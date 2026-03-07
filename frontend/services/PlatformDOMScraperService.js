@@ -540,42 +540,42 @@ class PlatformDOMScraperService {
                   }
                 } catch (e) {}
                 
-                // Try multiple selector strategies for Instamart product cards
-                let rawLinks = Array.from(document.querySelectorAll(
-                  'a[href*="/instamart/item/"], a[href*="/item/"]'
-                ));
-                log('Found ' + rawLinks.length + ' raw product links');
-
-                // Walk UP from each anchor to find the actual card container.
-                // The <a> is tiny (just "18 MINS"); the real card is its grandparent.
-                const getCardAncestor = (el) => {
-                  let cur = el.parentElement;
-                  for (let i = 0; i < 8 && cur; i++) {
-                    const txt = cur.textContent || '';
-                    const hasImg = !!cur.querySelector('img');
-                    const hasPricePattern = /[₹\u20B9]\s*\d/.test(txt) || /\b\d{2,4}\b/.test(txt);
-                    const txtLen = txt.length;
-                    if (hasImg && hasPricePattern && txtLen > 15 && txtLen < 600) return cur;
-                    cur = cur.parentElement;
-                  }
-                  return el; // fallback
-                };
-
-                // De-duplicate cards
-                const seenCards = new Set();
-                let productCards = [];
-                for (const link of rawLinks) {
-                  const card = getCardAncestor(link);
-                  if (!seenCards.has(card)) { seenCards.add(card); productCards.push(card); }
+                // Dump all links to understand Swiggy's URL structure (debug)
+                const allPageLinks = Array.from(document.querySelectorAll('a[href]'));
+                const swiggyLinks = allPageLinks.filter(a => (a.href || '').includes('swiggy') || (a.href || '').includes('instamart'));
+                if (swiggyLinks.length > 0) {
+                  log('Swiggy links sample: ' + swiggyLinks.slice(0, 5).map(a => (a.href || '').slice(0, 100)).join(' | '));
+                } else {
+                  log('No swiggy links found. Total links: ' + allPageLinks.length + ', sample: ' + allPageLinks.slice(0, 3).map(a => (a.href || '').slice(0, 80)).join(' | '));
                 }
-                log('Resolved ' + productCards.length + ' unique product cards');
 
-                // Debug first card to understand HTML structure
+                // Content-based product card detection — finds any block element with an image AND a price
+                // This is robust against URL changes in Swiggy's product links
+                const allElements = Array.from(document.querySelectorAll('div, article, li, section'));
+                const seenCards2 = new Set();
+                let productCards = allElements.filter(el => {
+                  if (seenCards2.has(el)) return false;
+                  const txt = el.textContent || '';
+                  const hasImg = !!el.querySelector('img');
+                  // Must have a rupee price like ₹120 or Rs.120 or a plain 2-4 digit number  
+                  const hasRupeePrice = /[₹\u20B9]\s*\d{2,4}/.test(txt);
+                  const txtLen = txt.length;
+                  const childCount = el.children.length;
+                  // Card should: have img, have rupee price, be between 40-500 chars, have 2+ children
+                  if (hasImg && hasRupeePrice && txtLen >= 40 && txtLen <= 500 && childCount >= 2) {
+                    seenCards2.add(el);
+                    return true;
+                  }
+                  return false;
+                });
+                log('Content-based: found ' + productCards.length + ' product cards');
+
+                // Debug first card
                 if (productCards.length > 0) {
                   const fc = productCards[0];
                   log('First card tag: ' + fc.tagName + ', textLen: ' + (fc.textContent || '').length);
                   log('First card TEXT: ' + (fc.textContent || '').replace(/\s+/g, ' ').slice(0, 250));
-                  log('First card HTML: ' + fc.innerHTML.slice(0, 350));
+                  log('First card HTML: ' + fc.innerHTML.slice(0, 400));
                 }
 
                 if (productCards.length === 0) {
