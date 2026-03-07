@@ -374,22 +374,24 @@ class PlatformDOMScraperService {
             try {
               const log = (msg) => {
                 try {
-                  window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-API] ' + msg}));
+                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (send) send(JSON.stringify({type: 'LOG', message: '[Instamart-API] ' + msg}));
                 } catch(e) {}
               };
 
               const sendResults = (products, error) => {
-                window.ReactNativeWebView.postMessage(JSON.stringify({
-                  type: 'SEARCH_RESULTS',
-                  platform: 'Instamart',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                  products: products || [],
-                  success: products && products.length > 0,
-                  error: error || null
-                }));
+                try {
+                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (send) send(JSON.stringify({
+                    type: 'SEARCH_RESULTS',
+                    platform: 'Instamart',
+                    sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                    products: products || [],
+                    success: products && products.length > 0,
+                    error: error || null
+                  }));
+                } catch(e) {}
               };
-
-
             log('Injected — will call Swiggy DAPI directly');
 
             // Extract lat/lng from current URL

@@ -110,6 +110,9 @@ const SearchScreen = ({ navigation, route }) => {
     injectedPlatformsRef.current[platform] = true;
 
     const platformToken = connectedPlatformTokensRef.current[platform] || null;
+    if (platform === 'Instamart') {
+      console.log(`[Search] DEBUG Instamart token pass: HasCookie=${!!platformToken?.cookie}, CookieLen=${platformToken?.cookie?.length || 0}`);
+    }
     const parseScript = PlatformDOMScraperService.getParseScript(platform, platformToken);
     if (!parseScript) {
       console.log(`[Search] No parser available for ${platform}`);
@@ -130,13 +133,15 @@ const SearchScreen = ({ navigation, route }) => {
       const probe = `
         (function(){
           try {
-            var hasBridge = !!(window.ReactNativeWebView && window.ReactNativeWebView.postMessage);
+            window.__rnMsg = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+            var sendMsg = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage);
+            var hasBridge = !!sendMsg;
             var msg = '[InjectProbe] platform=${platform} reason=${reason || ""} hasBridge=' + hasBridge +
               ' url=' + (window.location && window.location.href) +
               ' title=' + (document && document.title) +
               ' ready=' + (document && document.readyState);
-            if (hasBridge) {
-              window.ReactNativeWebView.postMessage(JSON.stringify({type:'LOG', message: msg}));
+            if (sendMsg) {
+              sendMsg(JSON.stringify({type:'LOG', message: msg}));
             }
           } catch(e) {}
         })();
@@ -270,7 +275,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   const searchProducts = async (q) => {
     console.log(
-      "[Search] searchProducts called with query:",
+      "[Search] searchProducts V_TIMESTAMP_99 called with query:",
       q,
       "connectedPlatforms:",
       connectedPlatformsRef.current.length,
@@ -816,8 +821,15 @@ const SearchScreen = ({ navigation, route }) => {
             thirdPartyCookiesEnabled={true}
             geolocationEnabled={true}
             injectedJavaScript={`
-            // Prevent app redirect prompts for Instamart/Swiggy
+            // Prevent app redirect prompts for Instamart/Swiggy and cache bridge
             (function() {
+              try {
+                // Eagerly cache the React Native bridge before Swiggy deletes it!
+                if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+                  window.__rnMsg = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
+                }
+              } catch(e) {}
+
               try {
                 // Override methods that might trigger app redirects (defensive: may be read-only)
                 try {
