@@ -461,8 +461,8 @@ class PlatformDOMScraperService {
                             // Immediate confirmation that script is running
               window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-DOM] Script injected and running'}));
                             setTimeout(async () => {
-                log('SetTimeout callback executed');
-                log('Starting product extraction after 10s wait...');
+                              log('SetTimeout callback executed');
+                              log('Starting product extraction after 6s wait...');
                 if (document.readyState !== 'complete') {
                   log('Document not complete, readyState: ' + document.readyState);
                   return;
@@ -529,25 +529,52 @@ class PlatformDOMScraperService {
                 } catch (e) {}
                 
                 // Try multiple selector strategies for Instamart product cards
-                let productCards = document.querySelectorAll(
-                  'a[href*="/instamart/item/"], a[href*="/item/"], [data-testid*="product"], [data-testid*="Product"], [data-testid*="item"], [data-testid*="Item"]'
-                );
-                log('Found ' + productCards.length + ' product links');
-                
+                let rawLinks = Array.from(document.querySelectorAll(
+                  'a[href*="/instamart/item/"], a[href*="/item/"]'
+                ));
+                log('Found ' + rawLinks.length + ' raw product links');
+
+                // Walk UP from each anchor to find the actual card container.
+                // The <a> is tiny (just "18 MINS"); the real card is its grandparent.
+                const getCardAncestor = (el) => {
+                  let cur = el.parentElement;
+                  for (let i = 0; i < 8 && cur; i++) {
+                    const txt = cur.textContent || '';
+                    const hasImg = !!cur.querySelector('img');
+                    const hasPricePattern = /[₹\u20B9]\s*\d/.test(txt) || /\b\d{2,4}\b/.test(txt);
+                    const txtLen = txt.length;
+                    if (hasImg && hasPricePattern && txtLen > 15 && txtLen < 600) return cur;
+                    cur = cur.parentElement;
+                  }
+                  return el; // fallback
+                };
+
+                // De-duplicate cards
+                const seenCards = new Set();
+                let productCards = [];
+                for (const link of rawLinks) {
+                  const card = getCardAncestor(link);
+                  if (!seenCards.has(card)) { seenCards.add(card); productCards.push(card); }
+                }
+                log('Resolved ' + productCards.length + ' unique product cards');
+
+                // Debug first card to understand HTML structure
+                if (productCards.length > 0) {
+                  const fc = productCards[0];
+                  log('First card tag: ' + fc.tagName + ', textLen: ' + (fc.textContent || '').length);
+                  log('First card TEXT: ' + (fc.textContent || '').replace(/\s+/g, ' ').slice(0, 250));
+                  log('First card HTML: ' + fc.innerHTML.slice(0, 350));
+                }
+
                 if (productCards.length === 0) {
-                  // Fallback: Find product containers with images and prices
                   log('DEBUG: Trying Instamart-specific fallback selector...');
                   const allElements = Array.from(document.querySelectorAll('div, a'));
-                  log('DEBUG: Total elements in document: ' + allElements.length);
-                  
                   productCards = allElements.filter(el => {
                     const text = el.textContent || '';
                     const hasImg = el.querySelector('img');
-                    const hasPrice = /₹\\s*\\d+/.test(text);
+                    const hasPrice = /[₹\u20B9]\s*\d/.test(text);
                     const textLen = text.length;
-                    const hasChildren = el.children.length >= 2;
-                    // Look for elements with image, price, reasonable size
-                    return hasImg && hasPrice && textLen > 20 && textLen < 500 && hasChildren;
+                    return hasImg && hasPrice && textLen > 20 && textLen < 500 && el.children.length >= 2;
                   });
                   log('DEBUG: Instamart fallback found ' + productCards.length + ' cards');
                 }
@@ -681,74 +708,140 @@ class PlatformDOMScraperService {
                   return;
                 }
                 
+                const priceAttrNames = [
+                  'data-price',
+                  'data-final-price',
+                  'data-offer-price',
+                  'data-list-price',
+                  'data-product-price',
+                  'data-value',
+                  'data-amount',
+                  'aria-label'
+                ];
+
+                const extractPriceFromAttributes = (element) => {
+                  if (!element || !element.getAttribute) return null;
+                  for (const attr of priceAttrNames) {
+                    const value = element.getAttribute(attr);
+                    if (value && /\d/.test(value)) {
+                      const cleaned = value.replace(/[^0-9.]/g, '');
+                      if (cleaned) return cleaned;
+                    }
+                  }
+                  return null;
+                };
+
+                const extractPriceFromDescendants = (card) => {
+                  const all = [card, ...Array.from(card.querySelectorAll('*'))];
+                  for (const el of all) {
+                    const attr = extractPriceFromAttributes(el);
+                    if (attr) return attr;
+                    const aria = el.getAttribute && el.getAttribute('aria-label');
+                    if (aria) {
+                      const found = parsePriceFromText(aria);
+                      if (found) return found;
+                    }
+                    if (el.className && typeof el.className === 'string' && /price/i.test(el.className)) {
+                      const found = parsePriceFromText(el.textContent || el.innerText || '');
+                      if (found) return found;
+                    }
+                    if (el.dataset) {
+                      for (const val of Object.values(el.dataset)) {
+                        const found = parsePriceFromText(val);
+                        if (found) return found;
+                      }
+                    }
+                  }
+                  return null;
+                };
+
+                const parsePriceFromText = (text) => {
+                  if (!text) return null;
+                  const cleaned = text.replace(/[\u00a0\u202f]/g, ' ');
+                  const rupeeMatch = cleaned.match(/(?:₹|Rs\.?\s*)\s*([0-9][0-9,.]*)/i);
+                  if (rupeeMatch && rupeeMatch[1]) return rupeeMatch[1];
+
+                  const numbers = cleaned.match(/\d+/g) || [];
+                  for (const n of numbers) {
+                    const val = parseInt(n, 10);
+                    if (val < 5 || val > 9999) continue;
+                    const idx = cleaned.indexOf(n);
+                    const after = cleaned.substring(idx + n.length, idx + n.length + 6).toLowerCase();
+                    // Skip delivery times/weights
+                    if (/(min|mins|kg|g|ml|l|ltr|pcs|pack)/.test(after)) continue;
+                    return n;
+                  }
+                  return null;
+                };
+
+                const resolvePrice = (card, cardText) => {
+                  let resolved = parsePriceFromText(cardText);
+                  if (resolved) return resolved;
+
+                  const attrPrice = extractPriceFromDescendants(card);
+                  if (attrPrice) return attrPrice;
+
+                  const textNodes = Array.from(card.querySelectorAll('span, div, p, button'));
+                  for (const node of textNodes) {
+                    const candidate = parsePriceFromText(node.textContent || node.innerText || '');
+                    if (candidate) return candidate;
+                  }
+
+                  return null;
+                };
+
+                const normalizeNumericPrice = (raw) => {
+                  if (!raw) return 0;
+                  const match = String(raw).match(/\d+(?:\.\d+)?/);
+                  if (!match) return 0;
+                  const n = parseFloat(match[0]);
+                  if (!Number.isFinite(n)) return 0;
+                  if (n < 5 || n > 9999) return 0;
+                  return Math.round(n);
+                };
+
                 log('Processing ' + productCards.length + ' cards');
-                
+
                 productCards.forEach((card, index) => {
                   try {
-                    // Get product name
                     let name = '';
                     const heading = card.querySelector('h4, h3, h2, div[class*="name"], div[class*="title"]');
                     if (heading && heading.textContent) {
                       name = heading.textContent.trim();
                     }
-                    
-                    // If no heading, extract from text nodes
+
                     if (!name || name.length < 5) {
                       const textEls = Array.from(card.querySelectorAll('div, p, span'))
                         .map(el => el.textContent?.trim())
-                        .filter(t => t && t.length > 5 && t.length < 80 && 
-                                 !/^[₹\\d\\s,]+$/.test(t) && 
-                                 !/^(ADD|Buy|MINS)/.test(t) &&
-                                 /[a-zA-Z]/.test(t));
+                        .filter(t => t && t.length > 3 && t.length < 120 && /[a-zA-Z]/.test(t))
+                        .filter(t => !/^\d+\s*(min|mins)$/i.test(t));
+
                       if (textEls.length > 0) {
-                        name = textEls[0];
+                        // Prefer strings with fewer numbers (avoid delivery time labels)
+                        const sorted = textEls
+                          .map(t => ({ t, score: (t.match(/\d+/g) || []).length }))
+                          .sort((a, b) => a.score - b.score);
+                        name = sorted[0].t;
                       }
                     }
-                    
-                    // Get price
+
                     const cardText = card.textContent || '';
-                    let price;
-                    
-                    // Try to find price with rupee symbol
-                    const rupeeMatch = cardText.match(/₹\\s*(\\d+)/g);
-                    if (rupeeMatch && rupeeMatch.length > 0) {
-                      const prices = rupeeMatch.map(m => parseInt(m.replace(/₹\\s*/g, ''))).filter(p => p >= 5 && p <= 9999);
-                      if (prices.length > 0) {
-                        price = Math.min(...prices).toString();
-                      }
-                    }
-                    
-                    // Fallback: Find numbers NOT followed by units
-                    if (!price) {
-                      const numbers = cardText.match(/\\d+/g) || [];
-                      for (let i = 0; i < numbers.length; i++) {
-                        const num = numbers[i];
-                        const val = parseInt(num);
-                        if (val < 5 || val > 9999) continue;
-                        
-                        const numIndex = cardText.indexOf(num);
-                        const contextAfter = cardText.substring(numIndex + num.length, numIndex + num.length + 10).toLowerCase();
-                        
-                        if (!/\\s*(ml|g|kg|l|pcs|pack|mins?)/.test(contextAfter)) {
-                          price = num;
-                          break;
-                        }
-                      }
-                    }
-                    
+                    const priceCandidate = resolvePrice(card, cardText);
+                    const numericPrice = normalizeNumericPrice(priceCandidate);
+
                     const imgEl = card.querySelector('img');
                     const productUrl = card.href || card.querySelector('a')?.href || '';
                     
                     if (index === 0) {
-                      log('First product: ' + (name || 'NOT FOUND') + ', price: ' + price);
+                      log('First product: ' + (name || 'NOT FOUND') + ', rawPrice: ' + (priceCandidate || 'NONE') + ', price: ' + numericPrice);
                     }
                     
-                    if (name && price && parseInt(price) > 0) {
+                    if (name && numericPrice > 0) {
                       products.push({
                         product_name: name,
                         brand: '',
-                        price: parseInt(price),
-                        mrp: parseInt(price),
+                        price: numericPrice,
+                        mrp: numericPrice,
                         image_url: imgEl ? imgEl.src : '',
                         product_url: productUrl,
                         in_stock: true,
@@ -762,6 +855,84 @@ class PlatformDOMScraperService {
                     }
                   }
                 });
+
+                // Fallback: if we still have zero products, try __NEXT_DATA__ extraction even when cards were present (price parsing may have failed)
+                if (products.length === 0) {
+                  try {
+                    const nextDataEl = document.querySelector('script#__NEXT_DATA__');
+                    const nextDataText = nextDataEl?.textContent;
+                    if (nextDataText && nextDataText.trim().startsWith('{')) {
+                      const nextData = JSON.parse(nextDataText);
+                      const found = [];
+                      const seen = new Set();
+
+                      const normalizePrice = (raw) => {
+                        const n = typeof raw === 'string' ? parseFloat(raw) : raw;
+                        if (!Number.isFinite(n) || n <= 0) return 0;
+                        if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                        if (n > 0 && n <= 9999) return Math.round(n);
+                        return 0;
+                      };
+
+                      const tryPush = (obj) => {
+                        const name = obj?.name || obj?.display_name || obj?.displayName || obj?.product_name || obj?.title;
+                        const rawPrice = obj?.price ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.mrp;
+                        if (typeof name !== 'string' || name.trim().length < 3) return;
+                        const price = normalizePrice(rawPrice);
+                        if (!price) return;
+                        const key = (name.trim().toLowerCase() + '|' + price);
+                        if (seen.has(key)) return;
+                        seen.add(key);
+                        found.push({ name: name.trim(), price });
+                      };
+
+                      const walk = (node, depth) => {
+                        if (!node || depth > 7) return;
+                        if (Array.isArray(node)) {
+                          for (const item of node) walk(item, depth + 1);
+                          return;
+                        }
+                        if (typeof node !== 'object') return;
+
+                        const maybeProduct = ('name' in node || 'display_name' in node || 'displayName' in node) && ('price' in node || 'mrp' in node || 'finalPrice' in node || 'final_price' in node || 'offerPrice' in node || 'offer_price' in node);
+                        if (maybeProduct) tryPush(node);
+
+                        if (Array.isArray(node.variations)) {
+                          for (const v of node.variations) {
+                            tryPush(v);
+                          }
+                        }
+
+                        for (const k of Object.keys(node)) {
+                          const v = node[k];
+                          if (typeof v === 'string' && v.length > 50000) continue;
+                          walk(v, depth + 1);
+                        }
+                      };
+
+                      walk(nextData, 0);
+                      log('DEBUG: __NEXT_DATA__ fallback candidates: ' + found.length);
+
+                      for (const p of found.slice(0, 60)) {
+                        products.push({
+                          product_name: p.name,
+                          brand: '',
+                          price: p.price,
+                          mrp: p.price,
+                          image_url: '',
+                          product_url: '',
+                          in_stock: true,
+                          weight: '',
+                          platform: 'Instamart'
+                        });
+                      }
+                    } else {
+                      log('DEBUG: __NEXT_DATA__ fallback missing or not JSON');
+                    }
+                  } catch (e) {
+                    log('DEBUG: __NEXT_DATA__ fallback parse failed: ' + e.message);
+                  }
+                }
                 
                 log('Parsed ' + products.length + ' products');
                 
@@ -772,7 +943,7 @@ class PlatformDOMScraperService {
                   products: products,
                   success: true
                 }));
-              }, 10000); // Wait 10s for Instamart's React app to render (increased for iOS)
+              }, 6000); // Shorter wait to avoid WebView timeouts while React renders
             } catch (error) {
               log('FATAL ERROR: ' + error.message);
               window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -813,7 +984,7 @@ class PlatformDOMScraperService {
               log('Title: ' + document.title);
               
               setTimeout(() => {
-                log('Extracting products after 10s wait...');
+                log('Extracting products after 6s wait...');
                 log('ReadyState: ' + document.readyState);
                 log('Body children count: ' + document.body.children.length);
                 
