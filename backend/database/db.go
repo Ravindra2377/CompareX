@@ -21,7 +21,8 @@ func Connect() {
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to database: ", err)
+		log.Printf("⚠️  Database connection failed (Auth/History features disabled): %v", err)
+		return
 	}
 
 	fmt.Println("🚀 Connected to Database")
