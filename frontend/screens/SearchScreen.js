@@ -792,18 +792,21 @@ const SearchScreen = ({ navigation, route }) => {
             javaScriptEnabled={true}
             domStorageEnabled={true}
             onMessage={(event) => handleWebViewMessage(platform, event)}
-            onLoadEnd={() => {
+            onLoadEnd={(syntheticEvent) => {
+              const { nativeEvent } = syntheticEvent;
+              const eventUrl = nativeEvent.url;
+              const currentUrl = eventUrl || currentWebViewUrlsRef.current[platform];
+              
               console.log(
-                `[Search] WebView onLoadEnd for ${platform}, currentUrl: ${currentWebViewUrlsRef.current[platform]}`,
+                `[Search] WebView onLoadEnd for ${platform}, currentUrl: ${currentUrl}`,
               );
               // Only inject if the WebView is actually on the search URL
-              const currentUrl = currentWebViewUrlsRef.current[platform];
               const searchUrl = searchUrls[platform];
-              if (
-                currentUrl &&
-                searchUrl &&
-                currentUrl.includes(searchUrl.split("?")[0])
-              ) {
+              
+              const isMatch = currentUrl && searchUrl && currentUrl.includes(searchUrl.split("?")[0]);
+              const isInstamartAggressiveMatch = platform === 'Instamart' && currentUrl && currentUrl.includes('swiggy.com/instamart/search');
+              
+              if (isMatch || isInstamartAggressiveMatch) {
                 injectDomParser(platform, "onLoadEnd");
               } else {
                 console.log(
@@ -944,18 +947,18 @@ const SearchScreen = ({ navigation, route }) => {
                 );
 
                 // Swiggy often redirects to a custom_back URL without reliably triggering onLoadEnd again.
-                // Inject once when navigation finishes on a search URL.
+                // Inject once when navigation hits a search URL, EVEN IF loading is true (Swiggy SPA router is weird).
                 const isSearchUrl =
                   typeof navState.url === "string" &&
                   navState.url.includes("/instamart/search");
-                if (isSearchUrl && navState.loading === false) {
+                if (isSearchUrl) {
                   const lastUrl = lastInjectedUrlRef.current[platform];
                   if (
                     lastUrl !== navState.url &&
                     currentSearchQueryRef.current
                   ) {
                     lastInjectedUrlRef.current[platform] = navState.url;
-                    injectDomParser(platform, "navFinish");
+                    injectDomParser(platform, "navFinishAggr");
                   }
                 }
               }
