@@ -80,6 +80,7 @@ const SearchScreen = ({ navigation, route }) => {
   });
 
   const connectedPlatformsRef = useRef([]);
+  const connectedPlatformTokensRef = useRef({});
   const activeSearchPlatformsRef = useRef([]);
 
   console.log(
@@ -108,7 +109,8 @@ const SearchScreen = ({ navigation, route }) => {
     }
     injectedPlatformsRef.current[platform] = true;
 
-    const parseScript = PlatformDOMScraperService.getParseScript(platform);
+    const platformToken = connectedPlatformTokensRef.current[platform] || null;
+    const parseScript = PlatformDOMScraperService.getParseScript(platform, platformToken);
     if (!parseScript) {
       console.log(`[Search] No parser available for ${platform}`);
       return;
@@ -229,11 +231,19 @@ const SearchScreen = ({ navigation, route }) => {
               }
               return true;
             }
-            return false;
+            return true;
           }
 
           return true;
         });
+        
+        // Save the actual token objects
+        const tokenMap = {};
+        connected.forEach(plat => {
+          tokenMap[plat] = parsed[plat];
+        });
+        connectedPlatformTokensRef.current = tokenMap;
+
         console.log("[Search] connected platforms:", connected);
         return connected;
       } catch (e) {

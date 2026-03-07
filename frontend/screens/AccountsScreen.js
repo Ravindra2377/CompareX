@@ -306,29 +306,12 @@ export default function AccountsScreen() {
       }
 
       async function verifySwiggyInstamart() {
-        const variants = [
           {
-            id: 'str',
-            url: 'https://www.swiggy.com/dapi/instamart/search?lat=12.9716&lng=77.5946&str=milk&submitAction=ENTER'
+            id: 'api_query',
+            url: 'https://www.swiggy.com/api/instamart/search?lat=12.9716&lng=77.5946&query=milk&pageType=INSTAMART_SEARCH'
           },
           {
-            id: 'q',
-            url: 'https://www.swiggy.com/dapi/instamart/search?lat=12.9716&lng=77.5946&q=milk&submitAction=ENTER'
-          },
-          {
-            id: 'query',
-            url: 'https://www.swiggy.com/dapi/instamart/search?lat=12.9716&lng=77.5946&query=milk&submitAction=ENTER'
-          },
-          {
-            id: 'q_simple',
-            url: 'https://www.swiggy.com/dapi/instamart/search?q=milk'
-          },
-          {
-            id: 'query_simple',
-            url: 'https://www.swiggy.com/dapi/instamart/search?query=milk'
-          },
-          {
-            id: 'api_search',
+            id: 'api_str',
             url: 'https://www.swiggy.com/api/instamart/search?lat=12.9716&lng=77.5946&str=milk'
           }
         ];
@@ -498,6 +481,11 @@ export default function AccountsScreen() {
           // Swiggy headers from localStorage (can exist even when logged out)
           if (ls.swiggy_auth_headers) {
             payload['authHeaders'] = ls.swiggy_auth_headers;
+          }
+
+          // Always grab cookies for the SearchScreen fetch
+          if (cookies) {
+            payload['cookie'] = cookies;
           }
 
           // Capture user info to reduce false positives (helps indicate user actually logged in)

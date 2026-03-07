@@ -369,7 +369,7 @@ class PlatformDOMScraperService {
       Instamart: {
         searchUrl: (query, lat = 12.9716, lng = 77.5946) =>
           `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(query)}&lat=${encodeURIComponent(String(lat))}&lng=${encodeURIComponent(String(lng))}`,
-        parseScript: () => `
+        parseScript: (tokens) => `
           (function() {
             const log = (msg) => {
               try {
@@ -408,14 +408,35 @@ class PlatformDOMScraperService {
                 const apiUrl = 'https://www.swiggy.com/api/instamart/search?lat=' + lat + '&lng=' + lng + '&query=' + encodeURIComponent(query) + '&pageType=INSTAMART_SEARCH';
                 log('Calling: ' + apiUrl.slice(0, 150));
 
-                const resp = await fetch(apiUrl, {
-                  method: 'GET',
-                  credentials: 'include', // Use page cookies (Swiggy session)
-                  headers: {
+                // Extract tokens passed from React Native
+                const injectedTokens = ${JSON.stringify(tokens || {})};
+                const swiggyCookie = injectedTokens.cookie || '';
+                
+                // Parse any extra auth headers stored during login
+                let authHeaders = {};
+                try {
+                  if (injectedTokens.authHeaders) {
+                    authHeaders = JSON.parse(injectedTokens.authHeaders);
+                    if (authHeaders.headers) authHeaders = authHeaders.headers;
+                  }
+                } catch(e) {}
+
+                const fetchHeaders = {
                     'accept': 'application/json, text/plain, */*',
                     'referer': 'https://www.swiggy.com/instamart',
                     'origin': 'https://www.swiggy.com',
-                  }
+                    ...authHeaders
+                };
+                
+                // Explicitly set Cookie if we captured it
+                if (swiggyCookie) {
+                  fetchHeaders['Cookie'] = swiggyCookie;
+                }
+
+                const resp = await fetch(apiUrl, {
+                  method: 'GET',
+                  credentials: 'include', // Best effort for native cookies
+                  headers: fetchHeaders
                 });
 
                 log('API status: ' + resp.status + '  CT: ' + (resp.headers.get('content-type') || 'none'));
@@ -739,10 +760,10 @@ class PlatformDOMScraperService {
     return config.searchUrl(query, lat, lng);
   }
 
-  getParseScript(platform) {
+  getParseScript(platform, tokens) {
     const config = this.platforms[platform];
     if (!config) return null;
-    return config.parseScript();
+    return config.parseScript(tokens);
   }
 }
 
