@@ -371,22 +371,24 @@ class PlatformDOMScraperService {
           `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(query)}&lat=${encodeURIComponent(String(lat))}&lng=${encodeURIComponent(String(lng))}`,
         parseScript: (tokens) => `
           (function() {
-            const log = (msg) => {
-              try {
-                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-API] ' + msg}));
-              } catch(e) {}
-            };
+            try {
+              const log = (msg) => {
+                try {
+                  window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-API] ' + msg}));
+                } catch(e) {}
+              };
 
-            const sendResults = (products, error) => {
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Instamart',
-                sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                products: products || [],
-                success: products && products.length > 0,
-                error: error || null
-              }));
-            };
+              const sendResults = (products, error) => {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'SEARCH_RESULTS',
+                  platform: 'Instamart',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  products: products || [],
+                  success: products && products.length > 0,
+                  error: error || null
+                }));
+              };
+
 
             log('Injected — will call Swiggy DAPI directly');
 
@@ -587,6 +589,19 @@ class PlatformDOMScraperService {
               }
               sendResults(products, products.length === 0 ? 'API returned 0 products' : null);
             }
+          } catch(e) {
+            try {
+              window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-API] Fatal Injection Error: ' + e.message}));
+              window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: 'SEARCH_RESULTS',
+                platform: 'Instamart',
+                sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                products: [],
+                success: false,
+                error: 'Fatal Injection Error: ' + e.message
+              }));
+            } catch(sendErr) {}
+          }
           })();
         `,
       },
