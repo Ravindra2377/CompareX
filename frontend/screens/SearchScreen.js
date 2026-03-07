@@ -341,7 +341,7 @@ const SearchScreen = ({ navigation, route }) => {
             },
           });
         }
-      }, 15000); // 15s per platform (Instamart & Zepto wait 10s for JS rendering)
+      }, 22000); // 22s per platform timeout (Instamart & Zepto need extra time)
     });
 
     // Set timeout for search completion
@@ -353,7 +353,7 @@ const SearchScreen = ({ navigation, route }) => {
       Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
       platformTimeoutsRef.current = {};
       aggregateResults(newSessionId);
-    }, 18000); // 18s overall timeout (platforms wait up to 10s for dynamic rendering)
+    }, 25000); // 25s overall timeout
   };
 
   const handleWebViewMessage = (platform, event) => {

@@ -507,16 +507,28 @@ class PlatformDOMScraperService {
                   bodyText.includes('get app') &&
                   (bodyText.includes('best offer') || bodyText.includes('just for you'));
 
-                try {
-                  const entries = (window.__COMPAREX_INSTAMART_NET_HOOKS__ && window.__COMPAREX_INSTAMART_NET_HOOKS__.entries)
-                    ? window.__COMPAREX_INSTAMART_NET_HOOKS__.entries
-                    : [];
-                  log('NET: Captured entries: ' + entries.length);
-                  if (entries.length) {
-                    const last = entries.slice(-3).map(e => (e.via + ':' + e.status + ':' + String(e.url || '').slice(0, 90)));
-                    log('NET: Last entries: ' + last.join(' | '));
-                  }
-                } catch (e) {}
+                // Try to dismiss the GET APP interstitial so products can load beneath it
+                if (looksLikeGetAppInterstitial) {
+                  log('GET APP interstitial detected — attempting to dismiss...');
+                  try {
+                    // Try clicking any close / dismiss / skip button in the interstitial
+                    const dismissSelectors = [
+                      'button[aria-label*="close" i]', 'button[aria-label*="dismiss" i]',
+                      '[class*="close"]', '[class*="Close"]', '[class*="dismiss"]',
+                      'button[class*="skip" i]', 'svg[class*="close"]',
+                      // Swiggy specific: the X button or the backdrop
+                      '[data-testid*="close"]', '[data-testid*="dismiss"]',
+                    ];
+                    let dismissed = false;
+                    for (const sel of dismissSelectors) {
+                      const btn = document.querySelector(sel);
+                      if (btn) { btn.click(); dismissed = true; log('Clicked dismiss: ' + sel); break; }
+                    }
+                    // Also try pressing Escape key
+                    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', keyCode: 27, bubbles: true }));
+                    if (!dismissed) log('No dismiss button found, continuing anyway (products may be behind modal)');
+                  } catch (e) { log('Dismiss attempt failed: ' + e.message); }
+                }
 
                 try {
                   const perf = (window.performance && window.performance.getEntriesByType) ? window.performance.getEntriesByType('resource') : [];
@@ -694,18 +706,10 @@ class PlatformDOMScraperService {
                   if (looksLikeLocationGate) reason = 'Location selection required';
                   else if (looksLikeServiceabilityGate) reason = 'Not serviceable for current location';
                   else if (looksLikeWafOrError) reason = 'Error/WAF page displayed';
-                  else if (looksLikeGetAppInterstitial) reason = 'Web interstitial shown (GET APP) - products not rendered in WebView';
+                  else if (looksLikeGetAppInterstitial) reason = 'GET APP interstitial shown — products may still be in DOM';
 
-                  log('ERROR: ' + reason);
-                  window.ReactNativeWebView.postMessage(JSON.stringify({
-                    type: 'SEARCH_RESULTS',
-                    platform: 'Instamart',
-                    sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                    error: reason,
-                    success: false,
-                    products: []
-                  }));
-                  return;
+                  log('WARNING: ' + reason + ' — proceeding with extraction anyway');
+                  // Don't return early — products may still be extractable behind the modal
                 }
                 
                 const priceAttrNames = [
