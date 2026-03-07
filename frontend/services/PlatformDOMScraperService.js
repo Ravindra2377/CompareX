@@ -409,8 +409,9 @@ class PlatformDOMScraperService {
             // However, the WebView successfully loads the initial HTML page (SSR), 
             // which contains all the search results embedded as JSON!
             // We will extract that JSON directly from the DOM markup.
-            setTimeout(() => {
+            const runExtraction = (attempt) => {
               try {
+                log('Starting product extraction (attempt ' + attempt + ')... readyState=' + document.readyState);
                 const html = document.documentElement.innerHTML;
                 
                 // Method 1: Look for the hydration state script tag
@@ -431,13 +432,25 @@ class PlatformDOMScraperService {
                   const anyJsonMatch = html.match(new RegExp('{[^{]*"display_name"[^{]*', 'i'));
                   if (!anyJsonMatch) {
                     log('No JSON state found in HTML. Body len: ' + html.length);
-                    // Could be the "We'll be back shortly" interstitial
+                    // Could be the "We\'ll be back shortly" interstitial
                     if (html.includes('We will be back shortly') || html.includes('Something went wrong')) {
                       sendResults([], 'Swiggy blocked load (WAF interstitial)');
                       return;
                     }
+                    // If DOM isn\'t fully ready yet, retry once after a short delay
+                    if (document.readyState !== 'complete' && attempt === 1) {
+                      log('DOM not complete; retrying extraction in 2s');
+                      setTimeout(() => runExtraction(attempt + 1), 2000);
+                      return;
+                    }
                     sendResults([], 'Could not find product data in DOM');
                     return;
+                  }
+                  try {
+                    jsonStr = '{' + anyJsonMatch[0].split('{').slice(1).join('{');
+                    log('Found JSON via loose match (len: ' + jsonStr.length + ')');
+                  } catch(e) {
+                    log('Failed to parse loose JSON match: ' + e.message);
                   }
                 }
 
@@ -468,6 +481,12 @@ class PlatformDOMScraperService {
                 const productNodes = Array.from(document.querySelectorAll('[data-testid="item-card"], [data-testid*="product-"], .ItemCard_container, a[href*="/item/"]'));
                 
                 if (productNodes.length === 0) {
+                  // If DOM still incomplete on first attempt, retry once
+                  if (document.readyState !== 'complete' && attempt === 1) {
+                    log('DOM not complete; retrying DOM extraction in 2s');
+                    setTimeout(() => runExtraction(attempt + 1), 2000);
+                    return;
+                  }
                   sendResults([], 'No products found via DOM fallback');
                   return;
                 }
@@ -511,7 +530,10 @@ class PlatformDOMScraperService {
                 log('Extraction error: ' + e.message);
                 sendResults([], 'Extraction error: ' + e.message);
               }
-            }, 3000); // Wait 3s for React to render the full page
+            };
+
+            // initial attempt after 3s
+            setTimeout(() => runExtraction(1), 3000);
 
             function parseAndSend(result) {
               const products = [];
