@@ -58,9 +58,21 @@ func (im *InstamartScraper) Search(ctx context.Context, query string, lat, lng f
 			req.Header.Set("Cookie", cookie)
 		}
 
+		// Handle Swiggy authHeaders (which is a JSON string)
+		if authStr, ok := userTokens["authHeaders"]; ok && authStr != "" {
+			var authMap map[string]string
+			if err := json.Unmarshal([]byte(authStr), &authMap); err == nil {
+				for k, v := range authMap {
+					if k != "cookie" && k != "referer" && k != "origin" { // Don't override standard ones if needed
+						req.Header.Set(k, v)
+					}
+				}
+			}
+		}
+
 		// Set any other tokens as headers
 		for k, v := range userTokens {
-			if v != "" && k != "cookie" {
+			if v != "" && k != "cookie" && k != "authHeaders" && k != "swiggyUserInfo" && k != "verifiedInstamartApi" && k != "verifiedInstamartVariant" && k != "swiggyUserId" {
 				req.Header.Set(k, v)
 			}
 		}

@@ -1,16 +1,9 @@
-🚀 Connected to Database
-2026/02/15 00:33:07 🚀 Connected to Meilisearch and ensured 'products' index
-2026/02/15 00:33:07 ✅ Loaded platform configuration from JSON
-2026/02/15 00:33:07 ✅ Redis connected for scraper caching
-2026/02/15 00:33:07 ✅ Scraper service initialized with 5 platforms (HTTP mode)
 
-   ____    __
-  / __/___/ /  ___
- / _// __/ _ \/ _ \
-/___/\__/_//_/\___/ v4.15.0
-High performance, minimalist Go web framework
-https://echo.labstack.com
-____________________________________O/_______
-                                    O\
-⇨ http server started on [::]:8080
-signal: killed
+2026/03/07 17:02:52 [35m/Users/chethannv/Downloads/CompareX/backend/database/db.go:22
+[0m[31m[error] [0mfailed to initialize database, got error failed to connect to `user=user database=pricepilot`:
+	[::1]:5432 (localhost): dial error: dial tcp [::1]:5432: connect: connection refused
+	127.0.0.1:5432 (localhost): dial error: dial tcp 127.0.0.1:5432: connect: connection refused
+2026/03/07 17:02:52 Failed to connect to database: failed to connect to `user=user database=pricepilot`:
+	[::1]:5432 (localhost): dial error: dial tcp [::1]:5432: connect: connection refused
+	127.0.0.1:5432 (localhost): dial error: dial tcp 127.0.0.1:5432: connect: connection refused
+exit status 1

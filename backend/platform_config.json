@@ -14,10 +14,11 @@
     }
   },
   "zepto": {
-    "base_url": "https://api.zepto.co.in/api/v1/search",
+    "base_url": "https://api.zeptonow.com/api/v1/search",
     "headers": {
       "app_version": "12.23.0",
       "platform": "web",
+      "store_id": "40d2ba18-7b44-4060-8041-002636603a3d",
       "content-type": "application/json",
       "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     },
@@ -36,7 +37,7 @@
     }
   },
   "instamart": {
-    "base_url": "https://www.swiggy.com/dapi/instamart/search",
+    "base_url": "https://www.swiggy.com/api/instamart/search",
     "headers": {
       "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "accept": "application/json",
