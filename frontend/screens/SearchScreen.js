@@ -38,6 +38,12 @@ const SUGGESTIONS = [
 ];
 
 const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
+const ENABLE_BACKEND_FALLBACK = false;
+const ENABLE_BACKEND_COLLECTION = false;
+const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
+const INSTAMART_INITIAL_TIMEOUT_MS = 80000;
+const INSTAMART_RETRY_TIMEOUT_MS = 30000;
+const OVERALL_SEARCH_TIMEOUT_MS = 120000;
 
 const reducer = (state, action) => {
   console.log(
@@ -99,21 +105,91 @@ const SearchScreen = ({ navigation, route }) => {
   const lastInjectedUrlRef = useRef({});
   const injectedPlatformsRef = useRef({});
   const platformTimeoutsRef = useRef({}); // Track per-platform timeouts
+  const instamartTimeoutRetriedRef = useRef({}); // Track one retry per session
   const fallbackAttemptedRef = useRef(new Set()); // Prevent infinite backend fallback retries
   const currentWebViewUrlsRef = useRef({}); // Track current URL of each WebView
 
+  const armPlatformTimeout = (platform, sessionId) => {
+    if (platformTimeoutsRef.current[platform]) {
+      clearTimeout(platformTimeoutsRef.current[platform]);
+    }
+
+    const timeoutMs =
+      platform === "Instamart"
+        ? INSTAMART_INITIAL_TIMEOUT_MS
+        : DEFAULT_PLATFORM_TIMEOUT_MS;
+
+    platformTimeoutsRef.current[platform] = setTimeout(() => {
+      if (sessionId !== searchSessionIdRef.current) {
+        return;
+      }
+      if (!platformResultsRef.current[platform]) {
+        if (
+          platform === "Instamart" &&
+          !instamartTimeoutRetriedRef.current[sessionId]
+        ) {
+          instamartTimeoutRetriedRef.current[sessionId] = true;
+          console.log(
+            `[Search] Instamart timeout hit, forcing re-injection and extending timeout for session ${sessionId}`,
+          );
+          injectedPlatformsRef.current[platform] = false;
+          injectDomParser(platform, "timeoutRetry");
+          platformTimeoutsRef.current[platform] = setTimeout(() => {
+            if (sessionId !== searchSessionIdRef.current) {
+              return;
+            }
+            if (!platformResultsRef.current[platform]) {
+              console.log(
+                `[Search] ${platform} timed out after retry, continuing without timeout error`,
+              );
+              writePlatformResult(platform, [], true, null, sessionId);
+            }
+          }, INSTAMART_RETRY_TIMEOUT_MS);
+          return;
+        }
+
+        console.log(`[Search] ${platform} timed out, marking as failed`);
+        handleWebViewMessage(platform, {
+          nativeEvent: {
+            data: JSON.stringify({
+              type: "SEARCH_RESULTS",
+              platform,
+              sessionId,
+              error: "WebView timeout",
+              success: false,
+              products: [],
+            }),
+          },
+        });
+      }
+    }, timeoutMs);
+  };
+
   const injectDomParser = (platform, reason) => {
-    // Prevent multiple injections for the same platform in this session
-    if (injectedPlatformsRef.current[platform]) {
+    const currentUrl = (currentWebViewUrlsRef.current[platform] || "").split(
+      "#",
+    )[0];
+    const sessionForKey = searchSessionIdRef.current;
+    const reasonKey = platform === "Instamart" ? `:${reason || ""}` : "";
+    const injectKey = `${sessionForKey}:${currentUrl || "no-url"}${reasonKey}`;
+
+    // Prevent duplicate injection for the same platform+URL in this session,
+    // but allow reinjection when SPA navigation changes URL (critical for Instamart).
+    if (injectedPlatformsRef.current[platform] === injectKey) {
       return;
     }
-    injectedPlatformsRef.current[platform] = true;
+    injectedPlatformsRef.current[platform] = injectKey;
 
     const platformToken = connectedPlatformTokensRef.current[platform] || null;
-    if (platform === 'Instamart') {
-      console.log(`[Search] DEBUG Instamart token pass: HasCookie=${!!platformToken?.cookie}, CookieLen=${platformToken?.cookie?.length || 0}`);
+    if (platform === "Instamart") {
+      console.log(
+        `[Search] DEBUG Instamart token pass: HasCookie=${!!platformToken?.cookie}, CookieLen=${platformToken?.cookie?.length || 0}`,
+      );
     }
-    const parseScript = PlatformDOMScraperService.getParseScript(platform, platformToken);
+    const parseScript = PlatformDOMScraperService.getParseScript(
+      platform,
+      platformToken,
+    );
     if (!parseScript) {
       console.log(`[Search] No parser available for ${platform}`);
       return;
@@ -126,7 +202,7 @@ const SearchScreen = ({ navigation, route }) => {
 
     try {
       console.log(
-        `[Search] Injecting DOM parser for ${platform}${reason ? ` (${reason})` : ""}`,
+        `[Search] Injecting DOM parser for ${platform}${reason ? ` (${reason})` : ""} @ ${currentUrl || "unknown-url"}`,
       );
 
       // Probe: verify injectJavaScript actually executes for this WebView (especially Swiggy/Instamart)
@@ -241,10 +317,10 @@ const SearchScreen = ({ navigation, route }) => {
 
           return true;
         });
-        
+
         // Save the actual token objects
         const tokenMap = {};
-        connected.forEach(plat => {
+        connected.forEach((plat) => {
           tokenMap[plat] = parsed[plat];
         });
         connectedPlatformTokensRef.current = tokenMap;
@@ -293,6 +369,7 @@ const SearchScreen = ({ navigation, route }) => {
     searchSessionIdRef.current = newSessionId;
     aggregatedSessionIdRef.current = null;
     fallbackAttemptedRef.current.clear(); // Reset per-platform fallback guard for new search
+    instamartTimeoutRetriedRef.current = {}; // Reset Instamart timeout retry guard
 
     setLoading(true);
     setHasSearched(true);
@@ -327,8 +404,23 @@ const SearchScreen = ({ navigation, route }) => {
     platformsSnapshot.forEach((platform) => {
       const url = PlatformDOMScraperService.getSearchUrl(platform, q);
       if (url) {
-        urls[platform] = url;
-        console.log(`[Search] Navigating ${platform} to: ${url}`);
+        // For Instamart: start at the Instamart homepage to warm up Swiggy session cookies.
+        // Without cookies, Swiggy shows "Something went wrong" on the direct search URL.
+        // After 3.5s the navigation state change handler will detect the homepage loaded and redirect.
+        if (platform === "Instamart") {
+          urls[platform] = "https://www.swiggy.com/instamart";
+          console.log(`[Search] Navigating ${platform} to WARMUP: https://www.swiggy.com/instamart`);
+          // Schedule redirect to actual search URL after warmup
+          setTimeout(() => {
+            if (searchSessionIdRef.current === newSessionId) {
+              console.log(`[Search] Instamart warmup complete — navigating to search: ${url}`);
+              setSearchUrls((prev) => ({ ...prev, [platform]: url }));
+            }
+          }, 3500);
+        } else {
+          urls[platform] = url;
+          console.log(`[Search] Navigating ${platform} to: ${url}`);
+        }
       }
     });
 
@@ -340,26 +432,11 @@ const SearchScreen = ({ navigation, route }) => {
 
     // Set per-platform timeout to prevent hanging on unresponsive WebViews
     platformsSnapshot.forEach((platform) => {
-      platformTimeoutsRef.current[platform] = setTimeout(() => {
-        if (!platformResultsRef.current[platform]) {
-          console.log(`[Search] ${platform} timed out, marking as failed`);
-          handleWebViewMessage(platform, {
-            nativeEvent: {
-              data: JSON.stringify({
-                type: "SEARCH_RESULTS",
-                platform,
-                sessionId: newSessionId,
-                error: "WebView timeout",
-                success: false,
-                products: [],
-              }),
-            },
-          });
-        }
-      }, 22000); // 22s per platform timeout (Instamart & Zepto need extra time)
+      armPlatformTimeout(platform, newSessionId);
     });
 
     // Set timeout for search completion
+    const overallTimeoutMs = OVERALL_SEARCH_TIMEOUT_MS;
     searchTimeoutRef.current = setTimeout(() => {
       console.log(
         `[Search] Timeout reached for session ${newSessionId}, aggregating results...`,
@@ -368,7 +445,7 @@ const SearchScreen = ({ navigation, route }) => {
       Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
       platformTimeoutsRef.current = {};
       aggregateResults(newSessionId);
-    }, 25000); // 25s overall timeout
+    }, overallTimeoutMs);
   };
 
   const handleWebViewMessage = (platform, event) => {
@@ -395,15 +472,27 @@ const SearchScreen = ({ navigation, route }) => {
             data.products?.length || 0
           } products from ${platform} (session: ${searchSessionIdRef.current})`,
         );
-        if (data.error || !data.success || (data.products && data.products.length === 0)) {
-          console.log(`[Search] ${platform} error/empty: ${data.error || '0 products'}`);
-          
-          // Only fall back to backend ONCE per platform per search session
-          const fallbackKey = `${platform}:${searchSessionIdRef.current}`;
-          if (!fallbackAttemptedRef.current.has(fallbackKey)) {
-            fallbackAttemptedRef.current.add(fallbackKey);
-            fallbackToBackend(platform, currentSearchQueryRef.current, searchSessionIdRef.current);
-            return; // Let fallback handle the state update
+        if (
+          data.error ||
+          !data.success ||
+          (data.products && data.products.length === 0)
+        ) {
+          console.log(
+            `[Search] ${platform} error/empty: ${data.error || "0 products"}`,
+          );
+
+          // Optional backend fallback (disabled by default to keep scraping fully client-side)
+          if (ENABLE_BACKEND_FALLBACK) {
+            const fallbackKey = `${platform}:${searchSessionIdRef.current}`;
+            if (!fallbackAttemptedRef.current.has(fallbackKey)) {
+              fallbackAttemptedRef.current.add(fallbackKey);
+              fallbackToBackend(
+                platform,
+                currentSearchQueryRef.current,
+                searchSessionIdRef.current,
+              );
+              return; // Let fallback handle the state update
+            }
           }
           // Fallback already tried — fall through and store the empty result
         }
@@ -467,51 +556,89 @@ const SearchScreen = ({ navigation, route }) => {
     }
   };
 
-
   // to avoid re-triggering the fallback check.
-  const writePlatformResult = React.useCallback((platform, products, success, errorMsg, sessionId) => {
-    if (sessionId !== searchSessionIdRef.current) return; // stale session, ignore
-    setPlatformResults((prev) => {
-      const prevEntry = prev[platform];
-      // Don't overwrite a good prior result with an empty one
-      if (prevEntry && prevEntry.success && prevEntry.products?.length > 0 && !success) {
-        return prev;
-      }
-      const updated = { ...prev, [platform]: { products, success, error: errorMsg } };
-      platformResultsRef.current = updated;
-      const respondedCount = Object.keys(updated).length;
-      const expectedCount =
-        activeSearchPlatformsRef.current.length ||
-        connectedPlatformsRef.current.length ||
-        state.connectedPlatforms.length;
-      if (respondedCount >= expectedCount) {
-        if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-        setTimeout(() => aggregateResults(sessionId), 500);
-      }
-      return updated;
-    });
-  }, [state.connectedPlatforms.length]);
+  const writePlatformResult = React.useCallback(
+    (platform, products, success, errorMsg, sessionId) => {
+      if (sessionId !== searchSessionIdRef.current) return; // stale session, ignore
+      setPlatformResults((prev) => {
+        const prevEntry = prev[platform];
+        // Don't overwrite a good prior result with an empty one
+        if (
+          prevEntry &&
+          prevEntry.success &&
+          prevEntry.products?.length > 0 &&
+          !success
+        ) {
+          return prev;
+        }
+        const updated = {
+          ...prev,
+          [platform]: { products, success, error: errorMsg },
+        };
+        platformResultsRef.current = updated;
+        const respondedCount = Object.keys(updated).length;
+        const expectedCount =
+          activeSearchPlatformsRef.current.length ||
+          connectedPlatformsRef.current.length ||
+          state.connectedPlatforms.length;
+        if (respondedCount >= expectedCount) {
+          if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+          setTimeout(() => aggregateResults(sessionId), 500);
+        }
+        return updated;
+      });
+    },
+    [state.connectedPlatforms.length],
+  );
 
   const fallbackToBackend = async (platform, fallbackQuery, sessionId) => {
     try {
-      console.log(`[Search] Falling back to backend API for ${platform} query: ${fallbackQuery}`);
-      const tokensRaw = await AsyncStorage.getItem('userTokens');
+      console.log(
+        `[Search] Falling back to backend API for ${platform} query: ${fallbackQuery}`,
+      );
+      const tokensRaw = await AsyncStorage.getItem("userTokens");
       const tokens = tokensRaw ? JSON.parse(tokensRaw) : {};
 
-      // Pass only the scoped token for this platform
+      // Pass scoped token first, but include allied aliases when needed (e.g., Swiggy for Instamart)
       const scopedTokens = {};
       if (tokens[platform]) scopedTokens[platform] = tokens[platform];
+      if (platform === "Instamart" && tokens.Swiggy)
+        scopedTokens.Swiggy = tokens.Swiggy;
+      // If no scoped token exists, fall back to all tokens so backend can still resolve provider auth
+      const tokensForHeader =
+        Object.keys(scopedTokens).length > 0 ? scopedTokens : tokens;
 
-      const response = await api.get('/compare', {
-        headers: { 'X-User-Tokens': JSON.stringify(scopedTokens) },
+      const response = await api.get("/compare", {
+        headers: { "X-User-Tokens": JSON.stringify(tokensForHeader) },
         params: { q: fallbackQuery, lat: 12.9716, lng: 77.5946 },
       });
 
+      const platformMatches = (listingPlatform, expectedPlatform) => {
+        const lp = String(listingPlatform || "")
+          .trim()
+          .toLowerCase();
+        const ep = String(expectedPlatform || "")
+          .trim()
+          .toLowerCase();
+        if (!lp || !ep) return false;
+        if (lp === ep) return true;
+        if (
+          ep === "instamart" &&
+          (lp.includes("instamart") || lp.includes("swiggy"))
+        ) {
+          return true;
+        }
+        return false;
+      };
+
       const allListings = [];
       if (response.data?.products) {
-        response.data.products.forEach(group => {
-          group.listings?.forEach(listing => {
-            if (listing.platform === platform && listing.price > 0) {
+        response.data.products.forEach((group) => {
+          group.listings?.forEach((listing) => {
+            if (
+              platformMatches(listing.platform, platform) &&
+              listing.price > 0
+            ) {
               allListings.push({
                 product_name: listing.product_name,
                 brand: group.name,
@@ -520,7 +647,7 @@ const SearchScreen = ({ navigation, route }) => {
                 image_url: listing.image_url || listing.deep_link,
                 product_url: listing.deep_link,
                 in_stock: true,
-                weight: '',
+                weight: "",
                 platform,
               });
             }
@@ -528,12 +655,33 @@ const SearchScreen = ({ navigation, route }) => {
         });
       }
 
-      console.log(`[Search] Backend fallback for ${platform} returned ${allListings.length} items`);
+      console.log(
+        `[Search] Backend fallback for ${platform} returned ${allListings.length} items`,
+      );
       // Write DIRECTLY to state — do not call handleWebViewMessage (avoids re-triggering loop)
-      writePlatformResult(platform, allListings, allListings.length > 0, allListings.length === 0 ? 'Backend returned 0 products' : null, sessionId);
+      writePlatformResult(
+        platform,
+        allListings,
+        allListings.length > 0,
+        allListings.length === 0 ? "Backend returned 0 products" : null,
+        sessionId,
+      );
     } catch (e) {
-      console.error(`[Search] Backend fallback for ${platform} failed:`, e.message);
-      writePlatformResult(platform, [], false, 'Backend fallback failed', sessionId);
+      const status = e?.response?.status;
+      const statusText = e?.response?.statusText;
+      const errMsg = status
+        ? `HTTP ${status} ${statusText || ""}`.trim()
+        : e?.message || "Network error";
+      console.warn(
+        `[Search] Backend fallback for ${platform} failed: ${errMsg}`,
+      );
+      writePlatformResult(
+        platform,
+        [],
+        false,
+        `Backend fallback failed: ${errMsg}`,
+        sessionId,
+      );
     }
   };
 
@@ -662,8 +810,10 @@ const SearchScreen = ({ navigation, route }) => {
         `[Search] Session ${sessionId}: Aggregated ${aggregated.length} products`,
       );
 
-      // Send results to backend for analytics/caching (non-blocking)
-      collectResultsToBackend(stableQuery, resultsToAggregate);
+      // Send results to backend for analytics/caching (optional)
+      if (ENABLE_BACKEND_COLLECTION) {
+        collectResultsToBackend(stableQuery, resultsToAggregate);
+      }
     } else {
       // No products found
       setResults([]);
@@ -795,17 +945,24 @@ const SearchScreen = ({ navigation, route }) => {
             onLoadEnd={(syntheticEvent) => {
               const { nativeEvent } = syntheticEvent;
               const eventUrl = nativeEvent.url;
-              const currentUrl = eventUrl || currentWebViewUrlsRef.current[platform];
-              
+              const currentUrl =
+                eventUrl || currentWebViewUrlsRef.current[platform];
+
               console.log(
                 `[Search] WebView onLoadEnd for ${platform}, currentUrl: ${currentUrl}`,
               );
               // Only inject if the WebView is actually on the search URL
               const searchUrl = searchUrls[platform];
-              
-              const isMatch = currentUrl && searchUrl && currentUrl.includes(searchUrl.split("?")[0]);
-              const isInstamartAggressiveMatch = platform === 'Instamart' && currentUrl && currentUrl.includes('swiggy.com/instamart/search');
-              
+
+              const isMatch =
+                currentUrl &&
+                searchUrl &&
+                currentUrl.includes(searchUrl.split("?")[0]);
+              const isInstamartAggressiveMatch =
+                platform === "Instamart" &&
+                currentUrl &&
+                currentUrl.includes("swiggy.com/instamart/search");
+
               if (isMatch || isInstamartAggressiveMatch) {
                 injectDomParser(platform, "onLoadEnd");
               } else {
@@ -913,6 +1070,17 @@ const SearchScreen = ({ navigation, route }) => {
                 `[Search] ${platform} WebView load start: ${nativeEvent.url}`,
               );
 
+              if (
+                platform === "Instamart" &&
+                searchSessionIdRef.current &&
+                !platformResultsRef.current[platform]
+              ) {
+                console.log(
+                  "[Search] Re-arming Instamart timeout on load start",
+                );
+                armPlatformTimeout(platform, searchSessionIdRef.current);
+              }
+
               // Test injection for Instamart
               if (platform === "Instamart") {
                 setTimeout(() => {
@@ -946,19 +1114,31 @@ const SearchScreen = ({ navigation, route }) => {
                   `[Search] Instamart navigation: ${navState.url}, loading: ${navState.loading}`,
                 );
 
-                // Swiggy often redirects to a custom_back URL without reliably triggering onLoadEnd again.
-                // Inject once when navigation hits a search URL, EVEN IF loading is true (Swiggy SPA router is weird).
+                // Swiggy often redirects to a custom_back URL without reliably triggering consistent load events.
+                // Inject once while loading, and again when loading=false for the same URL to avoid script loss.
                 const isSearchUrl =
                   typeof navState.url === "string" &&
                   navState.url.includes("/instamart/search");
                 if (isSearchUrl) {
-                  const lastUrl = lastInjectedUrlRef.current[platform];
                   if (
-                    lastUrl !== navState.url &&
+                    navState.loading &&
+                    searchSessionIdRef.current &&
+                    !platformResultsRef.current[platform]
+                  ) {
+                    armPlatformTimeout(platform, searchSessionIdRef.current);
+                  }
+                  const phase = navState.loading ? "loading" : "ready";
+                  const phaseKey = `${navState.url}|${phase}`;
+                  const lastPhaseKey = lastInjectedUrlRef.current[platform];
+                  if (
+                    lastPhaseKey !== phaseKey &&
                     currentSearchQueryRef.current
                   ) {
-                    lastInjectedUrlRef.current[platform] = navState.url;
-                    injectDomParser(platform, "navFinishAggr");
+                    lastInjectedUrlRef.current[platform] = phaseKey;
+                    injectDomParser(
+                      platform,
+                      phase === "ready" ? "navReady" : "navFinishAggr",
+                    );
                   }
                 }
               }

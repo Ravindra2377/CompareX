@@ -669,8 +669,8 @@ class PlatformDOMScraperService {
                 sendResults([], 'All extraction strategies exhausted (attempt ' + attempt + ')');
               }
 
-              // Start extraction after 3s to let Swiggy SSR hydrate
-              setTimeout(function(){ runExtraction(1); }, 3000);
+              // Start extraction after 1s - page is already hydrated since we warmed up on homepage first
+              setTimeout(function(){ runExtraction(1); }, 1000);
 
             } catch(e) {
               try {
