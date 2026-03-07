@@ -217,6 +217,68 @@ class PlatformDOMScraperService {
                     }
                   }
                 });
+
+                if (products.length === 0) {
+                  try {
+                    const state =
+                      (window.grofers && window.grofers.PRELOADED_STATE) ||
+                      window.__PRELOADED_STATE__ ||
+                      null;
+                    if (state && typeof state === 'object') {
+                      const seen = new Set();
+
+                      const toPrice = (raw) => {
+                        const n = typeof raw === 'string' ? parseFloat(raw) : raw;
+                        if (!Number.isFinite(n) || n <= 0) return 0;
+                        if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                        if (n > 0 && n <= 9999) return Math.round(n);
+                        return 0;
+                      };
+
+                      const tryPush = (obj) => {
+                        const name = obj?.name || obj?.display_name || obj?.displayName || obj?.product_name || obj?.title;
+                        const rawPrice = obj?.price ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.mrp;
+                        if (typeof name !== 'string' || name.trim().length < 3) return;
+                        const price = toPrice(rawPrice);
+                        if (!price) return;
+                        const key = name.trim().toLowerCase() + '|' + price;
+                        if (seen.has(key)) return;
+                        seen.add(key);
+                        products.push({
+                          product_name: name.trim(),
+                          brand: '',
+                          price,
+                          mrp: price,
+                          image_url: obj?.image_url || obj?.imageUrl || obj?.image || '',
+                          product_url: obj?.deep_link || obj?.url || '',
+                          in_stock: true,
+                          weight: obj?.quantity || obj?.unit || '',
+                          platform: 'Blinkit'
+                        });
+                      };
+
+                      const walk = (node, depth) => {
+                        if (!node || depth > 9) return;
+                        if (Array.isArray(node)) {
+                          node.forEach((x) => walk(x, depth + 1));
+                          return;
+                        }
+                        if (typeof node !== 'object') return;
+                        const hasName = ('name' in node) || ('display_name' in node) || ('displayName' in node) || ('title' in node);
+                        const hasPrice = ('price' in node) || ('mrp' in node) || ('finalPrice' in node) || ('offerPrice' in node) || ('selling_price' in node);
+                        if (hasName && hasPrice) tryPush(node);
+                        Object.keys(node).forEach((k) => walk(node[k], depth + 1));
+                      };
+
+                      walk(state, 0);
+                      log('Blinkit PRELOADED_STATE fallback parsed ' + products.length + ' products');
+                    } else {
+                      log('Blinkit PRELOADED_STATE fallback: global state missing');
+                    }
+                  } catch (e) {
+                    log('Blinkit PRELOADED_STATE fallback failed: ' + e.message);
+                  }
+                }
                 
                 log('Parsed ' + products.length + ' products');
                 
@@ -259,7 +321,16 @@ class PlatformDOMScraperService {
               
               setTimeout(() => {
                 const products = [];
-                const productCards = document.querySelectorAll('[data-test-id="product-pod"], .product-card, .SKUDeck___StyledDiv-sc-1e5d9gk-0, li[class*="Product"]');
+                let productCards = document.querySelectorAll('[data-test-id="product-pod"], .product-card, .SKUDeck___StyledDiv-sc-1e5d9gk-0, li[class*="Product"]');
+
+                if (productCards.length === 0) {
+                  const candidateLinks = Array.from(document.querySelectorAll('a[href*="/pd/"], a[href*="/product/"]'));
+                  productCards = candidateLinks.filter((a) => {
+                    const text = a.textContent || '';
+                    return text.length > 20 && text.length < 500 && /₹\s*\d+/.test(text);
+                  });
+                  log('Fallback link-based cards: ' + productCards.length);
+                }
                 
                 log('Found ' + productCards.length + ' product cards');
                 
@@ -298,10 +369,10 @@ class PlatformDOMScraperService {
                       const cardText = card.textContent || '';
                       const allNumbers = cardText.match(/[0-9]+/g);
                       if (allNumbers) {
-                        // Skip discount %, delivery time, quantities - find first number >= 50
+                        // Skip discount %, delivery time, quantities - find first number >= 5
                         for (let num of allNumbers) {
                           const val = parseInt(num);
-                          if (val >= 50 && val <= 9999) {
+                          if (val >= 5 && val <= 9999) {
                             priceText = num;
                             break;
                           }
@@ -350,7 +421,7 @@ class PlatformDOMScraperService {
                   products: products,
                   success: true
                 }));
-              }, 3000);
+              }, 5000);
             } catch (error) {
               log('Error: ' + error.message);
               window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -371,261 +442,245 @@ class PlatformDOMScraperService {
           `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(query)}&lat=${encodeURIComponent(String(lat))}&lng=${encodeURIComponent(String(lng))}`,
         parseScript: (tokens) => `
           (function() {
-            try {
-              const log = (msg) => {
-                try {
-                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-                  if (send) send(JSON.stringify({type: 'LOG', message: '[Instamart-API] ' + msg}));
-                } catch(e) {}
-              };
+            // ---- bridge helpers (bridge may be deleted by Swiggy WAF, use cached ref) ----
+            var __send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+            if (!__send && window.ReactNativeWebView) __send = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
 
-              const sendResults = (products, error) => {
-                try {
-                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-                  if (send) send(JSON.stringify({
-                    type: 'SEARCH_RESULTS',
-                    platform: 'Instamart',
-                    sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                    products: products || [],
-                    success: products && products.length > 0,
-                    error: error || null
-                  }));
-                } catch(e) {}
-              };
-            log('Injected — will call Swiggy DAPI directly');
+            function log(msg) {
+              try { if (__send) __send(JSON.stringify({type:'LOG', message:'[Instamart-API] '+msg})); } catch(ignored){}
+            }
 
-            // Extract lat/lng from current URL
-            const currentUrl = window.location.href;
-            const latMatch = currentUrl.match(/lat=([0-9.]+)/);
-            const lngMatch = currentUrl.match(/lng=([0-9.]+)/);
-            const queryMatch = currentUrl.match(/query=([^&]+)/);
-            const lat = latMatch ? latMatch[1] : '12.9716';
-            const lng = lngMatch ? lngMatch[1] : '77.5946';
-            const query = queryMatch ? decodeURIComponent(queryMatch[1]) : '';
-
-            log('Params: query=' + query + ' lat=' + lat + ' lng=' + lng);
-
-            // Swiggy completely blocks DAPI fetches from the RN WebView (WAF 404 block).
-            // However, the WebView successfully loads the initial HTML page (SSR), 
-            // which contains all the search results embedded as JSON!
-            // We will extract that JSON directly from the DOM markup.
-            const runExtraction = (attempt) => {
+            function sendResults(prods, err) {
               try {
-                log('Starting product extraction (attempt ' + attempt + ')... readyState=' + document.readyState);
-                const html = document.documentElement.innerHTML;
-                
-                // Method 1: Look for the hydration state script tag
-                // Swiggy usually embeds it like: window.__PRELOADED_STATE__ = {...}
-                let jsonStr = null;
-                
-                // Try initial state match
-                const stateMatch = html.match(/window\.__PRELOADED_STATE__\s*=\s*(\{.*?\});\s*<\/script>/is) || 
-                                   html.match(/window\.INITIAL_STATE\s*=\s*(\{.*?\});\s*<\/script>/is) ||
-                                   html.match(/id="__NEXT_DATA__".*?>(\{.*?\})<\/script>/is);
-                                   
-                if (stateMatch && stateMatch[1]) {
-                  jsonStr = stateMatch[1];
-                  log('Found embedded JSON state in HTML (len: ' + jsonStr.length + ')');
-                } else {
-                  // Fallback: If we can't find the exact script tag, look for any large JSON block 
-                  // that contains our search query and "display_name"
-                  const anyJsonMatch = html.match(new RegExp('{[^{]*"display_name"[^{]*', 'i'));
-                  if (!anyJsonMatch) {
-                    log('No JSON state found in HTML. Body len: ' + html.length);
-                    // Could be the "We\'ll be back shortly" interstitial
-                    if (html.includes('We will be back shortly') || html.includes('Something went wrong')) {
-                      sendResults([], 'Swiggy blocked load (WAF interstitial)');
-                      return;
-                    }
-                    // If DOM isn\'t fully ready yet, retry once after a short delay
-                    if (document.readyState !== 'complete' && attempt === 1) {
-                      log('DOM not complete; retrying extraction in 2s');
-                      setTimeout(() => runExtraction(attempt + 1), 2000);
-                      return;
-                    }
-                    sendResults([], 'Could not find product data in DOM');
+                var payload = JSON.stringify({
+                  type:'SEARCH_RESULTS',
+                  platform:'Instamart',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  products: prods || [],
+                  success: !!(prods && prods.length > 0),
+                  error: err || null
+                });
+                if (__send) __send(payload);
+              } catch(ignored){}
+            }
+
+            try {
+              log('Script executing. readyState=' + document.readyState + ' url=' + location.href);
+
+              // ---- helpers ----
+              function toPrice(raw) {
+                var n = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
+                if (!isFinite(n) || n <= 0) return 0;
+                if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                if (n > 0 && n <= 9999) return Math.round(n);
+                return 0;
+              }
+
+              // ---- parseAndSend: walk a JS object tree for products ----
+              function parseAndSend(result) {
+                var products = [];
+                var seen = Object.create(null);
+
+                function getString(obj) {
+                  var keys = ['name','display_name','displayName','product_name','title'];
+                  for (var i=0;i<keys.length;i++) { if (obj && typeof obj[keys[i]]==='string' && obj[keys[i]].length>2) return obj[keys[i]]; }
+                  return '';
+                }
+                function getRawPrice(obj) {
+                  var keys = ['price','finalPrice','final_price','offerPrice','offer_price','selling_price','sellingPrice','mrp'];
+                  for (var i=0;i<keys.length;i++) { if (obj && obj[keys[i]] != null) return obj[keys[i]]; }
+                  return null;
+                }
+
+                function tryAdd(obj) {
+                  var name = getString(obj);
+                  if (!name || name.length < 3) return;
+                  var price = toPrice(getRawPrice(obj));
+                  if (!price) return;
+                  var key = name.toLowerCase()+'|'+price;
+                  if (seen[key]) return;
+                  seen[key] = 1;
+                  products.push({
+                    product_name: name.trim(),
+                    price: price,
+                    mrp: price,
+                    image_url: obj.image_url || obj.imageUrl || obj.image || '',
+                    product_url: obj.deep_link || obj.url || '',
+                    in_stock: true,
+                    weight: obj.quantity || obj.unit || '',
+                    platform: 'Instamart'
+                  });
+                }
+
+                function walk(node, depth) {
+                  if (!node || depth > 10) return;
+                  if (Array.isArray(node)) {
+                    for (var i=0;i<node.length;i++) walk(node[i], depth+1);
                     return;
                   }
-                  try {
-                    jsonStr = '{' + anyJsonMatch[0].split('{').slice(1).join('{');
-                    log('Found JSON via loose match (len: ' + jsonStr.length + ')');
-                  } catch(e) {
-                    log('Failed to parse loose JSON match: ' + e.message);
+                  if (typeof node !== 'object') return;
+                  var hasName = ('name' in node)||('display_name' in node)||('displayName' in node)||('title' in node);
+                  var hasPrice = ('price' in node)||('mrp' in node)||('finalPrice' in node)||('offerPrice' in node)||('selling_price' in node);
+                  if (hasName && hasPrice) tryAdd(node);
+                  var keys = Object.keys(node);
+                  for (var i=0;i<keys.length;i++) {
+                    var v = node[keys[i]];
+                    if (typeof v === 'string' && v.length > 30000) continue;
+                    walk(v, depth+1);
                   }
                 }
 
-                // If we found the JSON string, parse it
-                if (jsonStr) {
-                  try {
-                    const data = JSON.parse(jsonStr);
-                    // Determine the structure (it changes between React/Next.js versions)
-                    let searchData = null;
-                    
-                    // Route 1: __PRELOADED_STATE__ structure
-                    if (data.seoParams && data.widgets) searchData = data;
-                    if (data.searchState) searchData = data.searchState;
-                    if (data.props?.pageProps?.initialState) searchData = data.props.pageProps.initialState;
-                    if (data.props?.pageProps?.initialData) searchData = data.props.pageProps.initialData;
-                    
-                    // Just pass the whole tree to parseAndSend and let it hunt for widgets
-                    parseAndSend(searchData || data);
-                    return;
-                  } catch(e) {
-                    log('Failed to parse embedded JSON: ' + e.message);
-                  }
+                walk(result, 0);
+                log('parseAndSend found ' + products.length + ' products');
+                if (products.length === 0) {
+                  log('Top-level keys: ' + JSON.stringify(Object.keys(result || {}).slice(0, 10)));
                 }
+                sendResults(products, products.length === 0 ? 'parseAndSend: 0 products' : null);
+              }
 
-                // Fallback 2: Direct DOM traversal if the JSON is missing or unparseable
-                // (Old approach, but much more robust selectors now)
-                log('Falling back to direct DOM extraction...');
-                const productNodes = Array.from(document.querySelectorAll('[data-testid="item-card"], [data-testid*="product-"], .ItemCard_container, a[href*="/item/"]'));
-                
-                if (productNodes.length === 0) {
-                  // If DOM still incomplete on first attempt, retry once
-                  if (document.readyState !== 'complete' && attempt === 1) {
-                    log('DOM not complete; retrying DOM extraction in 2s');
-                    setTimeout(() => runExtraction(attempt + 1), 2000);
+              // ---- runExtraction: try JSON state first, then DOM ----
+              function runExtraction(attempt) {
+                log('Extraction attempt ' + attempt + ', readyState=' + document.readyState);
+
+                // Strategy 1: hydrated globals
+                try {
+                  var gs = window.__PRELOADED_STATE__ || window.INITIAL_STATE || null;
+                  if (gs && typeof gs === 'object') {
+                    log('Found global hydrated state');
+                    parseAndSend(gs);
                     return;
                   }
-                  sendResults([], 'No products found via DOM fallback');
+                } catch(e) { log('Global state error: '+e.message); }
+
+                // Strategy 2: script#__NEXT_DATA__
+                try {
+                  var el = document.querySelector('script#__NEXT_DATA__');
+                  var txt = el ? el.textContent : '';
+                  if (txt && txt.trim().charAt(0) === '{') {
+                    var nd = JSON.parse(txt);
+                    var initialData = (nd && nd.props && nd.props.pageProps && (nd.props.pageProps.initialState || nd.props.pageProps.initialData)) || nd;
+                    log('Found __NEXT_DATA__, parsing...');
+                    parseAndSend(initialData);
+                    return;
+                  }
+                } catch(e) { log('__NEXT_DATA__ parse error: '+e.message); }
+
+                // Strategy 3: scan raw HTML for state assignment
+                try {
+                  var html = document.documentElement.innerHTML;
+                  function extractObjectAfter(src, marker) {
+                    var mi = src.indexOf(marker);
+                    if (mi < 0) return null;
+                    var start = src.indexOf('{', mi);
+                    if (start < 0) return null;
+                    var depth = 0, inStr = false, quote = '', esc = false;
+                    for (var i=start;i<src.length;i++) {
+                      var ch = src[i];
+                      if (inStr) {
+                        if (esc) { esc = false; }
+                        else if (ch === '\\\\') { esc = true; }
+                        else if (ch === quote) { inStr = false; quote = ''; }
+                        continue;
+                      }
+                      if (ch === '"' || ch === "'") { inStr = true; quote = ch; continue; }
+                      if (ch === '{') depth++;
+                      if (ch === '}') { depth--; if (depth === 0) return src.slice(start, i+1); }
+                    }
+                    return null;
+                  }
+                  var jsonStr = extractObjectAfter(html, 'window.__PRELOADED_STATE__') || extractObjectAfter(html, 'window.INITIAL_STATE');
+                  if (jsonStr) {
+                    log('Found embedded JSON state len=' + jsonStr.length);
+                    parseAndSend(JSON.parse(jsonStr));
+                    return;
+                  }
+                } catch(e) { log('HTML state scan error: '+e.message); }
+
+                // Strategy 4: display_name regex on raw HTML
+                try {
+                  var html2 = document.documentElement.innerHTML;
+                  var products4 = [];
+                  var seen4 = Object.create(null);
+                  var re = /"display_name"\\s*:\\s*"([^"\\\\]{3,140}(?:\\\\.[^"\\\\]{0,40})*)"[\\s\\S]{0,300}?"(?:price|final_price|offer_price|selling_price|mrp)"\\s*:\\s*([0-9]{1,7})/g;
+                  var m;
+                  while ((m = re.exec(html2)) !== null) {
+                    var rawName = m[1].replace(/\\\\u[0-9a-fA-F]{4}/g,' ').replace(/\\\\"/g,' ').replace(/\\s+/g,' ').trim();
+                    var price4 = parseInt(m[2], 10);
+                    if (!rawName || rawName.length < 3) continue;
+                    if (!isFinite(price4) || price4 <= 0) continue;
+                    if (price4 > 9999 && price4 <= 999999) price4 = Math.round(price4/100);
+                    if (price4 < 5 || price4 > 9999) continue;
+                    var key4 = rawName.toLowerCase()+'|'+price4;
+                    if (seen4[key4]) continue;
+                    seen4[key4] = 1;
+                    products4.push({ product_name:rawName, price:price4, mrp:price4, platform:'Instamart', in_stock:true });
+                    if (products4.length >= 80) break;
+                  }
+                  if (products4.length > 0) {
+                    log('HTML regex found ' + products4.length + ' products');
+                    sendResults(products4);
+                    return;
+                  }
+                  log('HTML regex: 0 products');
+                } catch(e) { log('HTML regex error: '+e.message); }
+
+                // Strategy 5: DOM elements
+                try {
+                  var nodes = Array.from(document.querySelectorAll(
+                    'a[href*="/instamart/item/"], [data-testid="item-card"], [data-testid*="product"], [class*="ProductCard"], [class*="productCard"], [class*="ItemCard"]'
+                  ));
+                  log('DOM strategy: ' + nodes.length + ' candidate nodes');
+                  var products5 = [];
+                  var seen5 = Object.create(null);
+                  nodes.forEach(function(node) {
+                    var rawText = (node.innerText||node.textContent||'').replace(/\\s+/g,' ').trim();
+                    if (!rawText || rawText.length < 8) return;
+                    var heading = node.querySelector('h2,h3,h4,[class*="name"],[class*="title"]');
+                    var name = heading ? heading.textContent.trim() : '';
+                    if (!name) {
+                      var lines = rawText.split(' ');
+                      name = lines.find(function(l){
+                        return l.length>=4 && l.length<=120 && /[a-zA-Z]/.test(l) && !/^\\d+\\s*mins?$/i.test(l) && !/^add$/i.test(l) && !/₹/.test(l);
+                      }) || '';
+                    }
+                    var rupeeM = rawText.match(/₹\\s*([0-9]+(?:\\.[0-9]+)?)/);
+                    var price5 = rupeeM ? Math.round(parseFloat(rupeeM[1])) : 0;
+                    if (!name || !price5) return;
+                    var key5 = name.toLowerCase()+'|'+price5;
+                    if (seen5[key5]) return;
+                    seen5[key5] = 1;
+                    products5.push({ product_name:name, price:price5, mrp:price5, platform:'Instamart', in_stock:!rawText.toLowerCase().includes('out of stock') });
+                  });
+                  if (products5.length > 0) {
+                    log('DOM strategy found ' + products5.length + ' products');
+                    sendResults(products5);
+                    return;
+                  }
+                  log('DOM strategy: 0 products');
+                } catch(e) { log('DOM strategy error: '+e.message); }
+
+                // All failed on attempt 1? Retry once after 2s
+                if (attempt <= 1) {
+                  log('All strategies failed, retrying in 2s...');
+                  setTimeout(function(){ runExtraction(attempt+1); }, 2000);
                   return;
                 }
 
-                const products = [];
-                for (const node of productNodes) {
-                  const text = node.innerText || '';
-                  if (!text.trim()) continue;
-                  
-                  // Very messy heuristic extraction since classnames change
-                  const lines = text.split('\\n').map(l => l.trim()).filter(Boolean);
-                  if (lines.length < 2) continue;
-                  
-                  let name = lines[0];
-                  // If first line is a discount like "10% OFF", skip it
-                  if (name.includes('OFF') || name.includes('%')) name = lines[1];
-                  
-                  // Find price
-                  let priceMatch = text.match(/₹\\s*([0-9]+(?:\\.[0-9]+)?)/);
-                  let price = priceMatch ? parseFloat(priceMatch[1]) : 0;
-                  
-                  if (name && price > 0) {
-                    products.push({
-                      product_name: name,
-                      price: price,
-                      mrp: price,
-                      platform: 'Instamart',
-                      in_stock: !text.toLowerCase().includes('out of stock')
-                    });
-                  }
-                }
-                
-                if (products.length > 0) {
-                  log('DOM fallback parsed ' + products.length + ' products');
-                  sendResults(products);
-                } else {
-                  sendResults([], 'DOM fallback failed to extract data');
-                }
-
-              } catch(e) {
-                log('Extraction error: ' + e.message);
-                sendResults([], 'Extraction error: ' + e.message);
+                sendResults([], 'All extraction strategies exhausted (attempt ' + attempt + ')');
               }
-            };
 
-            // initial attempt after 3s
-            setTimeout(() => runExtraction(1), 3000);
+              // Start extraction after 3s to let Swiggy SSR hydrate
+              setTimeout(function(){ runExtraction(1); }, 3000);
 
-            function parseAndSend(result) {
-              const products = [];
-
-              const getString = (obj, ...keys) => {
-                for (const k of keys) {
-                  if (obj && obj[k] && typeof obj[k] === 'string') return obj[k];
+            } catch(e) {
+              try {
+                var errSend = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                if (errSend) {
+                  errSend(JSON.stringify({type:'LOG', message:'[Instamart-API] Fatal error: '+e.message}));
+                  errSend(JSON.stringify({type:'SEARCH_RESULTS', platform:'Instamart', sessionId:window.__COMPAREX_SESSION_ID__||null, products:[], success:false, error:'Fatal: '+e.message}));
                 }
-                return '';
-              };
-              const getNum = (obj, ...keys) => {
-                for (const k of keys) {
-                  const v = obj && obj[k];
-                  const n = typeof v === 'string' ? parseFloat(v) : (typeof v === 'number' ? v : NaN);
-                  if (Number.isFinite(n) && n > 0) return n;
-                }
-                return 0;
-              };
-
-              const tryAdd = (item) => {
-                if (!item || typeof item !== 'object') return;
-                const name = getString(item, 'name', 'display_name', 'displayName', 'product_name', 'title');
-                if (!name || name.length < 3) return;
-                let price = getNum(item, 'price', 'finalPrice', 'offerPrice', 'sellingPrice');
-                // Instamart prices are often in paise (×100)
-                if (price > 9999) price = Math.round(price / 100);
-                const mrp = getNum(item, 'mrp', 'actualPrice') || price;
-                // try getting price from nested price object
-                if (price === 0 && item.price && typeof item.price === 'object') {
-                  price = getNum(item.price, 'offer_price', 'offerPrice', 'amount');
-                  if (price > 9999) price = Math.round(price / 100);
-                }
-                // try variations
-                if (price === 0 && Array.isArray(item.variations) && item.variations[0]) {
-                  const v = item.variations[0];
-                  price = getNum(v, 'price', 'offerPrice');
-                  if (price === 0 && v.price && typeof v.price === 'object') {
-                    price = getNum(v.price, 'offer_price', 'offerPrice');
-                  }
-                  if (price > 9999) price = Math.round(price / 100);
-                }
-                if (price <= 0 || price > 9999) return;
-                const imgUrl = getString(item, 'image_url', 'imageUrl', 'image', 'thumbnail');
-                const pid = getString(item, 'product_id', 'id', 'itemId');
-                products.push({
-                  product_name: name,
-                  brand: getString(item, 'brand', 'brand_name', 'brandName'),
-                  price: price,
-                  mrp: mrp > 9999 ? Math.round(mrp / 100) : mrp || price,
-                  image_url: imgUrl,
-                  product_url: pid ? 'https://www.swiggy.com/instamart/item/' + pid : '',
-                  in_stock: true,
-                  weight: getString(item, 'quantity', 'unit', 'weight', 'serving_size'),
-                  platform: 'Instamart'
-                });
-              };
-
-              const walk = (node, depth) => {
-                if (!node || depth > 8) return;
-                if (Array.isArray(node)) { node.forEach(n => walk(n, depth + 1)); return; }
-                if (typeof node !== 'object') return;
-                // Check if this node looks like a product
-                const hasName = 'name' in node || 'display_name' in node || 'displayName' in node;
-                const hasPrice = 'price' in node || 'mrp' in node || 'finalPrice' in node || 'offerPrice' in node;
-                if (hasName && hasPrice) tryAdd(node);
-                for (const k of Object.keys(node)) {
-                  const v = node[k];
-                  if (typeof v === 'string' && v.length > 30000) continue;
-                  walk(v, depth + 1);
-                }
-              };
-
-              walk(result, 0);
-              log('Parsed ' + products.length + ' products from API');
-              if (products.length === 0) {
-                log('Top-level keys: ' + JSON.stringify(Object.keys(result || {}).slice(0, 10)));
-              }
-              sendResults(products, products.length === 0 ? 'API returned 0 products' : null);
+              } catch(ignored){}
             }
-          } catch(e) {
-            try {
-              window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-API] Fatal Injection Error: ' + e.message}));
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Instamart',
-                sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                products: [],
-                success: false,
-                error: 'Fatal Injection Error: ' + e.message
-              }));
-            } catch(sendErr) {}
-          }
           })();
         `,
       },
@@ -809,6 +864,67 @@ class PlatformDOMScraperService {
                     log('Error on card ' + index + ': ' + e.message);
                   }
                 });
+
+                if (products.length === 0) {
+                  try {
+                    const nextDataEl = document.querySelector('script#__NEXT_DATA__');
+                    const nextDataText = nextDataEl ? nextDataEl.textContent : '';
+                    if (nextDataText && nextDataText.trim().startsWith('{')) {
+                      const nextData = JSON.parse(nextDataText);
+                      const seen = new Set();
+
+                      const toPrice = (raw) => {
+                        const n = typeof raw === 'string' ? parseFloat(raw) : raw;
+                        if (!Number.isFinite(n) || n <= 0) return 0;
+                        if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                        if (n > 0 && n <= 9999) return Math.round(n);
+                        return 0;
+                      };
+
+                      const tryPush = (obj) => {
+                        const name = obj?.name || obj?.display_name || obj?.displayName || obj?.product_name || obj?.title;
+                        const rawPrice = obj?.price ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.mrp;
+                        if (typeof name !== 'string' || name.trim().length < 3) return;
+                        const price = toPrice(rawPrice);
+                        if (!price) return;
+                        const key = name.trim().toLowerCase() + '|' + price;
+                        if (seen.has(key)) return;
+                        seen.add(key);
+                        products.push({
+                          product_name: name.trim(),
+                          brand: '',
+                          price,
+                          mrp: price,
+                          image_url: obj?.image_url || obj?.imageUrl || obj?.image || '',
+                          product_url: obj?.deep_link || obj?.url || '',
+                          in_stock: true,
+                          weight: obj?.quantity || obj?.unit || '',
+                          platform: 'Zepto'
+                        });
+                      };
+
+                      const walk = (node, depth) => {
+                        if (!node || depth > 9) return;
+                        if (Array.isArray(node)) {
+                          node.forEach((x) => walk(x, depth + 1));
+                          return;
+                        }
+                        if (typeof node !== 'object') return;
+                        const hasName = ('name' in node) || ('display_name' in node) || ('displayName' in node) || ('title' in node);
+                        const hasPrice = ('price' in node) || ('mrp' in node) || ('finalPrice' in node) || ('offerPrice' in node) || ('selling_price' in node);
+                        if (hasName && hasPrice) tryPush(node);
+                        Object.keys(node).forEach((k) => walk(node[k], depth + 1));
+                      };
+
+                      walk(nextData, 0);
+                      log('Zepto __NEXT_DATA__ fallback parsed ' + products.length + ' products');
+                    } else {
+                      log('Zepto __NEXT_DATA__ fallback: no state found');
+                    }
+                  } catch (e) {
+                    log('Zepto __NEXT_DATA__ fallback failed: ' + e.message);
+                  }
+                }
                 
                 log('Parsed ' + products.length + ' products');
                 
