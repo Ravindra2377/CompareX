@@ -404,45 +404,37 @@ class PlatformDOMScraperService {
             // Wait 2s for the page's own cookies/session to be set, then make API call
             setTimeout(async () => {
               try {
-                const apiUrl = 'https://www.swiggy.com/dapi/instamart/search?lat=' + lat + '&lng=' + lng + '&str=' + encodeURIComponent(query) + '&submitAction=ENTER';
-                log('Calling: ' + apiUrl.slice(0, 120));
+                // Primary endpoint (confirmed working as of 2025)
+                const apiUrl = 'https://www.swiggy.com/api/instamart/search?lat=' + lat + '&lng=' + lng + '&query=' + encodeURIComponent(query) + '&pageType=INSTAMART_SEARCH';
+                log('Calling: ' + apiUrl.slice(0, 150));
 
                 const resp = await fetch(apiUrl, {
                   method: 'GET',
                   credentials: 'include', // Use page cookies (Swiggy session)
                   headers: {
-                    'accept': 'application/json',
-                    'content-type': 'application/json',
+                    'accept': 'application/json, text/plain, */*',
                     'referer': 'https://www.swiggy.com/instamart',
                     'origin': 'https://www.swiggy.com',
                   }
                 });
 
-                log('API response status: ' + resp.status);
+                log('API status: ' + resp.status + '  CT: ' + (resp.headers.get('content-type') || 'none'));
 
-                if (!resp.ok) {
-                  log('API failed with status ' + resp.status + ' — trying alternate endpoint');
-                  // Try alternate URL pattern
-                  const altUrl = 'https://www.swiggy.com/api/instamart/search?lat=' + lat + '&lng=' + lng + '&query=' + encodeURIComponent(query);
-                  const altResp = await fetch(altUrl, { credentials: 'include', headers: { 'accept': 'application/json' } });
-                  log('Alt API status: ' + altResp.status);
-                  if (!altResp.ok) { sendResults([], 'API HTTP ' + resp.status); return; }
-                  const altData = await altResp.json();
-                  parseAndSend(altData);
+                const text = await resp.text();
+                log('Body len: ' + text.length + '  First100: ' + text.slice(0, 100).replace(/\s+/g,' '));
+
+                if (!text || text.trim().length < 5) {
+                  sendResults([], 'Empty response — Swiggy requires logged-in session');
                   return;
                 }
 
-                const contentType = resp.headers.get('content-type') || '';
-                log('Content-Type: ' + contentType);
-
-                if (!contentType.includes('json')) {
-                  const text = await resp.text();
-                  log('Non-JSON response (first 100): ' + text.slice(0, 100));
-                  sendResults([], 'API returned non-JSON: ' + contentType);
+                let data = null;
+                try { data = JSON.parse(text); } catch(e) {
+                  log('Not JSON: ' + e.message + '. Body start: ' + text.slice(0, 80));
+                  sendResults([], 'Non-JSON response from Swiggy API');
                   return;
                 }
 
-                const data = await resp.json();
                 log('Got JSON, top keys: ' + Object.keys(data || {}).join(', '));
                 parseAndSend(data);
 
