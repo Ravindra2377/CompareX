@@ -981,85 +981,163 @@ const SearchScreen = ({ navigation, route }) => {
             thirdPartyCookiesEnabled={true}
             geolocationEnabled={true}
             injectedJavaScript={`
-            // Prevent app redirect prompts for Instamart/Swiggy and cache bridge
             (function() {
+              // === 1. Cache the RN bridge immediately before Swiggy can delete it ===
               try {
-                // Eagerly cache the React Native bridge before Swiggy deletes it!
                 if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
                   window.__rnMsg = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
                 }
               } catch(e) {}
 
-              try {
-                // Override methods that might trigger app redirects (defensive: may be read-only)
+              function rnLog(msg) {
                 try {
-                  const originalReplace = window.location && window.location.replace;
-                  if (typeof originalReplace === 'function') {
-                    window.location.replace = function(url) {
-                      try {
-                        if (!url.includes('swiggy://') && !url.includes('app://')) {
-                          window.location.href = url;
-                        }
-                      } catch (e) {}
-                    };
-                  }
-                } catch (e) {}
+                  var fn = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (fn) fn(JSON.stringify({type:'LOG', message:'[Instamart-XHR] ' + msg}));
+                } catch(e) {}
+              }
 
-                // Block app install prompts
-                if (window.addEventListener) {
-                  window.addEventListener('beforeinstallprompt', function(e) {
-                    try { e.preventDefault(); } catch (err) {}
+              function rnSend(products) {
+                try {
+                  var fn = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (fn) fn(JSON.stringify({
+                    type: 'SEARCH_RESULTS',
+                    platform: 'Instamart',
+                    sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                    products: products,
+                    success: products.length > 0,
+                    error: products.length === 0 ? 'XHR intercept: 0 products' : null
+                  }));
+                } catch(e) {}
+              }
+
+              // Already sent guard so we don't double-post
+              var __resultsSent = false;
+
+              function extractProducts(data) {
+                if (__resultsSent) return;
+                var products = [];
+                var seen = {};
+
+                function toPrice(raw) {
+                  var n = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
+                  if (!isFinite(n) || n <= 0) return 0;
+                  if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                  if (n > 0 && n <= 9999) return Math.round(n);
+                  return 0;
+                }
+
+                function tryAdd(obj) {
+                  if (!obj || typeof obj !== 'object') return;
+                  var nameKeys = ['display_name','name','displayName','product_name','title','item_name'];
+                  var priceKeys = ['price','offer_price','display_price','final_price','sp','selling_price','mrp','offerPrice'];
+                  var name = '';
+                  for (var i=0;i<nameKeys.length;i++) { if (typeof obj[nameKeys[i]] === 'string' && obj[nameKeys[i]].length > 2) { name = obj[nameKeys[i]].trim(); break; } }
+                  if (!name) return;
+                  var price = 0;
+                  for (var j=0;j<priceKeys.length;j++) { var p = toPrice(obj[priceKeys[j]]); if (p > 0) { price = p; break; } }
+                  if (!price) return;
+                  var key = name.toLowerCase() + '|' + price;
+                  if (seen[key]) return;
+                  seen[key] = 1;
+                  products.push({
+                    product_name: name,
+                    price: price,
+                    mrp: toPrice(obj.mrp || obj.MRP) || price,
+                    image_url: obj.image_url || obj.img_url || obj.imageUrl || '',
+                    product_url: obj.deep_link || obj.url || '',
+                    weight: obj.quantity || obj.unit || obj.weight || '',
+                    in_stock: !(obj.is_out_of_stock || obj.out_of_stock),
+                    platform: 'Instamart'
                   });
                 }
 
-                // Mark as mobile for Swiggy (may throw if non-configurable)
-                try {
-                  Object.defineProperty(navigator, 'platform', {
-                    get: function() { return 'Linux armv8l'; },
-                    configurable: true
-                  });
-                } catch (e) {}
+                function walk(node, depth) {
+                  if (!node || depth > 12) return;
+                  if (Array.isArray(node)) { node.forEach(function(x){ walk(x, depth+1); }); return; }
+                  if (typeof node !== 'object') return;
+                  var hasName = ('display_name' in node)||('name' in node)||('item_name' in node)||('displayName' in node);
+                  var hasPrice = ('price' in node)||('offer_price' in node)||('sp' in node)||('mrp' in node);
+                  if (hasName && hasPrice) tryAdd(node);
+                  Object.keys(node).forEach(function(k){ var v=node[k]; if(typeof v==='string'&&v.length>50000)return; walk(v,depth+1); });
+                }
 
-                try {
-                  Object.defineProperty(navigator, 'maxTouchPoints', {
-                    get: function() { return 5; },
-                    configurable: true
-                  });
-                } catch (e) {}
+                walk(data, 0);
+                rnLog('XHR intercept extracted ' + products.length + ' products');
+                if (!__resultsSent) {
+                  __resultsSent = true;
+                  rnSend(products);
+                }
+              }
 
-                // Spoof geolocation (Swiggy often gates Instamart by location)
+              // === 2. Intercept fetch ===
+              try {
+                var origFetch = window.fetch;
+                window.fetch = function(url, opts) {
+                  var urlStr = typeof url === 'string' ? url : (url && url.url) || '';
+                  var isSearch = urlStr.includes('/instamart') && (urlStr.includes('search') || urlStr.includes('listing'));
+                  return origFetch.apply(this, arguments).then(function(resp) {
+                    if (isSearch) {
+                      resp.clone().json().then(function(data) {
+                        rnLog('fetch intercepted: ' + urlStr.substring(0,80));
+                        extractProducts(data);
+                      }).catch(function(e){ rnLog('fetch json parse failed: ' + e.message); });
+                    }
+                    return resp;
+                  });
+                };
+                rnLog('fetch interceptor installed');
+              } catch(e) { rnLog('fetch intercept failed: ' + e.message); }
+
+              // === 3. Intercept XMLHttpRequest ===
+              try {
+                var OrigXHR = window.XMLHttpRequest;
+                function PatchedXHR() {
+                  var xhr = new OrigXHR();
+                  var _open_url = '';
+                  var origOpen = xhr.open.bind(xhr);
+                  xhr.open = function(method, url) {
+                    _open_url = typeof url === 'string' ? url : '';
+                    return origOpen.apply(xhr, arguments);
+                  };
+                  xhr.addEventListener('load', function() {
+                    try {
+                      var isSearch = _open_url.includes('/instamart') && (_open_url.includes('search') || _open_url.includes('listing'));
+                      if (isSearch && xhr.responseText) {
+                        rnLog('XHR intercepted: ' + _open_url.substring(0,80));
+                        var data = JSON.parse(xhr.responseText);
+                        extractProducts(data);
+                      }
+                    } catch(e) { rnLog('XHR parse failed: ' + e.message); }
+                  });
+                  return xhr;
+                }
+                PatchedXHR.prototype = OrigXHR.prototype;
+                window.XMLHttpRequest = PatchedXHR;
+                rnLog('XHR interceptor installed');
+              } catch(e) { rnLog('XHR intercept failed: ' + e.message); }
+
+              // === 4. Prevent app redirect prompts ===
+              try {
+                try {
+                  window.location.replace = function(url) {
+                    try { if (!url.includes('swiggy://') && !url.includes('app://')) window.location.href = url; } catch(e) {}
+                  };
+                } catch(e) {}
+                if (window.addEventListener) {
+                  window.addEventListener('beforeinstallprompt', function(e) { try { e.preventDefault(); } catch(e) {} });
+                }
+                try { Object.defineProperty(navigator, 'maxTouchPoints', { get: function(){ return 5; }, configurable: true }); } catch(e) {}
                 try {
                   if (navigator && navigator.geolocation) {
-                    const fakePosition = {
-                      coords: {
-                        latitude: 12.9716,
-                        longitude: 77.5946,
-                        accuracy: 50,
-                        altitude: null,
-                        altitudeAccuracy: null,
-                        heading: null,
-                        speed: null,
-                      },
-                      timestamp: Date.now(),
-                    };
-
-                    navigator.geolocation.getCurrentPosition = function(success, error) {
-                      try {
-                        if (typeof success === 'function') success(fakePosition);
-                      } catch (e) {}
-                    };
-
-                    navigator.geolocation.watchPosition = function(success, error) {
-                      try {
-                        if (typeof success === 'function') success(fakePosition);
-                      } catch (e) {}
-                      return 1;
-                    };
-
-                    navigator.geolocation.clearWatch = function(id) {};
+                    var fp = { coords: { latitude:12.9716, longitude:77.5946, accuracy:50, altitude:null, altitudeAccuracy:null, heading:null, speed:null }, timestamp: Date.now() };
+                    navigator.geolocation.getCurrentPosition = function(s){ try{ s(fp); }catch(e){} };
+                    navigator.geolocation.watchPosition = function(s){ try{ s(fp); }catch(e){} return 1; };
+                    navigator.geolocation.clearWatch = function(){};
                   }
-                } catch (e) {}
-              } catch (e) {}
+                } catch(e) {}
+              } catch(e) {}
+
+              rnLog('injectedJavaScript complete — interceptors active');
             })();
             true;
           `}
