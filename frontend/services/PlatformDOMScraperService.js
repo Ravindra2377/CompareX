@@ -401,69 +401,113 @@ class PlatformDOMScraperService {
 
             log('Params: query=' + query + ' lat=' + lat + ' lng=' + lng);
 
-            // Wait 2s for the page's own cookies/session to be set, then make API call
-            setTimeout(async () => {
+            // Swiggy completely blocks DAPI fetches from the RN WebView (WAF 404 block).
+            // However, the WebView successfully loads the initial HTML page (SSR), 
+            // which contains all the search results embedded as JSON!
+            // We will extract that JSON directly from the DOM markup.
+            setTimeout(() => {
               try {
-                // Primary endpoint (confirmed working as of 2025)
-                const apiUrl = 'https://www.swiggy.com/api/instamart/search?lat=' + lat + '&lng=' + lng + '&query=' + encodeURIComponent(query) + '&pageType=INSTAMART_SEARCH';
-                log('Calling: ' + apiUrl.slice(0, 150));
-
-                // Extract tokens passed from React Native
-                const injectedTokens = ${JSON.stringify(tokens || {})};
-                const swiggyCookie = injectedTokens.cookie || '';
+                const html = document.documentElement.innerHTML;
                 
-                // Parse any extra auth headers stored during login
-                let authHeaders = {};
-                try {
-                  if (injectedTokens.authHeaders) {
-                    authHeaders = JSON.parse(injectedTokens.authHeaders);
-                    if (authHeaders.headers) authHeaders = authHeaders.headers;
+                // Method 1: Look for the hydration state script tag
+                // Swiggy usually embeds it like: window.__PRELOADED_STATE__ = {...}
+                let jsonStr = null;
+                
+                // Try initial state match
+                const stateMatch = html.match(/window\.__PRELOADED_STATE__\s*=\s*(\{.*?\});\s*<\/script>/is) || 
+                                   html.match(/window\.INITIAL_STATE\s*=\s*(\{.*?\});\s*<\/script>/is) ||
+                                   html.match(/id="__NEXT_DATA__".*?>(\{.*?\})<\/script>/is);
+                                   
+                if (stateMatch && stateMatch[1]) {
+                  jsonStr = stateMatch[1];
+                  log('Found embedded JSON state in HTML (len: ' + jsonStr.length + ')');
+                } else {
+                  // Fallback: If we can't find the exact script tag, look for any large JSON block 
+                  // that contains our search query and "display_name"
+                  const anyJsonMatch = html.match(new RegExp('{[^{]*"display_name"[^{]*', 'i'));
+                  if (!anyJsonMatch) {
+                    log('No JSON state found in HTML. Body len: ' + html.length);
+                    // Could be the "We'll be back shortly" interstitial
+                    if (html.includes('We will be back shortly') || html.includes('Something went wrong')) {
+                      sendResults([], 'Swiggy blocked load (WAF interstitial)');
+                      return;
+                    }
+                    sendResults([], 'Could not find product data in DOM');
+                    return;
                   }
-                } catch(e) {}
+                }
 
-                const fetchHeaders = {
-                    'accept': 'application/json, text/plain, */*',
-                    'referer': 'https://www.swiggy.com/instamart',
-                    'origin': 'https://www.swiggy.com',
-                    ...authHeaders
-                };
+                // If we found the JSON string, parse it
+                if (jsonStr) {
+                  try {
+                    const data = JSON.parse(jsonStr);
+                    // Determine the structure (it changes between React/Next.js versions)
+                    let searchData = null;
+                    
+                    // Route 1: __PRELOADED_STATE__ structure
+                    if (data.seoParams && data.widgets) searchData = data;
+                    if (data.searchState) searchData = data.searchState;
+                    if (data.props?.pageProps?.initialState) searchData = data.props.pageProps.initialState;
+                    if (data.props?.pageProps?.initialData) searchData = data.props.pageProps.initialData;
+                    
+                    // Just pass the whole tree to parseAndSend and let it hunt for widgets
+                    parseAndSend(searchData || data);
+                    return;
+                  } catch(e) {
+                    log('Failed to parse embedded JSON: ' + e.message);
+                  }
+                }
+
+                // Fallback 2: Direct DOM traversal if the JSON is missing or unparseable
+                // (Old approach, but much more robust selectors now)
+                log('Falling back to direct DOM extraction...');
+                const productNodes = Array.from(document.querySelectorAll('[data-testid="item-card"], [data-testid*="product-"], .ItemCard_container, a[href*="/item/"]'));
                 
-                // Explicitly set Cookie if we captured it
-                if (swiggyCookie) {
-                  fetchHeaders['Cookie'] = swiggyCookie;
-                }
-
-                const resp = await fetch(apiUrl, {
-                  method: 'GET',
-                  credentials: 'include', // Best effort for native cookies
-                  headers: fetchHeaders
-                });
-
-                log('API status: ' + resp.status + '  CT: ' + (resp.headers.get('content-type') || 'none'));
-
-                const text = await resp.text();
-                log('Body len: ' + text.length + '  First100: ' + text.slice(0, 100).replace(/\s+/g,' '));
-
-                if (!text || text.trim().length < 5) {
-                  sendResults([], 'Empty response — Swiggy requires logged-in session');
+                if (productNodes.length === 0) {
+                  sendResults([], 'No products found via DOM fallback');
                   return;
                 }
 
-                let data = null;
-                try { data = JSON.parse(text); } catch(e) {
-                  log('Not JSON: ' + e.message + '. Body start: ' + text.slice(0, 80));
-                  sendResults([], 'Non-JSON response from Swiggy API');
-                  return;
+                const products = [];
+                for (const node of productNodes) {
+                  const text = node.innerText || '';
+                  if (!text.trim()) continue;
+                  
+                  // Very messy heuristic extraction since classnames change
+                  const lines = text.split('\\n').map(l => l.trim()).filter(Boolean);
+                  if (lines.length < 2) continue;
+                  
+                  let name = lines[0];
+                  // If first line is a discount like "10% OFF", skip it
+                  if (name.includes('OFF') || name.includes('%')) name = lines[1];
+                  
+                  // Find price
+                  let priceMatch = text.match(/₹\\s*([0-9]+(?:\\.[0-9]+)?)/);
+                  let price = priceMatch ? parseFloat(priceMatch[1]) : 0;
+                  
+                  if (name && price > 0) {
+                    products.push({
+                      product_name: name,
+                      price: price,
+                      mrp: price,
+                      platform: 'Instamart',
+                      in_stock: !text.toLowerCase().includes('out of stock')
+                    });
+                  }
                 }
-
-                log('Got JSON, top keys: ' + Object.keys(data || {}).join(', '));
-                parseAndSend(data);
+                
+                if (products.length > 0) {
+                  log('DOM fallback parsed ' + products.length + ' products');
+                  sendResults(products);
+                } else {
+                  sendResults([], 'DOM fallback failed to extract data');
+                }
 
               } catch(e) {
-                log('Fetch error: ' + e.message);
-                sendResults([], 'Fetch error: ' + e.message);
+                log('Extraction error: ' + e.message);
+                sendResults([], 'Extraction error: ' + e.message);
               }
-            }, 2000);
+            }, 3000); // Wait 3s for React to render the full page
 
             function parseAndSend(result) {
               const products = [];
