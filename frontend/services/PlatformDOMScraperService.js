@@ -95,270 +95,487 @@ class PlatformDOMScraperService {
                     if (!name) {
                       // Try to extract product name from text nodes
                       // Filter out: discount badges, delivery time, buttons, numbers-only, prices
-                          var __tokenBundle = ${JSON.stringify(tokens || {})};
-                          var __send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-                          if (!__send && window.ReactNativeWebView) __send = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
-                          if (!__send) return;
-
-                          function log(msg) {
-                            try { __send(JSON.stringify({ type: 'LOG', message: '[Instamart-DOM] ' + msg })); } catch (ignored) {}
-                          }
-
-                          function sendResults(products, error) {
-                            try {
-                              __send(JSON.stringify({
-                                type: 'SEARCH_RESULTS',
-                                platform: 'Instamart',
-                                sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                                products: products || [],
-                                success: !!(products && products.length > 0),
-                                error: error || null
-                              }));
-                            } catch (ignored) {}
-                          }
-
-                          function syncTokens(reason) {
-                            try {
-                              __send(JSON.stringify({
-                                type: 'SYNC_TOKENS',
-                                platform: 'Instamart',
-                                payload: {
-                                  cookie: document.cookie || (__tokenBundle && __tokenBundle.cookie) || '',
-                                  authHeaders:
-                                    localStorage.swiggy_auth_headers ||
-                                    localStorage.auth_headers ||
-                                    (__tokenBundle && __tokenBundle.authHeaders) ||
-                                    '',
-                                  swiggyUserInfo:
-                                    localStorage.swiggy_user_info ||
-                                    localStorage.user_info ||
-                                    (__tokenBundle && __tokenBundle.swiggyUserInfo) ||
-                                    '',
-                                  syncReason: reason || 'dom',
-                                  syncUrl: location.href
-                                }
-                              }));
-                            } catch (ignored) {}
-                          }
-
-                          function toPrice(raw) {
-                            var n = typeof raw === 'string' ? parseFloat(String(raw).replace(/[^0-9.]/g, '')) : Number(raw);
-                            if (!isFinite(n) || n <= 0) return 0;
-                            if (n > 9999 && n <= 999999) return Math.round(n / 100);
-                            if (n > 0 && n <= 9999) return Math.round(n);
-                            return 0;
-                          }
-
-                          function collectFromObject(root) {
-                            var products = [];
-                            var seen = Object.create(null);
-
-                            function pickName(obj) {
-                              var keys = ['display_name', 'name', 'displayName', 'product_name', 'title', 'item_name'];
-                              for (var i = 0; i < keys.length; i++) {
-                                var value = obj && obj[keys[i]];
-                                if (typeof value === 'string' && value.trim().length > 2) return value.trim();
-                              }
-                              return '';
+                      const textNodes = Array.from(card.querySelectorAll('*'))
+                        .map(el => el.textContent?.trim())
+                        .filter(t => {
+                          if (!t || t.length < 5 || t.length > 150) return false;
+                          if (/^\d+$/.test(t)) return false; // Skip numbers-only
+                          // Skip if it's JUST the badge/time/button (not combined text)
+                          if (/^[0-9]+%\s*OFF$/i.test(t)) return false; 
+                          if (/^[0-9]+\s*mins$/i.test(t)) return false; 
+                          if (/^ADD$/i.test(t)) return false;
+                          if (/^₹\s*[0-9]+$/i.test(t)) return false;
+                          return /[a-zA-Z]/.test(t); // Must have letters
+                        })
+                        .map(t => {
+                          // Clean up the text: remove mins, price, ADD from combined strings
+                          let cleaned = t;
+                          // Remove delivery time pattern ANYWHERE in string
+                          cleaned = cleaned.replace(/\d+\s*mins/gi, '');
+                          // Remove quantity pattern ANYWHERE
+                          cleaned = cleaned.replace(/\d+\s*pcs/gi, '');
+                          // Remove discount badge
+                          cleaned = cleaned.replace(/\d+%\s*OFF/gi, '');
+                          // Remove price (₹ followed by numbers) and everything after
+                          cleaned = cleaned.replace(/₹\s*\d+.*$/g, '');
+                          // Remove ADD button text
+                          cleaned = cleaned.replace(/ADD/gi, '');
+                          // Trim and return
+                          return cleaned.trim();
+                        })
+                        .filter(t => t.length > 10 && t.length < 100); // Re-filter after cleaning
+                      
+                      // Pick the cleanest text (no junk like mins, pcs, prices)
+                      // Score each option: lower score = cleaner
+                      const scoredTexts = textNodes.map(t => ({
+                        text: t,
+                        score: 
+                          (t.match(/\d+/g) || []).length + // penalize numbers
+                          (t.match(/mins/gi) || []).length * 10 + // heavily penalize mins
+                          (t.match(/pcs/gi) || []).length * 10 + // heavily penalize pcs
+                          (t.match(/₹/g) || []).length * 10 // heavily penalize rupee
+                      })).sort((a, b) => a.score - b.score); // sort by cleanest (lowest score)
+                      
+                      name = scoredTexts.length > 0 ? scoredTexts[0].text : textNodes[0];
+                      if (index === 0) {
+                        log('[Blinkit] Cleaned options: ' + textNodes.slice(0, 3).join(' | '));
+                        log('[Blinkit] Selected: ' + name);
+                      }
+                    }
+                    
+                    // Try multiple selectors for price  
+                    let priceText = '';
+                    let priceEl = card.querySelector('div[class*="Price"]');
+                    if (!priceEl) priceEl = card.querySelector('span[class*="price"]');
+                    if (priceEl) {
+                      priceText = priceEl.textContent;
+                    } else {
+                      // Fallback: extract price from card text
+                      const cardText = card.textContent || '';
+                      
+                      // First try: Find numbers immediately after rupee symbol
+                      const rupeeMatch = cardText.match(/₹\s*([0-9]+)/g);
+                      if (rupeeMatch && rupeeMatch.length > 0) {
+                        // Get all prices with ₹ symbol, pick smallest realistic one
+                        const prices = rupeeMatch.map(m => parseInt(m.replace(/₹\s*/g, ''))).filter(p => p >= 5 && p <= 9999);
+                        if (prices.length > 0) {
+                          priceText = Math.min(...prices).toString();
+                        }
+                      }
+                      
+                      // Fallback: Find numbers NOT followed by units
+                      if (!priceText) {
+                        const allNumbers = cardText.match(/[0-9]+/g);
+                        if (allNumbers) {
+                          for (let i = 0; i < allNumbers.length; i++) {
+                            const num = allNumbers[i];
+                            const val = parseInt(num);
+                            
+                            // Skip if not in price range
+                            if (val < 5 || val > 9999) continue;
+                            
+                            // Check context around this number to skip measurements
+                            const numIndex = cardText.indexOf(num);
+                            const contextAfter = cardText.substring(numIndex + num.length, numIndex + num.length + 10).toLowerCase();
+                            
+                            // Skip if followed by measurement units
+                            if (/^\s*(ml|g|kg|l|pcs|pack|piece|mins?|%)/.test(contextAfter)) {
+                              continue;
                             }
-
-                            function pickPrice(obj) {
-                              var keys = ['price', 'final_price', 'finalPrice', 'offer_price', 'offerPrice', 'selling_price', 'sellingPrice', 'sp', 'mrp'];
-                              for (var i = 0; i < keys.length; i++) {
-                                if (obj && obj[keys[i]] != null) return toPrice(obj[keys[i]]);
-                              }
-                              return 0;
-                            }
-
-                            function walk(node, depth) {
-                              if (!node || depth > 10) return;
-                              if (Array.isArray(node)) {
-                                for (var i = 0; i < node.length; i++) walk(node[i], depth + 1);
-                                return;
-                              }
-                              if (typeof node !== 'object') return;
-
-                              var name = pickName(node);
-                              var price = pickPrice(node);
-                              if (name && price) {
-                                var key = name.toLowerCase() + '|' + price;
-                                if (!seen[key]) {
-                                  seen[key] = 1;
-                                  var itemId = node.product_id || node.productId || node.id || '';
-                                  products.push({
-                                    product_name: name,
-                                    brand: node.brand || node.brand_name || '',
-                                    price: price,
-                                    mrp: toPrice(node.mrp) || price,
-                                    image_url: node.image_url || node.imageUrl || node.image || '',
-                                    product_url: itemId ? ('https://www.swiggy.com/instamart/item/' + encodeURIComponent(String(itemId))) : (node.url || node.deep_link || ''),
-                                    in_stock: !(node.out_of_stock === true || node.in_stock === false),
-                                    weight: node.quantity || node.unit || node.weight || '',
-                                    platform: 'Instamart'
-                                  });
-                                }
-                              }
-
-                              var keys = Object.keys(node);
-                              for (var j = 0; j < keys.length; j++) {
-                                var value = node[keys[j]];
-                                if (typeof value === 'string' && value.length > 30000) continue;
-                                walk(value, depth + 1);
-                              }
-                            }
-
-                            walk(root, 0);
-                            return products;
+                            
+                            priceText = num;
+                            break;
                           }
+                        }
+                      }
+                    }
+                    
+                    const price = priceText ? parseFloat(priceText.replace(/[^0-9.]/g, '')) : 0;
+                    const imgEl = card.querySelector('img');
+                    const image = imgEl ? imgEl.src : '';
+                    
+                    if (index === 0) {
+                      log('First product - name: ' + (name || 'NOT FOUND') + ', price: ' + price);
+                    }
+                    
+                    if (name && name.length > 3 && price > 0) {
+                      products.push({
+                        product_name: name,
+                        brand: '',
+                        price: price,
+                        mrp: price,
+                        image_url: image,
+                        product_url: card.href || card.querySelector('a')?.href || '',
+                        in_stock: true,
+                        weight: card.querySelector('div[class*="weight"], div[class*="quantity"]')?.textContent?.trim() || '',
+                        platform: 'Blinkit'
+                      });
+                    }
+                  } catch(e) {
+                    if (index === 0) {
+                      log('Error parsing first product: ' + e.message);
+                    }
+                  }
+                });
 
-                          function collectFromDom() {
-                            var selector = [
-                              'a[href*="/instamart/item/"]',
-                              '[data-testid*="item"]',
-                              '[data-testid*="product"]',
-                              '[class*="ProductCard"]',
-                              '[class*="product-card"]',
-                              '[class*="item-card"]',
-                              '[aria-label*="ADD"]',
-                              'button[aria-label*="ADD"]'
-                            ].join(',');
+                if (products.length === 0) {
+                  try {
+                    const state =
+                      (window.grofers && window.grofers.PRELOADED_STATE) ||
+                      window.__PRELOADED_STATE__ ||
+                      null;
+                    if (state && typeof state === 'object') {
+                      const seen = new Set();
 
-                            var nodes = Array.from(document.querySelectorAll(selector));
-                            log('DOM candidates=' + nodes.length);
+                      const toPrice = (raw) => {
+                        const n = typeof raw === 'string' ? parseFloat(raw) : raw;
+                        if (!Number.isFinite(n) || n <= 0) return 0;
+                        if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                        if (n > 0 && n <= 9999) return Math.round(n);
+                        return 0;
+                      };
 
-                            var products = [];
-                            var seen = Object.create(null);
+                      const tryPush = (obj) => {
+                        const name = obj?.name || obj?.display_name || obj?.displayName || obj?.product_name || obj?.title;
+                        const rawPrice = obj?.price ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.mrp;
+                        if (typeof name !== 'string' || name.trim().length < 3) return;
+                        const price = toPrice(rawPrice);
+                        if (!price) return;
+                        const key = name.trim().toLowerCase() + '|' + price;
+                        if (seen.has(key)) return;
+                        seen.add(key);
+                        products.push({
+                          product_name: name.trim(),
+                          brand: '',
+                          price,
+                          mrp: price,
+                          image_url: obj?.image_url || obj?.imageUrl || obj?.image || '',
+                          product_url: obj?.deep_link || obj?.url || '',
+                          in_stock: true,
+                          weight: obj?.quantity || obj?.unit || '',
+                          platform: 'Blinkit'
+                        });
+                      };
 
-                            nodes.forEach(function(node) {
-                              var text = (node.innerText || node.textContent || '').replace(/\s+/g, ' ').trim();
-                              if (!text || text.length < 10) return;
+                      const walk = (node, depth) => {
+                        if (!node || depth > 9) return;
+                        if (Array.isArray(node)) {
+                          node.forEach((x) => walk(x, depth + 1));
+                          return;
+                        }
+                        if (typeof node !== 'object') return;
+                        const hasName = ('name' in node) || ('display_name' in node) || ('displayName' in node) || ('title' in node);
+                        const hasPrice = ('price' in node) || ('mrp' in node) || ('finalPrice' in node) || ('offerPrice' in node) || ('selling_price' in node);
+                        if (hasName && hasPrice) tryPush(node);
+                        Object.keys(node).forEach((k) => walk(node[k], depth + 1));
+                      };
 
-                              var titleNode = node.querySelector('h1,h2,h3,h4,[class*="name"],[class*="title"]');
-                              var name = titleNode ? (titleNode.textContent || '').trim() : '';
-                              if (!name) {
-                                name = text
-                                  .replace(/₹\s*\d+(?:\.\d+)?/g, ' ')
-                                  .replace(/\bADD\b/gi, ' ')
-                                  .replace(/\b\d+\s*mins?\b/gi, ' ')
-                                  .replace(/\s+/g, ' ')
-                                  .trim()
-                                  .split(' ')
-                                  .slice(0, 12)
-                                  .join(' ');
-                              }
+                      walk(state, 0);
+                      log('Blinkit PRELOADED_STATE fallback parsed ' + products.length + ' products');
+                    } else {
+                      log('Blinkit PRELOADED_STATE fallback: global state missing');
+                    }
+                  } catch (e) {
+                    log('Blinkit PRELOADED_STATE fallback failed: ' + e.message);
+                  }
+                }
+                
+                log('Parsed ' + products.length + ' products');
+                
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'SEARCH_RESULTS',
+                  platform: 'Blinkit',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  products: products,
+                  success: true
+                }));
+              }, 5000); // Wait 5s for Blinkit's React app to render
+            } catch (error) {
+              log('Error: ' + error.message);
+              window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: 'SEARCH_RESULTS',
+                platform: 'Blinkit',
+                sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                error: error.message,
+                success: false,
+                products: []
+              }));
+            }
+          })();
+        `,
+      },
 
-                              var priceMatches = text.match(/₹\s*([0-9]+(?:\.[0-9]+)?)/g) || [];
-                              var price = 0;
-                              if (priceMatches.length > 0) {
-                                price = priceMatches
-                                  .map(function(entry) {
-                                    return parseFloat(String(entry).replace(/[^0-9.]/g, ''));
-                                  })
-                                  .filter(function(value) {
-                                    return isFinite(value) && value >= 5 && value <= 9999;
-                                  })
-                                  .sort(function(a, b) {
-                                    return a - b;
-                                  })[0] || 0;
-                              }
+      BigBasket: {
+        searchUrl: (query) =>
+          `https://www.bigbasket.com/ps/?q=${encodeURIComponent(query)}`,
+        parseScript: () => `
+          (function() {
+            const log = (msg) => {
+              try {
+                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[BigBasket-DOM] ' + msg}));
+              } catch(e) {}
+            };
+            
+            try {
+              log('Parsing search results page...');
+              
+              setTimeout(() => {
+                const products = [];
+                let productCards = document.querySelectorAll('[data-test-id="product-pod"], .product-card, .SKUDeck___StyledDiv-sc-1e5d9gk-0, li[class*="Product"]');
 
-                              if (!name || name.length < 3 || !price) return;
-
-                              var key = name.toLowerCase() + '|' + price;
-                              if (seen[key]) return;
-                              seen[key] = 1;
-
-                              var imgNode = node.querySelector('img');
-                              var deepLink =
-                                node.href ||
-                                (node.closest && node.closest('a') && node.closest('a').href) ||
-                                (node.querySelector && node.querySelector('a') && node.querySelector('a').href) ||
-                                '';
-
-                              products.push({
-                                product_name: name,
-                                brand: '',
-                                price: Math.round(price),
-                                mrp: Math.round(price),
-                                image_url: imgNode ? (imgNode.currentSrc || imgNode.src || '') : '',
-                                product_url: deepLink,
-                                in_stock: text.toLowerCase().indexOf('out of stock') === -1,
-                                weight: '',
-                                platform: 'Instamart'
-                              });
-                            });
-
-                            return products;
+                if (productCards.length === 0) {
+                  const candidateLinks = Array.from(document.querySelectorAll('a[href*="/pd/"], a[href*="/product/"]'));
+                  productCards = candidateLinks.filter((a) => {
+                    const text = a.textContent || '';
+                    return text.length > 20 && text.length < 500 && /₹\s*\d+/.test(text);
+                  });
+                  log('Fallback link-based cards: ' + productCards.length);
+                }
+                
+                log('Found ' + productCards.length + ' product cards');
+                
+                // Debug first card
+                if (productCards.length > 0) {
+                  const firstCard = productCards[0];
+                  log('First card classes: ' + firstCard.className);
+                  log('First card has h3: ' + !!firstCard.querySelector('h3'));
+                  log('First card has img: ' + !!firstCard.querySelector('img'));
+                  const allText = firstCard.textContent?.substring(0, 100);
+                  log('First card text: ' + allText);
+                }
+                
+                productCards.forEach((card, index) => {
+                  try {
+                    // Try multiple strategies to find name
+                    let name = card.querySelector('h3')?.textContent?.trim();
+                    if (!name) name = card.querySelector('[qa="product-name"]')?.textContent?.trim();
+                    if (!name) name = card.querySelector('.text-base')?.textContent?.trim();
+                    if (!name) name = card.querySelector('a[href*="/pd/"]')?.textContent?.trim();
+                    
+                    // Try multiple strategies to find price
+                    let priceText = '';
+                    let priceEl = card.querySelector('[qa="selling-price"]');
+                    if (!priceEl) priceEl = card.querySelector('.Pricing___StyledLabel-sc-pldi2d-1');
+                    if (!priceEl) priceEl = card.querySelector('[class*="Price"]');
+                    if (!priceEl) priceEl = card.querySelector('span[class*="price"]');
+                    
+                    if (priceEl) {
+                      priceText = priceEl.textContent;
+                      if (index === 0) {
+                        log('DEBUG: Found priceEl with text: "' + priceText + '"');
+                      }
+                    } else {
+                      // Fallback: extract price from card text using regex
+                      const cardText = card.textContent || '';
+                      const allNumbers = cardText.match(/[0-9]+/g);
+                      if (allNumbers) {
+                        // Skip discount %, delivery time, quantities - find first number >= 5
+                        for (let num of allNumbers) {
+                          const val = parseInt(num);
+                          if (val >= 5 && val <= 9999) {
+                            priceText = num;
+                            break;
                           }
+                        }
+                      }
+                      if (index === 0) {
+                        log('DEBUG: No priceEl, cardText: "' + cardText + '"');
+                        log('DEBUG: All numbers found: ' + (allNumbers ? allNumbers.join(',') : 'NONE') + ', Selected: ' + priceText);
+                      }
+                    }
+                    
+                    const price = priceText ? parseFloat(priceText.replace(/[^0-9.]/g, '')) : 0;
+                    const imgEl = card.querySelector('img');
+                    const image = imgEl ? imgEl.src : '';
+                    
+                    if (index === 0) {
+                      log('First product - name: ' + (name || 'NOT FOUND') + ', priceText: "' + priceText + '", price: ' + price);
+                    }
+                    
+                    if (name && price > 0) {
+                      products.push({
+                        product_name: name,
+                        brand: card.querySelector('[qa="brand"]')?.textContent?.trim() || '',
+                        price: price,
+                        mrp: price,
+                        image_url: image,
+                        product_url: card.querySelector('a')?.href || '',
+                        in_stock: true,
+                        weight: card.querySelector('[qa="size"]')?.textContent?.trim() || '',
+                        platform: 'BigBasket'
+                      });
+                    }
+                  } catch(e) {
+                    if (index === 0) {
+                      log('Error parsing first product: ' + e.message);
+                    }
+                  }
+                });
+                
+                log('Parsed ' + products.length + ' products');
+                
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'SEARCH_RESULTS',
+                  platform: 'BigBasket',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  products: products,
+                  success: true
+                }));
+              }, 5000);
+            } catch (error) {
+              log('Error: ' + error.message);
+              window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: 'SEARCH_RESULTS',
+                platform: 'BigBasket',
+                sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                error: error.message,
+                success: false,
+                products: []
+              }));
+            }
+          })();
+        `,
+      },
 
-                          function runExtraction(reason) {
-                            syncTokens(reason || 'run');
+      Instamart: {
+        searchUrl: (query, lat = 12.9716, lng = 77.5946) =>
+          `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(query)}&lat=${encodeURIComponent(String(lat))}&lng=${encodeURIComponent(String(lng))}`,
+        parseScript: (tokens) => `
+          (function() {
+            var __tokenBundle = ${JSON.stringify(tokens || {})};
+            // ---- bridge helpers (bridge may be deleted by Swiggy WAF, use cached ref) ----
+            var __send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+            if (!__send && window.ReactNativeWebView) __send = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
 
-                            try {
-                              var preloaded = window.__PRELOADED_STATE__ || window.INITIAL_STATE || null;
-                              if (preloaded && typeof preloaded === 'object') {
-                                var fromPreload = collectFromObject(preloaded);
-                                log('state parser found ' + fromPreload.length + ' products');
-                                if (fromPreload.length > 0) {
-                                  sendResults(fromPreload, null);
-                                  return true;
-                                }
-                              }
-                            } catch (e) {
-                              log('state parser error: ' + e.message);
-                            }
+            function log(msg) {
+              try { if (__send) __send(JSON.stringify({type:'LOG', message:'[Instamart-API] '+msg})); } catch(ignored){}
+            }
 
-                            try {
-                              var nextDataNode = document.querySelector('script#__NEXT_DATA__');
-                              var nextDataText = nextDataNode ? nextDataNode.textContent : '';
-                              if (nextDataText && nextDataText.trim().charAt(0) === '{') {
-                                var parsedNext = JSON.parse(nextDataText);
-                                var nextState =
-                                  (parsedNext && parsedNext.props && parsedNext.props.pageProps && (parsedNext.props.pageProps.initialState || parsedNext.props.pageProps.initialData)) ||
-                                  parsedNext;
-                                var fromNext = collectFromObject(nextState);
-                                log('__NEXT_DATA__ parser found ' + fromNext.length + ' products');
-                                if (fromNext.length > 0) {
-                                  sendResults(fromNext, null);
-                                  return true;
-                                }
-                              }
-                            } catch (e) {
-                              log('__NEXT_DATA__ parser error: ' + e.message);
-                            }
+            function sendResults(prods, err) {
+              try {
+                var payload = JSON.stringify({
+                  type:'SEARCH_RESULTS',
+                  platform:'Instamart',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  products: prods || [],
+                  success: !!(prods && prods.length > 0),
+                  error: err || null
+                });
+                if (__send) __send(payload);
+              } catch(ignored){}
+            }
 
-                            try {
-                              var fromDom = collectFromDom();
-                              log('DOM parser found ' + fromDom.length + ' products');
-                              if (fromDom.length > 0) {
-                                sendResults(fromDom, null);
-                                return true;
-                              }
-                            } catch (e) {
-                              log('DOM parser error: ' + e.message);
-                            }
+            try {
+              log('Script executing. readyState=' + document.readyState + ' url=' + location.href);
 
-                            return false;
-                          }
+              // ---- helpers ----
+              function safeJsonParse(value) {
+                if (!value) return null;
+                if (typeof value === 'object') return value;
+                if (typeof value !== 'string') return null;
+                try {
+                  return JSON.parse(value);
+                } catch (e) {
+                  return null;
+                }
+              }
 
-                          try {
-                            log('Script executing. readyState=' + document.readyState + ' url=' + location.href);
+              function getSearchContext() {
+                var fallback = { query: '', lat: '12.9716', lng: '77.5946' };
+                try {
+                  var url = new URL(location.href);
+                  var params = url.searchParams;
+                  fallback.query = params.get('query') || params.get('q') || params.get('str') || '';
+                  fallback.lat = params.get('lat') || fallback.lat;
+                  fallback.lng = params.get('lng') || fallback.lng;
+                } catch (e) {}
+                return fallback;
+              }
 
-                            var done = false;
-                            function attempt(reason) {
-                              if (done) return;
-                              if (runExtraction(reason)) {
-                                done = true;
-                              }
-                            }
+              function buildAuthHeaders() {
+                var headers = {
+                  'accept': 'application/json',
+                  'x-requested-with': 'XMLHttpRequest',
+                  'referer': location.href,
+                  'origin': location.origin
+                };
 
-                            setTimeout(function(){ attempt('attempt-1'); }, 1200);
-                            setTimeout(function(){ attempt('attempt-2'); }, 3200);
-                            setTimeout(function(){ attempt('attempt-3'); }, 6200);
-                            setTimeout(function(){ if (!done) sendResults([], 'Instamart DOM parser returned 0 products'); }, 9200);
-                          } catch (e) {
-                            sendResults([], 'Fatal: ' + e.message);
-                          }
+                var candidates = [
+                  __tokenBundle && __tokenBundle.authHeaders,
+                  __tokenBundle && __tokenBundle.swiggy_auth_headers,
+                  __tokenBundle && __tokenBundle.auth_headers
+                ];
+
+                for (var i = 0; i < candidates.length; i++) {
+                  var parsed = safeJsonParse(candidates[i]);
+                  if (!parsed || typeof parsed !== 'object') continue;
+
+                  var source = parsed.headers && typeof parsed.headers === 'object'
+                    ? parsed.headers
+                    : parsed;
+
+                  var keys = Object.keys(source);
+                  for (var j = 0; j < keys.length; j++) {
+                    var key = keys[j];
+                    var value = source[key];
+                    if (typeof value !== 'string' || !value || value.length > 5000) {
+                      continue;
+                    }
+
+                    var lower = String(key).toLowerCase();
+                    if (
+                      lower === 'cookie' ||
+                      lower === 'host' ||
+                      lower === 'content-length'
+                    ) {
+                      continue;
+                    }
+
+                    headers[key] = value;
+                  }
+                }
+
+                return headers;
+              }
+
+              function toPrice(raw) {
+                var n = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
+                if (!isFinite(n) || n <= 0) return 0;
+                if (n > 500 && n === Math.round(n) && Math.round(n) % 100 === 0) {
+                  return Math.round(n / 100);
+                }
+                if (n > 9999 && n <= 999999) return Math.round(n / 100);
+                if (n > 0 && n <= 9999) return Math.round(n);
+                return 0;
+              }
+
+              function imageFrom(obj) {
+                if (!obj || typeof obj !== 'object') return '';
+                if (obj.image_url || obj.imageUrl || obj.image || obj.img_url) {
+                  return obj.image_url || obj.imageUrl || obj.image || obj.img_url || '';
+                }
+                if (obj.image_id) {
+                  return 'https://media-assets.swiggy.com/swiggy/image/upload/' + obj.image_id;
+                }
+                return '';
+              }
+
+              function deepLinkFrom(obj) {
+                if (!obj || typeof obj !== 'object') return '';
+                if (obj.deep_link || obj.url) return obj.deep_link || obj.url || '';
+                if (obj.product_id) {
+                  return 'https://www.swiggy.com/instamart/item/' + obj.product_id;
+                }
+                return '';
+              }
+
+              function isInStock(obj) {
+                if (!obj || typeof obj !== 'object') return true;
+                if (obj.in_stock === false || obj.is_out_of_stock === true || obj.out_of_stock === true) {
+                  return false;
+                }
+                if (obj.stock && typeof obj.stock === 'object') {
+                  var qty = Number(obj.stock.quantity);
                   if (isFinite(qty) && qty <= 0) return false;
                 }
                 return true;
