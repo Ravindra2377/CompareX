@@ -96,43 +96,79 @@ const instamartInterceptScript = `
             continue; 
           }
           
-          // sometimes it's nested
-          var actualCard = card.card || card;
-          if (!actualCard.gridElements || !actualCard.gridElements.infoWithStyle) {
-            log('card ' + i + ' no gridElements.infoWithStyle, keys: ' + Object.keys(actualCard).join(','));
-            continue;
-          }
+          // Log card type for debugging
+          log('card ' + i + ' @type: ' + (card['@type'] || 'unknown') + ', keys: ' + Object.keys(card).join(','));
           
-          var items = actualCard.gridElements.infoWithStyle.items;
-          if (!Array.isArray(items)) {
-            log('card ' + i + ' items not array, type: ' + typeof items);
-            continue;
-          }
-          
-          for (var j = 0; j < items.length; j++) {
-            var info = items[j].info;
-            if (!info) continue;
+          // Try different structures
+          if (card.gridElements && card.gridElements.infoWithStyle) {
+            // Original structure
+            var items = card.gridElements.infoWithStyle.items;
+            if (!Array.isArray(items)) {
+              log('card ' + i + ' items not array, type: ' + typeof items);
+              continue;
+            }
             
-            var name = info.display_name || info.name || '';
+            for (var j = 0; j < items.length; j++) {
+              var info = items[j].info;
+              if (!info) continue;
+              
+              var name = info.display_name || info.name || '';
+              if (name.length < 3) continue;
+              
+              var price = 0, mrp = 0;
+              if (info.price && typeof info.price === 'object') {
+                price = toPrice(info.price.offer_price || info.price.discounted_price || info.price.price);
+                mrp = toPrice(info.price.mrp);
+              } else {
+                price = toPrice(info.offer_price || info.price);
+                mrp = toPrice(info.mrp);
+              }
+              if (!price) price = mrp;
+              if (!mrp) mrp = price;
+              if (!price) continue;
+              
+              var inStock = true;
+              if (info.out_of_stock !== undefined) inStock = !info.out_of_stock;
+              else if (info.in_stock !== undefined) inStock = !!info.in_stock;
+
+              var itemId = info.id || '';
+              var deepLink = itemId ? 'https://www.swiggy.com/instamart/item/' + encodeURIComponent(String(itemId)) : 'https://www.swiggy.com/instamart';
+
+              products.push({
+                platform: 'Instamart',
+                name: name,
+                price: price,
+                mrp: mrp,
+                inStock: inStock,
+                deliveryTime: '10-15 mins',
+                deepLink: deepLink
+              });
+            }
+          } else if (card['@type'] === 'ProductCard' || card.type === 'product') {
+            // New structure - direct product card
+            log('card ' + i + ' is ProductCard, extracting product');
+            var name = card.name || card.displayName || card.title || '';
             if (name.length < 3) continue;
             
             var price = 0, mrp = 0;
-            if (info.price && typeof info.price === 'object') {
-              price = toPrice(info.price.offer_price || info.price.discounted_price || info.price.price);
-              mrp = toPrice(info.price.mrp);
-            } else {
-              price = toPrice(info.offer_price || info.price);
-              mrp = toPrice(info.mrp);
+            if (card.price) {
+              if (typeof card.price === 'object') {
+                price = toPrice(card.price.offerPrice || card.price.finalPrice || card.price.price);
+                mrp = toPrice(card.price.mrp || card.price.originalPrice);
+              } else {
+                price = toPrice(card.price);
+              }
             }
             if (!price) price = mrp;
             if (!mrp) mrp = price;
             if (!price) continue;
             
             var inStock = true;
-            if (info.out_of_stock !== undefined) inStock = !info.out_of_stock;
-            else if (info.in_stock !== undefined) inStock = !!info.in_stock;
+            if (card.outOfStock !== undefined) inStock = !card.outOfStock;
+            else if (card.inStock !== undefined) inStock = !!card.inStock;
+            else if (card.availability !== undefined) inStock = card.availability === 'IN_STOCK';
 
-            var itemId = info.id || '';
+            var itemId = card.id || card.productId || '';
             var deepLink = itemId ? 'https://www.swiggy.com/instamart/item/' + encodeURIComponent(String(itemId)) : 'https://www.swiggy.com/instamart';
 
             products.push({
@@ -144,6 +180,45 @@ const instamartInterceptScript = `
               deliveryTime: '10-15 mins',
               deepLink: deepLink
             });
+          } else if (card.items && Array.isArray(card.items)) {
+            // Alternative structure with direct items array
+            log('card ' + i + ' has direct items array');
+            for (var j = 0; j < card.items.length; j++) {
+              var item = card.items[j];
+              var name = item.name || item.displayName || item.title || '';
+              if (name.length < 3) continue;
+              
+              var price = 0, mrp = 0;
+              if (item.price) {
+                if (typeof item.price === 'object') {
+                  price = toPrice(item.price.offerPrice || item.price.finalPrice || item.price.price);
+                  mrp = toPrice(item.price.mrp || item.price.originalPrice);
+                } else {
+                  price = toPrice(item.price);
+                }
+              }
+              if (!price) price = mrp;
+              if (!mrp) mrp = price;
+              if (!price) continue;
+              
+              var inStock = true;
+              if (item.outOfStock !== undefined) inStock = !item.outOfStock;
+              else if (item.inStock !== undefined) inStock = !!item.inStock;
+              else if (item.availability !== undefined) inStock = item.availability === 'IN_STOCK';
+
+              var itemId = item.id || item.productId || '';
+              var deepLink = itemId ? 'https://www.swiggy.com/instamart/item/' + encodeURIComponent(String(itemId)) : 'https://www.swiggy.com/instamart';
+
+              products.push({
+                platform: 'Instamart',
+                name: name,
+                price: price,
+                mrp: mrp,
+                inStock: inStock,
+                deliveryTime: '10-15 mins',
+                deepLink: deepLink
+              });
+            }
           }
         }
         
