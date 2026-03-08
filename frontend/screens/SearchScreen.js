@@ -181,7 +181,7 @@ const instamartInterceptScript = `
     syncTokens('boot');
   })();
   true;
-\`;
+`;
 
 const reducer = (state, action) => {
   console.log(
