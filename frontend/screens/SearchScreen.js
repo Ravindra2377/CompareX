@@ -1151,63 +1151,127 @@ const SearchScreen = ({ navigation, route }) => {
           }
         } catch(e) { log(source + ' widgets strategy error: ' + e.message); }
 
-        // Strategy B: Swiggy cards response (from /api/instamart/search)
-        // data.data.cards[] -> cards can have Items or product arrays
+        // Strategy B: Swiggy cards response — data.data.cards[i].card.card.gridElements/items
+        // Debug confirmed: cards[0] = { card: { ... } }
         try {
           var cards = (data && data.data && data.data.cards) || [];
           if (cards.length > 0) {
-            log(source + ' found ' + cards.length + ' cards, extracting...');
             var cProducts = [];
-            function extractFromCard(card) {
-              if (!card || typeof card !== 'object') return;
-              if (Array.isArray(card)) { card.forEach(extractFromCard); return; }
-              var name = card.display_name || card.name || '';
-              var hasPrice = card.price != null || card.offer_price != null || card.sp != null || card.mrp != null;
-              if (name && name.length >= 3 && hasPrice) {
-                var p = toPrice(card.price) || toPrice(card.offer_price) || toPrice(card.sp);
-                if (p > 0) {
-                  var pid2 = card.product_id || '';
-                  var img2 = card.image_url || card.img_url || '';
-                  if (!img2 && card.image_id) img2 = 'https://media-assets.swiggy.com/swiggy/image/upload/' + card.image_id;
-                  cProducts.push({ product_name:name.trim(), brand:card.brand_name||'', price:p, mrp:toPrice(card.mrp)||p, image_url:img2, product_url:card.deep_link||(pid2?'https://www.swiggy.com/instamart/item/'+pid2:''), weight:card.quantity||'', in_stock:!(card.is_out_of_stock||card.out_of_stock), platform:'Instamart' });
-                  return;
+            var seen2 = {};
+            var card1Keys = cards[0] ? JSON.stringify(Object.keys(cards[0]).slice(0,5)) : 'none';
+            var card2 = cards[0] && cards[0].card;
+            var card2Keys = card2 ? JSON.stringify(Object.keys(card2).slice(0,8)) : 'none';
+            var card3 = card2 && card2.card;
+            var card3Keys = card3 ? JSON.stringify(Object.keys(card3).slice(0,8)) : 'none';
+            log(source + ' card path debug: cards[0] keys=' + card1Keys + ' .card keys=' + card2Keys + ' .card.card keys=' + card3Keys);
+
+            function tryAddProduct(info) {
+              if (!info || typeof info !== 'object') return;
+              var name = info.display_name || info.name || info.product_name || '';
+              if (typeof name !== 'string' || name.trim().length < 3) return;
+              // Swiggy prices are in paise (e.g. 2400 = ₹24)
+              var rawPrice = info.price;
+              var price = 0;
+              if (rawPrice != null) {
+                if (typeof rawPrice === 'object') {
+                  // price is nested: { offer_price, mrp }
+                  price = toPrice(rawPrice.offer_price || rawPrice.offerPrice || rawPrice.discounted_price) ||
+                          toPrice(rawPrice.mrp);
+                } else {
+                  price = toPrice(rawPrice);
                 }
               }
-              Object.keys(card).forEach(function(k) {
-                var v = card[k];
-                if (typeof v === 'string' && v.length > 50000) return;
-                if (typeof v === 'object') extractFromCard(v);
+              if (!price) price = toPrice(info.offer_price || info.offerPrice || info.discounted_price || info.sp);
+              if (!price) return;
+              var key3 = name.trim().toLowerCase() + '|' + price;
+              if (seen2[key3]) return;
+              seen2[key3] = 1;
+              var pid3 = info.product_id || info.id || '';
+              var img3 = info.image_url || info.img_url || info.imageUrl || '';
+              if (!img3 && info.image_id) img3 = 'https://media-assets.swiggy.com/swiggy/image/upload/' + info.image_id;
+              cProducts.push({
+                product_name: name.trim(),
+                brand: info.brand_name || info.brand || '',
+                price: price,
+                mrp: toPrice(typeof info.mrp === 'object' ? (info.mrp.mrp || info.mrp.value) : info.mrp) || price,
+                image_url: img3,
+                product_url: info.deep_link || (pid3 ? 'https://www.swiggy.com/instamart/item/' + pid3 : ''),
+                weight: info.quantity || info.unit || info.weight || info.pack_size || '',
+                in_stock: !(info.is_out_of_stock || info.out_of_stock || info.in_stock === false),
+                platform: 'Instamart'
               });
             }
-            cards.forEach(extractFromCard);
+
+            // Walk each card's nested structure following Swiggy's known layout
+            cards.forEach(function(cardWrapper, ci) {
+              if (!cardWrapper) return;
+              // Swiggy wraps every card: { card: { card: { gridElements | items | inlineCard | ... } } }
+              var outerCard = cardWrapper.card || cardWrapper;
+              var innerCard = outerCard.card || outerCard;
+              if (!innerCard) return;
+
+              // Path 1: gridElements.infoWithStyle.items[].info  (main product grid)
+              var ge = innerCard.gridElements;
+              if (ge && ge.infoWithStyle && ge.infoWithStyle.items) {
+                if (ci === 0) log(source + ' card[0] has gridElements.infoWithStyle.items len=' + ge.infoWithStyle.items.length);
+                ge.infoWithStyle.items.forEach(function(item) {
+                  tryAddProduct(item.info || item);
+                });
+              }
+
+              // Path 2: items[] directly on card
+              if (innerCard.items && Array.isArray(innerCard.items)) {
+                if (ci === 0) log(source + ' card[0] has items len=' + innerCard.items.length);
+                innerCard.items.forEach(function(item) {
+                  tryAddProduct(item.info || item);
+                });
+              }
+
+              // Path 3: inlineCard.shelfContent.inlineItems[].itemId -> product
+              var inlineCard = innerCard.inlineCard;
+              if (inlineCard && inlineCard.shelfContent && inlineCard.shelfContent.inlineItems) {
+                inlineCard.shelfContent.inlineItems.forEach(function(item) {
+                  tryAddProduct(item.itemId || item.info || item);
+                });
+              }
+
+              // Path 4: band.cardSection.cards[].card -> another nested card level
+              if (innerCard.band && innerCard.band.cardSection && innerCard.band.cardSection.cards) {
+                innerCard.band.cardSection.cards.forEach(function(c2) {
+                  var c2inner = (c2.card && c2.card.card) || c2.card || c2;
+                  if (c2inner && c2inner.items) c2inner.items.forEach(function(i2){ tryAddProduct(i2.info||i2); });
+                  var ge2 = c2inner && c2inner.gridElements;
+                  if (ge2 && ge2.infoWithStyle && ge2.infoWithStyle.items) ge2.infoWithStyle.items.forEach(function(i2){ tryAddProduct(i2.info||i2); });
+                });
+              }
+            });
+
+            log(source + ' cards strategy found ' + cProducts.length + ' products');
             if (cProducts.length > 0) {
-              log(source + ' cards strategy found ' + cProducts.length + ' products');
               send({ type:'SEARCH_RESULTS', platform:'Instamart', sessionId:window.__COMPAREX_SESSION_ID__||null, products:cProducts, success:true, error:null });
               return;
             }
           }
         } catch(e) { log(source + ' cards strategy error: ' + e.message); }
 
-        // Strategy C: Generic tree walk (fallback)
+        // Strategy C: Generic tree walk (last resort)
         var products = collectProducts(data);
         log(source + ' generic walk extracted ' + products.length + ' products');
 
-        // Log 2nd-level info when all strategies fail
         if (products.length === 0) {
+          // Deep path debug for next iteration
           try {
-            log(source + ' DEBUG: data.data=' + (data && data.data ? JSON.stringify(Object.keys(data.data)).substring(0, 200) : 'null'));
-            if (data && data.data) {
-              var keys2 = Object.keys(data.data);
-              keys2.slice(0, 5).forEach(function(k) {
-                var v = data.data[k];
-                if (Array.isArray(v)) {
-                  log(source + ' data.data.' + k + ' is array len=' + v.length + (v[0] ? ' first keys=' + JSON.stringify(Object.keys(v[0]||{}).slice(0,8)) : ''));
-                } else if (v && typeof v === 'object') {
-                  log(source + ' data.data.' + k + ' keys=' + JSON.stringify(Object.keys(v).slice(0,8)));
-                }
-              });
+            var c0 = data && data.data && data.data.cards && data.data.cards[0];
+            var c0c = c0 && c0.card;
+            var c0cc = c0c && c0c.card;
+            if (c0cc) {
+              log(source + ' cards[0].card.card keys=' + JSON.stringify(Object.keys(c0cc).slice(0,10)));
+              var ge3 = c0cc.gridElements;
+              if (ge3) log(source + ' gridElements keys=' + JSON.stringify(Object.keys(ge3).slice(0,8)));
+              if (ge3 && ge3.infoWithStyle) log(source + ' infoWithStyle keys=' + JSON.stringify(Object.keys(ge3.infoWithStyle).slice(0,8)));
+              if (c0cc.items) log(source + ' items[0]=' + JSON.stringify(c0cc.items[0]).substring(0,300));
             }
-          } catch(debugErr) {}
+          } catch(dbErr) {}
         }
 
         if (products.length > 0) {
