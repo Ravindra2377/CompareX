@@ -38,10 +38,10 @@ const SUGGESTIONS = [
 ];
 
 const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
-const ENABLE_BACKEND_FALLBACK = true;  // Use Go backend API when WebView fails
+const ENABLE_BACKEND_FALLBACK = true; // Use Go backend API when WebView fails
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
-const INSTAMART_INITIAL_TIMEOUT_MS = 25000;  // Fall through to backend quickly
+const INSTAMART_INITIAL_TIMEOUT_MS = 25000; // Fall through to backend quickly
 const INSTAMART_RETRY_TIMEOUT_MS = 15000;
 const OVERALL_SEARCH_TIMEOUT_MS = 120000;
 
@@ -140,9 +140,25 @@ const SearchScreen = ({ navigation, route }) => {
             }
             if (!platformResultsRef.current[platform]) {
               console.log(
-                `[Search] ${platform} timed out after retry, continuing without timeout error`,
+                `[Search] ${platform} timed out after retry, trying backend fallback`,
               );
-              writePlatformResult(platform, [], true, null, sessionId);
+              const fallbackKey = `${platform}:${sessionId}`;
+              if (!fallbackAttemptedRef.current.has(fallbackKey)) {
+                fallbackAttemptedRef.current.add(fallbackKey);
+                fallbackToBackend(
+                  platform,
+                  currentSearchQueryRef.current,
+                  sessionId,
+                );
+                return;
+              }
+              writePlatformResult(
+                platform,
+                [],
+                false,
+                "WebView timeout after retry",
+                sessionId,
+              );
             }
           }, INSTAMART_RETRY_TIMEOUT_MS);
           return;
@@ -321,7 +337,15 @@ const SearchScreen = ({ navigation, route }) => {
         // Save the actual token objects
         const tokenMap = {};
         connected.forEach((plat) => {
-          tokenMap[plat] = parsed[plat];
+          if (plat === "Instamart") {
+            tokenMap[plat] = {
+              ...(parsed[plat] || {}),
+              ...(parsed.Swiggy || {}),
+              ...(parsed.swiggy || {}),
+            };
+          } else {
+            tokenMap[plat] = parsed[plat];
+          }
         });
         connectedPlatformTokensRef.current = tokenMap;
 
@@ -409,11 +433,15 @@ const SearchScreen = ({ navigation, route }) => {
         // After 3.5s the navigation state change handler will detect the homepage loaded and redirect.
         if (platform === "Instamart") {
           urls[platform] = "https://www.swiggy.com/instamart";
-          console.log(`[Search] Navigating ${platform} to WARMUP: https://www.swiggy.com/instamart`);
+          console.log(
+            `[Search] Navigating ${platform} to WARMUP: https://www.swiggy.com/instamart`,
+          );
           // Schedule redirect to actual search URL after warmup
           setTimeout(() => {
             if (searchSessionIdRef.current === newSessionId) {
-              console.log(`[Search] Instamart warmup complete — navigating to search: ${url}`);
+              console.log(
+                `[Search] Instamart warmup complete — navigating to search: ${url}`,
+              );
               setSearchUrls((prev) => ({ ...prev, [platform]: url }));
             }
           }, 3500);
@@ -451,6 +479,11 @@ const SearchScreen = ({ navigation, route }) => {
   const handleWebViewMessage = (platform, event) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
+
+      if (data.type === "TOKENS_SYNC") {
+        persistPlatformTokens(platform, data.payload || {});
+        return;
+      }
 
       if (data.type === "SEARCH_RESULTS") {
         // Reject late messages from older searches when sessionId is provided
@@ -556,6 +589,40 @@ const SearchScreen = ({ navigation, route }) => {
     }
   };
 
+  const persistPlatformTokens = useCallback(async (platform, payload) => {
+    try {
+      if (!platform || !payload || typeof payload !== "object") return;
+
+      const existingTokens = connectedPlatformTokensRef.current[platform] || {};
+      const mergedPayload = {
+        ...existingTokens,
+        ...payload,
+        _searchCapturedAt: new Date().toISOString(),
+      };
+
+      connectedPlatformTokensRef.current = {
+        ...connectedPlatformTokensRef.current,
+        [platform]: mergedPayload,
+      };
+
+      const storedRaw = await AsyncStorage.getItem("userTokens");
+      const stored = storedRaw ? JSON.parse(storedRaw) : {};
+      stored[platform] = {
+        ...(stored[platform] || {}),
+        ...mergedPayload,
+      };
+      await AsyncStorage.setItem("userTokens", JSON.stringify(stored));
+
+      if (platform === "Instamart") {
+        console.log(
+          `[Search] Synced Instamart tokens: cookieLen=${mergedPayload.cookie?.length || 0}, authHeadersLen=${mergedPayload.authHeaders?.length || 0}, userInfoLen=${mergedPayload.swiggyUserInfo?.length || 0}`,
+        );
+      }
+    } catch (err) {
+      console.warn(`[Search] Failed to persist ${platform} tokens:`, err);
+    }
+  }, []);
+
   // to avoid re-triggering the fallback check.
   const writePlatformResult = React.useCallback(
     (platform, products, success, errorMsg, sessionId) => {
@@ -601,9 +668,22 @@ const SearchScreen = ({ navigation, route }) => {
 
       // Pass scoped token first, but include allied aliases when needed (e.g., Swiggy for Instamart)
       const scopedTokens = {};
-      if (tokens[platform]) scopedTokens[platform] = tokens[platform];
-      if (platform === "Instamart" && tokens.Swiggy)
-        scopedTokens.Swiggy = tokens.Swiggy;
+      const livePlatformTokens = connectedPlatformTokensRef.current[platform];
+      if (tokens[platform] || livePlatformTokens) {
+        scopedTokens[platform] = {
+          ...(tokens[platform] || {}),
+          ...(livePlatformTokens || {}),
+        };
+      }
+      if (platform === "Instamart") {
+        const swiggyAlias = {
+          ...(tokens.Swiggy || {}),
+          ...(tokens.swiggy || {}),
+        };
+        if (Object.keys(swiggyAlias).length > 0) {
+          scopedTokens.Swiggy = swiggyAlias;
+        }
+      }
       // If no scoped token exists, fall back to all tokens so backend can still resolve provider auth
       const tokensForHeader =
         Object.keys(scopedTokens).length > 0 ? scopedTokens : tokens;
@@ -899,6 +979,313 @@ const SearchScreen = ({ navigation, route }) => {
     return null;
   };
 
+  const instamartInterceptScript = `
+    (function() {
+      try {
+        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+          window.__rnMsg = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
+        }
+      } catch (e) {}
+
+      function send(message) {
+        try {
+          var fn = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+          if (fn) fn(JSON.stringify(message));
+        } catch (e) {}
+      }
+
+      function log(msg) {
+        send({ type: 'LOG', message: '[Instamart-XHR] ' + msg });
+      }
+
+      function sync(reason) {
+        try {
+          var ls = window.localStorage || {};
+          var payload = {
+            cookie: document.cookie || '',
+            authHeaders: (typeof ls.swiggy_auth_headers === 'string' ? ls.swiggy_auth_headers : '') || (typeof ls.auth_headers === 'string' ? ls.auth_headers : ''),
+            swiggyUserInfo: (typeof ls.swiggy_user_info === 'string' ? ls.swiggy_user_info : '') || (typeof ls.user_info === 'string' ? ls.user_info : ''),
+            verifiedInstamartApi: false,
+            syncReason: reason || 'unknown',
+            syncUrl: location.href,
+          };
+          send({ type: 'TOKENS_SYNC', platform: 'Instamart', payload: payload });
+          log('token sync(' + (reason || 'unknown') + '): cookie=' + payload.cookie.length + ' auth=' + payload.authHeaders.length + ' user=' + payload.swiggyUserInfo.length);
+        } catch (e) {
+          log('token sync failed: ' + e.message);
+        }
+      }
+
+      function toPrice(raw) {
+        var n = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
+        if (!isFinite(n) || n <= 0) return 0;
+        if (n > 500 && n === Math.round(n) && Math.round(n) % 100 === 0) return Math.round(n / 100);
+        if (n > 9999 && n <= 999999) return Math.round(n / 100);
+        if (n > 0 && n <= 9999) return Math.round(n);
+        return 0;
+      }
+
+      function collectProducts(data) {
+        var products = [];
+        var seen = {};
+
+        function tryAdd(obj) {
+          if (!obj || typeof obj !== 'object') return;
+          var name = obj.display_name || obj.name || obj.displayName || obj.product_name || obj.title || obj.item_name || '';
+          if (typeof name !== 'string' || name.trim().length < 3) return;
+
+          var keys = ['price','offer_price','display_price','final_price','sp','selling_price','mrp','offerPrice'];
+          var price = 0;
+          for (var i = 0; i < keys.length; i++) {
+            price = toPrice(obj[keys[i]]);
+            if (price > 0) break;
+          }
+          if (!price) return;
+
+          var key = name.trim().toLowerCase() + '|' + price;
+          if (seen[key]) return;
+          seen[key] = 1;
+
+          var image = obj.image_url || obj.img_url || obj.imageUrl || obj.image || '';
+          if (!image && obj.image_id) image = 'https://media-assets.swiggy.com/swiggy/image/upload/' + obj.image_id;
+          var url = obj.deep_link || obj.url || '';
+          if (!url && obj.product_id) url = 'https://www.swiggy.com/instamart/item/' + obj.product_id;
+
+          products.push({
+            product_name: name.trim(),
+            brand: obj.brand_name || obj.brand || '',
+            price: price,
+            mrp: toPrice(obj.mrp) || price,
+            image_url: image,
+            product_url: url,
+            weight: obj.quantity || obj.unit || obj.weight || '',
+            in_stock: !(obj.is_out_of_stock || obj.out_of_stock || obj.in_stock === false),
+            platform: 'Instamart'
+          });
+        }
+
+        function walk(node, depth) {
+          if (!node || depth > 12) return;
+          if (Array.isArray(node)) {
+            for (var i = 0; i < node.length; i++) walk(node[i], depth + 1);
+            return;
+          }
+          if (typeof node !== 'object') return;
+
+          var hasName = ('display_name' in node) || ('name' in node) || ('item_name' in node) || ('displayName' in node);
+          var hasPrice = ('price' in node) || ('offer_price' in node) || ('sp' in node) || ('mrp' in node);
+          if (hasName && hasPrice) tryAdd(node);
+
+          var keys = Object.keys(node);
+          for (var j = 0; j < keys.length; j++) {
+            var value = node[keys[j]];
+            if (typeof value === 'string' && value.length > 50000) continue;
+            walk(value, depth + 1);
+          }
+        }
+
+        walk(data, 0);
+        return products;
+      }
+
+      function handleData(source, data) {
+        // Log structure when we get a response to understand the format
+        try {
+          var topKeys = Object.keys(data || {});
+          log(source + ' response top keys: ' + JSON.stringify(topKeys.slice(0, 15)));
+          if (data && data.data) {
+            log(source + ' data keys: ' + JSON.stringify(Object.keys(data.data).slice(0, 15)));
+          }
+          if (data && data.statusCode !== undefined) {
+            log(source + ' statusCode: ' + data.statusCode);
+          }
+        } catch(e) {}
+
+        // Strategy A: Swiggy /api/instamart/search/v2 response structure
+        // data.widgets[] -> each widget has data.nodes[] -> node has product fields
+        try {
+          var widgets = (data && data.data && data.data.widgets) || [];
+          if (widgets.length > 0) {
+            log(source + ' found ' + widgets.length + ' widgets, extracting...');
+            var wProducts = [];
+            widgets.forEach(function(w) {
+              if (!w || !w.data || !w.data.nodes) return;
+              w.data.nodes.forEach(function(node) {
+                var d = (node && node.data) || node;
+                if (!d) return;
+                var name = d.display_name || d.name || '';
+                if (!name || name.length < 3) return;
+                var price = toPrice(d.price) || toPrice(d.offer_price) || toPrice(d.sp);
+                if (!price) {
+                  // Try nested price object or variations
+                  if (d.variations && d.variations[0]) {
+                    var v = d.variations[0];
+                    price = toPrice(v.price) || toPrice((v.price_details || {}).offer_price);
+                  }
+                  if (!price && d.price && typeof d.price === 'object') {
+                    price = toPrice(d.price.offer_price) || toPrice(d.price.mrp);
+                  }
+                }
+                if (!price) return;
+                var pid = d.product_id || '';
+                var img = d.image_url || d.img_url || '';
+                if (!img && d.image_id) img = 'https://media-assets.swiggy.com/swiggy/image/upload/' + d.image_id;
+                wProducts.push({
+                  product_name: name.trim(),
+                  brand: d.brand_name || d.brand || '',
+                  price: price,
+                  mrp: toPrice(d.mrp) || price,
+                  image_url: img,
+                  product_url: d.deep_link || (pid ? 'https://www.swiggy.com/instamart/item/' + pid : ''),
+                  weight: d.quantity || d.unit || d.weight || '',
+                  in_stock: !(d.is_out_of_stock || d.out_of_stock || d.in_stock === false),
+                  platform: 'Instamart'
+                });
+              });
+            });
+            if (wProducts.length > 0) {
+              log(source + ' widgets strategy found ' + wProducts.length + ' products');
+              send({ type:'SEARCH_RESULTS', platform:'Instamart', sessionId:window.__COMPAREX_SESSION_ID__||null, products:wProducts, success:true, error:null });
+              return;
+            }
+          }
+        } catch(e) { log(source + ' widgets strategy error: ' + e.message); }
+
+        // Strategy B: Swiggy cards response (from /api/instamart/search)
+        // data.data.cards[] -> cards can have Items or product arrays
+        try {
+          var cards = (data && data.data && data.data.cards) || [];
+          if (cards.length > 0) {
+            log(source + ' found ' + cards.length + ' cards, extracting...');
+            var cProducts = [];
+            function extractFromCard(card) {
+              if (!card || typeof card !== 'object') return;
+              if (Array.isArray(card)) { card.forEach(extractFromCard); return; }
+              var name = card.display_name || card.name || '';
+              var hasPrice = card.price != null || card.offer_price != null || card.sp != null || card.mrp != null;
+              if (name && name.length >= 3 && hasPrice) {
+                var p = toPrice(card.price) || toPrice(card.offer_price) || toPrice(card.sp);
+                if (p > 0) {
+                  var pid2 = card.product_id || '';
+                  var img2 = card.image_url || card.img_url || '';
+                  if (!img2 && card.image_id) img2 = 'https://media-assets.swiggy.com/swiggy/image/upload/' + card.image_id;
+                  cProducts.push({ product_name:name.trim(), brand:card.brand_name||'', price:p, mrp:toPrice(card.mrp)||p, image_url:img2, product_url:card.deep_link||(pid2?'https://www.swiggy.com/instamart/item/'+pid2:''), weight:card.quantity||'', in_stock:!(card.is_out_of_stock||card.out_of_stock), platform:'Instamart' });
+                  return;
+                }
+              }
+              Object.keys(card).forEach(function(k) {
+                var v = card[k];
+                if (typeof v === 'string' && v.length > 50000) return;
+                if (typeof v === 'object') extractFromCard(v);
+              });
+            }
+            cards.forEach(extractFromCard);
+            if (cProducts.length > 0) {
+              log(source + ' cards strategy found ' + cProducts.length + ' products');
+              send({ type:'SEARCH_RESULTS', platform:'Instamart', sessionId:window.__COMPAREX_SESSION_ID__||null, products:cProducts, success:true, error:null });
+              return;
+            }
+          }
+        } catch(e) { log(source + ' cards strategy error: ' + e.message); }
+
+        // Strategy C: Generic tree walk (fallback)
+        var products = collectProducts(data);
+        log(source + ' generic walk extracted ' + products.length + ' products');
+
+        // Log 2nd-level info when all strategies fail
+        if (products.length === 0) {
+          try {
+            log(source + ' DEBUG: data.data=' + (data && data.data ? JSON.stringify(Object.keys(data.data)).substring(0, 200) : 'null'));
+            if (data && data.data) {
+              var keys2 = Object.keys(data.data);
+              keys2.slice(0, 5).forEach(function(k) {
+                var v = data.data[k];
+                if (Array.isArray(v)) {
+                  log(source + ' data.data.' + k + ' is array len=' + v.length + (v[0] ? ' first keys=' + JSON.stringify(Object.keys(v[0]||{}).slice(0,8)) : ''));
+                } else if (v && typeof v === 'object') {
+                  log(source + ' data.data.' + k + ' keys=' + JSON.stringify(Object.keys(v).slice(0,8)));
+                }
+              });
+            }
+          } catch(debugErr) {}
+        }
+
+        if (products.length > 0) {
+          send({ type:'SEARCH_RESULTS', platform:'Instamart', sessionId:window.__COMPAREX_SESSION_ID__||null, products:products, success:true, error:null });
+        }
+      }
+
+      if (!window.__comparexInstamartInterceptorsInstalled) {
+        window.__comparexInstamartInterceptorsInstalled = true;
+
+        try {
+          var originalFetch = window.fetch;
+          window.fetch = function(url) {
+            var urlStr = typeof url === 'string' ? url : ((url && url.url) || '');
+            var isSearch = urlStr.indexOf('/api/instamart/search') !== -1;
+            var fetchPromise = originalFetch.apply(this, arguments);
+            if (isSearch) {
+              sync('fetch');
+              fetchPromise.then(function(resp) {
+                try {
+                  resp.clone().json().then(function(data) {
+                    handleData('fetch', data);
+                  }).catch(function(err) {
+                    log('fetch json parse failed: ' + err.message);
+                  });
+                } catch (e) {
+                  log('fetch clone failed: ' + e.message);
+                }
+              }).catch(function(err) {
+                log('fetch failed: ' + err.message);
+              });
+            }
+            return fetchPromise;
+          };
+          log('fetch interceptor installed');
+        } catch (e) {
+          log('fetch intercept failed: ' + e.message);
+        }
+
+        try {
+          var OriginalXHR = window.XMLHttpRequest;
+          function PatchedXHR() {
+            var xhr = new OriginalXHR();
+            var openUrl = '';
+            var originalOpen = xhr.open.bind(xhr);
+            xhr.open = function(method, url) {
+              openUrl = typeof url === 'string' ? url : '';
+              return originalOpen.apply(xhr, arguments);
+            };
+            xhr.addEventListener('load', function() {
+              try {
+                if (openUrl.indexOf('/api/instamart/search') === -1 || !xhr.responseText) return;
+                sync('xhr');
+                handleData('xhr', JSON.parse(xhr.responseText));
+              } catch (e) {
+                log('xhr parse failed: ' + e.message);
+              }
+            });
+            return xhr;
+          }
+          PatchedXHR.prototype = OriginalXHR.prototype;
+          window.XMLHttpRequest = PatchedXHR;
+          log('xhr interceptor installed');
+        } catch (e) {
+          log('xhr intercept failed: ' + e.message);
+        }
+      } else {
+        log('interceptors already installed');
+      }
+
+      sync('initial');
+      setTimeout(function() { sync('delayed-2s'); }, 2000);
+      setTimeout(function() { sync('delayed-5s'); }, 5000);
+      log('interceptor bootstrap complete');
+    })();
+    true;
+  `;
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -980,167 +1367,12 @@ const SearchScreen = ({ navigation, route }) => {
             sharedCookiesEnabled={true}
             thirdPartyCookiesEnabled={true}
             geolocationEnabled={true}
-            injectedJavaScript={`
-            (function() {
-              // === 1. Cache the RN bridge immediately before Swiggy can delete it ===
-              try {
-                if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-                  window.__rnMsg = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
-                }
-              } catch(e) {}
-
-              function rnLog(msg) {
-                try {
-                  var fn = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-                  if (fn) fn(JSON.stringify({type:'LOG', message:'[Instamart-XHR] ' + msg}));
-                } catch(e) {}
-              }
-
-              function rnSend(products) {
-                try {
-                  var fn = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-                  if (fn) fn(JSON.stringify({
-                    type: 'SEARCH_RESULTS',
-                    platform: 'Instamart',
-                    sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                    products: products,
-                    success: products.length > 0,
-                    error: products.length === 0 ? 'XHR intercept: 0 products' : null
-                  }));
-                } catch(e) {}
-              }
-
-              // Already sent guard so we don't double-post
-              var __resultsSent = false;
-
-              function extractProducts(data) {
-                if (__resultsSent) return;
-                var products = [];
-                var seen = {};
-
-                function toPrice(raw) {
-                  var n = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
-                  if (!isFinite(n) || n <= 0) return 0;
-                  if (n > 9999 && n <= 999999) return Math.round(n / 100);
-                  if (n > 0 && n <= 9999) return Math.round(n);
-                  return 0;
-                }
-
-                function tryAdd(obj) {
-                  if (!obj || typeof obj !== 'object') return;
-                  var nameKeys = ['display_name','name','displayName','product_name','title','item_name'];
-                  var priceKeys = ['price','offer_price','display_price','final_price','sp','selling_price','mrp','offerPrice'];
-                  var name = '';
-                  for (var i=0;i<nameKeys.length;i++) { if (typeof obj[nameKeys[i]] === 'string' && obj[nameKeys[i]].length > 2) { name = obj[nameKeys[i]].trim(); break; } }
-                  if (!name) return;
-                  var price = 0;
-                  for (var j=0;j<priceKeys.length;j++) { var p = toPrice(obj[priceKeys[j]]); if (p > 0) { price = p; break; } }
-                  if (!price) return;
-                  var key = name.toLowerCase() + '|' + price;
-                  if (seen[key]) return;
-                  seen[key] = 1;
-                  products.push({
-                    product_name: name,
-                    price: price,
-                    mrp: toPrice(obj.mrp || obj.MRP) || price,
-                    image_url: obj.image_url || obj.img_url || obj.imageUrl || '',
-                    product_url: obj.deep_link || obj.url || '',
-                    weight: obj.quantity || obj.unit || obj.weight || '',
-                    in_stock: !(obj.is_out_of_stock || obj.out_of_stock),
-                    platform: 'Instamart'
-                  });
-                }
-
-                function walk(node, depth) {
-                  if (!node || depth > 12) return;
-                  if (Array.isArray(node)) { node.forEach(function(x){ walk(x, depth+1); }); return; }
-                  if (typeof node !== 'object') return;
-                  var hasName = ('display_name' in node)||('name' in node)||('item_name' in node)||('displayName' in node);
-                  var hasPrice = ('price' in node)||('offer_price' in node)||('sp' in node)||('mrp' in node);
-                  if (hasName && hasPrice) tryAdd(node);
-                  Object.keys(node).forEach(function(k){ var v=node[k]; if(typeof v==='string'&&v.length>50000)return; walk(v,depth+1); });
-                }
-
-                walk(data, 0);
-                rnLog('XHR intercept extracted ' + products.length + ' products');
-                if (!__resultsSent) {
-                  __resultsSent = true;
-                  rnSend(products);
-                }
-              }
-
-              // === 2. Intercept fetch ===
-              try {
-                var origFetch = window.fetch;
-                window.fetch = function(url, opts) {
-                  var urlStr = typeof url === 'string' ? url : (url && url.url) || '';
-                  var isSearch = urlStr.includes('/instamart') && (urlStr.includes('search') || urlStr.includes('listing'));
-                  return origFetch.apply(this, arguments).then(function(resp) {
-                    if (isSearch) {
-                      resp.clone().json().then(function(data) {
-                        rnLog('fetch intercepted: ' + urlStr.substring(0,80));
-                        extractProducts(data);
-                      }).catch(function(e){ rnLog('fetch json parse failed: ' + e.message); });
-                    }
-                    return resp;
-                  });
-                };
-                rnLog('fetch interceptor installed');
-              } catch(e) { rnLog('fetch intercept failed: ' + e.message); }
-
-              // === 3. Intercept XMLHttpRequest ===
-              try {
-                var OrigXHR = window.XMLHttpRequest;
-                function PatchedXHR() {
-                  var xhr = new OrigXHR();
-                  var _open_url = '';
-                  var origOpen = xhr.open.bind(xhr);
-                  xhr.open = function(method, url) {
-                    _open_url = typeof url === 'string' ? url : '';
-                    return origOpen.apply(xhr, arguments);
-                  };
-                  xhr.addEventListener('load', function() {
-                    try {
-                      var isSearch = _open_url.includes('/instamart') && (_open_url.includes('search') || _open_url.includes('listing'));
-                      if (isSearch && xhr.responseText) {
-                        rnLog('XHR intercepted: ' + _open_url.substring(0,80));
-                        var data = JSON.parse(xhr.responseText);
-                        extractProducts(data);
-                      }
-                    } catch(e) { rnLog('XHR parse failed: ' + e.message); }
-                  });
-                  return xhr;
-                }
-                PatchedXHR.prototype = OrigXHR.prototype;
-                window.XMLHttpRequest = PatchedXHR;
-                rnLog('XHR interceptor installed');
-              } catch(e) { rnLog('XHR intercept failed: ' + e.message); }
-
-              // === 4. Prevent app redirect prompts ===
-              try {
-                try {
-                  window.location.replace = function(url) {
-                    try { if (!url.includes('swiggy://') && !url.includes('app://')) window.location.href = url; } catch(e) {}
-                  };
-                } catch(e) {}
-                if (window.addEventListener) {
-                  window.addEventListener('beforeinstallprompt', function(e) { try { e.preventDefault(); } catch(e) {} });
-                }
-                try { Object.defineProperty(navigator, 'maxTouchPoints', { get: function(){ return 5; }, configurable: true }); } catch(e) {}
-                try {
-                  if (navigator && navigator.geolocation) {
-                    var fp = { coords: { latitude:12.9716, longitude:77.5946, accuracy:50, altitude:null, altitudeAccuracy:null, heading:null, speed:null }, timestamp: Date.now() };
-                    navigator.geolocation.getCurrentPosition = function(s){ try{ s(fp); }catch(e){} };
-                    navigator.geolocation.watchPosition = function(s){ try{ s(fp); }catch(e){} return 1; };
-                    navigator.geolocation.clearWatch = function(){};
-                  }
-                } catch(e) {}
-              } catch(e) {}
-
-              rnLog('injectedJavaScript complete — interceptors active');
-            })();
-            true;
-          `}
+            injectedJavaScriptBeforeContentLoaded={
+              platform === "Instamart" ? instamartInterceptScript : undefined
+            }
+            injectedJavaScript={
+              platform === "Instamart" ? instamartInterceptScript : undefined
+            }
             onLoadStart={(syntheticEvent) => {
               const { nativeEvent } = syntheticEvent;
               currentWebViewUrlsRef.current[platform] = nativeEvent.url;
