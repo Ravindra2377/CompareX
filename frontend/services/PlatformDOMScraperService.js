@@ -176,10 +176,16 @@ class PlatformDOMScraperService {
                             
                             // Check context around this number to skip measurements
                             const numIndex = cardText.indexOf(num);
+                            const contextBefore = cardText.substring(Math.max(0, numIndex - 6), numIndex).toLowerCase();
                             const contextAfter = cardText.substring(numIndex + num.length, numIndex + num.length + 10).toLowerCase();
                             
+                            // Fallback numbers are only allowed when they look currency-adjacent
+                            if (!/₹|rs\.?|inr/.test(contextBefore)) {
+                              continue;
+                            }
+
                             // Skip if followed by measurement units
-                            if (/^\s*(ml|g|kg|l|pcs|pack|piece|mins?|%)/.test(contextAfter)) {
+                            if (/^\s*(ml|g|kg|l|pcs|pack|piece|mins?|%|off)/.test(contextAfter)) {
                               continue;
                             }
                             
@@ -367,20 +373,37 @@ class PlatformDOMScraperService {
                     } else {
                       // Fallback: extract price from card text using regex
                       const cardText = card.textContent || '';
-                      const allNumbers = cardText.match(/[0-9]+/g);
-                      if (allNumbers) {
-                        // Skip discount %, delivery time, quantities - find first number >= 5
-                        for (let num of allNumbers) {
-                          const val = parseInt(num);
-                          if (val >= 5 && val <= 9999) {
+                      const rupeeMatch = cardText.match(/₹\s*([0-9]+)/g);
+                      if (rupeeMatch && rupeeMatch.length > 0) {
+                        const prices = rupeeMatch.map(m => parseInt(m.replace(/₹\s*/g, ''))).filter(p => p >= 5 && p <= 9999);
+                        if (prices.length > 0) {
+                          priceText = Math.min(...prices).toString();
+                        }
+                      }
+
+                      if (!priceText) {
+                        const allNumbers = cardText.match(/[0-9]+/g);
+                        if (allNumbers) {
+                          for (let num of allNumbers) {
+                            const val = parseInt(num);
+                            if (val < 5 || val > 9999) continue;
+
+                            const numIndex = cardText.indexOf(num);
+                            const contextBefore = cardText.substring(Math.max(0, numIndex - 6), numIndex).toLowerCase();
+                            const contextAfter = cardText.substring(numIndex + num.length, numIndex + num.length + 10).toLowerCase();
+
+                            if (!/₹|rs\.?|inr/.test(contextBefore)) continue;
+                            if (/^\s*(ml|g|kg|l|pcs|pack|piece|mins?|%|off)/.test(contextAfter)) continue;
+
                             priceText = num;
                             break;
                           }
                         }
                       }
+
                       if (index === 0) {
                         log('DEBUG: No priceEl, cardText: "' + cardText + '"');
-                        log('DEBUG: All numbers found: ' + (allNumbers ? allNumbers.join(',') : 'NONE') + ', Selected: ' + priceText);
+                        log('DEBUG: Selected fallback price: ' + priceText);
                       }
                     }
                     
@@ -431,131 +454,6 @@ class PlatformDOMScraperService {
                 error: error.message,
                 success: false,
                 products: []
-              }));
-            }
-          })();
-        `,
-      },
-
-      Instamart: {
-        searchUrl: (query, lat = 12.9716, lng = 77.5946) =>
-          `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(query)}&lat=${encodeURIComponent(String(lat))}&lng=${encodeURIComponent(String(lng))}`,
-        parseScript: () => `
-          (function() {
-            const log = (msg) => {
-              try {
-                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart-DOM] ' + msg}));
-              } catch(e) {}
-            };
-            
-            try {
-              log('Starting Instamart parser...');
-              log('URL: ' + window.location.href);
-              log('Title: ' + document.title);
-              
-              setTimeout(() => {
-                log('Extracting products after 5s wait...');
-                log('ReadyState: ' + document.readyState);
-                log('Body children count: ' + document.body.children.length);
-                
-                const products = [];
-                
-                // Instamart specific selectors
-                let productCards = document.querySelectorAll('a[href*="/instamart/item/"]');
-                log('Found ' + productCards.length + ' instamart item links');
-                
-                if (productCards.length === 0) {
-                  productCards = document.querySelectorAll('[data-testid="item-card"], [data-testid*="product"], [data-testid*="Item"]');
-                  log('Found ' + productCards.length + ' data-testid elements');
-                }
-                
-                if (productCards.length === 0) {
-                  productCards = document.querySelectorAll('[class*="ProductCard"], [class*="productCard"], [class*="ItemCard"], [class*="item-card"]');
-                  log('Found ' + productCards.length + ' class-based elements');
-                }
-                
-                log('Processing ' + productCards.length + ' cards');
-                
-                productCards.forEach((card, index) => {
-                  try {
-                    // Get name from various sources
-                    let name = card.querySelector('h3, h4, h2, [class*="name"], [class*="title"]')?.textContent?.trim();
-                    if (!name) {
-                      // Extract from card text, removing prices and buttons
-                      const cardText = card.textContent || '';
-                      const cleaned = cardText
-                        .replace(/₹\\s*\\d+/g, '') // Remove prices
-                        .replace(/ADD/gi, '') // Remove ADD
-                        .replace(/\\d+\\s*mins?/gi, '') // Remove delivery time
-                        .replace(/\\d+%\\s*OFF/gi, '') // Remove discount
-                        .replace(/\\s+/g, ' ')
-                        .trim();
-                      const parts = cleaned.split(/\\s{2,}/);
-                      name = parts.find(p => p.length > 5 && p.length < 100 && /[a-zA-Z]/.test(p));
-                    }
-                    
-                    // Get price - look for ₹ followed by number
-                    const cardText = card.textContent || '';
-                    const priceMatch = cardText.match(/₹\\s*(\\d+)/);
-                    let price = priceMatch ? parseInt(priceMatch[1]) : null;
-                    
-                    // Fallback: any number that looks like price
-                    if (!price) {
-                      const numbers = cardText.match(/\\d+/g) || [];
-                      for (let num of numbers) {
-                        const val = parseInt(num);
-                        if (val >= 5 && val <= 9999) {
-                          price = val;
-                          break;
-                        }
-                      }
-                    }
-                    
-                    const imgEl = card.querySelector('img');
-                    
-                    if (index < 3) {
-                      log('Card ' + index + ': name=' + (name || 'none') + ', price=' + (price || 'none'));
-                    }
-                    
-                    if (name && price) {
-                      products.push({
-                        product_name: name.substring(0, 100),
-                        brand: '',
-                        price: price,
-                        mrp: price,
-                        image_url: imgEl ? imgEl.src : '',
-                        product_url: card.href || '',
-                        in_stock: !cardText.toLowerCase().includes('out of stock'),
-                        weight: '',
-                        platform: 'Instamart'
-                      });
-                    }
-                  } catch(e) {
-                    log('Error processing card ' + index + ': ' + e.message);
-                  }
-                });
-                
-                log('Parsed ' + products.length + ' products');
-                
-                window.ReactNativeWebView.postMessage(JSON.stringify({
-                  type: 'SEARCH_RESULTS',
-                  platform: 'Instamart',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                  products: products,
-                  success: products.length > 0,
-                  error: products.length === 0 ? 'No products found' : null
-                }));
-                
-              }, 5000);
-            } catch(e) {
-              log('Fatal error: ' + e.message);
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Instamart',
-                sessionId: window.__COMPAREX_SESSION_ID__ || null,
-                products: [],
-                success: false,
-                error: 'Fatal: ' + e.message
               }));
             }
           })();
@@ -693,7 +591,7 @@ class PlatformDOMScraperService {
                     if (rupeeMatch && rupeeMatch.length > 0) {
                       const prices = rupeeMatch.map(m => parseInt(m.replace(/\\u20b9\\s*/g, ''))).filter(p => p >= 5 && p <= 9999);
                       if (prices.length > 0) {
-                        price = Math.min(...prices).toString();
+                        price = Math.max(...prices).toString();
                       }
                     }
                     
@@ -706,9 +604,14 @@ class PlatformDOMScraperService {
                         if (val < 5 || val > 9999) continue;
                         
                         const numIndex = cardText.indexOf(num);
+                        const contextBefore = cardText.substring(Math.max(0, numIndex - 6), numIndex).toLowerCase();
                         const contextAfter = cardText.substring(numIndex + num.length, numIndex + num.length + 10).toLowerCase();
+
+                        if (!/₹|rs\.?|inr/.test(contextBefore)) {
+                          continue;
+                        }
                         
-                        if (!/\\s*(ml|g|kg|l|pcs|pack|mins?)/.test(contextAfter)) {
+                        if (!/\s*(ml|g|kg|l|pcs|pack|mins?|%|off)/.test(contextAfter)) {
                           price = num;
                           break;
                         }
@@ -724,12 +627,13 @@ class PlatformDOMScraperService {
                     if (name && price && parseInt(price) > 0) {
                       const linkEl = card.querySelector('a');
                       const productUrl = card.href || (linkEl ? linkEl.href : '') || '';
+                      const parsedPrice = parseInt(price);
                       
                       products.push({
                         product_name: name.substring(0, 100),
                         brand: '',
-                        price: parseInt(price),
-                        mrp: parseInt(price),
+                        price: parsedPrice,
+                        mrp: parsedPrice,
                         image_url: imgEl ? imgEl.src : '',
                         product_url: productUrl,
                         in_stock: true,
@@ -760,9 +664,9 @@ class PlatformDOMScraperService {
 
                       const tryPush = (obj) => {
                         const name = obj?.name || obj?.display_name || obj?.displayName || obj?.product_name || obj?.title;
-                        const rawPrice = obj?.price ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.mrp;
+                        const rawBasePrice = obj?.mrp ?? obj?.original_price ?? obj?.originalPrice ?? obj?.price ?? obj?.selling_price ?? obj?.sellingPrice ?? obj?.finalPrice ?? obj?.final_price ?? obj?.offerPrice ?? obj?.offer_price;
                         if (typeof name !== 'string' || name.trim().length < 3) return;
-                        const price = toPrice(rawPrice);
+                        const price = toPrice(rawBasePrice);
                         if (!price) return;
                         const key = name.trim().toLowerCase() + '|' + price;
                         if (seen.has(key)) return;

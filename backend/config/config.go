@@ -17,7 +17,6 @@ type Config struct {
 	Blinkit   PlatformConfig `json:"blinkit"`
 	Zepto     PlatformConfig `json:"zepto"`
 	Swiggy    PlatformConfig `json:"swiggy"`
-	Instamart PlatformConfig `json:"instamart"`
 	BigBasket PlatformConfig `json:"bigbasket"`
 	Zomato    PlatformConfig `json:"zomato"`
 }

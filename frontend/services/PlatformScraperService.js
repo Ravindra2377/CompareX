@@ -41,7 +41,7 @@ class PlatformScraperService {
               log('Has authKey: ' + !!authKey);
               
               const url = 'https://blinkit.com/v6/search/products?start=0&size=20&q=${encodeURIComponent(
-                query
+                query,
               )}&lat=${lat}&lon=${lng}';
               log('URL: ' + url);
               
@@ -239,89 +239,6 @@ class PlatformScraperService {
               window.ReactNativeWebView.postMessage(JSON.stringify({
                 type: 'SEARCH_RESULTS',
                 platform: 'BigBasket',
-                error: error.message,
-                success: false
-              }));
-            }
-          })();
-        `,
-      },
-
-      Instamart: {
-        searchScript: (query, lat, lng) => `
-          (async function() {
-            const log = (msg) => {
-              try {
-                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Instamart] ' + msg}));
-              } catch(e) {}
-            };
-            
-            try {
-              log('Starting search for: ${query}');
-              
-              const url = \`https://www.swiggy.com/dapi/instamart/search?lat=\${${lat}}&lng=\${${lng}}&str=\${encodeURIComponent("${query}")}&submitAction=ENTER\`;
-              log('URL: ' + url);
-              
-              const response = await fetch(url, {
-                headers: {
-                  'accept': 'application/json',
-                  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-                  'referer': 'https://www.swiggy.com/instamart',
-                  'Cookie': document.cookie
-                }
-              });
-              
-              log('Response status: ' + response.status);
-              
-              if (!response.ok) {
-                const errorText = await response.text();
-                log('Error response: ' + errorText.substring(0, 200));
-                throw new Error('API returned ' + response.status);
-              }
-              
-              const data = await response.json();
-              
-              const widgets = data.data?.widgets || [];
-              log('Got data, widgets count: ' + widgets.length);
-              
-              let allProducts = [];
-              for (const widget of widgets) {
-                const nodes = widget.data?.nodes || [];
-                if (nodes.length > 0) {
-                  log('Found widget with ' + nodes.length + ' nodes');
-                  
-                  for (const node of nodes) {
-                    const itemData = node.data || node;
-                    if (itemData.name || itemData.display_name) {
-                      allProducts.push({
-                        product_name: itemData.display_name || itemData.name,
-                        brand: itemData.brand_name || '',
-                        price: itemData.price || 0,
-                        mrp: itemData.mrp || itemData.price || 0,
-                        image_url: itemData.image_id ? \`https://media-assets.swiggy.com/swiggy/image/upload/\${itemData.image_id}\` : '',
-                        product_url: '',
-                        in_stock: itemData.in_stock !== false,
-                        weight: itemData.unit || '',
-                        platform: 'Instamart'
-                      });
-                    }
-                  }
-                }
-              }
-              
-              log('Parsed products: ' + allProducts.length);
-              
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Instamart',
-                products: allProducts,
-                success: true
-              }));
-            } catch (error) {
-              log('Error: ' + error.message);
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Instamart',
                 error: error.message,
                 success: false
               }));

@@ -130,8 +130,6 @@ func ValidateTokens(c echo.Context) error {
 				hasTokens = tokens["user"] != "" || tokens["cookie"] != ""
 			case "BigBasket":
 				hasTokens = tokens["cookie"] != ""
-			case "Instamart":
-				hasTokens = tokens["cookie"] != ""
 			default:
 				hasTokens = len(tokens) > 0
 			}

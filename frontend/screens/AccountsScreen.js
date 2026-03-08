@@ -43,15 +43,6 @@ const PLATFORMS = [
     icon: "basket",
     requiredTokens: ["sessionid", "_bb_vid"],
   },
-  {
-    id: "Instamart",
-    name: "Swiggy Instamart",
-    loginUrl: "https://www.swiggy.com/instamart",
-    testUrl: "https://www.swiggy.com/dapi/instamart/search?q=milk",
-    color: "#FC8019",
-    icon: "storefront",
-    requiredTokens: ["_session_tid"],
-  },
 ];
 
 export default function AccountsScreen() {
@@ -76,23 +67,6 @@ export default function AccountsScreen() {
           const platformTokens = parsed[platform.id];
           if (!platformTokens || Object.keys(platformTokens).length === 0) {
             status[platform.id] = false;
-            return;
-          }
-
-          // Swiggy cookies are often HttpOnly, so document.cookie won't contain _session_tid.
-          // Treat Instamart as connected if we have a verified API session OR a limited session
-          // (auth headers + user info) that enables DOM scraping attempts.
-          if (platform.id === "Instamart") {
-            const verified =
-              platformTokens.verifiedInstamartApi === "true" ||
-              platformTokens.verifiedInstamartApi === true;
-            const hasAuthHeaders =
-              typeof platformTokens.authHeaders === "string" &&
-              platformTokens.authHeaders.length > 20;
-            const hasUserInfo =
-              typeof platformTokens.swiggyUserInfo === "string" &&
-              platformTokens.swiggyUserInfo.length > 10;
-            status[platform.id] = verified || (hasAuthHeaders && hasUserInfo);
             return;
           }
 
@@ -165,24 +139,11 @@ export default function AccountsScreen() {
         setModalVisible(false);
         await checkConnections();
 
-        const isInstamart = currentPlatform.id === "Instamart";
-        const verified =
-          data?.payload?.verifiedInstamartApi === "true" ||
-          data?.payload?.verifiedInstamartApi === true;
-
-        if (isInstamart && !verified) {
-          Alert.alert(
-            "Connected (Limited)",
-            `✅ ${currentPlatform.name} saved.\n\n⚠️ Swiggy is blocking Instamart API access in this WebView (404 HTML). Search will try DOM scraping, but results may still be unavailable on some networks/devices.`,
-            [{ text: "OK" }],
-          );
-        } else {
-          Alert.alert(
-            "Success!",
-            `✅ ${currentPlatform.name} connected successfully!\n\nYou can now search and compare prices.`,
-            [{ text: "OK" }],
-          );
-        }
+        Alert.alert(
+          "Success!",
+          `✅ ${currentPlatform.name} connected successfully!\n\nYou can now search and compare prices.`,
+          [{ text: "OK" }],
+        );
       }
     } catch (e) {
       console.error("[WebView] Error parsing message:", e);
@@ -228,138 +189,11 @@ export default function AccountsScreen() {
   const INJECTED_JAVASCRIPT = `
     (function() {
       let hasProcessed = false;
-      let swiggyLastVerifyAt = 0;
-      let swiggyVerified = false;
-      let swiggyVerifyError = '';
-      let swiggyVerifiedVariant = '';
       
       function log(msg) {
         try {
           window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: msg}));
         } catch(e) {}
-      }
-
-      function safeJsonParse(str) {
-        try {
-          return JSON.parse(str);
-        } catch (e) {
-          return null;
-        }
-      }
-
-      function extractUserId(obj) {
-        try {
-          if (!obj || typeof obj !== 'object') return '';
-
-          const candidates = [
-            obj.userId,
-            obj.userid,
-            obj.user_id,
-            obj.id,
-            obj.user && (obj.user.id || obj.user.userId),
-            obj.data && (obj.data.userId || (obj.data.user && obj.data.user.id)),
-            obj.profile && (obj.profile.id || obj.profile.userId),
-          ];
-
-          for (let i = 0; i < candidates.length; i++) {
-            const v = candidates[i];
-            if (typeof v === 'string' && v.trim()) return v.trim();
-            if (typeof v === 'number' && Number.isFinite(v)) return String(v);
-          }
-        } catch (e) {}
-        return '';
-      }
-
-      function buildSwiggyHeaders(ls) {
-        const headers = {
-          'accept': 'application/json',
-          'x-requested-with': 'XMLHttpRequest',
-          'referer': 'https://www.swiggy.com/instamart',
-          'origin': 'https://www.swiggy.com'
-        };
-
-        const candidates = [];
-        if (ls && typeof ls.swiggy_auth_headers === 'string') candidates.push(ls.swiggy_auth_headers);
-        if (ls && typeof ls.auth_headers === 'string') candidates.push(ls.auth_headers);
-
-        for (let i = 0; i < candidates.length; i++) {
-          const raw = candidates[i];
-          const obj = safeJsonParse(raw);
-          if (!obj || typeof obj !== 'object') continue;
-
-          // Some shapes nest headers under the "headers" key
-          const maybeHeaders = obj.headers && typeof obj.headers === 'object' ? obj.headers : obj;
-          for (const k in maybeHeaders) {
-            try {
-              const v = maybeHeaders[k];
-              if (!v) continue;
-              const key = String(k).toLowerCase();
-              if (key === 'cookie') continue;
-              if (key === 'referer' || key === 'origin' || key === 'accept') continue;
-              // Only allow header-like strings
-              if (typeof v === 'string' && v.length > 0 && v.length < 5000) {
-                headers[k] = v;
-              }
-            } catch (e) {}
-          }
-        }
-
-        return headers;
-      }
-
-      async function verifySwiggyInstamart() {
-        const variants = [
-          {
-            id: 'api_query',
-            url: 'https://www.swiggy.com/api/instamart/search?lat=12.9716&lng=77.5946&query=milk&pageType=INSTAMART_SEARCH'
-          },
-          {
-            id: 'api_str',
-            url: 'https://www.swiggy.com/api/instamart/search?lat=12.9716&lng=77.5946&str=milk'
-          }
-        ];
-
-        const swiggyHeaders = buildSwiggyHeaders({...localStorage});
-        try {
-          const headerKeys = Object.keys(swiggyHeaders || {});
-          log('Swiggy verify headers keys: ' + headerKeys.slice(0, 25).join(', '));
-        } catch (e) {}
-
-        for (let i = 0; i < variants.length; i++) {
-          const v = variants[i];
-          try {
-            log('Verifying Instamart session via API (variant=' + v.id + ')...');
-            const resp = await fetch(v.url, {
-              method: 'GET',
-              credentials: 'include',
-              headers: swiggyHeaders
-            });
-            const ct = (resp.headers && resp.headers.get && resp.headers.get('content-type')) ? resp.headers.get('content-type') : '';
-            if (!resp.ok) {
-              const text = await resp.text().catch(() => '');
-              throw new Error('variant=' + v.id + ' status=' + resp.status + ' ct=' + ct + ' body=' + (text || '').slice(0, 120));
-            }
-            if (!ct || ct.indexOf('application/json') === -1) {
-              const text = await resp.text().catch(() => '');
-              throw new Error('variant=' + v.id + ' non-json ct=' + ct + ' body=' + (text || '').slice(0, 120));
-            }
-            const json = await resp.json();
-            const widgets = json && json.data && json.data.widgets;
-            if (!widgets) {
-              throw new Error('variant=' + v.id + ' json missing data.widgets');
-            }
-            swiggyVerified = true;
-            swiggyVerifyError = '';
-            swiggyVerifiedVariant = v.id;
-            log('✓ Instamart API verified (variant=' + v.id + ')');
-            return;
-          } catch (e) {
-            swiggyVerified = false;
-            swiggyVerifiedVariant = '';
-            swiggyVerifyError = e && e.message ? e.message : String(e);
-            log('Instamart verify failed: ' + swiggyVerifyError);
-          }
-        }
       }
 
       function sendTokens() {
@@ -471,67 +305,6 @@ export default function AccountsScreen() {
           for (let key in ls) {
             if (key.toLowerCase().includes('csrf') || key.toLowerCase().includes('token')) {
               payload[key] = ls[key];
-            }
-          }
-        }
-
-        // SWIGGY INSTAMART
-        else if (host.includes('swiggy')) {
-          try {
-            log('Swiggy localStorage keys: ' + Object.keys(ls).slice(0, 30).join(', '));
-          } catch (e) {}
-
-          // Swiggy headers from localStorage (can exist even when logged out)
-          if (ls.swiggy_auth_headers) {
-            payload['authHeaders'] = ls.swiggy_auth_headers;
-          }
-
-          // Always grab cookies for the SearchScreen fetch
-          if (cookies) {
-            payload['cookie'] = cookies;
-          }
-
-          // Capture user info to reduce false positives (helps indicate user actually logged in)
-          if (ls.swiggy_user_info) {
-            payload['swiggyUserInfo'] = ls.swiggy_user_info;
-          } else if (ls.user_info) {
-            payload['swiggyUserInfo'] = ls.user_info;
-          }
-
-          // If we have auth headers + user info, allow a limited connection even if verify fails.
-          // This lets the Search screen try DOM scraping (some environments block dapi via WAF).
-          const userInfoObj = payload['swiggyUserInfo'] ? safeJsonParse(payload['swiggyUserInfo']) : null;
-          const userId = extractUserId(userInfoObj);
-          const looksLoggedIn = !!userId;
-          const hasAuthHeaders = typeof payload['authHeaders'] === 'string' && payload['authHeaders'].length > 20;
-
-          // document.cookie often won't include Swiggy session cookies (HttpOnly), so don't rely on it.
-          // Instead, verify connection by hitting Instamart search API from the WebView origin.
-          const now = Date.now();
-          const shouldRetry = !swiggyVerified && (now - swiggyLastVerifyAt > 10000);
-          if (shouldRetry) {
-            swiggyLastVerifyAt = now;
-            verifySwiggyInstamart();
-          }
-
-          if (swiggyVerified) {
-            payload['verifiedInstamartApi'] = 'true';
-            if (swiggyVerifiedVariant) {
-              payload['verifiedInstamartVariant'] = swiggyVerifiedVariant;
-            }
-            isValid = true;
-          } else {
-            // Not valid yet; keep polling until verified
-            if (swiggyVerifyError) {
-              payload['verifyError'] = swiggyVerifyError;
-            }
-
-            // If we look logged in, allow storing tokens but mark as unverified
-            if (looksLoggedIn && hasAuthHeaders) {
-              payload['verifiedInstamartApi'] = 'false';
-              payload['swiggyUserId'] = userId;
-              isValid = true;
-              log('⚠️ Instamart API not verified; saving limited connection for DOM scraping');
             }
           }
         }
@@ -660,11 +433,7 @@ export default function AccountsScreen() {
               injectedJavaScriptBeforeContentLoaded={INJECTED_JAVASCRIPT}
               onMessage={handleWebViewMessage}
               style={styles.webview}
-              userAgent={
-                currentPlatform.id === "Instamart"
-                  ? "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-                  : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-              }
+              userAgent={"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
               javaScriptEnabled={true}
               domStorageEnabled={true}
               sharedCookiesEnabled={true}

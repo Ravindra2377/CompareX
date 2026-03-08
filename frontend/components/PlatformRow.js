@@ -1,34 +1,35 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
 
 const PLATFORM_ICONS = {
-  blinkit: 'flash-outline',
-  zepto: 'rocket-outline',
-  bigbasket: 'basket-outline',
-  instamart: 'storefront-outline',
-  swiggy: 'fast-food-outline',
-  zomato: 'restaurant-outline',
+  blinkit: "flash-outline",
+  zepto: "rocket-outline",
+  bigbasket: "basket-outline",
+  swiggy: "fast-food-outline",
+  zomato: "restaurant-outline",
 };
 
 const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
   const {
-    name = 'Platform',
+    name = "Platform",
     price = 0,
-    deliveryTime = '',
+    deliveryTime = "",
     deliveryCharge = 0,
     inStock = true,
   } = platform;
 
   const isAvailable = inStock && price > 0;
-  const icon = PLATFORM_ICONS[name.toLowerCase()] || 'storefront-outline';
+  const icon = PLATFORM_ICONS[name.toLowerCase()] || "storefront-outline";
 
   if (!isAvailable) {
     return (
       <View style={[styles.row, styles.unavailable]}>
         <Ionicons name={icon} size={18} color={COLORS.textTertiary} />
-        <Text style={[styles.name, { color: COLORS.textTertiary }]}>{name}</Text>
+        <Text style={[styles.name, { color: COLORS.textTertiary }]}>
+          {name}
+        </Text>
         <Text style={styles.naText}>N/A</Text>
       </View>
     );
@@ -40,16 +41,20 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
       onPress={onOpenStore}
       activeOpacity={0.6}
     >
-      <Ionicons name={icon} size={18} color={isCheapest ? COLORS.savings : COLORS.textSecondary} />
+      <Ionicons
+        name={icon}
+        size={18}
+        color={isCheapest ? COLORS.savings : COLORS.textSecondary}
+      />
       <View style={styles.info}>
         <Text style={styles.name}>{name}</Text>
-        {deliveryTime ? <Text style={styles.delivery}>{deliveryTime}</Text> : null}
+        {deliveryTime ? (
+          <Text style={styles.delivery}>{deliveryTime}</Text>
+        ) : null}
       </View>
 
       <View style={styles.right}>
-        {deliveryCharge === 0 && (
-          <Text style={styles.freeTag}>FREE</Text>
-        )}
+        {deliveryCharge === 0 && <Text style={styles.freeTag}>FREE</Text>}
         <Text style={[styles.price, isCheapest && { color: COLORS.savings }]}>
           ₹{price}
         </Text>
@@ -66,8 +71,8 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.lg,
     borderBottomWidth: 1,
@@ -95,21 +100,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   right: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   price: {
     ...FONTS.priceSmall,
   },
   freeTag: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: "600",
     color: COLORS.savings,
     marginBottom: 2,
   },
   naText: {
     ...FONTS.caption,
     flex: 1,
-    textAlign: 'right',
+    textAlign: "right",
   },
   bestBadge: {
     backgroundColor: COLORS.savings,
@@ -120,8 +125,8 @@ const styles = StyleSheet.create({
   },
   bestText: {
     fontSize: 9,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: "700",
+    color: "#FFFFFF",
     letterSpacing: 0.5,
   },
 });

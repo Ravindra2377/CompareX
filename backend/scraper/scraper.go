@@ -27,7 +27,7 @@ type Service struct {
 }
 
 // AllPlatforms lists all supported platforms for the "Not Available" display
-var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket", "Instamart"}
+var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket"}
 
 // NewService creates a new scraper service
 func NewService(redisAddr string) *Service {
@@ -53,7 +53,6 @@ func NewService(redisAddr string) *Service {
 		NewBlinkitScraper(),
 		NewZeptoScraper(),
 		NewBigBasketScraper(),
-		NewInstamartScraper(),
 	}
 
 	log.Printf("✅ Scraper service initialized with %d platforms (HTTP mode)", len(s.scrapers))
@@ -152,11 +151,6 @@ func (s *Service) scrapeAllPlatforms(ctx context.Context, query string, lat, lng
 			if platformTokens == nil {
 				platformTokens = allTokens[strings.ToLower(scraper.Name())]
 			}
-			if scraper.Name() == "Instamart" {
-				platformTokens = mergePlatformTokens(platformTokens, allTokens["Swiggy"])
-				platformTokens = mergePlatformTokens(platformTokens, allTokens["swiggy"])
-			}
-
 			start := time.Now()
 			listings, err := scraper.Search(scrapeCtx, query, lat, lng, platformTokens)
 			elapsed := time.Since(start)
@@ -175,22 +169,6 @@ func (s *Service) scrapeAllPlatforms(ctx context.Context, query string, lat, lng
 
 	wg.Wait()
 	return allListings
-}
-
-func mergePlatformTokens(base, extra map[string]string) map[string]string {
-	if len(base) == 0 && len(extra) == 0 {
-		return nil
-	}
-	out := map[string]string{}
-	for k, v := range base {
-		out[k] = v
-	}
-	for k, v := range extra {
-		if _, exists := out[k]; !exists || out[k] == "" {
-			out[k] = v
-		}
-	}
-	return out
 }
 
 // ensureAllPlatforms adds "Not Available" entries for platforms missing from results
@@ -227,8 +205,6 @@ func getPlatformURL(platform, query string) string {
 		return fmt.Sprintf("https://www.zeptonow.com/search?query=%s", query)
 	case "BigBasket":
 		return fmt.Sprintf("https://www.bigbasket.com/ps/?q=%s", query)
-	case "Instamart":
-		return fmt.Sprintf("https://www.swiggy.com/instamart/search?query=%s", query)
 	case "Swiggy":
 		return fmt.Sprintf("https://www.swiggy.com/search?query=%s", query)
 	case "Zomato":

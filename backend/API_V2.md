@@ -227,7 +227,6 @@ Validate if stored tokens are still functional.
 - **Blinkit:** Checks for `auth` or `cookie`
 - **Zepto:** Checks for `user` or `cookie`
 - **BigBasket:** Checks for `cookie`
-- **Instamart:** Checks for `cookie`
 
 ---
 
