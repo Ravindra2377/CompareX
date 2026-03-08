@@ -22,6 +22,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
+import * as Haptics from 'expo-haptics';
+import SkeletonLoader from "../components/SkeletonLoader";
 import PlatformScraperService from "../services/PlatformScraperService";
 import PlatformDOMScraperService from "../services/PlatformDOMScraperService";
 import api from "../config/api";
@@ -903,6 +905,7 @@ const SearchScreen = ({ navigation, route }) => {
   // Aggregation now only happens once after search timeout in searchProducts
 
   const handleProduct = (product) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate("ProductDetail", { product });
   };
 
@@ -967,32 +970,46 @@ const SearchScreen = ({ navigation, route }) => {
       <StatusBar barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>CompareX</Text>
-        <SearchBar value={query} onChangeText={setQuery} />
+        <SearchBar 
+          value={query} 
+          onChangeText={setQuery} 
+          onClear={() => {
+            setQuery("");
+            setResults([]);
+            setHasSearched(false);
+          }}
+          autoFocus={!hasSearched && query === ""}
+        />
       </View>
 
-      {loading && (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-          <Text style={styles.loaderText}>
-            Searching {state.connectedPlatforms.length} platforms...
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <Text style={styles.loaderStatusText}>
+            Scanning {state.connectedPlatforms.length} platforms...
           </Text>
           <Text style={styles.loaderDetail}>
             {Object.keys(platformResults).length}/
             {state.connectedPlatforms.length} completed
           </Text>
+          <View style={{ marginTop: SPACING.xl }}>
+            <SkeletonLoader />
+            <SkeletonLoader />
+            <SkeletonLoader />
+            <SkeletonLoader />
+          </View>
         </View>
+      ) : (
+        <FlatList
+          data={results}
+          renderItem={({ item }) => (
+            <ProductCard product={item} onPress={() => handleProduct(item)} />
+          )}
+          keyExtractor={(item) => String(item.id)}
+          contentContainerStyle={styles.list}
+          ListEmptyComponent={renderEmpty}
+          key={state.forceUpdate}
+        />
       )}
-
-      <FlatList
-        data={results}
-        renderItem={({ item }) => (
-          <ProductCard product={item} onPress={() => handleProduct(item)} />
-        )}
-        keyExtractor={(item) => String(item.id)}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={renderEmpty}
-        key={state.forceUpdate}
-      />
 
       {/* Hidden WebViews for authenticated platform scraping */}
       {query.trim() &&
@@ -1106,20 +1123,21 @@ const styles = StyleSheet.create({
     ...FONTS.h1,
     marginBottom: SPACING.lg,
   },
-  loader: {
-    padding: SPACING.xxxl,
-    alignItems: "center",
-    justifyContent: "center",
+  loaderContainer: {
     flex: 1,
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.lg,
   },
-  loaderText: {
-    marginTop: SPACING.lg,
-    ...FONTS.h3,
-    color: COLORS.textPrimary,
+  loaderStatusText: {
+    ...FONTS.captionBold,
+    color: COLORS.accent,
+    textAlign: 'center',
   },
   loaderDetail: {
-    marginTop: SPACING.sm,
+    marginTop: 2,
     ...FONTS.caption,
+    textAlign: 'center',
+    marginBottom: SPACING.lg,
   },
   list: {
     padding: SPACING.md,

@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import api from "../config/api";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
+import * as Haptics from 'expo-haptics';
 
 // Platform configuration with proper login URLs
 const PLATFORMS = [
@@ -94,6 +95,7 @@ export default function AccountsScreen() {
   };
 
   const disconnectAccount = async (platformId) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
       "Disconnect Account",
       `Are you sure you want to disconnect from ${platformId}?`,
@@ -113,6 +115,7 @@ export default function AccountsScreen() {
                   JSON.stringify(parsed),
                 );
                 await checkConnections();
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 Alert.alert("Success", `Disconnected from ${platformId}`);
               }
             } catch (e) {
@@ -140,6 +143,7 @@ export default function AccountsScreen() {
         setModalVisible(false);
         await checkConnections();
 
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         Alert.alert(
           "Success!",
           `✅ ${currentPlatform.name} connected successfully!\n\nYou can now search and compare prices.`,

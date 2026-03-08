@@ -16,6 +16,8 @@ const ProductCard = ({ product, onPress, onCompare }) => {
     bestPlatform = '',
   } = product;
 
+  const hasDiscount = discount > 0;
+
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {

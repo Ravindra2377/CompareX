@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Animated
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,41 +28,55 @@ const TRENDING = [
 const HomeScreen = ({ navigation }) => {
   const { logout } = useContext(AuthContext);
 
+  const fadeAnimHeader = React.useRef(new Animated.Value(0)).current;
+  const fadeAnimCats = React.useRef(new Animated.Value(0)).current;
+  const fadeAnimTrend = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.stagger(150, [
+      Animated.timing(fadeAnimHeader, { toValue: 1, duration: 500, useNativeDriver: true }),
+      Animated.timing(fadeAnimCats, { toValue: 1, duration: 500, useNativeDriver: true }),
+      Animated.timing(fadeAnimTrend, { toValue: 1, duration: 500, useNativeDriver: true })
+    ]).start();
+  }, [fadeAnimHeader, fadeAnimCats, fadeAnimTrend]);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header with Gradient Background */}
-        <LinearGradient
-          colors={COLORS.gradientCard}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.headerGradient}
-        >
-          <View style={styles.headerTop}>
-            <View>
-              <Text style={styles.greeting}>Good evening 👋</Text>
-              <Text style={styles.title}>CompareX</Text>
-            </View>
-            <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
-              <Ionicons name="person-outline" size={20} color={COLORS.textPrimary} />
-            </TouchableOpacity>
-          </View>
-
-          {/* Search Bar - Lifted into the header area */}
-          <TouchableOpacity
-            style={styles.searchBar}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Search')}
+        <Animated.View style={{ opacity: fadeAnimHeader, transform: [{ translateY: fadeAnimHeader.interpolate({ inputRange: [0, 1], outputRange: [-20, 0] }) }] }}>
+          <LinearGradient
+            colors={COLORS.gradientCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.headerGradient}
           >
-            <Ionicons name="search-outline" size={20} color={COLORS.textSecondary} />
-            <Text style={styles.searchPlaceholder}>Search eggs, milk, bread...</Text>
-            <View style={styles.searchIconBg}>
-              <Ionicons name="options-outline" size={16} color="#FFF" />
+            <View style={styles.headerTop}>
+              <View>
+                <Text style={styles.greeting}>Good evening 👋</Text>
+                <Text style={styles.title}>CompareX</Text>
+              </View>
+              <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
+                <Ionicons name="person-outline" size={20} color={COLORS.textPrimary} />
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </LinearGradient>
+
+            {/* Search Bar - Lifted into the header area */}
+            <TouchableOpacity
+              style={styles.searchBar}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Search')}
+            >
+              <Ionicons name="search-outline" size={20} color={COLORS.textSecondary} />
+              <Text style={styles.searchPlaceholder}>Search eggs, milk, bread...</Text>
+              <View style={styles.searchIconBg}>
+                <Ionicons name="options-outline" size={16} color="#FFF" />
+              </View>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Animated.View>
 
         {/* Quick Info */}
         <View style={styles.infoRow}>
@@ -83,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         {/* Categories */}
-        <View style={styles.section}>
+        <Animated.View style={[styles.section, { opacity: fadeAnimCats, transform: [{ translateY: fadeAnimCats.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }]}>
           <Text style={styles.sectionTitle}>Categories</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => (
@@ -100,10 +114,10 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </Animated.View>
 
         {/* Trending */}
-        <View style={styles.section}>
+        <Animated.View style={[styles.section, { opacity: fadeAnimTrend, transform: [{ translateY: fadeAnimTrend.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }]}>
           <Text style={styles.sectionTitle}>Trending Price Drops</Text>
           {TRENDING.map((item) => (
             <TouchableOpacity
@@ -120,7 +134,7 @@ const HomeScreen = ({ navigation }) => {
               <Ionicons name="chevron-forward" size={16} color={COLORS.textTertiary} />
             </TouchableOpacity>
           ))}
-        </View>
+        </Animated.View>
 
         <View style={{ height: 100 }} />
       </ScrollView>

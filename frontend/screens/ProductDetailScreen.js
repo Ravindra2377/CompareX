@@ -8,14 +8,33 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
+  Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import PlatformRow from "../components/PlatformRow";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
+import * as Haptics from 'expo-haptics';
 
 const ProductDetailScreen = ({ route, navigation }) => {
   const { product } = route.params || {};
   const [saved, setSaved] = useState(false);
+  
+  const heartScale = React.useRef(new Animated.Value(1)).current;
+
+  const toggleSave = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const willSave = !saved;
+    setSaved(willSave);
+    
+    Animated.sequence([
+      Animated.timing(heartScale, { toValue: 1.3, duration: 150, useNativeDriver: true }),
+      Animated.spring(heartScale, { toValue: 1, friction: 3, useNativeDriver: true })
+    ]).start();
+    
+    if (willSave) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+  };
 
   const rawListings = product?.listings || [];
 
@@ -58,21 +77,26 @@ const ProductDetailScreen = ({ route, navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            navigation.goBack();
+          }}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         >
           <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Compare</Text>
         <TouchableOpacity
-          onPress={() => setSaved(!saved)}
+          onPress={toggleSave}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         >
-          <Ionicons
-            name={saved ? "heart" : "heart-outline"}
-            size={22}
-            color={saved ? COLORS.error : COLORS.textSecondary}
-          />
+          <Animated.View style={{ transform: [{ scale: heartScale }] }}>
+            <Ionicons
+              name={saved ? "heart" : "heart-outline"}
+              size={24}
+              color={saved ? COLORS.error : COLORS.textSecondary}
+            />
+          </Animated.View>
         </TouchableOpacity>
       </View>
 

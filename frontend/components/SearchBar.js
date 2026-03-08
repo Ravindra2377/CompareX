@@ -2,8 +2,9 @@ import React from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, RADIUS } from '../config/theme';
+import * as Haptics from 'expo-haptics';
 
-const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', onClear }) => {
+const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', onClear, autoFocus = false }) => {
   return (
     <View style={styles.container}>
       <Ionicons name="search-outline" size={20} color={COLORS.textTertiary} />
@@ -15,9 +16,16 @@ const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', on
         placeholderTextColor={COLORS.textTertiary}
         returnKeyType="search"
         autoCorrect={false}
+        autoFocus={autoFocus}
       />
       {value ? (
-        <TouchableOpacity onPress={onClear} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+        <TouchableOpacity 
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            if (onClear) onClear();
+          }} 
+          hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        >
           <Ionicons name="close-circle" size={18} color={COLORS.textTertiary} />
         </TouchableOpacity>
       ) : null}
