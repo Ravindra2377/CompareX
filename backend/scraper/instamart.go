@@ -73,6 +73,16 @@ func (s *InstamartScraper) Search(ctx context.Context, query string, lat, lng fl
 				"lng":   fmt.Sprintf("%f", lng),
 			},
 		},
+		{
+			method: "GET",
+			url:    "https://www.swiggy.com/dapi/instamart/search?query=" + url.QueryEscape(cleanQuery) + "&lat=" + fmt.Sprintf("%f", lat) + "&lng=" + fmt.Sprintf("%f", lng) + "&pageType=INSTAMART_SEARCH",
+			body:   nil,
+		},
+		{
+			method: "GET",
+			url:    "https://www.swiggy.com/dapi/instamart/search?str=" + url.QueryEscape(cleanQuery) + "&lat=" + fmt.Sprintf("%f", lat) + "&lng=" + fmt.Sprintf("%f", lng),
+			body:   nil,
+		},
 	}
 
 	for i, variant := range variants {
@@ -297,6 +307,165 @@ func (s *InstamartScraper) extractProducts(body io.Reader, query string) ([]mode
 		}
 	}
 
+	if len(listings) > 0 {
+		log.Printf("[Instamart] Extracted %d products for query: %s", len(listings), query)
+		return listings, nil
+	}
+
+	// Fallback for evolving API shapes: walk the full response and collect product-like objects
+	seen := make(map[string]struct{})
+	walkCollectProducts(result, &listings, seen, now)
+
+	if len(listings) == 0 {
+		log.Printf("[Instamart] Fallback extractor found 0 products. Top-level keys: %v", mapKeys(result))
+	}
+
 	log.Printf("[Instamart] Extracted %d products for query: %s", len(listings), query)
 	return listings, nil
+}
+
+func walkCollectProducts(node interface{}, listings *[]models.PlatformListing, seen map[string]struct{}, now time.Time) {
+	switch typed := node.(type) {
+	case []interface{}:
+		for _, child := range typed {
+			walkCollectProducts(child, listings, seen, now)
+		}
+	case map[string]interface{}:
+		tryAppendProductFromMap(typed, listings, seen, now)
+		for _, child := range typed {
+			walkCollectProducts(child, listings, seen, now)
+		}
+	}
+}
+
+func tryAppendProductFromMap(item map[string]interface{}, listings *[]models.PlatformListing, seen map[string]struct{}, now time.Time) {
+	if item == nil {
+		return
+	}
+
+	name := getString(item, "name")
+	if name == "" {
+		name = getString(item, "display_name")
+	}
+	if name == "" {
+		name = getString(item, "displayName")
+	}
+	if name == "" {
+		name = getString(item, "title")
+	}
+	if len(strings.TrimSpace(name)) < 3 {
+		return
+	}
+
+	price := 0.0
+	mrp := 0.0
+
+	if priceInfo, ok := item["price"].(map[string]interface{}); ok {
+		price = normalizedINR(
+			getFloat(priceInfo, "offer_price"),
+			getFloat(priceInfo, "discounted_price"),
+			getFloat(priceInfo, "selling_price"),
+			getFloat(priceInfo, "finalPrice"),
+			getFloat(priceInfo, "final_price"),
+			getFloat(priceInfo, "price"),
+		)
+		mrp = normalizedINR(
+			getFloat(priceInfo, "mrp"),
+			getFloat(priceInfo, "originalPrice"),
+			getFloat(priceInfo, "original_price"),
+		)
+	} else {
+		price = normalizedINR(
+			getFloat(item, "offer_price"),
+			getFloat(item, "discounted_price"),
+			getFloat(item, "selling_price"),
+			getFloat(item, "sellingPrice"),
+			getFloat(item, "finalPrice"),
+			getFloat(item, "final_price"),
+			getFloat(item, "display_price"),
+			getFloat(item, "sp"),
+			getFloat(item, "price"),
+		)
+		mrp = normalizedINR(
+			getFloat(item, "mrp"),
+			getFloat(item, "originalPrice"),
+			getFloat(item, "original_price"),
+		)
+	}
+
+	if price == 0 {
+		price = mrp
+	}
+	if mrp == 0 {
+		mrp = price
+	}
+	if price <= 0 {
+		return
+	}
+
+	if strings.Contains(strings.ToLower(name), "search") && len(name) < 8 {
+		return
+	}
+
+	key := strings.ToLower(strings.TrimSpace(name)) + "|" + fmt.Sprintf("%.2f", price)
+	if _, exists := seen[key]; exists {
+		return
+	}
+	seen[key] = struct{}{}
+
+	inStock := true
+	if outOfStock, ok := item["out_of_stock"].(bool); ok {
+		inStock = !outOfStock
+	} else if inStockVal, ok := item["in_stock"].(bool); ok {
+		inStock = inStockVal
+	} else if isOutOfStock, ok := item["is_out_of_stock"].(bool); ok {
+		inStock = !isOutOfStock
+	}
+
+	itemID := getString(item, "id")
+	if itemID == "" {
+		itemID = getString(item, "product_id")
+	}
+	if itemID == "" {
+		if idNum, ok := item["id"].(float64); ok {
+			itemID = fmt.Sprintf("%.0f", idNum)
+		}
+	}
+
+	deepLink := "https://www.swiggy.com/instamart"
+	if itemID != "" {
+		deepLink = fmt.Sprintf("https://www.swiggy.com/instamart/item/%s", url.PathEscape(itemID))
+	}
+
+	*listings = append(*listings, models.PlatformListing{
+		Platform:     "Instamart",
+		ProductName:  strings.TrimSpace(name),
+		Price:        price,
+		MRP:          mrp,
+		InStock:      inStock,
+		DeliveryTime: "10-15 mins",
+		DeepLink:     deepLink,
+		ScrapedAt:    now,
+	})
+}
+
+func normalizedINR(values ...float64) float64 {
+	for _, v := range values {
+		if v <= 0 {
+			continue
+		}
+		if v > 500 && float64(int64(v)) == v {
+			return v / 100
+		}
+		return v
+	}
+	return 0
+}
+
+func mapKeys(m map[string]interface{}) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
 }

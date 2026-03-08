@@ -308,6 +308,7 @@ export default function AccountsScreen() {
       }
 
       async function verifySwiggyInstamart() {
+        const variants = [
           {
             id: 'api_query',
             url: 'https://www.swiggy.com/api/instamart/search?lat=12.9716&lng=77.5946&query=milk&pageType=INSTAMART_SEARCH'
