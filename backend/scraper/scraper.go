@@ -24,11 +24,10 @@ type Service struct {
 	scrapers []PlatformScraper
 	redis    *redis.Client
 	cacheTTL time.Duration
-	useMock  bool // Enable mock data mode for testing
 }
 
 // AllPlatforms lists all supported platforms for the "Not Available" display
-var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket", "Instamart", "Swiggy", "Zomato"}
+var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket"}
 
 // NewService creates a new scraper service
 func NewService(redisAddr string) *Service {
@@ -47,7 +46,6 @@ func NewService(redisAddr string) *Service {
 	s := &Service{
 		redis:    rdb,
 		cacheTTL: 5 * time.Minute,
-		useMock:  false, // ALWAYS false - use real APIs only
 	}
 
 	// Register all platform scrapers
@@ -55,23 +53,10 @@ func NewService(redisAddr string) *Service {
 		NewBlinkitScraper(),
 		NewZeptoScraper(),
 		NewBigBasketScraper(),
-		NewInstamartScraper(),
 	}
 
 	log.Printf("✅ Scraper service initialized with %d platforms (HTTP mode)", len(s.scrapers))
 	return s
-}
-
-// EnableMockMode enables mock data mode for testing without API authentication
-func (s *Service) EnableMockMode() {
-	s.useMock = true
-	log.Println("🎭 Mock mode ENABLED - API requests will return sample data")
-}
-
-// DisableMockMode disables mock data mode and uses real API calls
-func (s *Service) DisableMockMode() {
-	s.useMock = false
-	log.Println("🔴 Mock mode DISABLED - using real API requests")
 }
 
 // Compare returns real product listings from all platforms.

@@ -5,11 +5,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
 
-const MOCK_ITEMS = [
-  { id: '1', name: 'Amul Butter 500g', price: 265, platform: 'Zepto', alert: true },
-  { id: '2', name: 'Farm Fresh Eggs (10 pcs)', price: 79, platform: 'Blinkit', alert: false },
-  { id: '3', name: 'India Gate Rice 5kg', price: 380, platform: 'BigBasket', alert: true },
-];
+const MOCK_ITEMS = [];
 
 const WishlistScreen = () => {
   const [items, setItems] = useState(MOCK_ITEMS);
