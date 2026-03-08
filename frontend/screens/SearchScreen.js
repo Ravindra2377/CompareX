@@ -38,11 +38,11 @@ const SUGGESTIONS = [
 ];
 
 const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
-const ENABLE_BACKEND_FALLBACK = false;
+const ENABLE_BACKEND_FALLBACK = true;  // Use Go backend API when WebView fails
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
-const INSTAMART_INITIAL_TIMEOUT_MS = 80000;
-const INSTAMART_RETRY_TIMEOUT_MS = 30000;
+const INSTAMART_INITIAL_TIMEOUT_MS = 25000;  // Fall through to backend quickly
+const INSTAMART_RETRY_TIMEOUT_MS = 15000;
 const OVERALL_SEARCH_TIMEOUT_MS = 120000;
 
 const reducer = (state, action) => {
