@@ -37,13 +37,11 @@ const SUGGESTIONS = [
   "Oil",
 ];
 
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
-const ENABLE_BACKEND_FALLBACK = true; // Use Go backend API when WebView fails
+const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
+const ENABLE_BACKEND_FALLBACK = false;
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
-const INSTAMART_INITIAL_TIMEOUT_MS = 25000; // Fall through to backend quickly
-const INSTAMART_RETRY_TIMEOUT_MS = 15000;
-const OVERALL_SEARCH_TIMEOUT_MS = 120000;
+const OVERALL_SEARCH_TIMEOUT_MS = 90000;
 
 const reducer = (state, action) => {
   console.log(
@@ -287,7 +285,7 @@ const SearchScreen = ({ navigation, route }) => {
   }, [query, state.connectedPlatforms]);
 
   const getConnectedPlatformsSnapshot = useCallback(
-    async ({ logInstamartLimited = false } = {}) => {
+    async () => {
       try {
         console.log("[Search] getConnectedPlatformsSnapshot called");
         const tokens = await AsyncStorage.getItem("userTokens");
@@ -297,55 +295,16 @@ const SearchScreen = ({ navigation, route }) => {
         );
         if (!tokens) return [];
         const parsed = JSON.parse(tokens);
-        console.log("[Search] parsed tokens keys:", Object.keys(parsed));
-        const supportedPlatforms = [
-          "Blinkit",
-          "BigBasket",
-          "Instamart",
-          "Zepto",
-        ];
+        const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
         const connected = Object.keys(parsed).filter((platform) => {
           if (!supportedPlatforms.includes(platform)) return false;
           const t = parsed[platform];
-          if (!t || Object.keys(t).length === 0) return false;
-
-          if (platform === "Instamart") {
-            const verified =
-              t.verifiedInstamartApi === "true" ||
-              t.verifiedInstamartApi === true;
-            if (verified) return true;
-
-            const hasAuthHeaders =
-              typeof t.authHeaders === "string" && t.authHeaders.length > 20;
-            const hasUserInfo =
-              typeof t.swiggyUserInfo === "string" &&
-              t.swiggyUserInfo.length > 10;
-            if (hasAuthHeaders && hasUserInfo) {
-              if (logInstamartLimited) {
-                console.log(
-                  "[Search] Instamart connected in limited mode (API not verified)",
-                );
-              }
-              return true;
-            }
-            return true;
-          }
-
-          return true;
+          return t && Object.keys(t).length > 0;
         });
 
-        // Save the actual token objects
         const tokenMap = {};
         connected.forEach((plat) => {
-          if (plat === "Instamart") {
-            tokenMap[plat] = {
-              ...(parsed[plat] || {}),
-              ...(parsed.Swiggy || {}),
-              ...(parsed.swiggy || {}),
-            };
-          } else {
-            tokenMap[plat] = parsed[plat];
-          }
+          tokenMap[plat] = parsed[plat];
         });
         connectedPlatformTokensRef.current = tokenMap;
 
@@ -360,7 +319,7 @@ const SearchScreen = ({ navigation, route }) => {
   );
 
   const checkConnectedPlatforms = useCallback(() => {
-    getConnectedPlatformsSnapshot({ logInstamartLimited: true })
+    getConnectedPlatformsSnapshot()
       .then((connected) => {
         console.log("[Search] In then, connected length:", connected.length);
         connectedPlatformsRef.current = connected;
