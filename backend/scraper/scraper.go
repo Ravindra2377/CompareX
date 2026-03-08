@@ -27,7 +27,7 @@ type Service struct {
 }
 
 // AllPlatforms lists all supported platforms for the "Not Available" display
-var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket"}
+var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket", "Instamart"}
 
 // NewService creates a new scraper service
 func NewService(redisAddr string) *Service {
@@ -53,6 +53,7 @@ func NewService(redisAddr string) *Service {
 		NewBlinkitScraper(),
 		NewZeptoScraper(),
 		NewBigBasketScraper(),
+		NewInstamartScraper(),
 	}
 
 	log.Printf("✅ Scraper service initialized with %d platforms (HTTP mode)", len(s.scrapers))

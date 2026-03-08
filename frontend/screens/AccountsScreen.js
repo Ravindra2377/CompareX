@@ -43,6 +43,15 @@ const PLATFORMS = [
     icon: "basket",
     requiredTokens: ["sessionid", "_bb_vid"],
   },
+  {
+    id: "Instamart",
+    name: "Swiggy Instamart",
+    loginUrl: "https://www.swiggy.com/instamart",
+    testUrl: "https://www.swiggy.com/dapi/instamart/search?q=milk",
+    color: "#FC8019",
+    icon: "storefront",
+    requiredTokens: ["_session_tid"],
+  },
 ];
 
 export default function AccountsScreen() {

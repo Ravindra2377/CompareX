@@ -37,11 +37,151 @@ const SUGGESTIONS = [
   "Oil",
 ];
 
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
+const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
 const ENABLE_BACKEND_FALLBACK = false;
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
+const INSTAMART_INITIAL_TIMEOUT_MS = 25000;
+const INSTAMART_RETRY_TIMEOUT_MS = 15000;
 const OVERALL_SEARCH_TIMEOUT_MS = 90000;
+
+const instamartInterceptScript = `
+  (function() {
+    function log(msg) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'LOG', message: '[IM] ' + msg }));
+    }
+    
+    function toPrice(p) {
+      if (!p) return 0;
+      if (typeof p === 'number') return p / 100;
+      var str = String(p).replace(/[^0-9.]/g, '');
+      return str ? parseFloat(str) / 100 : 0;
+    }
+
+    function syncTokens(reason) {
+      try {
+        var payload = {
+          cookie: document.cookie || '',
+          authHeaders: localStorage.swiggy_auth_headers || localStorage.auth_headers || '',
+          swiggyUserInfo: localStorage.swiggy_user_info || localStorage.user_info || '',
+          syncReason: reason,
+          syncUrl: location.href
+        };
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'SYNC_TOKENS',
+          platform: 'Instamart',
+          payload: payload
+        }));
+      } catch(e) {}
+    }
+
+    function onData(source, data) {
+      try {
+        if (!data || !data.data) return;
+        var dataOuter = data.data;
+        var dataInner = dataOuter.data || dataOuter;
+        if (!dataInner.cards || !Array.isArray(dataInner.cards)) return;
+        
+        var products = [];
+        for (var i = 0; i < dataInner.cards.length; i++) {
+          var card = dataInner.cards[i].card;
+          if (!card || !card.gridElements || !card.gridElements.infoWithStyle) continue;
+          var items = card.gridElements.infoWithStyle.items;
+          if (!Array.isArray(items)) continue;
+          
+          for (var j = 0; j < items.length; j++) {
+            var info = items[j].info;
+            if (!info) continue;
+            
+            var name = info.display_name || info.name || '';
+            if (name.length < 3) continue;
+            
+            var price = 0, mrp = 0;
+            if (info.price && typeof info.price === 'object') {
+              price = toPrice(info.price.offer_price || info.price.discounted_price || info.price.price);
+              mrp = toPrice(info.price.mrp);
+            } else {
+              price = toPrice(info.offer_price || info.price);
+              mrp = toPrice(info.mrp);
+            }
+            if (!price) price = mrp;
+            if (!mrp) mrp = price;
+            if (!price) continue;
+            
+            var inStock = true;
+            if (info.out_of_stock !== undefined) inStock = !info.out_of_stock;
+            else if (info.in_stock !== undefined) inStock = !!info.in_stock;
+
+            var itemId = info.id || '';
+            var deepLink = itemId ? 'https://www.swiggy.com/instamart/item/' + encodeURIComponent(String(itemId)) : 'https://www.swiggy.com/instamart';
+
+            products.push({
+              platform: 'Instamart',
+              name: name,
+              price: price,
+              mrp: mrp,
+              inStock: inStock,
+              deliveryTime: '10-15 mins',
+              deepLink: deepLink
+            });
+          }
+        }
+        
+        if (products.length > 0) {
+          log(source + ' parsed ' + products.length + ' products');
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'PRODUCTS',
+            platform: 'Instamart',
+            products: products
+          }));
+        } else {
+          log(source + ' parsed 0 products');
+        }
+      } catch(e) {
+        log('Parse error: ' + e.message);
+      }
+    }
+
+    var OrigFetch = window.fetch;
+    window.fetch = async function() {
+      var url = arguments[0];
+      var response = await OrigFetch.apply(this, arguments);
+      if (typeof url === 'string' && url.indexOf('/api/instamart/search') !== -1) {
+        response.clone().json().then(data => {
+          syncTokens('fetch');
+          onData('fetch', data);
+        }).catch(e => log('fetch JSON parse err: '+e.message));
+      }
+      return response;
+    };
+    log('fetch interceptor installed');
+    
+    var OrigXHR = window.XMLHttpRequest;
+    function PatchedXHR() {
+      var xhr = new OrigXHR();
+      var _url = '';
+      xhr.open = function(method, url) {
+        _url = url;
+        return OrigXHR.prototype.open.apply(this, arguments);
+      };
+      xhr.addEventListener('load', function() {
+        if (typeof _url === 'string' && _url.indexOf('/api/instamart/search') !== -1 && xhr.responseText) {
+          try {
+            syncTokens('xhr');
+            onData('xhr', JSON.parse(xhr.responseText));
+          } catch(e) { log('xhr JSON parse err: '+e.message); }
+        }
+      });
+      return xhr;
+    }
+    PatchedXHR.prototype = OrigXHR.prototype;
+    window.XMLHttpRequest = PatchedXHR;
+    log('xhr interceptor installed');
+
+    syncTokens('boot');
+  })();
+  true;
+\`;
 
 const reducer = (state, action) => {
   console.log(
@@ -295,16 +435,36 @@ const SearchScreen = ({ navigation, route }) => {
         );
         if (!tokens) return [];
         const parsed = JSON.parse(tokens);
-        const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
+        const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Instamart"];
         const connected = Object.keys(parsed).filter((platform) => {
           if (!supportedPlatforms.includes(platform)) return false;
           const t = parsed[platform];
-          return t && Object.keys(t).length > 0;
+          if (!t || Object.keys(t).length === 0) return false;
+
+          if (platform === "Instamart") {
+            const verified = t.verifiedInstamartApi === "true" || t.verifiedInstamartApi === true;
+            if (verified) return true;
+
+            const hasAuthHeaders = typeof t.authHeaders === "string" && t.authHeaders.length > 20;
+            const hasUserInfo = typeof t.swiggyUserInfo === "string" && t.swiggyUserInfo.length > 10;
+            if (hasAuthHeaders && hasUserInfo) return true;
+            return true; // We always allow Instamart through to the WebView so it can refresh tokens
+          }
+
+          return true;
         });
 
         const tokenMap = {};
         connected.forEach((plat) => {
-          tokenMap[plat] = parsed[plat];
+          if (plat === "Instamart") {
+            tokenMap[plat] = {
+              ...(parsed[plat] || {}),
+              ...(parsed.Swiggy || {}),
+              ...(parsed.swiggy || {})
+            };
+          } else {
+            tokenMap[plat] = parsed[plat];
+          }
         });
         connectedPlatformTokensRef.current = tokenMap;
 
@@ -938,198 +1098,6 @@ const SearchScreen = ({ navigation, route }) => {
     return null;
   };
 
-  // Instamart XHR/fetch interceptor — installed before Swiggy page scripts run.
-  // Confirmed API: POST /api/instamart/search/v2
-  // Confirmed path: data.data.cards[i].card.card.gridElements.infoWithStyle.items[j].info
-  const instamartInterceptScript = `
-    (function() {
-      // Cache RN bridge immediately so Swiggy WAF cannot delete it
-      try {
-        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-          window.__rnMsg = window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView);
-        }
-      } catch(e) {}
-
-      function send(obj) {
-        try {
-          var fn = window.__rnMsg ||(window.ReactNativeWebView&&window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-          if (fn) fn(JSON.stringify(obj));
-        } catch(e) {}
-      }
-      function log(msg) { send({type:'LOG', message:'[IM] '+msg}); }
-
-      // Sync cookies/auth back to RN so the backend fallback can use them
-      function syncTokens(reason) {
-        try {
-          var ls = window.localStorage || {};
-          send({
-            type: 'TOKENS_SYNC',
-            platform: 'Instamart',
-            payload: {
-              cookie: document.cookie || '',
-              authHeaders: ls.swiggy_auth_headers || ls.auth_headers || '',
-              swiggyUserInfo: ls.swiggy_user_info || ls.user_info || '',
-              syncReason: reason
-            }
-          });
-        } catch(e) {}
-      }
-
-      // Prices in Swiggy are in paise (e.g. 2400 = Rs 24)
-      function paise2Rs(v) {
-        var n = typeof v === 'string' ? parseFloat(v) : Number(v);
-        if (!isFinite(n) || n <= 0) return 0;
-        if (n > 100 && n === Math.round(n) && Math.round(n) % 100 === 0) return Math.round(n / 100);
-        return Math.round(n);
-      }
-
-      // Navigate the confirmed Swiggy Instamart card structure
-      function parseCards(root) {
-        var products = [];
-        var seen = {};
-        try {
-          var data = root && root.data;
-          var cards = data && data.cards;
-          if (!Array.isArray(cards)) return [];
-          log('parseCards: '+cards.length+' cards');
-
-          for (var i = 0; i < cards.length; i++) {
-            var cw = cards[i];
-            if (!cw) continue;
-            var outer = cw.card;
-            if (!outer) continue;
-            var inner = outer.card;
-            if (!inner) continue;
-
-            var items = null;
-            // Path A: gridElements.infoWithStyle.items  (confirmed main grid)
-            if (inner.gridElements && inner.gridElements.infoWithStyle && inner.gridElements.infoWithStyle.items) {
-              items = inner.gridElements.infoWithStyle.items;
-            }
-            // Path B: items[] directly
-            if (!items && Array.isArray(inner.items)) {
-              items = inner.items;
-            }
-            if (!items) continue;
-
-            for (var j = 0; j < items.length; j++) {
-              var itm = items[j];
-              if (!itm) continue;
-              var info = itm.info || itm;
-              if (!info || typeof info !== 'object') continue;
-
-              var name = info.display_name || info.name || info.product_name || '';
-              if (!name || name.length < 3) continue;
-
-              // Price resolution: direct value or nested {offer_price, mrp} object
-              var rawP = info.price;
-              var price = 0;
-              if (rawP != null && typeof rawP === 'object') {
-                price = paise2Rs(rawP.offer_price || rawP.offerPrice || rawP.mrp);
-              } else {
-                price = paise2Rs(rawP);
-              }
-              if (!price) price = paise2Rs(info.offer_price || info.discounted_price || info.sp);
-              if (!price) continue;
-
-              var key = name.trim().toLowerCase()+'|'+price;
-              if (seen[key]) continue;
-              seen[key] = 1;
-
-              var pid = info.product_id || info.id || '';
-              var img = info.image_url || info.img_url || '';
-              if (!img && info.image_id) img = 'https://media-assets.swiggy.com/swiggy/image/upload/'+info.image_id;
-              var rawMrp = info.mrp;
-              var mrp = (rawMrp && typeof rawMrp === 'object') ? paise2Rs(rawMrp.mrp || rawMrp.value) : paise2Rs(rawMrp);
-              if (!mrp) mrp = price;
-
-              products.push({
-                product_name: name.trim(),
-                brand: info.brand_name || info.brand || '',
-                price: price,
-                mrp: mrp,
-                image_url: img,
-                product_url: info.deep_link || (pid ? 'https://www.swiggy.com/instamart/item/'+pid : ''),
-                weight: info.quantity || info.unit || info.weight || '',
-                in_stock: !(info.is_out_of_stock || info.out_of_stock || info.in_stock === false),
-                platform: 'Instamart'
-              });
-            }
-          }
-        } catch(e) { log('parseCards error: '+e.message); }
-        return products;
-      }
-
-      function onData(source, data) {
-        var products = parseCards(data);
-        log(source+' parsed '+products.length+' products');
-        if (products.length > 0) {
-          send({
-            type: 'SEARCH_RESULTS',
-            platform: 'Instamart',
-            sessionId: window.__COMPAREX_SESSION_ID__ || null,
-            products: products,
-            success: true,
-            error: null
-          });
-        } else {
-          // Debug: log card path on failure
-          try {
-            var c0 = data && data.data && data.data.cards && data.data.cards[0];
-            var inner0 = c0 && c0.card && c0.card.card;
-            if (inner0) log('card[0].card.card keys='+JSON.stringify(Object.keys(inner0).slice(0,10)));
-          } catch(dbg){}
-        }
-      }
-
-      if (!window.__imIntercepted) {
-        window.__imIntercepted = true;
-
-        // Intercept fetch
-        try {
-          var origFetch = window.fetch;
-          window.fetch = function(url) {
-            var s = typeof url === 'string' ? url : (url && url.url) || '';
-            var isIM = s.indexOf('/api/instamart/search') !== -1;
-            var p = origFetch.apply(this, arguments);
-            if (isIM) {
-              syncTokens('fetch');
-              p.then(function(r){
-                r.clone().json().then(function(d){ onData('fetch',d); }).catch(function(){});
-              }).catch(function(){});
-            }
-            return p;
-          };
-          log('fetch interceptor installed');
-        } catch(e){ log('fetch failed: '+e.message); }
-
-        // Intercept XHR
-        try {
-          var OrigXHR = window.XMLHttpRequest;
-          function PatchedXHR() {
-            var xhr = new OrigXHR();
-            var _url = '';
-            var origOpen = xhr.open.bind(xhr);
-            xhr.open = function(m, u){ _url = u||''; return origOpen.apply(xhr, arguments); };
-            xhr.addEventListener('load', function(){
-              try {
-                if (_url.indexOf('/api/instamart/search') === -1 || !xhr.responseText) return;
-                syncTokens('xhr');
-                onData('xhr', JSON.parse(xhr.responseText));
-              } catch(e){ log('xhr err: '+e.message); }
-            });
-            return xhr;
-          }
-          PatchedXHR.prototype = OrigXHR.prototype;
-          window.XMLHttpRequest = PatchedXHR;
-          log('xhr interceptor installed');
-        } catch(e){ log('xhr failed: '+e.message); }
-      }
-
-      syncTokens('boot');
-    })();
-    true;
-  `;
 
   return (
     <View style={styles.container}>
