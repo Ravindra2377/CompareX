@@ -730,10 +730,10 @@ const SearchScreen = ({ navigation, route }) => {
         `[Search] DEBUG Instamart token pass: HasCookie=${!!platformToken?.cookie}, CookieLen=${platformToken?.cookie?.length || 0}`,
       );
     }
-    const parseScript =
-      platform === "Instamart"
-        ? instamartInterceptScript
-        : PlatformDOMScraperService.getParseScript(platform, platformToken);
+    const parseScript = PlatformDOMScraperService.getParseScript(
+      platform,
+      platformToken,
+    );
     if (!parseScript) {
       console.log(`[Search] No parser available for ${platform}`);
       return;
