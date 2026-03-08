@@ -8,9 +8,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"time"
 )
 
+// InstamartScraper fetches Swiggy Instamart products via their search API.
+// API: POST https://www.swiggy.com/api/instamart/search/v2
+// Response path: data.data.cards[i].card.card.gridElements.infoWithStyle.items[j].info
 type InstamartScraper struct {
 	client *http.Client
 }
@@ -24,10 +28,11 @@ func NewInstamartScraper() *InstamartScraper {
 func (im *InstamartScraper) Name() string { return "Instamart" }
 
 func (im *InstamartScraper) Search(ctx context.Context, query string, lat, lng float64, userTokens map[string]string) ([]models.PlatformListing, error) {
-	// Swiggy Instamart uses a POST request to this endpoint
-	endpoint := "https://www.swiggy.com/api/instamart/search/v2"
+	endpoint := fmt.Sprintf(
+		"https://www.swiggy.com/api/instamart/search/v2?lat=%f&lng=%f",
+		lat, lng,
+	)
 
-	// Build request body
 	bodyMap := map[string]interface{}{
 		"facets":                []interface{}{},
 		"sortAttribute":         "",
@@ -38,47 +43,37 @@ func (im *InstamartScraper) Search(ctx context.Context, query string, lat, lng f
 	}
 	bodyBytes, err := json.Marshal(bodyMap)
 	if err != nil {
-		return nil, fmt.Errorf("instamart: failed to marshal request body: %w", err)
+		return nil, fmt.Errorf("instamart: marshal body: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewReader(bodyBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(bodyBytes))
 	if err != nil {
 		return nil, err
 	}
 
-	// Required headers that Swiggy enforces
+	// Required headers
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("accept", "application/json")
 	req.Header.Set("origin", "https://www.swiggy.com")
-	req.Header.Set("referer", fmt.Sprintf("https://www.swiggy.com/instamart/search?query=%s&lat=%f&lng=%f", query, lat, lng))
+	req.Header.Set("referer", fmt.Sprintf("https://www.swiggy.com/instamart/search?query=%s", url.QueryEscape(query)))
 	req.Header.Set("user-agent", "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
-	req.Header.Set("x-build-id", "4671")
-	req.Header.Set("access-control-allow-origin", "*")
+	req.Header.Set("x-requested-with", "XMLHttpRequest")
 
-	// Provide lat/lng as query params too (some Swiggy endpoints need these)
-	q := req.URL.Query()
-	q.Set("lat", fmt.Sprintf("%f", lat))
-	q.Set("lng", fmt.Sprintf("%f", lng))
-	req.URL.RawQuery = q.Encode()
-
-	// Apply user session tokens (cookies, auth headers from their logged-in Swiggy session)
+	// Apply user session cookies if available (captured from the user's WebView)
 	if userTokens != nil {
 		if cookie, ok := userTokens["cookie"]; ok && cookie != "" {
 			req.Header.Set("Cookie", cookie)
 		}
-		if authStr, ok := userTokens["authHeaders"]; ok && authStr != "" {
-			var authMap map[string]string
-			if err := json.Unmarshal([]byte(authStr), &authMap); err == nil {
-				for k, v := range authMap {
-					if k != "cookie" {
-						req.Header.Set(k, v)
-					}
+		for _, key := range []string{"authHeaders", "swiggy_auth_headers"} {
+			if raw, ok := userTokens[key]; ok && raw != "" {
+				for k, v := range parseAuthHeaders(raw) {
+					req.Header.Set(k, v)
 				}
 			}
 		}
 	}
 
-	log.Printf("🔵 Instamart: calling POST %s for query=%q lat=%f lng=%f", endpoint, query, lat, lng)
+	log.Printf("🔵 Instamart: POST %s query=%q", endpoint, query)
 
 	resp, err := im.client.Do(req)
 	if err != nil {
@@ -86,139 +81,209 @@ func (im *InstamartScraper) Search(ctx context.Context, query string, lat, lng f
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		log.Printf("🔴 Instamart API error: status=%d", resp.StatusCode)
 		return nil, fmt.Errorf("instamart api status: %d", resp.StatusCode)
 	}
 
-	var result map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return nil, fmt.Errorf("instamart: json decode failed: %w", err)
+	var root map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&root); err != nil {
+		return nil, fmt.Errorf("instamart: json decode: %w", err)
 	}
 
-	listings := im.parseResponse(result, query)
-	log.Printf("✅ Instamart API found %d items for query=%q", len(listings), query)
+	listings := im.extractProducts(root)
+	log.Printf("✅ Instamart: found %d products for %q", len(listings), query)
 	return listings, nil
 }
 
-// parseResponse walks the Swiggy Instamart /api/instamart/search/v2 response tree.
-// The structure is:
+// extractProducts navigates the confirmed Swiggy Instamart response structure:
 //
-//	data.cards[] -> card.card.info (the product node)
-//	           OR -> groupedCard.cardGroupMap.ITEM.cards[].card.card.info
-func (im *InstamartScraper) parseResponse(result map[string]interface{}, query string) []models.PlatformListing {
+//	root.data.cards[i].card.card.gridElements.infoWithStyle.items[j].info → product
+func (im *InstamartScraper) extractProducts(root map[string]interface{}) []models.PlatformListing {
 	var listings []models.PlatformListing
 	seen := map[string]bool{}
 
-	tryAdd := func(node map[string]interface{}) {
-		name := getString(node, "display_name")
-		if name == "" {
-			name = getString(node, "name")
-		}
-		if name == "" {
-			return
-		}
-
-		// Swiggy prices are in paise (×100), fall back to direct rupee values
-		rawPrice := getFloat(node, "price")
-		if rawPrice == 0 {
-			rawPrice = getFloat(node, "offer_price")
-		}
-		if rawPrice == 0 {
-			rawPrice = getFloat(node, "sp")
-		}
-
-		// Normalize: paise if > 500 and is a round multiple of 100, else assume rupees
-		price := rawPrice
-		if price > 500 && price == float64(int(price)) && int(price)%100 == 0 {
-			price = price / 100
-		}
-
-		rawMRP := getFloat(node, "mrp")
-		mrp := rawMRP
-		if mrp > 500 && mrp == float64(int(mrp)) && int(mrp)%100 == 0 {
-			mrp = mrp / 100
-		}
-		if mrp == 0 {
-			mrp = price
-		}
-
-		if name == "" || price <= 0 {
-			return
-		}
-
-		key := fmt.Sprintf("%s|%.0f", name, price)
-		if seen[key] {
-			return
-		}
-		seen[key] = true
-
-		pid := getString(node, "product_id")
-		deepLink := ""
-		if pid != "" {
-			deepLink = fmt.Sprintf("https://www.swiggy.com/instamart/item/%s", pid)
-		}
-
-		imgURL := getString(node, "image_url")
-		if imgURL == "" {
-			imgURL = getString(node, "img_url")
-		}
-		if imgURL == "" {
-			imgURL = getString(node, "imageUrl")
-		}
-
-		// Stock check
-		inStock := true
-		if stockObj, ok := node["stock"].(map[string]interface{}); ok {
-			if qty := getFloat(stockObj, "quantity"); qty <= 0 {
-				inStock = false
-			}
-		}
-
-		listings = append(listings, models.PlatformListing{
-			Platform:     "Instamart",
-			ProductName:  name,
-			Price:        price,
-			MRP:          mrp,
-			ImageURL:     imgURL,
-			InStock:      inStock,
-			DeliveryTime: "10-20 mins",
-			DeepLink:     deepLink,
-			ScrapedAt:    time.Now(),
-		})
+	data, _ := root["data"].(map[string]interface{})
+	if data == nil {
+		return listings
 	}
+	cards, _ := data["cards"].([]interface{})
+	log.Printf("Instamart: %d cards in response", len(cards))
 
-	// Recursive walker that handles Swiggy's deeply nested card tree
-	var walk func(node interface{}, depth int)
-	walk = func(node interface{}, depth int) {
-		if depth > 15 || node == nil {
-			return
+	for _, cardWrapper := range cards {
+		cw, _ := cardWrapper.(map[string]interface{})
+		if cw == nil {
+			continue
 		}
-		switch v := node.(type) {
-		case []interface{}:
-			for _, item := range v {
-				walk(item, depth+1)
-			}
-		case map[string]interface{}:
-			// Check if this node itself looks like a product
-			hasName := v["display_name"] != nil || v["name"] != nil
-			hasPrice := v["price"] != nil || v["offer_price"] != nil || v["sp"] != nil || v["mrp"] != nil
-			if hasName && hasPrice {
-				tryAdd(v)
-			} else {
-				// Keep descending
-				for k, child := range v {
-					// Skip huge strings and metadata fields to save time
-					if s, ok := child.(string); ok && len(s) > 5000 {
-						continue
+
+		// Navigate: cardWrapper.card.card.gridElements.infoWithStyle.items
+		outer, _ := cw["card"].(map[string]interface{})
+		if outer == nil {
+			continue
+		}
+		inner, _ := outer["card"].(map[string]interface{})
+		if inner == nil {
+			continue
+		}
+
+		// Path A: gridElements.infoWithStyle.items (main product grid)
+		if ge, _ := inner["gridElements"].(map[string]interface{}); ge != nil {
+			if iws, _ := ge["infoWithStyle"].(map[string]interface{}); iws != nil {
+				if items, _ := iws["items"].([]interface{}); len(items) > 0 {
+					for _, item := range items {
+						itemMap, _ := item.(map[string]interface{})
+						if itemMap == nil {
+							continue
+						}
+						info, _ := itemMap["info"].(map[string]interface{})
+						if info == nil {
+							info = itemMap // items[j] might itself be the product
+						}
+						im.tryAdd(info, seen, &listings)
 					}
-					_ = k
-					walk(child, depth+1)
 				}
 			}
 		}
+
+		// Path B: items[] directly on inner card
+		if items, _ := inner["items"].([]interface{}); len(items) > 0 {
+			for _, item := range items {
+				itemMap, _ := item.(map[string]interface{})
+				if itemMap == nil {
+					continue
+				}
+				info, _ := itemMap["info"].(map[string]interface{})
+				if info == nil {
+					info = itemMap
+				}
+				im.tryAdd(info, seen, &listings)
+			}
+		}
 	}
 
-	walk(result, 0)
 	return listings
+}
+
+func (im *InstamartScraper) tryAdd(info map[string]interface{}, seen map[string]bool, listings *[]models.PlatformListing) {
+	if info == nil {
+		return
+	}
+
+	name := getString(info, "display_name")
+	if name == "" {
+		name = getString(info, "name")
+	}
+	if name == "" || len(name) < 3 {
+		return
+	}
+
+	// Swiggy stores prices in paise (×100)
+	rawPrice := getFloat(info, "price")
+	if rawPrice == 0 {
+		rawPrice = getFloat(info, "offer_price")
+	}
+	if rawPrice == 0 {
+		rawPrice = getFloat(info, "discounted_price")
+	}
+	// Handle nested price object: { "price": { "offer_price": 2400, "mrp": 2800 } }
+	if rawPrice == 0 {
+		if priceObj, _ := info["price"].(map[string]interface{}); priceObj != nil {
+			rawPrice = getFloat(priceObj, "offer_price")
+			if rawPrice == 0 {
+				rawPrice = getFloat(priceObj, "mrp")
+			}
+		}
+	}
+	price := im.normalizePaise(rawPrice)
+	if price <= 0 {
+		return
+	}
+
+	rawMRP := getFloat(info, "mrp")
+	if rawMRP == 0 {
+		if priceObj, _ := info["price"].(map[string]interface{}); priceObj != nil {
+			rawMRP = getFloat(priceObj, "mrp")
+		}
+	}
+	mrp := im.normalizePaise(rawMRP)
+	if mrp == 0 {
+		mrp = price
+	}
+
+	key := fmt.Sprintf("%s|%.0f", name, price)
+	if seen[key] {
+		return
+	}
+	seen[key] = true
+
+	pid := getString(info, "product_id")
+	deepLink := ""
+	if pid != "" {
+		deepLink = "https://www.swiggy.com/instamart/item/" + pid
+	}
+
+	imageID := getString(info, "image_id")
+	imgURL := getString(info, "image_url")
+	if imgURL == "" && imageID != "" {
+		imgURL = "https://media-assets.swiggy.com/swiggy/image/upload/" + imageID
+	}
+
+	inStock := true
+	if stockObj, _ := info["stock"].(map[string]interface{}); stockObj != nil {
+		if qty := getFloat(stockObj, "quantity"); qty <= 0 {
+			inStock = false
+		}
+	}
+	if b, _ := info["is_out_of_stock"].(bool); b {
+		inStock = false
+	}
+
+	*listings = append(*listings, models.PlatformListing{
+		Platform:     "Instamart",
+		ProductName:  name,
+		Brand:        getString(info, "brand_name"),
+		Price:        price,
+		MRP:          mrp,
+		ImageURL:     imgURL,
+		InStock:      inStock,
+		DeliveryTime: "10-20 mins",
+		DeepLink:     deepLink,
+		ScrapedAt:    time.Now(),
+	})
+}
+
+// normalizePaise converts Swiggy paise prices to rupees.
+// Swiggy sends ₹24 as 2400, ₹99 as 9900, etc.
+func (im *InstamartScraper) normalizePaise(v float64) float64 {
+	if v <= 0 {
+		return 0
+	}
+	// If it's a whole number divisible by 100 and > 100: assume paise
+	if v > 100 && v == float64(int64(v)) && int64(v)%100 == 0 {
+		return v / 100
+	}
+	// Otherwise treat it as rupees directly
+	return v
+}
+
+// parseAuthHeaders parses a JSON blob of auth headers (may be {"headers":{...}} or flat {k:v}).
+func parseAuthHeaders(raw string) map[string]string {
+	result := map[string]string{}
+	var m map[string]interface{}
+	if err := json.Unmarshal([]byte(raw), &m); err != nil {
+		return result
+	}
+	src := m
+	if nested, ok := m["headers"].(map[string]interface{}); ok {
+		src = nested
+	}
+	for k, v := range src {
+		if k == "cookie" || k == "host" || k == "content-length" {
+			continue
+		}
+		if s, ok := v.(string); ok && s != "" {
+			result[k] = s
+		}
+	}
+	return result
 }

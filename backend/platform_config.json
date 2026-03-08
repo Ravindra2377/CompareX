@@ -27,22 +27,12 @@
       "searchSource": "PRIMARY_SEARCH_BAR"
     }
   },
-  "swiggy": {
-    "base_url": "https://www.swiggy.com/dapi/restaurants/search/v3",
-    "headers": {
-      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "accept": "application/json",
-      "cookie": "PASTE_YOUR_COOKIE_HERE",
-      "__sw_headers": "PASTE_ANY_CUSTOM_HEADER"
-    }
-  },
   "instamart": {
-    "base_url": "https://www.swiggy.com/api/instamart/search",
+    "base_url": "https://www.swiggy.com/api/instamart/search/v2",
     "headers": {
-      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "user-agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
       "accept": "application/json",
-      "cookie": "PASTE_YOUR_COOKIE_HERE",
-      "__sw_headers": "PASTE_ANY_CUSTOM_HEADER"
+      "cookie": ""
     }
   },
   "bigbasket": {
@@ -52,14 +42,6 @@
       "x-channel": "BB-WEB",
       "cookie": "PASTE_YOUR_COOKIE_HERE",
       "x-csrf-token": "PASTE_YOUR_CSRF_TOKEN_HERE"
-    }
-  },
-  "zomato": {
-    "base_url": "https://www.zomato.com/webroutes/search/search",
-    "headers": {
-      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "cookie": "PASTE_YOUR_COOKIE_HERE",
-      "x-zomato-csrftoken": "PASTE_YOUR_CSRF_TOKEN_HERE"
     }
   }
 }

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -50,14 +51,11 @@ func NewService(redisAddr string) *Service {
 	}
 
 	// Register all platform scrapers
-	// Register all platform scrapers
 	s.scrapers = []PlatformScraper{
 		NewBlinkitScraper(),
 		NewZeptoScraper(),
 		NewBigBasketScraper(),
 		NewInstamartScraper(),
-		// NewSwiggyScraper(), // Disabled per user request
-		NewZomatoScraper(),
 	}
 
 	log.Printf("✅ Scraper service initialized with %d platforms (HTTP mode)", len(s.scrapers))
@@ -165,9 +163,12 @@ func (s *Service) scrapeAllPlatforms(ctx context.Context, query string, lat, lng
 
 			// Get specific tokens for this platform
 			platformTokens := allTokens[scraper.Name()]
-			// Also support lowercase lookup just in case
 			if platformTokens == nil {
-				platformTokens = allTokens[scraper.Name()]
+				platformTokens = allTokens[strings.ToLower(scraper.Name())]
+			}
+			if scraper.Name() == "Instamart" {
+				platformTokens = mergePlatformTokens(platformTokens, allTokens["Swiggy"])
+				platformTokens = mergePlatformTokens(platformTokens, allTokens["swiggy"])
 			}
 
 			start := time.Now()
@@ -188,6 +189,22 @@ func (s *Service) scrapeAllPlatforms(ctx context.Context, query string, lat, lng
 
 	wg.Wait()
 	return allListings
+}
+
+func mergePlatformTokens(base, extra map[string]string) map[string]string {
+	if len(base) == 0 && len(extra) == 0 {
+		return nil
+	}
+	out := map[string]string{}
+	for k, v := range base {
+		out[k] = v
+	}
+	for k, v := range extra {
+		if _, exists := out[k]; !exists || out[k] == "" {
+			out[k] = v
+		}
+	}
+	return out
 }
 
 // ensureAllPlatforms adds "Not Available" entries for platforms missing from results

@@ -82,15 +82,15 @@ export default function AccountsScreen() {
           // Swiggy cookies are often HttpOnly, so document.cookie won't contain _session_tid.
           // Treat Instamart as connected if we have a verified API session OR a limited session
           // (auth headers + user info) that enables DOM scraping attempts.
-          if (platform.id === 'Instamart') {
+          if (platform.id === "Instamart") {
             const verified =
-              platformTokens.verifiedInstamartApi === 'true' ||
+              platformTokens.verifiedInstamartApi === "true" ||
               platformTokens.verifiedInstamartApi === true;
             const hasAuthHeaders =
-              typeof platformTokens.authHeaders === 'string' &&
+              typeof platformTokens.authHeaders === "string" &&
               platformTokens.authHeaders.length > 20;
             const hasUserInfo =
-              typeof platformTokens.swiggyUserInfo === 'string' &&
+              typeof platformTokens.swiggyUserInfo === "string" &&
               platformTokens.swiggyUserInfo.length > 10;
             status[platform.id] = verified || (hasAuthHeaders && hasUserInfo);
             return;
@@ -101,7 +101,7 @@ export default function AccountsScreen() {
             (tokenKey) =>
               platformTokens[tokenKey] ||
               (platformTokens.cookie &&
-                platformTokens.cookie.includes(tokenKey))
+                platformTokens.cookie.includes(tokenKey)),
           );
           status[platform.id] = hasRequiredToken;
         });
@@ -135,7 +135,7 @@ export default function AccountsScreen() {
                 delete parsed[platformId];
                 await AsyncStorage.setItem(
                   "userTokens",
-                  JSON.stringify(parsed)
+                  JSON.stringify(parsed),
                 );
                 await checkConnections();
                 Alert.alert("Success", `Disconnected from ${platformId}`);
@@ -145,7 +145,7 @@ export default function AccountsScreen() {
             }
           },
         },
-      ]
+      ],
     );
   };
 
@@ -158,27 +158,29 @@ export default function AccountsScreen() {
       } else if (data.type === "TOKENS" && currentPlatform) {
         console.log(
           `[WebView] ✅ Tokens captured for ${currentPlatform.id}:`,
-          Object.keys(data.payload)
+          Object.keys(data.payload),
         );
 
         await saveTokens(currentPlatform.id, data.payload);
         setModalVisible(false);
         await checkConnections();
 
-        const isInstamart = currentPlatform.id === 'Instamart';
-        const verified = data?.payload?.verifiedInstamartApi === 'true' || data?.payload?.verifiedInstamartApi === true;
+        const isInstamart = currentPlatform.id === "Instamart";
+        const verified =
+          data?.payload?.verifiedInstamartApi === "true" ||
+          data?.payload?.verifiedInstamartApi === true;
 
         if (isInstamart && !verified) {
           Alert.alert(
             "Connected (Limited)",
             `✅ ${currentPlatform.name} saved.\n\n⚠️ Swiggy is blocking Instamart API access in this WebView (404 HTML). Search will try DOM scraping, but results may still be unavailable on some networks/devices.`,
-            [{ text: "OK" }]
+            [{ text: "OK" }],
           );
         } else {
           Alert.alert(
             "Success!",
             `✅ ${currentPlatform.name} connected successfully!\n\nYou can now search and compare prices.`,
-            [{ text: "OK" }]
+            [{ text: "OK" }],
           );
         }
       }
@@ -212,7 +214,7 @@ export default function AccountsScreen() {
       } catch (backendErr) {
         console.warn(
           `[Tokens] Backend upload failed (non-critical):`,
-          backendErr?.message
+          backendErr?.message,
         );
         // Continue even if backend fails - local storage is primary
       }
@@ -658,7 +660,7 @@ export default function AccountsScreen() {
               onMessage={handleWebViewMessage}
               style={styles.webview}
               userAgent={
-                currentPlatform.id === 'Instamart'
+                currentPlatform.id === "Instamart"
                   ? "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
                   : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
               }

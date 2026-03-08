@@ -2,12 +2,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 
 const getApiUrl = () => {
-  const debuggerHost = Constants.expoConfig?.hostUri;
-  if (debuggerHost) {
-    const ip = debuggerHost.split(':')[0];
-    return `http://${ip}:8080`;
-  }
-  return 'http://localhost:8080';
+  return 'https://comparex-8ztd.onrender.com';
 };
 
 export const API_URL = getApiUrl();
