@@ -38,63 +38,114 @@ func (s *InstamartScraper) Search(ctx context.Context, query string, lat, lng fl
 	// Clean query for JSON payload
 	cleanQuery := strings.TrimSpace(query)
 
-	// Instamart requires the payload in a specific format for v2
-	payloadMap := map[string]interface{}{
-		"pageType": "INSTAMART_SEARCH",
-		"query":    cleanQuery,
-		"lat":      fmt.Sprintf("%f", lat),
-		"lng":      fmt.Sprintf("%f", lng),
+	// Try multiple API variants
+	variants := []struct {
+		method string
+		url    string
+		body   interface{}
+	}{
+		{
+			method: "POST",
+			url:    platformConfig.BaseURL,
+			body: map[string]interface{}{
+				"pageType": "INSTAMART_SEARCH",
+				"query":    cleanQuery,
+				"lat":      fmt.Sprintf("%f", lat),
+				"lng":      fmt.Sprintf("%f", lng),
+			},
+		},
+		{
+			method: "GET",
+			url:    platformConfig.BaseURL + "?query=" + url.QueryEscape(cleanQuery) + "&lat=" + fmt.Sprintf("%f", lat) + "&lng=" + fmt.Sprintf("%f", lng) + "&offset=0&ageConsent=false",
+			body:   nil,
+		},
+		{
+			method: "GET",
+			url:    strings.Replace(platformConfig.BaseURL, "/v2", "", 1) + "?query=" + url.QueryEscape(cleanQuery) + "&lat=" + fmt.Sprintf("%f", lat) + "&lng=" + fmt.Sprintf("%f", lng),
+			body:   nil,
+		},
+		{
+			method: "POST",
+			url:    strings.Replace(platformConfig.BaseURL, "/v2", "", 1),
+			body: map[string]interface{}{
+				"query": cleanQuery,
+				"lat":   fmt.Sprintf("%f", lat),
+				"lng":   fmt.Sprintf("%f", lng),
+			},
+		},
 	}
 
-	payloadBytes, err := json.Marshal(payloadMap)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal payload: %w", err)
-	}
+	for i, variant := range variants {
+		log.Printf("[Instamart] Trying variant %d: %s %s", i+1, variant.method, variant.url)
 
-	searchURL := platformConfig.BaseURL
-
-	req, err := http.NewRequestWithContext(ctx, "POST", searchURL, bytes.NewBuffer(payloadBytes))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	// Apply default headers from config
-	for k, v := range platformConfig.Headers {
-		req.Header.Set(k, v)
-	}
-
-	// Must have JSON content type for the POST payload
-	req.Header.Set("Content-Type", "application/json")
-
-	// Apply user tokens (cookies, authorization, etc)
-	if cookie, ok := userTokens["cookie"]; ok && cookie != "" {
-		req.Header.Set("Cookie", cookie)
-	}
-	if authHeadersJSON, ok := userTokens["authHeaders"]; ok && authHeadersJSON != "" {
-		var headers map[string]string
-		if err := json.Unmarshal([]byte(authHeadersJSON), &headers); err == nil {
-			for k, v := range headers {
-				req.Header.Set(k, v)
+		var reqBody io.Reader
+		if variant.body != nil {
+			payloadBytes, err := json.Marshal(variant.body)
+			if err != nil {
+				continue
 			}
+			reqBody = bytes.NewBuffer(payloadBytes)
+		}
+
+		req, err := http.NewRequestWithContext(ctx, variant.method, variant.url, reqBody)
+		if err != nil {
+			continue
+		}
+
+		// Apply default headers from config
+		for k, v := range platformConfig.Headers {
+			req.Header.Set(k, v)
+		}
+
+		if variant.method == "POST" {
+			req.Header.Set("Content-Type", "application/json")
+		}
+
+		// Apply user tokens (cookies, authorization, etc)
+		if cookie, ok := userTokens["cookie"]; ok && cookie != "" {
+			req.Header.Set("Cookie", cookie)
+		}
+		if authHeadersJSON, ok := userTokens["authHeaders"]; ok && authHeadersJSON != "" {
+			var headers map[string]string
+			if err := json.Unmarshal([]byte(authHeadersJSON), &headers); err == nil {
+				for k, v := range headers {
+					req.Header.Set(k, v)
+				}
+			}
+		}
+
+		client := &http.Client{
+			Timeout: 10 * time.Second,
+		}
+
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Printf("[Instamart] Variant %d failed: %v", i+1, err)
+			continue
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			bodyBytes, _ := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			log.Printf("[Instamart] Variant %d status %d: %s", i+1, resp.StatusCode, string(bodyBytes))
+			continue
+		}
+
+		// Try to extract products
+		products, err := s.extractProducts(resp.Body, query)
+		resp.Body.Close()
+		if err != nil {
+			log.Printf("[Instamart] Variant %d extract error: %v", i+1, err)
+			continue
+		}
+
+		if len(products) > 0 {
+			log.Printf("[Instamart] Variant %d succeeded with %d products", i+1, len(products))
+			return products, nil
 		}
 	}
 
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		bodyBytes, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(bodyBytes))
-	}
-
-	return s.extractProducts(resp.Body, query)
+	return nil, fmt.Errorf("all API variants failed")
 }
 
 func (s *InstamartScraper) extractProducts(body io.Reader, query string) ([]models.PlatformListing, error) {
@@ -134,7 +185,14 @@ func (s *InstamartScraper) extractProducts(body io.Reader, query string) ([]mode
 			continue
 		}
 
-		gridElements, ok := cardData["gridElements"].(map[string]interface{})
+		var actualCard map[string]interface{}
+		if innerCard, ok := cardData["card"].(map[string]interface{}); ok {
+			actualCard = innerCard
+		} else {
+			actualCard = cardData
+		}
+
+		gridElements, ok := actualCard["gridElements"].(map[string]interface{})
 		if !ok {
 			continue
 		}

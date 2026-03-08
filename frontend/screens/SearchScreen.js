@@ -77,17 +77,37 @@ const instamartInterceptScript = `
 
     function onData(source, data) {
       try {
-        if (!data || !data.data) return;
+        log(source + ' onData called');
+        if (!data) { log('no data'); return; }
+        if (!data.data) { log('no data.data, keys: ' + Object.keys(data).join(',')); return; }
+        
         var dataOuter = data.data;
         var dataInner = dataOuter.data || dataOuter;
-        if (!dataInner.cards || !Array.isArray(dataInner.cards)) return;
+        if (!dataInner.cards || !Array.isArray(dataInner.cards)) { 
+          log('no cards arrays. keys: ' + Object.keys(dataInner).join(',')); 
+          return; 
+        }
         
         var products = [];
         for (var i = 0; i < dataInner.cards.length; i++) {
           var card = dataInner.cards[i].card;
-          if (!card || !card.gridElements || !card.gridElements.infoWithStyle) continue;
-          var items = card.gridElements.infoWithStyle.items;
-          if (!Array.isArray(items)) continue;
+          if (!card) { 
+            log('card ' + i + ' has no .card, keys: ' + Object.keys(dataInner.cards[i]).join(','));
+            continue; 
+          }
+          
+          // sometimes it's nested
+          var actualCard = card.card || card;
+          if (!actualCard.gridElements || !actualCard.gridElements.infoWithStyle) {
+            log('card ' + i + ' no gridElements.infoWithStyle, keys: ' + Object.keys(actualCard).join(','));
+            continue;
+          }
+          
+          var items = actualCard.gridElements.infoWithStyle.items;
+          if (!Array.isArray(items)) {
+            log('card ' + i + ' items not array, type: ' + typeof items);
+            continue;
+          }
           
           for (var j = 0; j < items.length; j++) {
             var info = items[j].info;
@@ -135,7 +155,7 @@ const instamartInterceptScript = `
             products: products
           }));
         } else {
-          log(source + ' parsed 0 products');
+          log(source + ' parsed 0 products. Examined ' + dataInner.cards.length + ' cards');
         }
       } catch(e) {
         log('Parse error: ' + e.message);
@@ -146,11 +166,16 @@ const instamartInterceptScript = `
     window.fetch = async function() {
       var url = arguments[0];
       var response = await OrigFetch.apply(this, arguments);
-      if (typeof url === 'string' && url.indexOf('/api/instamart/search') !== -1) {
-        response.clone().json().then(data => {
-          syncTokens('fetch');
-          onData('fetch', data);
-        }).catch(e => log('fetch JSON parse err: '+e.message));
+      if (typeof url === 'string' && url.indexOf('instamart') !== -1) {
+        log('fetch intercepting URL: ' + url);
+        response.clone().text().then(text => {
+          if (!text) { log('fetch skip: empty body for ' + url); return; }
+          try {
+            var data = JSON.parse(text);
+            syncTokens('fetch');
+            onData('fetch', data);
+          } catch(e) { log('fetch JSON parse err: ' + e.message + ' | text: ' + text.substring(0, 100)); }
+        }).catch(e => log('fetch text clone err: '+e.message));
       }
       return response;
     };
@@ -165,7 +190,8 @@ const instamartInterceptScript = `
         return OrigXHR.prototype.open.apply(this, arguments);
       };
       xhr.addEventListener('load', function() {
-        if (typeof _url === 'string' && _url.indexOf('/api/instamart/search') !== -1 && xhr.responseText) {
+        if (typeof _url === 'string' && _url.indexOf('instamart') !== -1 && xhr.responseText) {
+          log('xhr intercepting URL: ' + _url);
           try {
             syncTokens('xhr');
             onData('xhr', JSON.parse(xhr.responseText));
@@ -424,59 +450,58 @@ const SearchScreen = ({ navigation, route }) => {
     return () => clearTimeout(timer);
   }, [query, state.connectedPlatforms]);
 
-  const getConnectedPlatformsSnapshot = useCallback(
-    async () => {
-      try {
-        console.log("[Search] getConnectedPlatformsSnapshot called");
-        const tokens = await AsyncStorage.getItem("userTokens");
-        console.log(
-          "[Search] tokens from storage:",
-          tokens ? "present" : "null",
-        );
-        if (!tokens) return [];
-        const parsed = JSON.parse(tokens);
-        const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Instamart"];
-        const connected = Object.keys(parsed).filter((platform) => {
-          if (!supportedPlatforms.includes(platform)) return false;
-          const t = parsed[platform];
-          if (!t || Object.keys(t).length === 0) return false;
+  const getConnectedPlatformsSnapshot = useCallback(async () => {
+    try {
+      console.log("[Search] getConnectedPlatformsSnapshot called");
+      const tokens = await AsyncStorage.getItem("userTokens");
+      console.log("[Search] tokens from storage:", tokens ? "present" : "null");
+      if (!tokens) return [];
+      const parsed = JSON.parse(tokens);
+      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Instamart"];
+      const connected = Object.keys(parsed).filter((platform) => {
+        if (!supportedPlatforms.includes(platform)) return false;
+        const t = parsed[platform];
+        if (!t || Object.keys(t).length === 0) return false;
 
-          if (platform === "Instamart") {
-            const verified = t.verifiedInstamartApi === "true" || t.verifiedInstamartApi === true;
-            if (verified) return true;
+        if (platform === "Instamart") {
+          const verified =
+            t.verifiedInstamartApi === "true" ||
+            t.verifiedInstamartApi === true;
+          if (verified) return true;
 
-            const hasAuthHeaders = typeof t.authHeaders === "string" && t.authHeaders.length > 20;
-            const hasUserInfo = typeof t.swiggyUserInfo === "string" && t.swiggyUserInfo.length > 10;
-            if (hasAuthHeaders && hasUserInfo) return true;
-            return true; // We always allow Instamart through to the WebView so it can refresh tokens
-          }
+          const hasAuthHeaders =
+            typeof t.authHeaders === "string" && t.authHeaders.length > 20;
+          const hasUserInfo =
+            typeof t.swiggyUserInfo === "string" &&
+            t.swiggyUserInfo.length > 10;
+          if (hasAuthHeaders && hasUserInfo) return true;
+          return true; // We always allow Instamart through to the WebView so it can refresh tokens
+        }
 
-          return true;
-        });
+        return true;
+      });
 
-        const tokenMap = {};
-        connected.forEach((plat) => {
-          if (plat === "Instamart") {
-            tokenMap[plat] = {
-              ...(parsed[plat] || {}),
-              ...(parsed.Swiggy || {}),
-              ...(parsed.swiggy || {})
-            };
-          } else {
-            tokenMap[plat] = parsed[plat];
-          }
-        });
-        connectedPlatformTokensRef.current = tokenMap;
+      const tokenMap = {};
+      connected.forEach((plat) => {
+        if (plat === "Instamart") {
+          tokenMap[plat] = {
+            ...(parsed[plat] || {}),
+            ...(parsed.Swiggy || {}),
+            ...(parsed.swiggy || {}),
+          };
+        } else {
+          tokenMap[plat] = parsed[plat];
+        }
+      });
+      connectedPlatformTokensRef.current = tokenMap;
 
-        console.log("[Search] connected platforms:", connected);
-        return connected;
-      } catch (e) {
-        console.error("[Search] Error reading connections:", e);
-        return [];
-      }
-    },
-    [],
-  );
+      console.log("[Search] connected platforms:", connected);
+      return connected;
+    } catch (e) {
+      console.error("[Search] Error reading connections:", e);
+      return [];
+    }
+  }, []);
 
   const checkConnectedPlatforms = useCallback(() => {
     getConnectedPlatformsSnapshot()
@@ -1097,7 +1122,6 @@ const SearchScreen = ({ navigation, route }) => {
     }
     return null;
   };
-
 
   return (
     <View style={styles.container}>
