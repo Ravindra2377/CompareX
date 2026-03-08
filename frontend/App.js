@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,22 +39,25 @@ const MainTabs = () => (
           : TAB_ICONS[route.name].inactive;
         return <Ionicons name={iconName} size={24} color={color} />;
       },
-      tabBarActiveTintColor: COLORS.textPrimary,
+      tabBarActiveTintColor: COLORS.accent,
       tabBarInactiveTintColor: COLORS.textTertiary,
       tabBarStyle: {
-        backgroundColor: COLORS.background,
-        borderTopWidth: 1,
-        borderTopColor: COLORS.border,
-        elevation: 0,
-        shadowOpacity: 0,
+        backgroundColor: COLORS.surface,
+        borderTopWidth: 0,
+        elevation: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
         height: 84,
         paddingTop: 8,
         paddingBottom: 28,
+        position: 'absolute', // Floating effect
       },
 
       tabBarLabelStyle: {
         fontSize: 11,
-        fontWeight: '500',
+        fontWeight: '600',
       },
       tabBarShowLabel: false, // Cleaner look
     })}
@@ -72,13 +75,25 @@ const AppNav = () => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background }}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.accent} />
       </View>
     );
   }
 
+const customTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: COLORS.background,
+    card: COLORS.surface,
+    text: COLORS.textPrimary,
+    border: COLORS.border,
+    primary: COLORS.accent,
+  },
+};
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={customTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {userToken !== null ? (
           <>

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import PlatformRow from "../components/PlatformRow";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
 const ProductDetailScreen = ({ route, navigation }) => {
   const { product } = route.params || {};
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    borderBottomColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
   headerTitle: {
     ...FONTS.h3,
@@ -175,7 +176,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   productBrand: {
-    ...FONTS.body,
+    ...FONTS.caption,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
     marginBottom: SPACING.md,
   },
   priceRow: {
@@ -185,12 +188,11 @@ const styles = StyleSheet.create({
   },
   bestPrice: {
     fontSize: 28,
-    fontWeight: "700",
+    fontWeight: "800",
     color: COLORS.savings,
   },
   worstPrice: {
-    fontSize: 16,
-    color: COLORS.textTertiary,
+    ...FONTS.caption,
     textDecorationLine: "line-through",
   },
   savingsRow: {
@@ -201,8 +203,10 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.lg,
-    backgroundColor: COLORS.savingsLight,
-    borderRadius: RADIUS.sm,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
   },
   savingsText: {
     ...FONTS.captionBold,
@@ -212,9 +216,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: COLORS.divider,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
     marginBottom: SPACING.xxl,
   },
   statItem: {
@@ -223,6 +229,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...FONTS.h2,
+    color: COLORS.textPrimary,
     marginBottom: 2,
   },
   statLabel: {
@@ -230,7 +237,8 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: COLORS.borderLight,
+    marginVertical: SPACING.sm,
   },
   section: {
     paddingHorizontal: SPACING.xl,
@@ -240,6 +248,7 @@ const styles = StyleSheet.create({
     ...FONTS.captionBold,
     textTransform: "uppercase",
     letterSpacing: 0.5,
+    color: COLORS.textSecondary,
     marginBottom: SPACING.md,
   },
 });

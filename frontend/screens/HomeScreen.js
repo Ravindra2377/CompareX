@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
 import { COLORS, SPACING, RADIUS, SHADOWS, FONTS } from '../config/theme';
@@ -29,29 +30,39 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.greeting}>Good evening 👋</Text>
-            <Text style={styles.title}>CompareX</Text>
-          </View>
-          <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
-            <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Search Bar */}
-        <TouchableOpacity
-          style={styles.searchBar}
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate('Search')}
+        {/* Header with Gradient Background */}
+        <LinearGradient
+          colors={COLORS.gradientCard}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.headerGradient}
         >
-          <Ionicons name="search-outline" size={20} color={COLORS.textTertiary} />
-          <Text style={styles.searchPlaceholder}>Search eggs, milk, bread...</Text>
-        </TouchableOpacity>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.greeting}>Good evening 👋</Text>
+              <Text style={styles.title}>CompareX</Text>
+            </View>
+            <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
+              <Ionicons name="person-outline" size={20} color={COLORS.textPrimary} />
+            </TouchableOpacity>
+          </View>
+
+          {/* Search Bar - Lifted into the header area */}
+          <TouchableOpacity
+            style={styles.searchBar}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Search')}
+          >
+            <Ionicons name="search-outline" size={20} color={COLORS.textSecondary} />
+            <Text style={styles.searchPlaceholder}>Search eggs, milk, bread...</Text>
+            <View style={styles.searchIconBg}>
+              <Ionicons name="options-outline" size={16} color="#FFF" />
+            </View>
+          </TouchableOpacity>
+        </LinearGradient>
 
         {/* Quick Info */}
         <View style={styles.infoRow}>
@@ -122,29 +133,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  header: {
+  headerGradient: {
+    paddingTop: 60,
+    paddingHorizontal: SPACING.xl,
+    paddingBottom: SPACING.xxl,
+    borderBottomLeftRadius: RADIUS.lg,
+    borderBottomRightRadius: RADIUS.lg,
+    marginBottom: SPACING.xl,
+    ...SHADOWS.md,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 60,
-    paddingHorizontal: SPACING.xl,
-    paddingBottom: SPACING.lg,
+    marginBottom: SPACING.xl,
   },
   greeting: {
     ...FONTS.caption,
-    marginBottom: 2,
+    color: COLORS.textSecondary,
+    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: COLORS.textPrimary,
-    letterSpacing: -0.8,
+    ...FONTS.h1,
   },
   avatarBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: COLORS.card,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.surface,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -154,19 +172,26 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: SPACING.xl,
-    marginBottom: SPACING.xl,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: 14,
-    backgroundColor: COLORS.card,
-    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 12,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.full,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.borderLight,
     gap: SPACING.sm,
+    ...SHADOWS.sm,
   },
   searchPlaceholder: {
     ...FONTS.body,
-    color: COLORS.textTertiary,
+    flex: 1,
+  },
+  searchIconBg: {
+    backgroundColor: COLORS.accent,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   // Info Row
   infoRow: {
@@ -174,9 +199,11 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.xl,
     marginBottom: SPACING.xxl,
     paddingVertical: SPACING.lg,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: COLORS.divider,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   infoItem: {
     flex: 1,
@@ -184,14 +211,16 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     ...FONTS.h2,
-    marginBottom: 2,
+    color: COLORS.textPrimary,
+    marginBottom: 4,
   },
   infoLabel: {
     ...FONTS.caption,
   },
   infoDivider: {
     width: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: COLORS.borderLight,
+    marginVertical: SPACING.sm,
   },
   // Sections
   section: {
@@ -206,40 +235,46 @@ const styles = StyleSheet.create({
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   categoryItem: {
-    width: '25%',
+    width: '22%',
     alignItems: 'center',
     marginBottom: SPACING.xl,
   },
   categoryIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: RADIUS.md,
+    width: 56,
+    height: 56,
+    borderRadius: RADIUS.full,
     backgroundColor: COLORS.card,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: SPACING.sm,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   categoryName: {
     ...FONTS.caption,
-    fontWeight: '500',
-    color: COLORS.textPrimary,
+    textAlign: 'center',
   },
   // Trending
   trendingItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.md,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.md,
+    marginBottom: SPACING.sm,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     gap: SPACING.md,
   },
   trendingName: {
     ...FONTS.bodyBold,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   trendingMeta: {
     ...FONTS.caption,
@@ -247,6 +282,7 @@ const styles = StyleSheet.create({
   trendingPrice: {
     ...FONTS.priceSmall,
     color: COLORS.savings,
+    marginRight: SPACING.xs,
   },
 });
 

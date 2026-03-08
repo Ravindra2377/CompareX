@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import api from "../config/api";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
 // Platform configuration with proper login URLs
 const PLATFORMS = [
@@ -333,7 +334,7 @@ export default function AccountsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={["#1a1a1a", "#000"]} style={styles.header}>
+      <LinearGradient colors={COLORS.gradientCard} style={styles.header}>
         <Text style={styles.headerTitle}>Link Accounts</Text>
         <Text style={styles.headerSubtitle}>
           Login once to enable price comparisons
@@ -456,54 +457,54 @@ export default function AccountsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: COLORS.background,
   },
   header: {
     paddingTop: 60,
     paddingBottom: 30,
-    paddingHorizontal: 20,
+    paddingHorizontal: SPACING.xl,
+    borderBottomLeftRadius: RADIUS.lg,
+    borderBottomRightRadius: RADIUS.lg,
+    ...SHADOWS.md,
   },
   headerTitle: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 8,
+    ...FONTS.h1,
+    marginBottom: SPACING.xs,
   },
   headerSubtitle: {
-    fontSize: 16,
-    color: "#ccc",
+    ...FONTS.body,
   },
   list: {
-    padding: 16,
+    padding: SPACING.md,
+    paddingBottom: 100,
   },
   infoCard: {
     flexDirection: "row",
-    backgroundColor: "#E3F2FD",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
+    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    borderRadius: RADIUS.md,
+    padding: SPACING.lg,
+    marginBottom: SPACING.xl,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.2)',
   },
   infoText: {
     flex: 1,
-    marginLeft: 12,
-    fontSize: 14,
-    color: "#1976D2",
-    lineHeight: 20,
+    marginLeft: SPACING.md,
+    ...FONTS.body,
+    color: '#38BDF8',
   },
   card: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.lg,
+    marginBottom: SPACING.md,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
   cardLeft: {
     flexDirection: "row",
@@ -516,96 +517,100 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 16,
+    marginRight: SPACING.md,
+    ...SHADOWS.glow,
   },
   cardInfo: {
     flex: 1,
   },
   platformName: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
+    ...FONTS.h3,
     marginBottom: 4,
   },
   platformStatus: {
-    fontSize: 14,
+    ...FONTS.caption,
   },
   statusConnected: {
-    color: "#4CAF50",
-    fontWeight: "500",
+    color: COLORS.savings,
+    fontWeight: "600",
   },
   statusDisconnected: {
-    color: "#999",
+    color: COLORS.textTertiary,
   },
   cardButtons: {
     flexDirection: "row",
-    gap: 8,
+    gap: SPACING.sm,
   },
   buttonConnect: {
     flexDirection: "row",
-    backgroundColor: "#4A90E2",
-    paddingHorizontal: 20,
+    backgroundColor: COLORS.surface,
+    paddingHorizontal: SPACING.lg,
     paddingVertical: 10,
-    borderRadius: 20,
+    borderRadius: RADIUS.full,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.accent,
     gap: 6,
   },
   buttonConnectText: {
-    color: "#fff",
-    fontSize: 15,
+    color: COLORS.accent,
+    fontSize: 14,
     fontWeight: "600",
   },
   buttonReconnect: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: COLORS.surface,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
   buttonDisconnect: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#ffebee",
+    backgroundColor: COLORS.errorLight,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.background,
   },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: SPACING.xl,
     paddingTop: 60,
-    paddingBottom: 16,
-    backgroundColor: "#fff",
+    paddingBottom: SPACING.lg,
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: COLORS.border,
   },
   modalHeaderLeft: {
     flex: 1,
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
+    ...FONTS.h2,
     marginBottom: 4,
   },
   modalSubtitle: {
-    fontSize: 14,
-    color: "#666",
+    ...FONTS.caption,
   },
   modalCloseButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
   webview: {
     flex: 1,

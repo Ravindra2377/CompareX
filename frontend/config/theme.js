@@ -1,34 +1,39 @@
 // CompareX Design System — Clean & Minimal
 
 export const COLORS = {
-  // Primary
-  primary: '#111827',
-  primaryLight: '#374151',
-  accent: '#4F46E5',
-  accentLight: '#EEF2FF',
+  // Primary (Deep Dark Slate)
+  primary: '#0B0F19',
+  primaryLight: '#1A233A',
+  accent: '#6366F1', // Indigo
+  accentLight: '#3730A3',
 
   // Semantic
-  savings: '#059669',
-  savingsLight: '#ECFDF5',
-  warning: '#D97706',
-  warningLight: '#FFFBEB',
-  error: '#DC2626',
-  errorLight: '#FEF2F2',
+  savings: '#10B981', // Emerald green
+  savingsLight: 'rgba(16, 185, 129, 0.15)',
+  warning: '#F59E0B',
+  warningLight: 'rgba(245, 158, 11, 0.15)',
+  error: '#EF4444',
+  errorLight: 'rgba(239, 68, 68, 0.15)',
 
-  // Neutrals
-  background: '#FFFFFF',
-  surface: '#FFFFFF',
-  card: '#F9FAFB',
-  border: '#E5E7EB',
-  borderLight: '#F3F4F6',
-  divider: '#F3F4F6',
+  // Neutrals / Structural
+  background: '#0B0F19',
+  surface: '#111827',
+  card: '#1F2937', 
+  border: '#374151',
+  borderLight: '#4B5563',
+  divider: '#374151',
 
   // Text
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  textTertiary: '#9CA3AF',
-  textInverse: '#FFFFFF',
-  textAccent: '#4F46E5',
+  textPrimary: '#F9FAFB',
+  textSecondary: '#9CA3AF',
+  textTertiary: '#6B7280',
+  textInverse: '#0B0F19', // for text on very light/accent backgrounds
+  textAccent: '#818CF8',
+
+  // Gradients (To be used with linear-gradient)
+  gradientAccent: ['#6366F1', '#4F46E5'],
+  gradientSavings: ['#10B981', '#059669'],
+  gradientCard: ['#1F2937', '#111827'],
 };
 
 export const SPACING = {
@@ -54,73 +59,83 @@ export const SHADOWS = {
   none: {},
   sm: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 1,
+    elevation: 3,
   },
   md: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 6,
   },
+  glow: {
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  }
 };
 
 export const FONTS = {
   h1: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#111827',
-    letterSpacing: -0.5,
+    fontSize: 32,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    letterSpacing: -1,
   },
   h2: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
-    letterSpacing: -0.3,
+    color: COLORS.textPrimary,
+    letterSpacing: -0.5,
   },
   h3: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: COLORS.textPrimary,
+    letterSpacing: -0.2,
   },
   body: {
     fontSize: 15,
     fontWeight: '400',
-    color: '#6B7280',
+    color: COLORS.textSecondary,
     lineHeight: 22,
   },
   bodyBold: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: COLORS.textPrimary,
   },
   caption: {
     fontSize: 13,
-    fontWeight: '400',
-    color: '#9CA3AF',
+    fontWeight: '500',
+    color: COLORS.textTertiary,
   },
   captionBold: {
     fontSize: 13,
-    fontWeight: '600',
-    color: '#6B7280',
+    fontWeight: '700',
+    color: COLORS.textSecondary,
+    letterSpacing: 0.2,
   },
   price: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: 22,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    letterSpacing: -0.5,
   },
   priceSmall: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: 17,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
   },
   badge: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 10,
+    fontWeight: '800',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
 const PLATFORM_ICONS = {
   blinkit: "flash-outline",
@@ -73,27 +73,32 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SPACING.md,
+    paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.md,
+    marginBottom: SPACING.md,
+    ...SHADOWS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
     gap: SPACING.md,
   },
   cheapest: {
-    backgroundColor: COLORS.savingsLight,
-    borderRadius: RADIUS.md,
-    borderBottomWidth: 0,
-    marginBottom: SPACING.xs,
+    backgroundColor: 'rgba(16, 185, 129, 0.08)', // Faint emerald wash
+    borderColor: COLORS.savings,
   },
   unavailable: {
     opacity: 0.5,
+    backgroundColor: COLORS.background,
   },
   info: {
     flex: 1,
   },
   name: {
     ...FONTS.bodyBold,
-    fontSize: 14,
+    fontSize: 15,
+    color: COLORS.textPrimary,
+    marginBottom: 2,
   },
   delivery: {
     ...FONTS.caption,
@@ -104,12 +109,12 @@ const styles = StyleSheet.create({
   },
   price: {
     ...FONTS.priceSmall,
+    fontSize: 18,
   },
   freeTag: {
-    fontSize: 10,
-    fontWeight: "600",
+    ...FONTS.badge,
     color: COLORS.savings,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   naText: {
     ...FONTS.caption,
@@ -119,15 +124,14 @@ const styles = StyleSheet.create({
   bestBadge: {
     backgroundColor: COLORS.savings,
     paddingHorizontal: SPACING.sm,
-    paddingVertical: 2,
-    borderRadius: RADIUS.xs,
-    marginLeft: SPACING.xs,
+    paddingVertical: 4,
+    borderRadius: RADIUS.full,
+    marginLeft: SPACING.sm,
+    ...SHADOWS.glow,
   },
   bestText: {
-    fontSize: 9,
-    fontWeight: "700",
+    ...FONTS.badge,
     color: "#FFFFFF",
-    letterSpacing: 0.5,
   },
 });
 

@@ -21,7 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 import PlatformScraperService from "../services/PlatformScraperService";
 import PlatformDOMScraperService from "../services/PlatformDOMScraperService";
 import api from "../config/api";
@@ -1093,57 +1093,60 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    backgroundColor: COLORS.primary,
-    paddingTop: 50,
-    paddingBottom: 16,
-    paddingHorizontal: SPACING.md,
+    backgroundColor: COLORS.surface,
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: SPACING.xl,
+    borderBottomWidth: 1,
+    borderColor: COLORS.border,
+    ...SHADOWS.md,
+    zIndex: 10,
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 12,
+    ...FONTS.h1,
+    marginBottom: SPACING.lg,
   },
   loader: {
-    padding: SPACING.xl,
+    padding: SPACING.xxxl,
     alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   loaderText: {
-    marginTop: SPACING.md,
-    fontSize: 16,
-    color: COLORS.text,
-    fontWeight: "500",
+    marginTop: SPACING.lg,
+    ...FONTS.h3,
+    color: COLORS.textPrimary,
   },
   loaderDetail: {
     marginTop: SPACING.sm,
-    fontSize: 14,
-    color: COLORS.textLight,
+    ...FONTS.caption,
   },
   list: {
     padding: SPACING.md,
+    paddingBottom: 100, // space for tab bar
   },
   emptyState: {
     alignItems: "center",
-    paddingTop: 60,
+    justifyContent: 'center',
+    paddingTop: 80,
     paddingHorizontal: SPACING.xl,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.text,
-    marginTop: SPACING.md,
+    ...FONTS.h2,
+    marginTop: SPACING.lg,
   },
   emptySubtitle: {
-    fontSize: 14,
-    color: COLORS.textLight,
+    ...FONTS.body,
     marginTop: SPACING.sm,
     textAlign: "center",
   },
   warning: {
     flexDirection: "row",
-    backgroundColor: "#FFF3CD",
+    backgroundColor: COLORS.warningLight,
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.3)',
     borderRadius: RADIUS.md,
-    padding: SPACING.md,
+    padding: SPACING.lg,
     marginTop: SPACING.xl,
     alignItems: "center",
   },
