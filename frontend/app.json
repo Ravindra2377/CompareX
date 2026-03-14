@@ -20,8 +20,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
-        ,"package": "com.panviravindra.comparex"
+      "edgeToEdgeEnabled": true,
+      "package": "com.panviravindra.comparex"
     },
     "web": {
       "favicon": "./assets/favicon.png"
