@@ -69,6 +69,21 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
   );
 };
 
+const areEqual = (prevProps, nextProps) => {
+  const prevPlatform = prevProps.platform || {};
+  const nextPlatform = nextProps.platform || {};
+
+  return (
+    prevProps.isCheapest === nextProps.isCheapest &&
+    prevProps.onOpenStore === nextProps.onOpenStore &&
+    prevPlatform.name === nextPlatform.name &&
+    prevPlatform.price === nextPlatform.price &&
+    prevPlatform.deliveryTime === nextPlatform.deliveryTime &&
+    prevPlatform.deliveryCharge === nextPlatform.deliveryCharge &&
+    prevPlatform.inStock === nextPlatform.inStock
+  );
+};
+
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
     gap: SPACING.md,
   },
   cheapest: {
-    backgroundColor: 'rgba(16, 185, 129, 0.08)', // Faint emerald wash
+    backgroundColor: "rgba(16, 185, 129, 0.08)", // Faint emerald wash
     borderColor: COLORS.savings,
   },
   unavailable: {
@@ -135,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlatformRow;
+export default React.memo(PlatformRow, areEqual);

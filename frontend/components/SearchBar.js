@@ -1,10 +1,16 @@
-import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, RADIUS } from '../config/theme';
-import * as Haptics from 'expo-haptics';
+import React from "react";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS, SPACING, RADIUS } from "../config/theme";
+import * as Haptics from "expo-haptics";
 
-const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', onClear, autoFocus = false }) => {
+const SearchBar = ({
+  value,
+  onChangeText,
+  placeholder = "Search products...",
+  onClear,
+  autoFocus = false,
+}) => {
   return (
     <View style={styles.container}>
       <Ionicons name="search-outline" size={20} color={COLORS.textTertiary} />
@@ -17,13 +23,14 @@ const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', on
         returnKeyType="search"
         autoCorrect={false}
         autoFocus={autoFocus}
+        selectionColor={COLORS.accent}
       />
       {value ? (
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             if (onClear) onClear();
-          }} 
+          }}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         >
           <Ionicons name="close-circle" size={18} color={COLORS.textTertiary} />
@@ -35,20 +42,20 @@ const SearchBar = ({ value, onChangeText, placeholder = 'Search products...', on
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.card,
-    borderRadius: RADIUS.md,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(20, 34, 56, 0.92)",
+    borderRadius: RADIUS.full,
     paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
+    minHeight: 58,
     borderWidth: 1,
     borderColor: COLORS.borderLight,
     gap: SPACING.sm,
   },
   input: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: "500",
     color: COLORS.textPrimary,
     paddingVertical: 2,
   },

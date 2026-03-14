@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   Alert,
+  StatusBar,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import api from "../config/api";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
-import * as Haptics from 'expo-haptics';
+import * as Haptics from "expo-haptics";
 
 // Platform configuration with proper login URLs
 const PLATFORMS = [
@@ -115,7 +116,9 @@ export default function AccountsScreen() {
                   JSON.stringify(parsed),
                 );
                 await checkConnections();
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Success,
+                );
                 Alert.alert("Success", `Disconnected from ${platformId}`);
               }
             } catch (e) {
@@ -338,6 +341,8 @@ export default function AccountsScreen() {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+
       <LinearGradient colors={COLORS.gradientCard} style={styles.header}>
         <Text style={styles.headerTitle}>Link Accounts</Text>
         <Text style={styles.headerSubtitle}>
@@ -427,7 +432,7 @@ export default function AccountsScreen() {
               style={styles.modalCloseButton}
               onPress={() => setModalVisible(false)}
             >
-              <Ionicons name="close" size={28} color="#333" />
+              <Ionicons name="close" size={28} color={COLORS.textPrimary} />
             </TouchableOpacity>
           </View>
 
@@ -438,7 +443,9 @@ export default function AccountsScreen() {
               injectedJavaScriptBeforeContentLoaded={INJECTED_JAVASCRIPT}
               onMessage={handleWebViewMessage}
               style={styles.webview}
-              userAgent={"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+              userAgent={
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+              }
               javaScriptEnabled={true}
               domStorageEnabled={true}
               sharedCookiesEnabled={true}
@@ -484,19 +491,19 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flexDirection: "row",
-    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+    backgroundColor: "rgba(56, 189, 248, 0.1)",
     borderRadius: RADIUS.md,
     padding: SPACING.lg,
     marginBottom: SPACING.xl,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: 'rgba(56, 189, 248, 0.2)',
+    borderColor: "rgba(56, 189, 248, 0.2)",
   },
   infoText: {
     flex: 1,
     marginLeft: SPACING.md,
     ...FONTS.body,
-    color: '#38BDF8',
+    color: "#38BDF8",
   },
   card: {
     flexDirection: "row",
@@ -547,19 +554,19 @@ const styles = StyleSheet.create({
   },
   buttonConnect: {
     flexDirection: "row",
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.accent,
     paddingHorizontal: SPACING.lg,
     paddingVertical: 10,
     borderRadius: RADIUS.full,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.accentStrong,
     gap: 6,
   },
   buttonConnectText: {
-    color: COLORS.accent,
+    color: COLORS.textInverse,
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   buttonReconnect: {
     width: 40,
@@ -579,7 +586,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    borderColor: "rgba(239, 68, 68, 0.3)",
   },
   modalContainer: {
     flex: 1,
@@ -610,7 +617,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.cardAlt,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

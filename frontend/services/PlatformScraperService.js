@@ -40,9 +40,9 @@ class PlatformScraperService {
               log('Has accessToken: ' + !!accessToken);
               log('Has authKey: ' + !!authKey);
               
-              const url = 'https://blinkit.com/v6/search/products?start=0&size=20&q=${encodeURIComponent(
+              const url = \`https://blinkit.com/v6/search/products?start=0&size=20&q=\${encodeURIComponent(
                 query,
-              )}&lat=${lat}&lon=${lng}';
+              )}&lat=\${lat}&lon=\${lng}\`;
               log('URL: ' + url);
               
               const response = await fetch(url, {
@@ -145,17 +145,30 @@ class PlatformScraperService {
               const data = await response.json();
               log('Got data, results count: ' + (data.results?.length || 0));
               
-              const products = (data.results || []).map(p => ({
-                product_name: p.name,
-                brand: p.brand || '',
-                price: p.price || 0,
-                mrp: p.original_price || p.price || 0,
-                image_url: p.image || '',
-                product_url: '',
-                in_stock: p.in_stock !== false,
-                weight: p.weight || '',
-                platform: 'Zepto'
-              }));
+              const products = (data.results || []).map(p => {
+                const rawSelling = p.sellingPrice ?? p.discountedSellingPrice ?? p.price ?? 0;
+                const rawDiscount = p.discountAmount ?? 0;
+                const rawMrp = p.mrp ?? p.original_price ?? 0;
+
+                const price = rawSelling / 100;
+                let mrp = rawMrp / 100;
+
+                if (mrp <= price && rawDiscount > 0) {
+                  mrp = (rawSelling + rawDiscount) / 100;
+                }
+
+                return {
+                  product_name: p.name,
+                  brand: p.brand || '',
+                  price: price,
+                  mrp: mrp > price ? mrp : price,
+                  image_url: p.image || '',
+                  product_url: (p.slug && p.id) ? \`https://www.zepto.com/pn/\${p.slug}/pvid/\${p.id}\` : '',
+                  in_stock: p.in_stock !== false,
+                  weight: p.weight || '',
+                  platform: 'Zepto'
+                };
+              });
               
               log('Parsed products: ' + products.length);
               
@@ -191,7 +204,7 @@ class PlatformScraperService {
             try {
               log('Starting search for: ${query}');
               
-              const url = \`https://www.bigbasket.com/listing-svc/v2/products?type=pc&iss=false&page=1&tab_type=["all"]&sorted_on=relevance&q=\${encodeURIComponent("${query}")}\`;
+              const url = \`https://www.bigbasket.com/listing-svc/v2/products?type=pc&iss=false&page=1&tab_type=["all"]&sorted_on=relevance&q=\${encodeURIComponent(\`${query}\`)}\`;
               log('URL: ' + url);
               
               const response = await fetch(url, {

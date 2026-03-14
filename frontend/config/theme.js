@@ -1,39 +1,37 @@
-// CompareX Design System — Clean & Minimal
+// CompareX Design System - production-grade mobile tokens
 
 export const COLORS = {
-  // Primary (Deep Dark Slate)
-  primary: '#0B0F19',
-  primaryLight: '#1A233A',
-  accent: '#6366F1', // Indigo
-  accentLight: '#3730A3',
+  primary: "#0F172A",
+  primaryLight: "#1E293B",
+  accent: "#06B6D4",
+  accentStrong: "#0891B2",
+  accentMuted: "rgba(6, 182, 212, 0.16)",
 
-  // Semantic
-  savings: '#10B981', // Emerald green
-  savingsLight: 'rgba(16, 185, 129, 0.15)',
-  warning: '#F59E0B',
-  warningLight: 'rgba(245, 158, 11, 0.15)',
-  error: '#EF4444',
-  errorLight: 'rgba(239, 68, 68, 0.15)',
+  savings: "#22C55E",
+  savingsLight: "rgba(34, 197, 94, 0.16)",
+  warning: "#F59E0B",
+  warningLight: "rgba(245, 158, 11, 0.16)",
+  error: "#EF4444",
+  errorLight: "rgba(239, 68, 68, 0.14)",
 
-  // Neutrals / Structural
-  background: '#0B0F19',
-  surface: '#111827',
-  card: '#1F2937', 
-  border: '#374151',
-  borderLight: '#4B5563',
-  divider: '#374151',
+  background: "#020617",
+  surface: "#0B1220",
+  card: "#111B2E",
+  cardAlt: "#142238",
+  border: "#233450",
+  borderLight: "#355070",
+  divider: "#1B2A42",
 
-  // Text
-  textPrimary: '#F9FAFB',
-  textSecondary: '#9CA3AF',
-  textTertiary: '#6B7280',
-  textInverse: '#0B0F19', // for text on very light/accent backgrounds
-  textAccent: '#818CF8',
+  textPrimary: "#F8FAFC",
+  textSecondary: "#CBD5E1",
+  textTertiary: "#94A3B8",
+  textInverse: "#020617",
+  textAccent: "#67E8F9",
 
-  // Gradients (To be used with linear-gradient)
-  gradientAccent: ['#6366F1', '#4F46E5'],
-  gradientSavings: ['#10B981', '#059669'],
-  gradientCard: ['#1F2937', '#111827'],
+  gradientHero: ["#0B1220", "#0E7490"],
+  gradientCard: ["#142238", "#0F172A"],
+  gradientAccent: ["#06B6D4", "#0EA5E9"],
+  gradientSavings: ["#22C55E", "#16A34A"],
 };
 
 export const SPACING = {
@@ -44,98 +42,101 @@ export const SPACING = {
   xl: 20,
   xxl: 24,
   xxxl: 32,
+  huge: 40,
 };
 
 export const RADIUS = {
   xs: 6,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
+  sm: 10,
+  md: 14,
+  lg: 18,
+  xl: 24,
   full: 999,
 };
 
 export const SHADOWS = {
   none: {},
   sm: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOpacity: 0.16,
+    shadowRadius: 6,
     elevation: 3,
   },
   md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.24,
+    shadowRadius: 16,
+    elevation: 9,
   },
   glow: {
-    shadowColor: '#6366F1',
+    shadowColor: "#06B6D4",
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-  }
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 10,
+  },
 };
 
 export const FONTS = {
   h1: {
     fontSize: 32,
-    fontWeight: '800',
+    fontWeight: "800",
     color: COLORS.textPrimary,
-    letterSpacing: -1,
+    letterSpacing: -0.9,
   },
   h2: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     color: COLORS.textPrimary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.4,
   },
   h3: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "700",
     color: COLORS.textPrimary,
     letterSpacing: -0.2,
   },
   body: {
     fontSize: 15,
-    fontWeight: '400',
+    fontWeight: "400",
     color: COLORS.textSecondary,
     lineHeight: 22,
   },
   bodyBold: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: COLORS.textPrimary,
+    lineHeight: 22,
   },
   caption: {
     fontSize: 13,
-    fontWeight: '500',
+    fontWeight: "500",
     color: COLORS.textTertiary,
+    lineHeight: 18,
   },
   captionBold: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
     color: COLORS.textSecondary,
     letterSpacing: 0.2,
   },
   price: {
-    fontSize: 22,
-    fontWeight: '800',
+    fontSize: 24,
+    fontWeight: "800",
     color: COLORS.textPrimary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.4,
   },
   priceSmall: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: "700",
     color: COLORS.textPrimary,
   },
   badge: {
     fontSize: 10,
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.9,
   },
 };

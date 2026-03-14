@@ -1,28 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity, StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { AppButton } from "../components/SharedUI";
 
 const MOCK_ITEMS = [];
 
-const WishlistScreen = () => {
+const WishlistScreen = ({ navigation }) => {
   const [items, setItems] = useState(MOCK_ITEMS);
 
   const toggleAlert = (id) => {
-    setItems(items.map(i => i.id === id ? { ...i, alert: !i.alert } : i));
+    setItems(items.map((i) => (i.id === id ? { ...i, alert: !i.alert } : i)));
   };
 
   const removeItem = (id) => {
-    setItems(items.filter(i => i.id !== id));
+    setItems(items.filter((i) => i.id !== id));
   };
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <View style={styles.itemInfo}>
-        <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
-        <Text style={styles.itemMeta}>₹{item.price} · {item.platform}</Text>
+        <Text style={styles.itemName} numberOfLines={1}>
+          {item.name}
+        </Text>
+        <Text style={styles.itemMeta}>
+          ₹{item.price} · {item.platform}
+        </Text>
       </View>
 
       <TouchableOpacity
@@ -31,7 +41,7 @@ const WishlistScreen = () => {
         hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
       >
         <Ionicons
-          name={item.alert ? 'notifications' : 'notifications-outline'}
+          name={item.alert ? "notifications" : "notifications-outline"}
           size={18}
           color={item.alert ? COLORS.textAccent : COLORS.textTertiary}
         />
@@ -48,11 +58,11 @@ const WishlistScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
 
       <View style={styles.header}>
         <Text style={FONTS.h1}>Wishlist</Text>
-        <Text style={styles.count}>{items.length} items</Text>
+        <Text style={styles.count}>{items.length} saved products</Text>
       </View>
 
       <FlatList
@@ -65,7 +75,15 @@ const WishlistScreen = () => {
           <View style={styles.emptyState}>
             <Ionicons name="heart-outline" size={48} color={COLORS.border} />
             <Text style={styles.emptyTitle}>No saved items</Text>
-            <Text style={styles.emptySubtitle}>Heart products to track prices</Text>
+            <Text style={styles.emptySubtitle}>
+              Heart products to track prices
+            </Text>
+            <AppButton
+              label="Start Searching"
+              variant="secondary"
+              style={styles.emptyCta}
+              onPress={() => navigation.navigate("Search")}
+            />
           </View>
         }
       />
@@ -84,6 +102,7 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.divider,
+    backgroundColor: COLORS.surface,
   },
   count: {
     ...FONTS.caption,
@@ -94,11 +113,15 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   item: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    paddingHorizontal: SPACING.md,
+    marginTop: SPACING.sm,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.cardAlt,
+    borderRadius: RADIUS.md,
     gap: SPACING.lg,
   },
   itemInfo: {
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   emptyState: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 100,
   },
   emptyTitle: {
@@ -125,6 +148,10 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     ...FONTS.body,
+    textAlign: "center",
+  },
+  emptyCta: {
+    marginTop: SPACING.lg,
   },
 });
 

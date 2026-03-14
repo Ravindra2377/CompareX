@@ -1,82 +1,85 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import {
-  View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, KeyboardAvoidingView, Platform,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../context/AuthContext';
-import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../context/AuthContext";
+import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { AppButton, TextField, SurfaceCard } from "../components/SharedUI";
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
+
+      <LinearGradient colors={COLORS.gradientHero} style={styles.heroBg} />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.content}
       >
-        {/* Logo */}
         <View style={styles.logoSection}>
+          <Text style={styles.eyebrow}>Smart Grocery Assistant</Text>
           <Text style={styles.logo}>CompareX</Text>
-          <Text style={styles.tagline}>Compare grocery prices across 6 platforms</Text>
+          <Text style={styles.tagline}>
+            Compare prices across platforms and buy smarter every day.
+          </Text>
         </View>
 
-        {/* Form */}
-        <View style={styles.form}>
+        <SurfaceCard style={styles.form}>
           <Text style={styles.formTitle}>Sign in</Text>
 
-          <View style={styles.inputWrap}>
-            <Ionicons name="mail-outline" size={18} color={COLORS.textTertiary} />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor={COLORS.textTertiary}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+          <TextField
+            icon="mail-outline"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email address"
+            keyboardType="email-address"
+          />
 
-          <View style={styles.inputWrap}>
-            <Ionicons name="lock-closed-outline" size={18} color={COLORS.textTertiary} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor={COLORS.textTertiary}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-            />
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Ionicons
-                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                size={18}
-                color={COLORS.textTertiary}
-              />
-            </TouchableOpacity>
-          </View>
+          <TextField
+            icon="lock-closed-outline"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
+            secureTextEntry={!showPassword}
+            rightAccessory={
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  size={18}
+                  color={COLORS.textTertiary}
+                />
+              </TouchableOpacity>
+            }
+          />
 
-          <TouchableOpacity
-            style={styles.signInBtn}
+          <AppButton
+            label="Sign In"
             onPress={() => login(email, password)}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.signInText}>Sign In</Text>
-          </TouchableOpacity>
+            icon="arrow-forward"
+            style={styles.signInBtn}
+          />
 
           <View style={styles.registerRow}>
-            <Text style={FONTS.body}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.registerPrompt}>Don't have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
               <Text style={styles.registerLink}>Sign Up</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </SurfaceCard>
       </KeyboardAvoidingView>
     </View>
   );
@@ -87,62 +90,49 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  heroBg: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.3,
+  },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: SPACING.xxl,
   },
   logoSection: {
-    marginBottom: 48,
+    marginBottom: SPACING.xxl,
+  },
+  eyebrow: {
+    ...FONTS.captionBold,
+    color: COLORS.textAccent,
+    marginBottom: SPACING.xs,
+    textTransform: "uppercase",
   },
   logo: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: COLORS.textPrimary,
-    letterSpacing: -1,
+    ...FONTS.h1,
     marginBottom: SPACING.xs,
   },
   tagline: {
     ...FONTS.body,
   },
-  form: {},
+  form: {
+    borderColor: COLORS.borderLight,
+  },
   formTitle: {
     ...FONTS.h2,
     marginBottom: SPACING.xl,
   },
-  inputWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
-  },
-  input: {
-    flex: 1,
-    fontSize: 15,
-    color: COLORS.textPrimary,
-    paddingVertical: 4,
-  },
   signInBtn: {
-    backgroundColor: COLORS.textPrimary,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
     marginTop: SPACING.sm,
     marginBottom: SPACING.xxl,
   },
-  signInText: {
-    ...FONTS.bodyBold,
-    color: COLORS.textInverse,
-    fontSize: 16,
-  },
   registerRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  registerPrompt: {
+    ...FONTS.body,
   },
   registerLink: {
     ...FONTS.bodyBold,

@@ -121,16 +121,26 @@ func (bb *BigBasketScraper) Search(ctx context.Context, query string, lat, lng f
 			deepLink := fmt.Sprintf("https://www.bigbasket.com/pd/%v/%s/", sku, slug)
 
 			if name != "" && sp > 0 {
+				discountInfo := ""
+				if mrp > sp {
+					discountPct := int((mrp - sp) / mrp * 100)
+					if discountPct > 0 {
+						discountInfo = fmt.Sprintf("%d%% OFF", discountPct)
+					}
+				}
+
 				l := models.PlatformListing{
-					Platform:     "BigBasket",
-					ProductName:  name,
-					Brand:        brand,
-					Price:        sp,
-					MRP:          mrp,
-					InStock:      true,
-					DeliveryTime: "2-4 hours",
-					DeepLink:     deepLink,
-					ScrapedAt:    time.Now(),
+					Platform:       "BigBasket",
+					ProductName:    name,
+					Brand:          brand,
+					Price:          sp,
+					MRP:            mrp,
+					Discount:       discountInfo,
+					InStock:        true,
+					DeliveryTime:   "2-4 hours",
+					DeliveryCharge: 20.0, // Default base delivery for BigBasket
+					DeepLink:       deepLink,
+					ScrapedAt:      time.Now(),
 				}
 				listings = append(listings, l)
 			}

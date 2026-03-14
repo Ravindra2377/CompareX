@@ -1,21 +1,29 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import {
-  View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, KeyboardAvoidingView, Platform,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../context/AuthContext';
-import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { AuthContext } from "../context/AuthContext";
+import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { AppButton, SurfaceCard, TextField } from "../components/SharedUI";
 
 const RegisterScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { register } = useContext(AuthContext);
 
   const handleRegister = () => {
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      alert("Passwords do not match");
       return;
     }
     register(email, password);
@@ -23,13 +31,14 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
+
+      <LinearGradient colors={COLORS.gradientHero} style={styles.heroBg} />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.content}
       >
-        {/* Back */}
         <TouchableOpacity
           style={styles.backBtn}
           onPress={() => navigation.goBack()}
@@ -41,69 +50,54 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={styles.heading}>Create Account</Text>
         <Text style={styles.subtitle}>Join CompareX and start saving</Text>
 
-        {/* Email */}
-        <View style={styles.inputWrap}>
-          <Ionicons name="mail-outline" size={18} color={COLORS.textTertiary} />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor={COLORS.textTertiary}
+        <SurfaceCard style={styles.formCard}>
+          <TextField
+            icon="mail-outline"
             value={email}
             onChangeText={setEmail}
+            placeholder="Email address"
             keyboardType="email-address"
-            autoCapitalize="none"
           />
-        </View>
 
-        {/* Password */}
-        <View style={styles.inputWrap}>
-          <Ionicons name="lock-closed-outline" size={18} color={COLORS.textTertiary} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={COLORS.textTertiary}
+          <TextField
+            icon="lock-closed-outline"
             value={password}
             onChangeText={setPassword}
+            placeholder="Password"
             secureTextEntry={!showPassword}
+            rightAccessory={
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  size={18}
+                  color={COLORS.textTertiary}
+                />
+              </TouchableOpacity>
+            }
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={18}
-              color={COLORS.textTertiary}
-            />
-          </TouchableOpacity>
-        </View>
 
-        {/* Confirm Password */}
-        <View style={styles.inputWrap}>
-          <Ionicons name="shield-checkmark-outline" size={18} color={COLORS.textTertiary} />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm password"
-            placeholderTextColor={COLORS.textTertiary}
+          <TextField
+            icon="shield-checkmark-outline"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
+            placeholder="Confirm password"
             secureTextEntry={!showPassword}
           />
-        </View>
 
-        {/* Register Button */}
-        <TouchableOpacity
-          style={styles.createBtn}
-          onPress={handleRegister}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.createBtnText}>Create Account</Text>
-        </TouchableOpacity>
+          <AppButton
+            label="Create Account"
+            onPress={handleRegister}
+            icon="person-add-outline"
+            style={styles.createBtn}
+          />
 
-        {/* Sign In Link */}
-        <View style={styles.signInRow}>
-          <Text style={FONTS.body}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.signInLink}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.signInRow}>
+            <Text style={styles.signInPrompt}>Already have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={styles.signInLink}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+        </SurfaceCard>
       </KeyboardAvoidingView>
     </View>
   );
@@ -114,9 +108,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  heroBg: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.28,
+  },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: SPACING.xxl,
   },
   backBtn: {
@@ -128,41 +126,22 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...FONTS.body,
-    marginBottom: SPACING.xxxl,
+    marginBottom: SPACING.xxl,
   },
-  inputWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
-  },
-  input: {
-    flex: 1,
-    fontSize: 15,
-    color: COLORS.textPrimary,
-    paddingVertical: 4,
+  formCard: {
+    borderColor: COLORS.borderLight,
   },
   createBtn: {
-    backgroundColor: COLORS.textPrimary,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
     marginTop: SPACING.sm,
     marginBottom: SPACING.xxl,
   },
-  createBtnText: {
-    ...FONTS.bodyBold,
-    color: COLORS.textInverse,
-    fontSize: 16,
-  },
   signInRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  signInPrompt: {
+    ...FONTS.body,
   },
   signInLink: {
     ...FONTS.bodyBold,

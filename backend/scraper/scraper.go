@@ -5,7 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"hash/fnv"
 	"log"
+	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -67,11 +70,7 @@ func (s *Service) Compare(ctx context.Context, query string, lat, lng float64, u
 	// Note: Mock mode removed - always uses real API calls
 	// To get live data, link your accounts in the mobile app
 
-	tokenHash := ""
-	if len(userTokens) > 0 {
-		tokenBytes, _ := json.Marshal(userTokens)
-		tokenHash = fmt.Sprintf(":%x", tokenBytes)
-	}
+	tokenHash := buildTokenHash(userTokens)
 
 	cacheKey := fmt.Sprintf("compare:%s:%.2f:%.2f%s", query, lat, lng, tokenHash)
 
@@ -129,6 +128,40 @@ func (s *Service) Compare(ctx context.Context, query string, lat, lng float64, u
 	}
 
 	return result, nil
+}
+
+func buildTokenHash(userTokens map[string]map[string]string) string {
+	if len(userTokens) == 0 {
+		return ""
+	}
+
+	hasher := fnv.New64a()
+	platforms := make([]string, 0, len(userTokens))
+	for platform := range userTokens {
+		platforms = append(platforms, platform)
+	}
+	sort.Strings(platforms)
+
+	for _, platform := range platforms {
+		_, _ = hasher.Write([]byte(platform))
+		_, _ = hasher.Write([]byte{0})
+
+		tokens := userTokens[platform]
+		keys := make([]string, 0, len(tokens))
+		for key := range tokens {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			_, _ = hasher.Write([]byte(key))
+			_, _ = hasher.Write([]byte{0})
+			_, _ = hasher.Write([]byte(tokens[key]))
+			_, _ = hasher.Write([]byte{0})
+		}
+	}
+
+	return ":" + strconv.FormatUint(hasher.Sum64(), 16)
 }
 
 // scrapeAllPlatforms runs all scrapers concurrently using HTTP requests

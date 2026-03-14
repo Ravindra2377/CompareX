@@ -14,9 +14,9 @@
     }
   },
   "zepto": {
-    "base_url": "https://api.zeptonow.com/api/v1/search",
+    "base_url": "https://api.zepto.co.in",
     "headers": {
-      "app_version": "12.23.0",
+      "app_version": "14.13.0",
       "platform": "web",
       "store_id": "40d2ba18-7b44-4060-8041-002636603a3d",
       "content-type": "application/json",

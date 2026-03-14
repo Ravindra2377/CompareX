@@ -1,28 +1,58 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Animated
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../context/AuthContext';
-import { COLORS, SPACING, RADIUS, SHADOWS, FONTS } from '../config/theme';
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+  Animated,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../context/AuthContext";
+import { COLORS, SPACING, RADIUS, SHADOWS, FONTS } from "../config/theme";
 
 const CATEGORIES = [
-  { id: '1', name: 'Eggs', icon: 'egg-outline', query: 'eggs' },
-  { id: '2', name: 'Milk', icon: 'water-outline', query: 'milk' },
-  { id: '3', name: 'Bread', icon: 'pizza-outline', query: 'bread' },
-  { id: '4', name: 'Rice', icon: 'leaf-outline', query: 'rice' },
-  { id: '5', name: 'Chicken', icon: 'restaurant-outline', query: 'chicken' },
-  { id: '6', name: 'Atta', icon: 'bag-outline', query: 'atta' },
-  { id: '7', name: 'Oil', icon: 'flask-outline', query: 'oil' },
-  { id: '8', name: 'Snacks', icon: 'fast-food-outline', query: 'chips' },
+  { id: "1", name: "Eggs", icon: "egg-outline", query: "eggs" },
+  { id: "2", name: "Milk", icon: "water-outline", query: "milk" },
+  { id: "3", name: "Bread", icon: "pizza-outline", query: "bread" },
+  { id: "4", name: "Rice", icon: "leaf-outline", query: "rice" },
+  { id: "5", name: "Chicken", icon: "restaurant-outline", query: "chicken" },
+  { id: "6", name: "Atta", icon: "bag-outline", query: "atta" },
+  { id: "7", name: "Oil", icon: "flask-outline", query: "oil" },
+  { id: "8", name: "Snacks", icon: "fast-food-outline", query: "chips" },
 ];
 
 const TRENDING = [
-  { id: '1', name: 'White Eggs (10 pcs)', best: '₹79', platform: 'Zepto', saving: '₹16' },
-  { id: '2', name: 'Amul Butter 500g', best: '₹265', platform: 'Zepto', saving: '₹15' },
-  { id: '3', name: 'Aashirvaad Atta 5kg', best: '₹275', platform: 'BigBasket', saving: '₹24' },
-  { id: '4', name: 'Tata Tea Gold 500g', best: '₹275', platform: 'Blinkit', saving: '₹20' },
+  {
+    id: "1",
+    name: "White Eggs (10 pcs)",
+    best: "₹79",
+    platform: "Zepto",
+    saving: "₹16",
+  },
+  {
+    id: "2",
+    name: "Amul Butter 500g",
+    best: "₹265",
+    platform: "Zepto",
+    saving: "₹15",
+  },
+  {
+    id: "3",
+    name: "Aashirvaad Atta 5kg",
+    best: "₹275",
+    platform: "BigBasket",
+    saving: "₹24",
+  },
+  {
+    id: "4",
+    name: "Tata Tea Gold 500g",
+    best: "₹275",
+    platform: "Blinkit",
+    saving: "₹20",
+  },
 ];
 
 const HomeScreen = ({ navigation }) => {
@@ -34,9 +64,21 @@ const HomeScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     Animated.stagger(150, [
-      Animated.timing(fadeAnimHeader, { toValue: 1, duration: 500, useNativeDriver: true }),
-      Animated.timing(fadeAnimCats, { toValue: 1, duration: 500, useNativeDriver: true }),
-      Animated.timing(fadeAnimTrend, { toValue: 1, duration: 500, useNativeDriver: true })
+      Animated.timing(fadeAnimHeader, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnimCats, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnimTrend, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
     ]).start();
   }, [fadeAnimHeader, fadeAnimCats, fadeAnimTrend]);
 
@@ -46,20 +88,36 @@ const HomeScreen = ({ navigation }) => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header with Gradient Background */}
-        <Animated.View style={{ opacity: fadeAnimHeader, transform: [{ translateY: fadeAnimHeader.interpolate({ inputRange: [0, 1], outputRange: [-20, 0] }) }] }}>
+        <Animated.View
+          style={{
+            opacity: fadeAnimHeader,
+            transform: [
+              {
+                translateY: fadeAnimHeader.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-20, 0],
+                }),
+              },
+            ],
+          }}
+        >
           <LinearGradient
-            colors={COLORS.gradientCard}
+            colors={COLORS.gradientHero}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.headerGradient}
           >
             <View style={styles.headerTop}>
               <View>
-                <Text style={styles.greeting}>Good evening 👋</Text>
+                <Text style={styles.greeting}>Smart Savings</Text>
                 <Text style={styles.title}>CompareX</Text>
               </View>
               <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
-                <Ionicons name="person-outline" size={20} color={COLORS.textPrimary} />
+                <Ionicons
+                  name="log-out-outline"
+                  size={20}
+                  color={COLORS.textPrimary}
+                />
               </TouchableOpacity>
             </View>
 
@@ -67,12 +125,22 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.searchBar}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate('Search')}
+              onPress={() => navigation.navigate("Search")}
             >
-              <Ionicons name="search-outline" size={20} color={COLORS.textSecondary} />
-              <Text style={styles.searchPlaceholder}>Search eggs, milk, bread...</Text>
+              <Ionicons
+                name="search-outline"
+                size={20}
+                color={COLORS.textSecondary}
+              />
+              <Text style={styles.searchPlaceholder}>
+                Search eggs, milk, bread...
+              </Text>
               <View style={styles.searchIconBg}>
-                <Ionicons name="options-outline" size={16} color="#FFF" />
+                <Ionicons
+                  name="arrow-forward"
+                  size={16}
+                  color={COLORS.textInverse}
+                />
               </View>
             </TouchableOpacity>
           </LinearGradient>
@@ -91,13 +159,30 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <View style={styles.infoDivider} />
           <View style={styles.infoItem}>
-            <Text style={[styles.infoValue, { color: COLORS.savings }]}>30%</Text>
+            <Text style={[styles.infoValue, { color: COLORS.savings }]}>
+              30%
+            </Text>
             <Text style={styles.infoLabel}>Max savings</Text>
           </View>
         </View>
 
         {/* Categories */}
-        <Animated.View style={[styles.section, { opacity: fadeAnimCats, transform: [{ translateY: fadeAnimCats.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }]}>
+        <Animated.View
+          style={[
+            styles.section,
+            {
+              opacity: fadeAnimCats,
+              transform: [
+                {
+                  translateY: fadeAnimCats.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
           <Text style={styles.sectionTitle}>Categories</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => (
@@ -105,10 +190,16 @@ const HomeScreen = ({ navigation }) => {
                 key={cat.id}
                 style={styles.categoryItem}
                 activeOpacity={0.6}
-                onPress={() => navigation.navigate('Search', { query: cat.query })}
+                onPress={() =>
+                  navigation.navigate("Search", { query: cat.query })
+                }
               >
                 <View style={styles.categoryIcon}>
-                  <Ionicons name={cat.icon} size={22} color={COLORS.textSecondary} />
+                  <Ionicons
+                    name={cat.icon}
+                    size={22}
+                    color={COLORS.textSecondary}
+                  />
                 </View>
                 <Text style={styles.categoryName}>{cat.name}</Text>
               </TouchableOpacity>
@@ -117,21 +208,48 @@ const HomeScreen = ({ navigation }) => {
         </Animated.View>
 
         {/* Trending */}
-        <Animated.View style={[styles.section, { opacity: fadeAnimTrend, transform: [{ translateY: fadeAnimTrend.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }]}>
+        <Animated.View
+          style={[
+            styles.section,
+            {
+              opacity: fadeAnimTrend,
+              transform: [
+                {
+                  translateY: fadeAnimTrend.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
           <Text style={styles.sectionTitle}>Trending Price Drops</Text>
           {TRENDING.map((item) => (
             <TouchableOpacity
               key={item.id}
               style={styles.trendingItem}
               activeOpacity={0.6}
-              onPress={() => navigation.navigate('Search', { query: item.name.split(' (')[0] })}
+              onPress={() =>
+                navigation.navigate("Search", {
+                  query: item.name.split(" (")[0],
+                })
+              }
             >
               <View style={{ flex: 1 }}>
-                <Text style={styles.trendingName} numberOfLines={1}>{item.name}</Text>
-                <Text style={styles.trendingMeta}>Best on {item.platform} · Save {item.saving}</Text>
+                <Text style={styles.trendingName} numberOfLines={1}>
+                  {item.name}
+                </Text>
+                <Text style={styles.trendingMeta}>
+                  Best on {item.platform} · Save {item.saving}
+                </Text>
               </View>
               <Text style={styles.trendingPrice}>{item.best}</Text>
-              <Ionicons name="chevron-forward" size={16} color={COLORS.textTertiary} />
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={COLORS.textTertiary}
+              />
             </TouchableOpacity>
           ))}
         </Animated.View>
@@ -150,23 +268,23 @@ const styles = StyleSheet.create({
   headerGradient: {
     paddingTop: 60,
     paddingHorizontal: SPACING.xl,
-    paddingBottom: SPACING.xxl,
-    borderBottomLeftRadius: RADIUS.lg,
-    borderBottomRightRadius: RADIUS.lg,
+    paddingBottom: SPACING.xxxl,
+    borderBottomLeftRadius: RADIUS.xl,
+    borderBottomRightRadius: RADIUS.xl,
     marginBottom: SPACING.xl,
     ...SHADOWS.md,
   },
   headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: SPACING.xl,
   },
   greeting: {
     ...FONTS.caption,
-    color: COLORS.textSecondary,
+    color: COLORS.textAccent,
     marginBottom: 4,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 1,
   },
   title: {
@@ -176,19 +294,19 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(2, 6, 23, 0.5)",
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.borderLight,
   },
   // Search
   searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: SPACING.md,
-    paddingVertical: 12,
-    backgroundColor: COLORS.surface,
+    minHeight: 52,
+    backgroundColor: "rgba(2, 6, 23, 0.55)",
     borderRadius: RADIUS.full,
     borderWidth: 1,
     borderColor: COLORS.borderLight,
@@ -198,22 +316,23 @@ const styles = StyleSheet.create({
   searchPlaceholder: {
     ...FONTS.body,
     flex: 1,
+    color: COLORS.textSecondary,
   },
   searchIconBg: {
     backgroundColor: COLORS.accent,
     width: 32,
     height: 32,
     borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   // Info Row
   infoRow: {
-    flexDirection: 'row',
-    marginHorizontal: SPACING.xl,
+    flexDirection: "row",
+    marginHorizontal: SPACING.lg,
     marginBottom: SPACING.xxl,
     paddingVertical: SPACING.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.card,
     borderRadius: RADIUS.lg,
     ...SHADOWS.sm,
     borderWidth: 1,
@@ -221,7 +340,7 @@ const styles = StyleSheet.create({
   },
   infoItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   infoValue: {
     ...FONTS.h2,
@@ -239,7 +358,7 @@ const styles = StyleSheet.create({
   // Sections
   section: {
     marginBottom: SPACING.xxl,
-    paddingHorizontal: SPACING.xl,
+    paddingHorizontal: SPACING.lg,
   },
   sectionTitle: {
     ...FONTS.h3,
@@ -247,22 +366,22 @@ const styles = StyleSheet.create({
   },
   // Categories
   categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   categoryItem: {
-    width: '22%',
-    alignItems: 'center',
+    width: "23%",
+    alignItems: "center",
     marginBottom: SPACING.xl,
   },
   categoryIcon: {
     width: 56,
     height: 56,
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.card,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: COLORS.cardAlt,
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: SPACING.sm,
     ...SHADOWS.sm,
     borderWidth: 1,
@@ -270,15 +389,15 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     ...FONTS.caption,
-    textAlign: 'center',
+    textAlign: "center",
   },
   // Trending
   trendingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.md,
-    backgroundColor: COLORS.card,
+    backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.md,
     marginBottom: SPACING.sm,
     ...SHADOWS.sm,

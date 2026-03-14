@@ -11,19 +11,20 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
   StatusBar,
-  Dimensions,
-  InteractionManager,
+  TouchableOpacity,
+  Animated,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
+import PerformanceDebugPanel from "../components/PerformanceDebugPanel";
+import { getGlobalMonitor } from "../services/PerformanceMonitor";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
-import * as Haptics from 'expo-haptics';
-import SkeletonLoader from "../components/SkeletonLoader";
+import * as Haptics from "expo-haptics";
 import PlatformScraperService from "../services/PlatformScraperService";
 import PlatformDOMScraperService from "../services/PlatformDOMScraperService";
 import api from "../config/api";
@@ -42,11 +43,147 @@ const SUGGESTIONS = [
 const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
 const ENABLE_BACKEND_FALLBACK = false;
 const ENABLE_BACKEND_COLLECTION = false;
-const DEFAULT_PLATFORM_TIMEOUT_MS = 22000;
-const OVERALL_SEARCH_TIMEOUT_MS = 90000;
+const DEFAULT_PLATFORM_TIMEOUT_MS = 14000;
+const OVERALL_SEARCH_TIMEOUT_MS = 45000;
+const SEARCH_DEBOUNCE_MS = 250;
+const PARTIAL_AGGREGATION_DELAY_MS = 60;
+const RESULT_CARD_HEIGHT = 184;
+const SEARCH_CACHE_VERSION = 2;
 
 const NON_PRICE_TOKEN_REGEX =
   /%|\b(off|mins?|min|ml|ltr|litre|litres|kg|g|gm|grams?|pcs?|piece|pack|combo)\b/i;
+
+const sanitizeProductName = (rawName) => {
+  const name = String(rawName || "").trim();
+  if (!name) return "";
+
+  let cleaned = name
+    .replace(/\u00a0/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Za-z])(\d)/g, "$1 $2")
+    .replace(/(\d)([A-Za-z])/g, "$1 $2")
+    .replace(/\b\d+\s*mins?\b/gi, " ")
+    .replace(/₹\s*[0-9]+(?:\.[0-9]+)?/gi, " ")
+    .replace(/\b(add|buy\s*now|qty|view\s*more|off)\b/gi, " ")
+    .replace(/\b\d+(?:\.\d+)?\s*[kK]?\s*Ratings?.*$/i, "")
+    .replace(/\bRatings?.*$/i, "")
+    .replace(/\bReviews?.*$/i, "")
+    .replace(/[|]+/g, " ")
+    .replace(/\s*-\s*/g, " - ")
+    .replace(/\s*\(\s*/g, " (")
+    .replace(/\s*\)\s*/g, ") ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  // Repair common fragmented tokens from DOM text merges, e.g. "Go d rej" -> "Godrej".
+  for (let i = 0; i < 3; i += 1) {
+    cleaned = cleaned.replace(
+      /\b([A-Za-z]{2,})\s([A-Za-z])\s([A-Za-z]{2,})\b/g,
+      "$1$2$3",
+    );
+  }
+
+  cleaned = cleaned.replace(/\s+/g, " ").trim();
+
+  // Remove duplicated trailing quantities like "... 1 kg ... 1 kg" from merged platform titles.
+  const qtyPattern = /(\d+(?:\.\d+)?\s*(?:kg|g|gm|l|ml|pcs?|pack))$/i;
+  const trailingQty = cleaned.match(qtyPattern)?.[1] || "";
+  if (trailingQty) {
+    const head = cleaned.slice(0, -trailingQty.length).trim();
+    const escapedQty = trailingQty.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const qtyRegex = new RegExp(`\\b${escapedQty}\\b`, "ig");
+    const count = (cleaned.match(qtyRegex) || []).length;
+    if (count > 1) {
+      const collapsedHead = head
+        .replace(qtyRegex, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      cleaned = `${collapsedHead} ${trailingQty}`.replace(/\s+/g, " ").trim();
+    }
+  }
+
+  return cleaned;
+};
+
+const getProductMatchKey = (name) => {
+  const clean = sanitizeProductName(name).toLowerCase();
+  if (!clean) return "";
+
+  const stopWords = new Set([
+    "fresh",
+    "new",
+    "original",
+    "pack",
+    "pouch",
+    "bottle",
+    "net",
+    "quantity",
+    "medium",
+    "large",
+    "small",
+    "gram",
+    "grams",
+    "kg",
+    "g",
+    "gm",
+    "ml",
+    "l",
+    "ltr",
+    "litre",
+    "litres",
+    "pc",
+    "pcs",
+  ]);
+
+  const normalized = clean
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .map((t) => (t.length > 3 && t.endsWith("s") ? t.slice(0, -1) : t))
+    .filter((t) => !stopWords.has(t))
+    .filter((t) => !/^\d+(\.\d+)?$/.test(t));
+
+  if (!normalized.length) return clean.slice(0, 30);
+  return normalized.slice(0, 4).join(" ");
+};
+
+const selectBestDisplayName = (listings = [], fallback = "") => {
+  const candidates = listings
+    .map((l) => sanitizeProductName(l?.product_name || ""))
+    .filter((name) => name.length >= 4);
+
+  if (!candidates.length) {
+    return sanitizeProductName(fallback || "Product");
+  }
+
+  const scoreName = (name) => {
+    const parenCount = (name.match(/[()]/g) || []).length;
+    const qtyCount = (
+      name.match(/\b\d+(?:\.\d+)?\s*(?:kg|g|gm|l|ml|pcs?|pack)\b/gi) || []
+    ).length;
+    const pipeCount = (name.match(/\|/g) || []).length;
+    return (
+      name.length +
+      parenCount * 10 +
+      Math.max(0, qtyCount - 1) * 14 +
+      pipeCount * 2
+    );
+  };
+
+  return candidates.sort((a, b) => scoreName(a) - scoreName(b))[0];
+};
+
+const CACHE_TTL_MS = 5 * 60 * 1000;
+
+const areStringArraysEqual = (a = [], b = []) => {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+};
 
 const extractNumericPrice = (raw) => {
   if (raw === null || raw === undefined) return 0;
@@ -78,6 +215,26 @@ const extractNumericPrice = (raw) => {
   if (!Number.isFinite(parsed) || parsed <= 0) return 0;
   if (parsed > 10000) return Math.round((parsed / 100) * 100) / 100;
   return Math.round(parsed * 100) / 100;
+};
+
+const extractLabeledPriceHints = (rawText) => {
+  const compact = String(rawText || "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!compact) {
+    return { price: 0, mrp: 0 };
+  }
+
+  const priceMatch = compact.match(
+    /\bprice\b\s*:?\s*₹\s*([0-9]+(?:\.[0-9]+)?)/i,
+  );
+  const mrpMatch = compact.match(/\bmrp\b\s*:?\s*₹\s*([0-9]+(?:\.[0-9]+)?)/i);
+
+  return {
+    price: priceMatch?.[1] ? parseFloat(priceMatch[1]) : 0,
+    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1]) : 0,
+  };
 };
 
 const normalizeIncomingPrice = (product) => {
@@ -121,11 +278,62 @@ const normalizeIncomingPrice = (product) => {
     }
   }
 
+  const labeledHints = extractLabeledPriceHints(
+    product?.raw_text || product?.rawText || "",
+  );
+
+  if (labeledHints.price > 0) {
+    price = labeledHints.price;
+  }
+
+  if (labeledHints.mrp > 0) {
+    mrp = labeledHints.mrp;
+  }
+
   if (!price && mrp) price = mrp;
   if (!mrp && price) mrp = price;
 
+  const discountValue = extractNumericPrice(
+    product?.discount_value ?? product?.discountValue,
+  );
+  const discountPercent = Number(
+    product?.discount_percent ?? product?.discountPercent ?? 0,
+  );
+
+  // Guardrail: some DOM snippets expose "₹21 OFF" and parsers may mistake 21 as selling price.
+  // If that happens and MRP/discount metadata exists, reconstruct selling price.
+  if (mrp > 0 && discountValue > 0) {
+    const derivedFromValue = Math.round((mrp - discountValue) * 100) / 100;
+    if (derivedFromValue > 0 && Math.abs(price - discountValue) < 0.51) {
+      price = derivedFromValue;
+    }
+  }
+
+  if (mrp > 0 && discountPercent > 0 && discountPercent < 100) {
+    const derivedFromPercent =
+      Math.round(mrp * (1 - discountPercent / 100) * 100) / 100;
+    const discountAmountFromPercent =
+      Math.round(mrp * (discountPercent / 100) * 100) / 100;
+    if (
+      derivedFromPercent > 0 &&
+      Math.abs(price - discountAmountFromPercent) < 0.75
+    ) {
+      price = derivedFromPercent;
+    }
+  }
+
   if (price && mrp && price > mrp) {
     price = mrp;
+  }
+
+  // Validation: reject extreme outliers (discount > 75%)
+  // Such prices are likely parsing errors or unsustainable flash sales
+  // Use MRP as more reliable fallback
+  if (price > 0 && mrp > 0) {
+    const discountRatio = ((mrp - price) / mrp) * 100;
+    if (discountRatio > 75) {
+      price = mrp; // Use MRP instead of extreme discount price
+    }
   }
 
   return {
@@ -135,26 +343,13 @@ const normalizeIncomingPrice = (product) => {
 };
 
 const reducer = (state, action) => {
-  console.log(
-    "[Reducer] action:",
-    action.type,
-    "payload length:",
-    action.payload ? action.payload.length : "none",
-  );
   switch (action.type) {
     case "setConnected":
-      const newState = {
+      return {
         ...state,
         connectedPlatforms: action.payload,
         forceUpdate: state.forceUpdate + 1,
       };
-      console.log(
-        "[Reducer] new state connectedPlatforms:",
-        newState.connectedPlatforms.length,
-        "forceUpdate:",
-        newState.forceUpdate,
-      );
-      return newState;
     default:
       return state;
   }
@@ -168,6 +363,9 @@ const SearchScreen = ({ navigation, route }) => {
   const [platformResults, setPlatformResults] = useState({});
   const [searchUrls, setSearchUrls] = useState({});
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
+  const [tipIndex, setTipIndex] = useState(0);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseLoopRef = useRef(null);
 
   const [state, dispatch] = useReducer(reducer, {
     connectedPlatforms: [],
@@ -176,17 +374,56 @@ const SearchScreen = ({ navigation, route }) => {
 
   const connectedPlatformsRef = useRef([]);
   const connectedPlatformTokensRef = useRef({});
-  const activeSearchPlatformsRef = useRef([]);
+  // Pulse animation while platforms are still loading
+  const SAVING_TIPS = [
+    "Compare price per unit; same name can have different pack sizes.",
+    "Zepto and Blinkit flash deals can change every hour.",
+    "Bulk packs often save 15-30 percent versus single units.",
+    "Check quantity carefully: 500 g vs 1 kg changes real value.",
+    "Biggest savings are often on dairy and everyday staples.",
+  ];
 
-  console.log(
-    "[Search] Component render, connectedPlatforms:",
-    state.connectedPlatforms.length,
-    "forceUpdate:",
-    state.forceUpdate,
-  );
+  useEffect(() => {
+    if (loading) {
+      pulseLoopRef.current = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 0.3,
+            duration: 650,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 650,
+            useNativeDriver: true,
+          }),
+        ]),
+      );
+      pulseLoopRef.current.start();
+    } else {
+      if (pulseLoopRef.current) pulseLoopRef.current.stop();
+      pulseAnim.setValue(1);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading) return;
+    setTipIndex(0);
+    const id = setInterval(
+      () => setTipIndex((i) => (i + 1) % SAVING_TIPS.length),
+      3500,
+    );
+    return () => clearInterval(id);
+  }, [loading]);
+
+  const storedTokensRef = useRef({});
+  const activeSearchPlatformsRef = useRef([]);
+  const resultsCacheRef = useRef({});
+  const lastSearchKeyRef = useRef("");
 
   const webViewRefs = useRef({});
   const searchTimeoutRef = useRef(null);
+  const aggregateTimerRef = useRef(null);
   const searchSessionIdRef = useRef(0);
   const platformResultsRef = useRef({});
   const aggregatedSessionIdRef = useRef(null);
@@ -224,6 +461,65 @@ const SearchScreen = ({ navigation, route }) => {
       }
     }, timeoutMs);
   };
+
+  function clearScheduledAggregation() {
+    if (aggregateTimerRef.current) {
+      clearTimeout(aggregateTimerRef.current);
+      aggregateTimerRef.current = null;
+    }
+  }
+
+  function scheduleAggregateResults(
+    sessionId,
+    delayMs = PARTIAL_AGGREGATION_DELAY_MS,
+  ) {
+    if (sessionId !== searchSessionIdRef.current) {
+      return;
+    }
+
+    clearScheduledAggregation();
+    aggregateTimerRef.current = setTimeout(() => {
+      aggregateTimerRef.current = null;
+      aggregateResults(sessionId);
+    }, delayMs);
+  }
+
+  const canInjectForPlatform = useCallback(
+    (platform, currentUrl, searchUrl) => {
+      const current = String(currentUrl || "").toLowerCase();
+      const target = String(searchUrl || "").toLowerCase();
+
+      if (!current) return false;
+
+      if (target && current.includes(target.split("?")[0])) {
+        return true;
+      }
+
+      if (platform === "Zepto") {
+        return (
+          current.includes("zepto.com") &&
+          (current.includes("/search") || current.includes("query="))
+        );
+      }
+
+      if (platform === "BigBasket") {
+        return (
+          current.includes("bigbasket.com") &&
+          (current.includes("/ps/") || current.includes("q="))
+        );
+      }
+
+      if (platform === "Blinkit") {
+        return (
+          current.includes("blinkit.com") &&
+          (current.includes("/s/") || current.includes("q="))
+        );
+      }
+
+      return false;
+    },
+    [],
+  );
 
   const injectDomParser = (platform, reason) => {
     const currentUrl = (currentWebViewUrlsRef.current[platform] || "").split(
@@ -291,10 +587,40 @@ const SearchScreen = ({ navigation, route }) => {
   }, [checkConnectedPlatforms]);
 
   useEffect(() => {
-    console.log(
-      "[Search] connectedPlatforms changed:",
-      state.connectedPlatforms.length,
-    );
+    let cancelled = false;
+
+    const hydrateStoredTokens = async () => {
+      try {
+        const tokensRaw = await AsyncStorage.getItem("userTokens");
+        if (cancelled) {
+          return;
+        }
+
+        const parsed = tokensRaw ? JSON.parse(tokensRaw) : {};
+        storedTokensRef.current = parsed;
+
+        const tokenMap = {};
+        PLATFORMS.forEach((platform) => {
+          if (parsed?.[platform] && Object.keys(parsed[platform]).length > 0) {
+            tokenMap[platform] = parsed[platform];
+          }
+        });
+        connectedPlatformTokensRef.current = tokenMap;
+      } catch (err) {
+        if (!cancelled) {
+          console.error("[Search] Error hydrating tokens:", err);
+        }
+      }
+    };
+
+    hydrateStoredTokens();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     connectedPlatformsRef.current = state.connectedPlatforms;
   }, [state.connectedPlatforms]);
 
@@ -305,62 +631,60 @@ const SearchScreen = ({ navigation, route }) => {
   );
 
   useEffect(() => {
-    console.log(
-      "[Search] useEffect for query triggered, query:",
-      query,
-      "connectedPlatforms:",
-      connectedPlatformsRef.current.length,
-    );
     if (!query.trim()) {
       setResults([]);
       setHasSearched(false);
+      lastSearchKeyRef.current = "";
+      setSearchUrls({});
       return;
     }
     if (connectedPlatformsRef.current.length === 0) {
-      console.log("[Search] Skipping search because no connected platforms");
       return;
     }
-    const timer = setTimeout(() => searchProducts(query), 0);
+
+    const normalizedQuery = query.trim().toLowerCase();
+    const platformSignature = [...connectedPlatformsRef.current]
+      .sort()
+      .join("|");
+    const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
+    if (lastSearchKeyRef.current === searchKey) {
+      return;
+    }
+
+    const timer = setTimeout(() => searchProducts(query), SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
   }, [query, state.connectedPlatforms]);
 
   const getConnectedPlatformsSnapshot = useCallback(async () => {
     try {
-      console.log("[Search] getConnectedPlatformsSnapshot called");
-      const tokens = await AsyncStorage.getItem("userTokens");
-      console.log("[Search] tokens from storage:", tokens ? "present" : "null");
-      if (!tokens) return [];
-      const parsed = JSON.parse(tokens);
       const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
-      const connected = Object.keys(parsed).filter((platform) => {
-        if (!supportedPlatforms.includes(platform)) return false;
-        const t = parsed[platform];
-        if (!t || Object.keys(t).length === 0) return false;
-        return true;
-      });
+      const parsed = storedTokensRef.current || {};
 
       const tokenMap = {};
-      connected.forEach((plat) => {
-        tokenMap[plat] = parsed[plat];
+      supportedPlatforms.forEach((plat) => {
+        if (parsed?.[plat] && Object.keys(parsed[plat]).length > 0) {
+          tokenMap[plat] = parsed[plat];
+        }
       });
       connectedPlatformTokensRef.current = tokenMap;
 
-      console.log("[Search] connected platforms:", connected);
-      return connected;
+      // Search should remain functional without account linkage; tokens are optional.
+      return supportedPlatforms.sort();
     } catch (e) {
       console.error("[Search] Error reading connections:", e);
-      return [];
+      return ["BigBasket", "Blinkit", "Zepto"];
     }
   }, []);
 
   const checkConnectedPlatforms = useCallback(() => {
     getConnectedPlatformsSnapshot()
       .then((connected) => {
-        console.log("[Search] In then, connected length:", connected.length);
+        const current = connectedPlatformsRef.current || [];
+        if (areStringArraysEqual(current, connected)) {
+          return;
+        }
         connectedPlatformsRef.current = connected;
-        console.log("[Search] About to dispatch");
         dispatch({ type: "setConnected", payload: connected });
-        console.log("[Search] Dispatched");
       })
       .catch((err) =>
         console.error("[Search] Error in checkConnectedPlatforms:", err),
@@ -368,16 +692,38 @@ const SearchScreen = ({ navigation, route }) => {
   }, [getConnectedPlatformsSnapshot, dispatch]);
 
   const searchProducts = async (q) => {
-    console.log(
-      "[Search] searchProducts V_TIMESTAMP_99 called with query:",
-      q,
-      "connectedPlatforms:",
-      connectedPlatformsRef.current.length,
-    );
+    const monitor = getGlobalMonitor();
+    monitor.mark("search-start");
+
+    const normalizedQuery = q.trim().toLowerCase();
+    const platformSignature = [...connectedPlatformsRef.current]
+      .sort()
+      .join("|");
+    const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
+
+    const cached = resultsCacheRef.current[searchKey];
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      monitor.mark("search-cache-hit");
+      const duration = monitor.measure(
+        "search-from-cache",
+        "search-start",
+        "search-cache-hit",
+      );
+      console.log(`[Perf] Cache hit: ${duration.toFixed(2)}ms`);
+      setResults(cached.results);
+      setHasSearched(true);
+      setLoading(false);
+      currentSearchQueryRef.current = q;
+      setCurrentSearchQuery(q);
+      lastSearchKeyRef.current = searchKey;
+      return;
+    }
+
     // Clear previous search
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
+    clearScheduledAggregation();
     // Clear any existing platform timeouts
     Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
     platformTimeoutsRef.current = {};
@@ -391,7 +737,7 @@ const SearchScreen = ({ navigation, route }) => {
     setHasSearched(true);
     setPlatformResults({});
     platformResultsRef.current = {}; // Clear ref too
-    setResults([]); // Clear old results
+    lastSearchKeyRef.current = searchKey;
     setCurrentSearchQuery(q);
     currentSearchQueryRef.current = q;
 
@@ -411,21 +757,31 @@ const SearchScreen = ({ navigation, route }) => {
       return;
     }
 
-    console.log(
-      `[Search] Starting new search session ${newSessionId} for "${q}" on ${platformsSnapshot.length} platforms...`,
-    );
-
     // Generate search URLs for each platform
     const urls = {};
     platformsSnapshot.forEach((platform) => {
       const url = PlatformDOMScraperService.getSearchUrl(platform, q);
       if (url) {
         urls[platform] = url;
-        console.log(`[Search] Navigating ${platform} to: ${url}`);
       }
     });
 
     setSearchUrls(urls);
+
+    // Attempt concurrent injection immediately (and shortly after) so all platforms
+    // can start parsing at nearly the same time without waiting only on onLoadEnd.
+    const tryParallelInject = (reason) => {
+      platformsSnapshot.forEach((platform) => {
+        const searchUrl = urls[platform];
+        const currentUrl = currentWebViewUrlsRef.current[platform] || "";
+        if (canInjectForPlatform(platform, currentUrl, searchUrl)) {
+          injectDomParser(platform, reason);
+        }
+      });
+    };
+
+    setTimeout(() => tryParallelInject("searchStartParallel-150ms"), 150);
+    setTimeout(() => tryParallelInject("searchStartParallel-700ms"), 700);
 
     // Clear any existing platform timeouts
     Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
@@ -445,13 +801,54 @@ const SearchScreen = ({ navigation, route }) => {
       // Clear any remaining platform timeouts
       Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
       platformTimeoutsRef.current = {};
-      aggregateResults(newSessionId);
+      scheduleAggregateResults(newSessionId, 0);
     }, overallTimeoutMs);
   };
 
   const handleWebViewMessage = (platform, event) => {
     try {
+      const monitor = getGlobalMonitor();
       const rawData = JSON.parse(event.nativeEvent.data);
+
+      const normalizeIncomingProduct = (product, fallbackPlatform) => {
+        const rawName = String(
+          product?.raw_product_name ||
+            product?.product_name ||
+            product?.name ||
+            "",
+        ).trim();
+        const normalizedPrice = normalizeIncomingPrice(product);
+        return {
+          product_name: sanitizeProductName(rawName),
+          raw_product_name: rawName,
+          brand: product?.brand || "",
+          price: normalizedPrice.price,
+          mrp: normalizedPrice.mrp,
+          image_url: product?.image_url || "",
+          product_url: product?.product_url || product?.deepLink || "",
+          in_stock:
+            product?.in_stock !== undefined
+              ? !!product.in_stock
+              : product?.inStock !== undefined
+                ? !!product.inStock
+                : true,
+          weight: product?.weight || product?.quantity || "",
+          quantity: product?.quantity || product?.weight || "",
+          rating: Number(product?.rating || 0),
+          rating_count: Number(
+            product?.rating_count || product?.reviewCount || 0,
+          ),
+          discount_percent: Number(
+            product?.discount_percent || product?.discountPercent || 0,
+          ),
+          discount_value: Number(
+            product?.discount_value || product?.discountValue || 0,
+          ),
+          raw_text: product?.raw_text || "",
+          platform: product?.platform || fallbackPlatform,
+        };
+      };
+
       const data =
         rawData && rawData.type === "PRODUCTS"
           ? {
@@ -464,25 +861,9 @@ const SearchScreen = ({ navigation, route }) => {
                 Array.isArray(rawData.products) && rawData.products.length > 0
                   ? null
                   : "Parser returned 0 products",
-              products: (rawData.products || []).map((product) => {
-                const normalizedPrice = normalizeIncomingPrice(product);
-                return {
-                  product_name: product.product_name || product.name || "",
-                  brand: product.brand || "",
-                  price: normalizedPrice.price,
-                  mrp: normalizedPrice.mrp,
-                  image_url: product.image_url || "",
-                  product_url: product.product_url || product.deepLink || "",
-                  in_stock:
-                    product.in_stock !== undefined
-                      ? !!product.in_stock
-                      : product.inStock !== undefined
-                        ? !!product.inStock
-                        : true,
-                  weight: product.weight || "",
-                  platform: product.platform || platform,
-                };
-              }),
+              products: (rawData.products || []).map((product) =>
+                normalizeIncomingProduct(product, platform),
+              ),
             }
           : rawData;
 
@@ -492,6 +873,12 @@ const SearchScreen = ({ navigation, route }) => {
       }
 
       if (data.type === "SEARCH_RESULTS") {
+        if (Array.isArray(data.products)) {
+          data.products = data.products.map((product) =>
+            normalizeIncomingProduct(product, platform),
+          );
+        }
+
         // Reject late messages from older searches when sessionId is provided
         if (data.sessionId && data.sessionId !== searchSessionIdRef.current) {
           console.log(
@@ -510,6 +897,26 @@ const SearchScreen = ({ navigation, route }) => {
           `[Search] Received ${
             data.products?.length || 0
           } products from ${platform} (session: ${searchSessionIdRef.current})`,
+        );
+
+        if (platform === "BigBasket" && Array.isArray(data.products)) {
+          const sample = data.products.slice(0, 3).map((p) => ({
+            name: p.product_name,
+            price: p.price,
+            mrp: p.mrp,
+            rawText: String(p.raw_text || "").slice(0, 160),
+          }));
+          console.log(
+            `[Debug-BigBasket] Incoming sample: ${JSON.stringify(sample)}`,
+          );
+        }
+
+        const monitor = getGlobalMonitor();
+        monitor.mark(`platform-${platform}-result`);
+        monitor.measure(
+          `time-to-${platform}-result`,
+          "search-start",
+          `platform-${platform}-result`,
         );
         if (
           data.error ||
@@ -570,6 +977,7 @@ const SearchScreen = ({ navigation, route }) => {
             activeSearchPlatformsRef.current.length ||
             connectedPlatformsRef.current.length ||
             state.connectedPlatforms.length;
+          const hasUsableProducts = data.success && incomingProductsCount > 0;
           if (respondedCount === expectedCount) {
             console.log(
               `[Search] All platforms responded for session ${searchSessionIdRef.current}, aggregating now...`,
@@ -577,11 +985,9 @@ const SearchScreen = ({ navigation, route }) => {
             if (searchTimeoutRef.current) {
               clearTimeout(searchTimeoutRef.current);
             }
-            // Aggregate after a short delay to ensure state is updated
-            setTimeout(
-              () => aggregateResults(searchSessionIdRef.current),
-              1000,
-            );
+            scheduleAggregateResults(searchSessionIdRef.current, 0);
+          } else if (hasUsableProducts) {
+            scheduleAggregateResults(searchSessionIdRef.current);
           }
 
           return updated;
@@ -611,12 +1017,12 @@ const SearchScreen = ({ navigation, route }) => {
         [platform]: mergedPayload,
       };
 
-      const storedRaw = await AsyncStorage.getItem("userTokens");
-      const stored = storedRaw ? JSON.parse(storedRaw) : {};
+      const stored = { ...(storedTokensRef.current || {}) };
       stored[platform] = {
         ...(stored[platform] || {}),
         ...mergedPayload,
       };
+      storedTokensRef.current = stored;
       await AsyncStorage.setItem("userTokens", JSON.stringify(stored));
     } catch (err) {
       console.warn(`[Search] Failed to persist ${platform} tokens:`, err);
@@ -650,7 +1056,9 @@ const SearchScreen = ({ navigation, route }) => {
           state.connectedPlatforms.length;
         if (respondedCount >= expectedCount) {
           if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-          setTimeout(() => aggregateResults(sessionId), 500);
+          scheduleAggregateResults(sessionId, 0);
+        } else if (success && products?.length > 0) {
+          scheduleAggregateResults(sessionId);
         }
         return updated;
       });
@@ -663,8 +1071,7 @@ const SearchScreen = ({ navigation, route }) => {
       console.log(
         `[Search] Falling back to backend API for ${platform} query: ${fallbackQuery}`,
       );
-      const tokensRaw = await AsyncStorage.getItem("userTokens");
-      const tokens = tokensRaw ? JSON.parse(tokensRaw) : {};
+      const tokens = storedTokensRef.current || {};
 
       // Pass scoped token first, otherwise fall back to all tokens.
       const scopedTokens = {};
@@ -751,6 +1158,8 @@ const SearchScreen = ({ navigation, route }) => {
   };
 
   const aggregateResults = (sessionId) => {
+    const monitor = getGlobalMonitor();
+    monitor.mark("search-aggregate-start");
     // Verify this is for the current search session
     if (sessionId !== searchSessionIdRef.current) {
       console.log(
@@ -761,6 +1170,12 @@ const SearchScreen = ({ navigation, route }) => {
 
     // Use ref for most up-to-date results
     const resultsToAggregate = platformResultsRef.current;
+    const respondedCount = Object.keys(resultsToAggregate).length;
+    const expectedCount =
+      activeSearchPlatformsRef.current.length ||
+      connectedPlatformsRef.current.length ||
+      state.connectedPlatforms.length;
+    const isComplete = respondedCount >= expectedCount;
 
     console.log(
       `[Search] Aggregating results for session ${sessionId} from:`,
@@ -770,12 +1185,35 @@ const SearchScreen = ({ navigation, route }) => {
     // Filter products by search relevance
     const stableQuery = (currentSearchQueryRef.current || "").trim();
     const searchTerm = stableQuery.toLowerCase();
-    const searchWords = searchTerm.split(/\s+/); // Split into words
+    const searchWords = searchTerm.split(/\s+/).filter(Boolean);
+
+    const normalizeToken = (token = "") => {
+      const t = String(token || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "")
+        .trim();
+      if (!t) return "";
+      if (t.length > 3 && t.endsWith("es")) return t.slice(0, -2);
+      if (t.length > 2 && t.endsWith("s")) return t.slice(0, -1);
+      return t;
+    };
+
+    const normalizedSearchWords = searchWords
+      .map((w) => normalizeToken(w))
+      .filter(Boolean);
 
     const isRelevant = (productName) => {
-      const nameLower = productName.toLowerCase();
-      // Product must contain at least one search word
-      return searchWords.some((word) => nameLower.includes(word));
+      const rawName = String(productName || "").toLowerCase();
+      const nameWords = rawName
+        .split(/\s+/)
+        .map((w) => normalizeToken(w))
+        .filter(Boolean);
+
+      return normalizedSearchWords.some(
+        (word) =>
+          rawName.includes(word) ||
+          nameWords.some((nw) => nw.includes(word) || word.includes(nw)),
+      );
     };
 
     // Count total products before filtering
@@ -796,8 +1234,7 @@ const SearchScreen = ({ navigation, route }) => {
         }
         relevantProducts++;
 
-        const normalizedName = product.product_name.toLowerCase().trim();
-        const key = normalizedName.slice(0, 30); // Use first 30 chars as key
+        const key = getProductMatchKey(product.product_name);
 
         if (!productMap[key]) {
           productMap[key] = {
@@ -809,6 +1246,7 @@ const SearchScreen = ({ navigation, route }) => {
         productMap[key].listings.push({
           platform: product.platform,
           product_name: product.product_name,
+          raw_product_name: product.raw_product_name || product.product_name,
           brand: product.brand,
           price: product.price,
           mrp: product.mrp,
@@ -816,6 +1254,12 @@ const SearchScreen = ({ navigation, route }) => {
           product_url: product.product_url,
           in_stock: product.in_stock,
           weight: product.weight,
+          quantity: product.quantity || product.weight || "",
+          rating: Number(product.rating || 0),
+          rating_count: Number(product.rating_count || 0),
+          discount_percent: Number(product.discount_percent || 0),
+          discount_value: Number(product.discount_value || 0),
+          raw_text: product.raw_text || "",
         });
       });
     });
@@ -827,15 +1271,48 @@ const SearchScreen = ({ navigation, route }) => {
     // Convert to array format
     const aggregated = Object.values(productMap).map((group, idx) => {
       // Deduplicate listings by platform (keep the first one for each platform)
-      const uniqueListings = [];
-      const seenPlatforms = new Set();
+      const platformBestListings = new Map();
 
       group.listings.forEach((listing) => {
-        if (!seenPlatforms.has(listing.platform)) {
-          seenPlatforms.add(listing.platform);
-          uniqueListings.push(listing);
+        const existing = platformBestListings.get(listing.platform);
+        if (!existing) {
+          platformBestListings.set(listing.platform, listing);
+          return;
+        }
+
+        const listingPrice = Number(listing.price || 0);
+        const existingPrice = Number(existing.price || 0);
+        const listingHasLabeledPrice = /\bprice\b\s*:?\s*₹\s*[0-9]+/i.test(
+          listing.raw_text || "",
+        );
+        const existingHasLabeledPrice = /\bprice\b\s*:?\s*₹\s*[0-9]+/i.test(
+          existing.raw_text || "",
+        );
+
+        if (listingHasLabeledPrice && !existingHasLabeledPrice) {
+          platformBestListings.set(listing.platform, listing);
+          return;
+        }
+
+        if (
+          listingHasLabeledPrice === existingHasLabeledPrice &&
+          listingPrice > 0 &&
+          (existingPrice <= 0 || listingPrice < existingPrice)
+        ) {
+          platformBestListings.set(listing.platform, listing);
         }
       });
+
+      const uniqueListings = Array.from(platformBestListings.values());
+
+      const bbListing = uniqueListings.find((l) => l.platform === "BigBasket");
+      if (bbListing) {
+        console.log(
+          `[Debug-BigBasket] Aggregated listing for "${group.name}": price=${bbListing.price}, mrp=${bbListing.mrp}, raw="${String(
+            bbListing.raw_text || "",
+          ).slice(0, 180)}"`,
+        );
+      }
 
       const listings = uniqueListings.filter(
         (l) => l.price > 0 && l.in_stock !== false,
@@ -844,16 +1321,22 @@ const SearchScreen = ({ navigation, route }) => {
       const best = prices.length > 0 ? Math.min(...prices) : 0;
       const worst = prices.length > 0 ? Math.max(...prices) : 0;
       const first = listings[0] || uniqueListings[0] || {};
+      const displayName =
+        uniqueListings.find((l) => l.raw_product_name)?.raw_product_name ||
+        selectBestDisplayName(uniqueListings, group.name);
 
       return {
         id: idx,
-        name: group.name,
+        name: displayName,
         brand: first.brand || "",
-        price: best,
-        originalPrice: worst > best ? worst : undefined,
+        price: first.price || best,
+        originalPrice: worst > (first.price || best) ? worst : undefined,
         platformCount: listings.length,
         totalPlatforms: uniqueListings.length,
-        discount: worst > best ? Math.round(((worst - best) / worst) * 100) : 0,
+        discount:
+          worst > (first.price || best)
+            ? Math.round(((worst - (first.price || best)) / worst) * 100)
+            : 0,
         listings: uniqueListings,
         bestPlatform:
           listings.length > 0
@@ -866,20 +1349,43 @@ const SearchScreen = ({ navigation, route }) => {
     // Sort by number of available platforms
     aggregated.sort((a, b) => b.platformCount - a.platformCount);
 
-    // Always stop loading after aggregation timeout
-    setLoading(false);
+    if (isComplete || aggregated.length > 0) {
+      setLoading(false);
+    }
+
+    // Record aggregation timing
+    monitor.mark("search-aggregate-end");
+    const aggregateDuration = monitor.measure(
+      "search-aggregate",
+      "search-aggregate-start",
+      "search-aggregate-end",
+    );
+    const totalDuration = monitor.measure(
+      "search-total",
+      "search-start",
+      "search-aggregate-end",
+    );
+    console.log(
+      `[Perf] Search update: aggregation=${aggregateDuration.toFixed(2)}ms, total=${totalDuration.toFixed(2)}ms, complete=${isComplete}`,
+    );
 
     if (aggregated.length > 0) {
       setResults(aggregated);
-      console.log(
-        `[Search] Session ${sessionId}: Aggregated ${aggregated.length} products`,
-      );
+      const normalizedQuery = (stableQuery || "").toLowerCase();
+      const platformSignature = [...(connectedPlatformsRef.current || [])]
+        .sort()
+        .join("|");
+      const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
+      resultsCacheRef.current[searchKey] = {
+        results: aggregated,
+        timestamp: Date.now(),
+      };
 
       // Send results to backend for analytics/caching (optional)
       if (ENABLE_BACKEND_COLLECTION) {
         collectResultsToBackend(stableQuery, resultsToAggregate);
       }
-    } else {
+    } else if (isComplete) {
       // No products found
       setResults([]);
       console.log(
@@ -904,52 +1410,93 @@ const SearchScreen = ({ navigation, route }) => {
   // Removed auto-aggregate useEffect that was causing multiple re-aggregations
   // Aggregation now only happens once after search timeout in searchProducts
 
-  const handleProduct = (product) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    navigation.navigate("ProductDetail", { product });
-  };
+  const handleProduct = useCallback(
+    (product) => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      navigation.navigate("ProductDetail", { product });
+    },
+    [navigation],
+  );
+
+  const renderProductItem = useCallback(
+    ({ item }) => <ProductCard product={item} onPress={handleProduct} />,
+    [handleProduct],
+  );
+
+  const getResultItemLayout = useCallback(
+    (_, index) => ({
+      length: RESULT_CARD_HEIGHT,
+      offset: RESULT_CARD_HEIGHT * index,
+      index,
+    }),
+    [],
+  );
 
   const renderEmpty = () => {
-    console.log(
-      "renderEmpty, hasSearched:",
-      hasSearched,
-      "connectedPlatforms:",
-      state.connectedPlatforms.length,
-      "results:",
-      results.length,
-      "loading:",
-      loading,
-    );
     if (loading) return null;
     if (!hasSearched) {
       return (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={48} color={COLORS.border} />
-          <Text style={styles.emptyTitle}>Search for a product</Text>
-          <Text style={styles.emptySubtitle}>
-            Compare prices across {state.connectedPlatforms.length} platforms
-          </Text>
+          <LinearGradient
+            colors={COLORS.gradientCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.emptyCard}
+          >
+            <View style={styles.emptyIconWrap}>
+              <Ionicons
+                name="search-outline"
+                size={44}
+                color={COLORS.textAccent}
+              />
+            </View>
+            <Text style={styles.emptyTitle}>Search for a product</Text>
+            <Text style={styles.emptySubtitle}>
+              Compare prices across {state.connectedPlatforms.length} connected
+              platforms
+            </Text>
 
-          {state.connectedPlatforms.length === 0 && (
-            <View style={styles.warning}>
-              <Ionicons name="warning-outline" size={24} color={COLORS.error} />
-              <Text style={styles.warningText}>
-                No platforms connected. Go to Accounts tab to link your
-                accounts.
+            <View style={styles.platformBadge}>
+              <Ionicons
+                name="layers-outline"
+                size={14}
+                color={COLORS.textAccent}
+              />
+              <Text style={styles.platformBadgeText}>
+                {state.connectedPlatforms.length} live sources ready
               </Text>
             </View>
-          )}
 
-          <View style={styles.suggestions}>
-            <Text style={styles.suggestTitle}>Try searching for:</Text>
-            <View style={styles.chips}>
-              {SUGGESTIONS.map((s) => (
-                <Text key={s} style={styles.chip} onPress={() => setQuery(s)}>
-                  {s}
+            {state.connectedPlatforms.length === 0 && (
+              <View style={styles.warning}>
+                <Ionicons
+                  name="warning-outline"
+                  size={24}
+                  color={COLORS.error}
+                />
+                <Text style={styles.warningText}>
+                  No platforms connected. Go to Accounts tab to link your
+                  accounts.
                 </Text>
-              ))}
+              </View>
+            )}
+
+            <View style={styles.suggestions}>
+              <Text style={styles.suggestTitle}>Try searching for:</Text>
+              <View style={styles.chips}>
+                {SUGGESTIONS.map((s) => (
+                  <TouchableOpacity
+                    key={s}
+                    onPress={() => setQuery(s)}
+                    activeOpacity={0.85}
+                    style={styles.chipButton}
+                  >
+                    <Text style={styles.chip}>{s}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </View>
+          </LinearGradient>
         </View>
       );
     }
@@ -965,14 +1512,125 @@ const SearchScreen = ({ navigation, route }) => {
     return null;
   };
 
+  const PLATFORM_META = {
+    Blinkit: { color: "#FFCE00", icon: "flash", label: "Blinkit" },
+    Zepto: { color: "#9747FF", icon: "rocket", label: "Zepto" },
+    BigBasket: { color: "#84C225", icon: "basket", label: "BigBasket" },
+  };
+
+  const renderSearchProgress = () => {
+    if (!loading) return null;
+
+    const completedCount = Object.keys(platformResults).length;
+    const totalCount = Math.max(1, state.connectedPlatforms.length);
+    const progressRatio = Math.min(1, completedCount / totalCount);
+
+    return (
+      <View style={styles.loaderContainer}>
+        {/* Title row */}
+        <View style={styles.loaderTitleRow}>
+          <Ionicons name="search" size={16} color={COLORS.accent} />
+          <Text style={styles.loaderStatusText}>Live Price Scan</Text>
+        </View>
+        <Text style={styles.loaderDetail}>
+          {completedCount === 0
+            ? "Opening platforms..."
+            : completedCount < totalCount
+              ? `${completedCount}/${totalCount} done - more coming`
+              : "All platforms scanned"}
+        </Text>
+
+        {/* Per-platform status cards */}
+        <View style={styles.platformStatusRow}>
+          {state.connectedPlatforms.map((platform) => {
+            const isDone = !!platformResults[platform];
+            const meta = PLATFORM_META[platform] || {
+              color: COLORS.accent,
+              icon: "search",
+              label: platform,
+            };
+            const count = (platformResults[platform] || []).length;
+            return (
+              <Animated.View
+                key={platform}
+                style={[
+                  styles.platformStatusCard,
+                  isDone
+                    ? {
+                        borderColor: meta.color,
+                        backgroundColor: meta.color + "18",
+                      }
+                    : { opacity: pulseAnim },
+                ]}
+              >
+                <Ionicons
+                  name={isDone ? "checkmark-circle" : meta.icon}
+                  size={18}
+                  color={isDone ? meta.color : COLORS.textSecondary}
+                  style={styles.platformStatusIcon}
+                />
+                <Text
+                  style={[
+                    styles.platformStatusName,
+                    isDone && { color: meta.color },
+                  ]}
+                >
+                  {meta.label}
+                </Text>
+                <Text style={styles.platformStatusCount}>
+                  {isDone ? `${count} items` : "Scanning..."}
+                </Text>
+              </Animated.View>
+            );
+          })}
+        </View>
+
+        {/* Progress bar */}
+        <View style={styles.progressTrack}>
+          <View
+            style={[
+              styles.progressFill,
+              { width: `${Math.max(progressRatio * 100, 8)}%` },
+            ]}
+          />
+        </View>
+
+        {/* Cycling tip */}
+        <View style={styles.tipBox}>
+          <Ionicons
+            name="bulb"
+            size={13}
+            color={COLORS.warning}
+            style={styles.tipIcon}
+          />
+          <Text style={styles.tipLabel}>Tip</Text>
+          <Text style={styles.tipText}>{SAVING_TIPS[tipIndex]}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>CompareX</Text>
-        <SearchBar 
-          value={query} 
-          onChangeText={setQuery} 
+      <PerformanceDebugPanel enabled={false} />
+      <LinearGradient
+        colors={COLORS.gradientHero}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
+        <View style={styles.headerTopRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Live Price Compare</Text>
+            <Text style={styles.headerSubtitle}>
+              Scan Blinkit, Zepto, and BigBasket in one search.
+            </Text>
+          </View>
+        </View>
+        <SearchBar
+          value={query}
+          onChangeText={setQuery}
           onClear={() => {
             setQuery("");
             setResults([]);
@@ -980,117 +1638,98 @@ const SearchScreen = ({ navigation, route }) => {
           }}
           autoFocus={!hasSearched && query === ""}
         />
-      </View>
+      </LinearGradient>
 
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <Text style={styles.loaderStatusText}>
-            Scanning {state.connectedPlatforms.length} platforms...
-          </Text>
-          <Text style={styles.loaderDetail}>
-            {Object.keys(platformResults).length}/
-            {state.connectedPlatforms.length} completed
-          </Text>
-          <View style={{ marginTop: SPACING.xl }}>
-            <SkeletonLoader />
-            <SkeletonLoader />
-            <SkeletonLoader />
-            <SkeletonLoader />
-          </View>
-        </View>
-      ) : (
-        <FlatList
-          data={results}
-          renderItem={({ item }) => (
-            <ProductCard product={item} onPress={() => handleProduct(item)} />
-          )}
-          keyExtractor={(item) => String(item.id)}
-          contentContainerStyle={styles.list}
-          ListEmptyComponent={renderEmpty}
-          key={state.forceUpdate}
-        />
-      )}
+      <FlatList
+        data={results}
+        renderItem={renderProductItem}
+        keyExtractor={(item) => String(item.id)}
+        getItemLayout={results.length > 0 ? getResultItemLayout : undefined}
+        initialNumToRender={6}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        removeClippedSubviews={results.length > 0}
+        contentContainerStyle={styles.list}
+        ListHeaderComponent={renderSearchProgress}
+        ListEmptyComponent={renderEmpty}
+      />
 
-      {/* Hidden WebViews for authenticated platform scraping */}
-      {query.trim() &&
-        state.connectedPlatforms.map((platform) => (
-          <WebView
-            key={platform}
-            ref={(ref) => (webViewRefs.current[platform] = ref)}
-            source={{ uri: searchUrls[platform] || getPlatformUrl(platform) }}
-            style={styles.hiddenWebView}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            onMessage={(event) => handleWebViewMessage(platform, event)}
-            onLoadEnd={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              const eventUrl = nativeEvent.url;
-              const currentUrl =
-                eventUrl || currentWebViewUrlsRef.current[platform];
+      {/* Hidden WebViews: always mounted to pre-warm platforms for faster parallel searches */}
+      {state.connectedPlatforms.map((platform) => (
+        <WebView
+          key={platform}
+          ref={(ref) => (webViewRefs.current[platform] = ref)}
+          source={{ uri: searchUrls[platform] || getPlatformUrl(platform) }}
+          style={styles.hiddenWebView}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          onMessage={(event) => handleWebViewMessage(platform, event)}
+          onLoadEnd={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            const eventUrl = nativeEvent.url;
+            const currentUrl =
+              eventUrl || currentWebViewUrlsRef.current[platform];
 
+            console.log(
+              `[Search] WebView onLoadEnd for ${platform}, currentUrl: ${currentUrl}`,
+            );
+            // Only inject if the WebView is actually on the search URL
+            const searchUrl = searchUrls[platform];
+
+            const isMatch = canInjectForPlatform(
+              platform,
+              currentUrl,
+              searchUrl,
+            );
+
+            if (isMatch) {
+              injectDomParser(platform, "onLoadEnd");
+            } else {
               console.log(
-                `[Search] WebView onLoadEnd for ${platform}, currentUrl: ${currentUrl}`,
+                `[Search] Skipping injection for ${platform}: URL mismatch (current: ${currentUrl}, search: ${searchUrl})`,
               );
-              // Only inject if the WebView is actually on the search URL
-              const searchUrl = searchUrls[platform];
-
-              const isMatch =
-                currentUrl &&
-                searchUrl &&
-                currentUrl.includes(searchUrl.split("?")[0]);
-
-              if (isMatch) {
-                injectDomParser(platform, "onLoadEnd");
-              } else {
-                console.log(
-                  `[Search] Skipping injection for ${platform}: URL mismatch (current: ${currentUrl}, search: ${searchUrl})`,
-                );
-              }
-            }}
-            userAgent={
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             }
-            incognito={false}
-            sharedCookiesEnabled={true}
-            thirdPartyCookiesEnabled={true}
-            geolocationEnabled={true}
-            injectedJavaScriptBeforeContentLoaded={undefined}
-            injectedJavaScript={undefined}
-            onLoadStart={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              currentWebViewUrlsRef.current[platform] = nativeEvent.url;
-              console.log(
-                `[Search] ${platform} WebView load start: ${nativeEvent.url}`,
-              );
+          }}
+          userAgent={
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          }
+          incognito={false}
+          sharedCookiesEnabled={true}
+          thirdPartyCookiesEnabled={true}
+          geolocationEnabled={true}
+          injectedJavaScriptBeforeContentLoaded={undefined}
+          injectedJavaScript={undefined}
+          onLoadStart={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            currentWebViewUrlsRef.current[platform] = nativeEvent.url;
+            console.log(
+              `[Search] ${platform} WebView load start: ${nativeEvent.url}`,
+            );
 
-              // Fallback: if onLoadEnd doesn't fire, inject after 10s anyway
-              setTimeout(() => {
-                const currentUrl = currentWebViewUrlsRef.current[platform];
-                const searchUrl = searchUrls[platform];
-                if (
-                  currentUrl &&
-                  searchUrl &&
-                  currentUrl.includes(searchUrl.split("?")[0])
-                ) {
-                  injectDomParser(platform, "loadStartFallback");
-                }
-              }, 10000);
-            }}
-            onNavigationStateChange={(navState) => {
-              currentWebViewUrlsRef.current[platform] = navState.url;
-            }}
-            onError={(e) => {
-              console.log(`[Search] ${platform} WebView error:`, e.nativeEvent);
-            }}
-            onHttpError={(e) => {
-              console.log(
-                `[Search] ${platform} HTTP error:`,
-                e.nativeEvent.statusCode,
-                e.nativeEvent.url,
-              );
-            }}
-          />
-        ))}
+            // Fallback: if onLoadEnd doesn't fire, inject after 10s anyway
+            setTimeout(() => {
+              const currentUrl = currentWebViewUrlsRef.current[platform];
+              const searchUrl = searchUrls[platform];
+              if (canInjectForPlatform(platform, currentUrl, searchUrl)) {
+                injectDomParser(platform, "loadStartFallback");
+              }
+            }, 10000);
+          }}
+          onNavigationStateChange={(navState) => {
+            currentWebViewUrlsRef.current[platform] = navState.url;
+          }}
+          onError={(e) => {
+            console.log(`[Search] ${platform} WebView error:`, e.nativeEvent);
+          }}
+          onHttpError={(e) => {
+            console.log(
+              `[Search] ${platform} HTTP error:`,
+              e.nativeEvent.statusCode,
+              e.nativeEvent.url,
+            );
+          }}
+        />
+      ))}
     </View>
   );
 };
@@ -1110,59 +1749,127 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    backgroundColor: COLORS.surface,
     paddingTop: 60,
-    paddingBottom: 20,
-    paddingHorizontal: SPACING.xl,
+    paddingBottom: 22,
+    paddingHorizontal: SPACING.lg,
     borderBottomWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.borderLight,
     ...SHADOWS.md,
     zIndex: 10,
   },
+  headerTopRow: {
+    marginBottom: SPACING.md,
+  },
   headerTitle: {
     ...FONTS.h1,
-    marginBottom: SPACING.lg,
+    fontSize: 42,
+    lineHeight: 44,
+    marginBottom: SPACING.xs,
+  },
+  headerSubtitle: {
+    ...FONTS.body,
+    color: COLORS.textSecondary,
   },
   loaderContainer: {
-    flex: 1,
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.lg,
+    paddingBottom: SPACING.md,
   },
   loaderStatusText: {
     ...FONTS.captionBold,
     color: COLORS.accent,
-    textAlign: 'center',
+    textAlign: "center",
   },
   loaderDetail: {
     marginTop: 2,
     ...FONTS.caption,
-    textAlign: 'center',
-    marginBottom: SPACING.lg,
+    textAlign: "center",
+    marginBottom: SPACING.sm,
+  },
+  progressTrack: {
+    height: 8,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.border,
+    overflow: "hidden",
+    marginHorizontal: SPACING.xl,
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.accent,
+  },
+  loaderHint: {
+    ...FONTS.caption,
+    color: COLORS.textSecondary,
+    textAlign: "center",
+    marginTop: SPACING.sm,
   },
   list: {
-    padding: SPACING.md,
+    padding: SPACING.lg,
     paddingBottom: 100, // space for tab bar
   },
+  hiddenWebView: {
+    position: "absolute",
+    width: 1,
+    height: 1,
+    opacity: 0,
+    left: -9999,
+    top: -9999,
+  },
   emptyState: {
+    paddingTop: SPACING.xl,
+    paddingHorizontal: SPACING.lg,
+  },
+  emptyCard: {
     alignItems: "center",
-    justifyContent: 'center',
-    paddingTop: 80,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.xl,
     paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.xxl,
+    ...SHADOWS.md,
+  },
+  emptyIconWrap: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(6, 182, 212, 0.14)",
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
   emptyTitle: {
     ...FONTS.h2,
     marginTop: SPACING.lg,
+    textAlign: "center",
   },
   emptySubtitle: {
     ...FONTS.body,
     marginTop: SPACING.sm,
     textAlign: "center",
   },
+  platformBadge: {
+    marginTop: SPACING.lg,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.xs,
+    backgroundColor: COLORS.cardAlt,
+  },
+  platformBadgeText: {
+    ...FONTS.captionBold,
+    color: COLORS.textAccent,
+  },
   warning: {
     flexDirection: "row",
     backgroundColor: COLORS.warningLight,
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderColor: "rgba(245, 158, 11, 0.3)",
     borderRadius: RADIUS.md,
     padding: SPACING.lg,
     marginTop: SPACING.xl,
@@ -1171,7 +1878,7 @@ const styles = StyleSheet.create({
   warningText: {
     flex: 1,
     marginLeft: SPACING.sm,
-    color: "#856404",
+    color: COLORS.warning,
     fontSize: 14,
   },
   suggestions: {
@@ -1179,30 +1886,139 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   suggestTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.text,
+    ...FONTS.bodyBold,
     marginBottom: SPACING.md,
+    color: COLORS.textSecondary,
   },
   chips: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: SPACING.sm,
+    justifyContent: "center",
   },
-  chip: {
-    backgroundColor: COLORS.primaryLight,
+  chipButton: {
+    backgroundColor: COLORS.cardAlt,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.full,
-    color: COLORS.primary,
-    fontSize: 14,
+    minWidth: 84,
+    alignItems: "center",
   },
-  hiddenWebView: {
-    width: 300,
-    height: 300,
-    opacity: 0.5,
-    position: "absolute",
-    top: -400,
+  chip: {
+    color: COLORS.textSecondary,
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  loaderContainer: {
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.lg,
+    paddingBottom: SPACING.md,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    marginBottom: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  loaderStatusText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: COLORS.accent,
+    textAlign: "center",
+    letterSpacing: 0.3,
+  },
+  loaderTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+  },
+  loaderDetail: {
+    marginTop: 4,
+    fontSize: 12,
+    color: COLORS.textSecondary,
+    textAlign: "center",
+    marginBottom: SPACING.md,
+  },
+  platformStatusRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: SPACING.md,
+    gap: 6,
+  },
+  platformStatusCard: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: 4,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.card,
+  },
+  platformStatusIcon: {
+    marginBottom: 3,
+  },
+  platformStatusName: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: COLORS.textSecondary,
+    textAlign: "center",
+  },
+  platformStatusCount: {
+    fontSize: 10,
+    color: COLORS.textTertiary,
+    marginTop: 2,
+    textAlign: "center",
+  },
+  progressTrack: {
+    height: 5,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.border,
+    overflow: "hidden",
+    marginBottom: SPACING.sm,
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.accent,
+  },
+  tipBox: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.sm,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: COLORS.divider,
+    marginTop: 2,
+  },
+  tipLabel: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#F59E0B",
+    marginRight: 4,
+    flexShrink: 0,
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
+  },
+  tipIcon: {
+    marginRight: 4,
+    marginTop: 1,
+  },
+  tipText: {
+    fontSize: 11,
+    color: COLORS.textSecondary,
+    flex: 1,
+    lineHeight: 16,
+  },
+  loaderHint: {
+    fontSize: 11,
+    color: COLORS.textSecondary,
+    textAlign: "center",
+    marginTop: SPACING.xs,
   },
 });
 

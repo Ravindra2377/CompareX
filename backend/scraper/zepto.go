@@ -29,7 +29,12 @@ func (z *ZeptoScraper) Search(ctx context.Context, query string, lat, lng float6
 
 	baseURL := cfg.BaseURL
 	if baseURL == "" {
-		baseURL = "https://api.zepto.co.in/api/v1/search"
+		baseURL = "https://api.zepto.co.in" // Default base URL
+	}
+
+	apiURL := baseURL
+	if !bytes.Contains([]byte(baseURL), []byte("/api/v1/search")) {
+		apiURL = fmt.Sprintf("%s/api/v1/search", baseURL)
 	}
 
 	payload := map[string]interface{}{
@@ -58,7 +63,7 @@ func (z *ZeptoScraper) Search(ctx context.Context, query string, lat, lng float6
 
 	bodyData, _ := json.Marshal(payload)
 
-	req, err := http.NewRequestWithContext(ctx, "POST", baseURL, bytes.NewReader(bodyData))
+	req, err := http.NewRequestWithContext(ctx, "POST", apiURL, bytes.NewReader(bodyData))
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +110,7 @@ func (z *ZeptoScraper) Search(ctx context.Context, query string, lat, lng float6
 
 	if resp.StatusCode != 200 {
 		// Log more details for debugging
-		log.Printf("🔴 Zepto API error: status=%d, endpoint=%s", resp.StatusCode, baseURL)
+		log.Printf("🔴 Zepto API error: status=%d, endpoint=%s", resp.StatusCode, apiURL)
 		if resp.StatusCode == 404 {
 			log.Printf("💡 Zepto requires authentication. Link your account in the app's Accounts tab.")
 		}
@@ -137,21 +142,47 @@ func (z *ZeptoScraper) Search(ctx context.Context, query string, lat, lng float6
 			name := getString(variant, "name")
 			id := getString(variant, "id")
 			mrp := getFloat(variant, "mrp") / 100
-			price := getFloat(variant, "sellingPrice") / 100
-			slug := getString(variant, "slug")
 
+			// Robust price extraction: Zepto sometimes swaps sellingPrice with discount amount
+			sp := getFloat(variant, "sellingPrice") / 100
+			dsp := getFloat(variant, "discountedSellingPrice") / 100
+
+			log.Printf("DEBUG: %s | mrp: %.2f, sellingPrice: %.2f, discountedSellingPrice: %.2f", name, mrp, sp, dsp)
+
+			price := sp
+			// Heuristic: If sellingPrice is very low compared to MRP, it's likely a discount amount
+			// unless discountedSellingPrice is anche validly small.
+			if dsp > 0 && (sp < mrp*0.3 || sp < 10) {
+				price = dsp
+			} else if sp == 0 && dsp > 0 {
+				price = dsp
+			}
+
+			// Capture discount percentage/label
+			discountInfo := ""
+			if mrp > price {
+				discountPct := int((mrp - price) / mrp * 100)
+				if discountPct > 0 {
+					discountInfo = fmt.Sprintf("%d%% OFF", discountPct)
+				}
+			}
+
+			slug := getString(variant, "slug")
 			deepLink := fmt.Sprintf("https://zeptonow.com/product/%s/%s", slug, id)
 
 			if name != "" && price > 0 {
 				l := models.PlatformListing{
-					Platform:     "Zepto",
-					ProductName:  name,
-					Price:        price,
-					MRP:          mrp,
-					InStock:      getBool(variant, "isAvailable"),
-					DeliveryTime: "10 mins",
-					DeepLink:     deepLink,
-					ScrapedAt:    time.Now(),
+					Platform:       "Zepto",
+					ProductName:    name,
+					Price:          price,
+					MRP:            mrp,
+					Discount:       discountInfo,
+					InStock:        getBool(variant, "isAvailable"),
+					DeliveryTime:   "10 mins",
+					DeliveryCharge: 15.0, // Default base delivery for Zepto
+					Rating:         getFloat(variant, "rating"),
+					DeepLink:       deepLink,
+					ScrapedAt:      time.Now(),
 				}
 				listings = append(listings, l)
 			}

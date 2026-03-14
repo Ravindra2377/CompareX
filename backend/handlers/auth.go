@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"comparex/database"
@@ -29,6 +30,21 @@ func Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
 
+	if database.DB == nil {
+		return c.JSON(http.StatusServiceUnavailable, map[string]string{"error": "Database unavailable"})
+	}
+
+	req.Email = strings.TrimSpace(strings.ToLower(req.Email))
+	req.Password = strings.TrimSpace(req.Password)
+
+	if req.Email == "" || req.Password == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Email and password are required"})
+	}
+
+	if len(req.Password) < 6 {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Password must be at least 6 characters"})
+	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not hash password"})
@@ -40,6 +56,11 @@ func Register(c echo.Context) error {
 	}
 
 	if result := database.DB.Create(&user); result.Error != nil {
+		errMsg := strings.ToLower(result.Error.Error())
+		if strings.Contains(errMsg, "duplicate key") || strings.Contains(errMsg, "unique constraint") {
+			return c.JSON(http.StatusConflict, map[string]string{"error": "Email already registered"})
+		}
+
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not create user"})
 	}
 
@@ -50,6 +71,16 @@ func Login(c echo.Context) error {
 	req := new(LoginRequest)
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	}
+
+	if database.DB == nil {
+		return c.JSON(http.StatusServiceUnavailable, map[string]string{"error": "Database unavailable"})
+	}
+
+	req.Email = strings.TrimSpace(strings.ToLower(req.Email))
+
+	if req.Email == "" || req.Password == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Email and password are required"})
 	}
 
 	var user models.User

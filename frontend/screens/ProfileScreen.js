@@ -1,26 +1,47 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { AuthContext } from '../context/AuthContext';
-import { COLORS, SPACING, RADIUS, FONTS } from '../config/theme';
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../context/AuthContext";
+import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
 
 const STATS = [
-  { label: 'Searches', value: '24' },
-  { label: 'Saved', value: '3' },
-  { label: 'Savings', value: '₹156' },
+  { label: "Searches", value: "24" },
+  { label: "Saved", value: "3" },
+  { label: "Savings", value: "₹156" },
 ];
 
 const MENU = [
-  { icon: 'link-outline', label: 'Link Accounts', subtitle: 'Connect Blinkit, Zepto, etc.' },
-  { icon: 'notifications-outline', label: 'Price Alerts', subtitle: '3 active alerts' },
-  { icon: 'time-outline', label: 'Search History', subtitle: 'Recent searches' },
-  { icon: 'settings-outline', label: 'Settings', subtitle: 'App preferences' },
-  { icon: 'help-circle-outline', label: 'Help & Support', subtitle: 'FAQ and contact' },
+  {
+    icon: "link-outline",
+    label: "Link Accounts",
+    subtitle: "Connect Blinkit, Zepto, etc.",
+  },
+  {
+    icon: "notifications-outline",
+    label: "Price Alerts",
+    subtitle: "3 active alerts",
+  },
+  {
+    icon: "time-outline",
+    label: "Search History",
+    subtitle: "Recent searches",
+  },
+  { icon: "settings-outline", label: "Settings", subtitle: "App preferences" },
+  {
+    icon: "help-circle-outline",
+    label: "Help & Support",
+    subtitle: "FAQ and contact",
+  },
 ];
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const { logout } = useContext(AuthContext);
@@ -28,7 +49,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
@@ -63,28 +84,40 @@ const ProfileScreen = () => {
         {/* Menu */}
         <View style={styles.menuSection}>
           {MENU.map((item) => (
-            <TouchableOpacity 
-              key={item.label} 
-              style={styles.menuItem} 
+            <TouchableOpacity
+              key={item.label}
+              style={styles.menuItem}
               activeOpacity={0.6}
               onPress={() => {
-                if (item.label === 'Link Accounts') {
-                  navigation.navigate('Accounts');
+                if (item.label === "Link Accounts") {
+                  navigation.navigate("Accounts");
                 }
               }}
             >
-              <Ionicons name={item.icon} size={20} color={COLORS.textSecondary} />
+              <Ionicons
+                name={item.icon}
+                size={20}
+                color={COLORS.textSecondary}
+              />
               <View style={styles.menuInfo}>
                 <Text style={styles.menuLabel}>{item.label}</Text>
                 <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color={COLORS.textTertiary} />
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={COLORS.textTertiary}
+              />
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Logout */}
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout} activeOpacity={0.6}>
+        <TouchableOpacity
+          style={styles.logoutBtn}
+          onPress={logout}
+          activeOpacity={0.6}
+        >
           <Ionicons name="log-out-outline" size={20} color={COLORS.error} />
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>
@@ -106,10 +139,11 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.divider,
+    backgroundColor: COLORS.surface,
   },
   userSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: SPACING.xl,
     paddingVertical: SPACING.xxl,
     gap: SPACING.lg,
@@ -121,8 +155,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     borderWidth: 1,
     borderColor: COLORS.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   avatarText: {
     ...FONTS.h2,
@@ -139,17 +173,18 @@ const styles = StyleSheet.create({
     ...FONTS.caption,
   },
   statsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: COLORS.divider,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.cardAlt,
     marginBottom: SPACING.xxl,
   },
   statItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   statValue: {
     ...FONTS.h2,
@@ -167,11 +202,15 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxl,
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    paddingHorizontal: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.cardAlt,
+    marginBottom: SPACING.sm,
     gap: SPACING.lg,
   },
   menuInfo: {
@@ -185,9 +224,9 @@ const styles = StyleSheet.create({
     ...FONTS.caption,
   },
   logoutBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
     borderWidth: 1,

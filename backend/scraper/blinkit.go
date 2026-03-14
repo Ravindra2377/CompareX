@@ -10,8 +10,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 )
+
+var blinkitDebugLogging = os.Getenv("COMPAREX_DEBUG_SCRAPERS") == "1"
 
 type BlinkitScraper struct {
 	client *http.Client
@@ -27,13 +30,13 @@ func (b *BlinkitScraper) Name() string { return "Blinkit" }
 
 func (b *BlinkitScraper) Search(ctx context.Context, query string, lat, lng float64, userTokens map[string]string) ([]models.PlatformListing, error) {
 	// Log what tokens we received
-	if userTokens != nil && len(userTokens) > 0 {
+	if blinkitDebugLogging && userTokens != nil && len(userTokens) > 0 {
 		tokenKeys := make([]string, 0, len(userTokens))
 		for k := range userTokens {
 			tokenKeys = append(tokenKeys, k)
 		}
 		log.Printf("🔵 Blinkit received tokens: %v", tokenKeys)
-	} else {
+	} else if blinkitDebugLogging {
 		log.Printf("🔵 Blinkit: No tokens provided")
 	}
 
@@ -126,11 +129,13 @@ func (b *BlinkitScraper) Search(ctx context.Context, query string, lat, lng floa
 	req.Header.Set("lon", fmt.Sprintf("%f", lng))
 
 	// Log what tokens/headers we're using
-	log.Printf("🔵 Blinkit Request Headers:")
-	log.Printf("  - Cookie: %s", maskString(req.Header.Get("Cookie")))
-	log.Printf("  - access_token: %s", maskString(req.Header.Get("access_token")))
-	log.Printf("  - auth_key: %s", maskString(req.Header.Get("auth_key")))
-	log.Printf("  - lat/lon: %f, %f", lat, lng)
+	if blinkitDebugLogging {
+		log.Printf("🔵 Blinkit Request Headers:")
+		log.Printf("  - Cookie: %s", maskString(req.Header.Get("Cookie")))
+		log.Printf("  - access_token: %s", maskString(req.Header.Get("access_token")))
+		log.Printf("  - auth_key: %s", maskString(req.Header.Get("auth_key")))
+		log.Printf("  - lat/lon: %f, %f", lat, lng)
+	}
 
 	resp, err := b.client.Do(req)
 	if err != nil {
@@ -178,20 +183,32 @@ func (b *BlinkitScraper) Search(ctx context.Context, query string, lat, lng floa
 		deepLink := fmt.Sprintf("https://blinkit.com/prn/product/%s", pid)
 
 		if name != "" && price > 0 {
+			discountInfo := ""
+			if mrp > price {
+				discountPct := int((mrp - price) / mrp * 100)
+				if discountPct > 0 {
+					discountInfo = fmt.Sprintf("%d%% OFF", discountPct)
+				}
+			}
+
 			l := models.PlatformListing{
-				Platform:     "Blinkit",
-				ProductName:  name,
-				Price:        price,
-				MRP:          mrp,
-				InStock:      inStock,
-				DeliveryTime: "10-15 mins",
-				DeepLink:     deepLink,
-				ScrapedAt:    time.Now(),
+				Platform:       "Blinkit",
+				ProductName:    name,
+				Price:          price,
+				MRP:            mrp,
+				Discount:       discountInfo,
+				InStock:        inStock,
+				DeliveryTime:   "10-15 mins",
+				DeliveryCharge: 15.0, // Default base delivery for Blinkit
+				DeepLink:       deepLink,
+				ScrapedAt:      time.Now(),
 			}
 			listings = append(listings, l)
 		}
 	}
 
-	log.Printf("✅ Blinkit API found %d items", len(listings))
+	if blinkitDebugLogging {
+		log.Printf("✅ Blinkit API found %d items", len(listings))
+	}
 	return listings, nil
 }

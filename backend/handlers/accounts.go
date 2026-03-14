@@ -8,6 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const deviceTokenTTL = 24 * time.Hour
+
 // TokenStore manages user authentication tokens per device
 type TokenStore struct {
 	mu    sync.RWMutex
@@ -22,6 +24,14 @@ type DeviceTokens struct {
 
 var Store = &TokenStore{
 	byKey: make(map[string]*DeviceTokens),
+}
+
+func pruneExpiredLocked(now time.Time) {
+	for key, deviceTokens := range Store.byKey {
+		if now.Sub(deviceTokens.LastUsedAt) > deviceTokenTTL {
+			delete(Store.byKey, key)
+		}
+	}
 }
 
 // deviceKey generates a unique identifier for the device
@@ -62,9 +72,11 @@ func ConnectAccount(c echo.Context) error {
 	}
 
 	key := deviceKey(c)
+	now := time.Now()
 
 	Store.mu.Lock()
 	defer Store.mu.Unlock()
+	pruneExpiredLocked(now)
 
 	// Get or create device tokens
 	deviceTokens, exists := Store.byKey[key]
@@ -77,8 +89,8 @@ func ConnectAccount(c echo.Context) error {
 
 	// Store platform tokens
 	deviceTokens.Platforms[req.Platform] = req.Tokens
-	deviceTokens.UpdatedAt = time.Now()
-	deviceTokens.LastUsedAt = time.Now()
+	deviceTokens.UpdatedAt = now
+	deviceTokens.LastUsedAt = now
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status":   "connected",
@@ -98,13 +110,19 @@ func DisconnectAccount(c echo.Context) error {
 	}
 
 	key := deviceKey(c)
+	now := time.Now()
 
 	Store.mu.Lock()
 	defer Store.mu.Unlock()
+	pruneExpiredLocked(now)
 
 	if deviceTokens, exists := Store.byKey[key]; exists {
 		delete(deviceTokens.Platforms, platform)
-		deviceTokens.UpdatedAt = time.Now()
+		deviceTokens.UpdatedAt = now
+		deviceTokens.LastUsedAt = now
+		if len(deviceTokens.Platforms) == 0 {
+			delete(Store.byKey, key)
+		}
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
@@ -117,10 +135,11 @@ func DisconnectAccount(c echo.Context) error {
 // GET /accounts/status
 func GetAccountStatus(c echo.Context) error {
 	key := deviceKey(c)
+	now := time.Now()
 
-	Store.mu.RLock()
-	defer Store.mu.RUnlock()
-
+	Store.mu.Lock()
+	defer Store.mu.Unlock()
+	pruneExpiredLocked(now)
 	deviceTokens, exists := Store.byKey[key]
 	if !exists {
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -128,6 +147,7 @@ func GetAccountStatus(c echo.Context) error {
 			"count":     0,
 		})
 	}
+	deviceTokens.LastUsedAt = now
 
 	// Build list of connected platforms
 	connected := make([]string, 0, len(deviceTokens.Platforms))
@@ -162,9 +182,11 @@ func BulkConnectAccounts(c echo.Context) error {
 	}
 
 	key := deviceKey(c)
+	now := time.Now()
 
 	Store.mu.Lock()
 	defer Store.mu.Unlock()
+	pruneExpiredLocked(now)
 
 	// Get or create device tokens
 	deviceTokens, exists := Store.byKey[key]
@@ -184,8 +206,8 @@ func BulkConnectAccounts(c echo.Context) error {
 		}
 	}
 
-	deviceTokens.UpdatedAt = time.Now()
-	deviceTokens.LastUsedAt = time.Now()
+	deviceTokens.UpdatedAt = now
+	deviceTokens.LastUsedAt = now
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status":    "connected",
@@ -197,21 +219,17 @@ func BulkConnectAccounts(c echo.Context) error {
 // GetTokensForRequest retrieves stored tokens for the current device
 func GetTokensForRequest(c echo.Context) map[string]map[string]string {
 	key := deviceKey(c)
+	now := time.Now()
 
-	Store.mu.RLock()
-	defer Store.mu.RUnlock()
-
+	Store.mu.Lock()
+	defer Store.mu.Unlock()
+	pruneExpiredLocked(now)
 	deviceTokens, exists := Store.byKey[key]
 	if !exists {
 		return nil
 	}
 
-	// Update last used timestamp
-	go func() {
-		Store.mu.Lock()
-		deviceTokens.LastUsedAt = time.Now()
-		Store.mu.Unlock()
-	}()
+	deviceTokens.LastUsedAt = now
 
 	// Return a copy to prevent external modifications
 	result := make(map[string]map[string]string)
