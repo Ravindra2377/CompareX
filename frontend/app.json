@@ -24,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "05567090-ee66-46d5-af40-f8cb5ce9ca56"
+      }
+    },
+    "owner": "chethu"
   }
 }
