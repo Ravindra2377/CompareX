@@ -13,8 +13,8 @@ jobs:
   build-android-apk:
     runs-on: ubuntu-latest
     env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-      EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN || vars.EXPO_TOKEN }}
+      EAS_TOKEN: ${{ secrets.EAS_TOKEN || vars.EAS_TOKEN }}
     defaults:
       run:
         working-directory: frontend
@@ -51,11 +51,11 @@ jobs:
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN != '' && secrets.EXPO_TOKEN || secrets.EAS_TOKEN }}
+          token: ${{ secrets.EXPO_TOKEN || vars.EXPO_TOKEN || secrets.EAS_TOKEN || vars.EAS_TOKEN }}
 
       - name: Build APK (EAS Cloud)
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN != '' && secrets.EXPO_TOKEN || secrets.EAS_TOKEN }}
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN || vars.EXPO_TOKEN || secrets.EAS_TOKEN || vars.EAS_TOKEN }}
         run: eas build --platform android --profile preview --non-interactive --wait
 
       - name: Build artifact hint
