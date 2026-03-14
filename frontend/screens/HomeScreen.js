@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -7,253 +7,229 @@ import {
   TouchableOpacity,
   StatusBar,
   Animated,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
-import { COLORS, SPACING, RADIUS, SHADOWS, FONTS } from "../config/theme";
+import GlassCard from "../components/GlassCard";
+import {
+  COLORS,
+  SPACING,
+  RADIUS,
+  SHADOWS,
+  FONTS,
+} from "../config/theme";
+
+const { width: SCREEN_W } = Dimensions.get("window");
+const COL_GAP = SPACING.sm;
+const H_PADDING = SPACING.lg;
+const GRID_W = SCREEN_W - H_PADDING * 2;
+
+// Bento tile sizes
+const TILE_LARGE = (GRID_W - COL_GAP) / 2;
+const TILE_SMALL = (GRID_W - COL_GAP) / 2;
 
 const CATEGORIES = [
-  { id: "1", name: "Eggs", icon: "egg-outline", query: "eggs" },
-  { id: "2", name: "Milk", icon: "water-outline", query: "milk" },
-  { id: "3", name: "Bread", icon: "pizza-outline", query: "bread" },
-  { id: "4", name: "Rice", icon: "leaf-outline", query: "rice" },
-  { id: "5", name: "Chicken", icon: "restaurant-outline", query: "chicken" },
-  { id: "6", name: "Atta", icon: "bag-outline", query: "atta" },
-  { id: "7", name: "Oil", icon: "flask-outline", query: "oil" },
-  { id: "8", name: "Snacks", icon: "fast-food-outline", query: "chips" },
+  { id: "1", name: "Eggs", icon: "egg-outline", query: "eggs", accent: COLORS.warning },
+  { id: "2", name: "Milk", icon: "water-outline", query: "milk", accent: COLORS.accent },
+  { id: "3", name: "Bread", icon: "pizza-outline", query: "bread", accent: "#F97316" },
+  { id: "4", name: "Rice", icon: "leaf-outline", query: "rice", accent: COLORS.savings },
+  { id: "5", name: "Chicken", icon: "restaurant-outline", query: "chicken", accent: "#EF4444" },
+  { id: "6", name: "Atta", icon: "bag-outline", query: "atta", accent: "#E2751C" },
+  { id: "7", name: "Oil", icon: "flask-outline", query: "oil", accent: "#EAB308" },
+  { id: "8", name: "Snacks", icon: "fast-food-outline", query: "chips", accent: "#A855F7" },
 ];
 
 const TRENDING = [
-  {
-    id: "1",
-    name: "White Eggs (10 pcs)",
-    best: "₹79",
-    platform: "Zepto",
-    saving: "₹16",
-  },
-  {
-    id: "2",
-    name: "Amul Butter 500g",
-    best: "₹265",
-    platform: "Zepto",
-    saving: "₹15",
-  },
-  {
-    id: "3",
-    name: "Aashirvaad Atta 5kg",
-    best: "₹275",
-    platform: "BigBasket",
-    saving: "₹24",
-  },
-  {
-    id: "4",
-    name: "Tata Tea Gold 500g",
-    best: "₹275",
-    platform: "Blinkit",
-    saving: "₹20",
-  },
+  { id: "1", name: "White Eggs (10 pcs)", best: "₹79", platform: "Zepto", saving: "₹16", accent: COLORS.platformZepto },
+  { id: "2", name: "Amul Butter 500g", best: "₹265", platform: "Zepto", saving: "₹15", accent: COLORS.platformZepto },
+  { id: "3", name: "Aashirvaad Atta 5kg", best: "₹275", platform: "BigBasket", saving: "₹24", accent: COLORS.platformBigBasket },
+  { id: "4", name: "Tata Tea Gold 500g", best: "₹275", platform: "Blinkit", saving: "₹20", accent: COLORS.platformBlinkit },
 ];
+
+// --- Sub-components ---
+
+const StatTile = ({ value, label, highlight }) => (
+  <View style={styles.statTile}>
+    <Text style={[styles.statValue, highlight && { color: COLORS.savings }]}>{value}</Text>
+    <Text style={styles.statLabel}>{label}</Text>
+  </View>
+);
+
+const BentoCategory = ({ cat, navigation, isLarge }) => (
+  <TouchableOpacity
+    activeOpacity={0.75}
+    style={[styles.bentoTile, isLarge ? styles.bentoLarge : styles.bentoSmall]}
+    onPress={() => navigation.navigate("Search", { query: cat.query })}
+  >
+    <LinearGradient
+      colors={[`${cat.accent}22`, `${cat.accent}08`]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={StyleSheet.absoluteFill}
+    />
+    <View
+      style={[
+        styles.bentoIconWrap,
+        { backgroundColor: `${cat.accent}22`, borderColor: `${cat.accent}44` },
+      ]}
+    >
+      <Ionicons name={cat.icon} size={isLarge ? 28 : 22} color={cat.accent} />
+    </View>
+    <Text style={[styles.bentoLabel, isLarge && styles.bentoLabelLarge]}>
+      {cat.name}
+    </Text>
+  </TouchableOpacity>
+);
+
+const TrendingCard = ({ item, navigation }) => (
+  <TouchableOpacity
+    style={styles.trendCard}
+    activeOpacity={0.75}
+    onPress={() => navigation.navigate("Search", { query: item.name.split(" (")[0] })}
+  >
+    <LinearGradient
+      colors={[`${item.accent}18`, `${item.accent}06`]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={[StyleSheet.absoluteFill, { borderRadius: RADIUS.lg }]}
+    />
+    <View style={[styles.trendDot, { backgroundColor: item.accent }]} />
+    <View style={{ flex: 1 }}>
+      <Text style={styles.trendName} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.trendMeta}>{item.platform}</Text>
+    </View>
+    <View style={styles.trendRight}>
+      <Text style={[styles.trendPrice, { color: item.accent }]}>{item.best}</Text>
+      <Text style={styles.trendSave}>save {item.saving}</Text>
+    </View>
+  </TouchableOpacity>
+);
+
+// --- Main Screen ---
 
 const HomeScreen = ({ navigation }) => {
   const { logout } = useContext(AuthContext);
 
-  const fadeAnimHeader = React.useRef(new Animated.Value(0)).current;
-  const fadeAnimCats = React.useRef(new Animated.Value(0)).current;
-  const fadeAnimTrend = React.useRef(new Animated.Value(0)).current;
+  const fadeHeader = React.useRef(new Animated.Value(0)).current;
+  const fadeBento = React.useRef(new Animated.Value(0)).current;
+  const fadeTrend = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
-    Animated.stagger(150, [
-      Animated.timing(fadeAnimHeader, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnimCats, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnimTrend, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
+    Animated.stagger(120, [
+      Animated.timing(fadeHeader, { toValue: 1, duration: 480, useNativeDriver: true }),
+      Animated.timing(fadeBento, { toValue: 1, duration: 480, useNativeDriver: true }),
+      Animated.timing(fadeTrend, { toValue: 1, duration: 480, useNativeDriver: true }),
     ]).start();
-  }, [fadeAnimHeader, fadeAnimCats, fadeAnimTrend]);
+  }, []);
+
+  const slideUp = (anim) => ({
+    opacity: anim,
+    transform: [
+      {
+        translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }),
+      },
+    ],
+  });
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header with Gradient Background */}
-        <Animated.View
-          style={{
-            opacity: fadeAnimHeader,
-            transform: [
-              {
-                translateY: fadeAnimHeader.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-20, 0],
-                }),
-              },
-            ],
-          }}
-        >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* ── Hero Header ── */}
+        <Animated.View style={slideUp(fadeHeader)}>
           <LinearGradient
             colors={COLORS.gradientHero}
             start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.headerGradient}
+            end={{ x: 0.5, y: 1 }}
+            style={styles.hero}
           >
-            <View style={styles.headerTop}>
+            {/* Top bar */}
+            <View style={styles.heroTop}>
               <View>
-                <Text style={styles.greeting}>Smart Savings</Text>
-                <Text style={styles.title}>CompareX</Text>
+                <Text style={styles.heroLabel}>SMART SAVINGS</Text>
+                <Text style={styles.heroTitle}>CompareX</Text>
               </View>
               <TouchableOpacity style={styles.avatarBtn} onPress={logout}>
-                <Ionicons
-                  name="log-out-outline"
-                  size={20}
-                  color={COLORS.textPrimary}
-                />
+                <Ionicons name="log-out-outline" size={19} color={COLORS.textPrimary} />
               </TouchableOpacity>
             </View>
 
-            {/* Search Bar - Lifted into the header area */}
+            {/* Glowing accent strip */}
+            <View style={styles.accentStrip} />
+
+            {/* Search CTA */}
             <TouchableOpacity
-              style={styles.searchBar}
+              style={styles.searchCta}
               activeOpacity={0.8}
               onPress={() => navigation.navigate("Search")}
             >
-              <Ionicons
-                name="search-outline"
-                size={20}
-                color={COLORS.textSecondary}
-              />
-              <Text style={styles.searchPlaceholder}>
-                Search eggs, milk, bread...
-              </Text>
-              <View style={styles.searchIconBg}>
-                <Ionicons
-                  name="arrow-forward"
-                  size={16}
-                  color={COLORS.textInverse}
-                />
+              <View style={styles.searchCtaIcon}>
+                <Ionicons name="search-outline" size={18} color={COLORS.textSecondary} />
+              </View>
+              <Text style={styles.searchCtaText}>Search eggs, milk, bread…</Text>
+              <View style={styles.searchCtaArrow}>
+                <Ionicons name="arrow-forward" size={15} color={COLORS.textInverse} />
               </View>
             </TouchableOpacity>
+
+            {/* Stat tiles */}
+            <View style={styles.statsRow}>
+              <StatTile value="3" label="Platforms" />
+              <View style={styles.statDivider} />
+              <StatTile value="200+" label="Products" />
+              <View style={styles.statDivider} />
+              <StatTile value="30%" label="Max Savings" highlight />
+            </View>
           </LinearGradient>
         </Animated.View>
 
-        {/* Quick Info */}
-        <View style={styles.infoRow}>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoValue}>6</Text>
-            <Text style={styles.infoLabel}>Platforms</Text>
-          </View>
-          <View style={styles.infoDivider} />
-          <View style={styles.infoItem}>
-            <Text style={styles.infoValue}>200+</Text>
-            <Text style={styles.infoLabel}>Products</Text>
-          </View>
-          <View style={styles.infoDivider} />
-          <View style={styles.infoItem}>
-            <Text style={[styles.infoValue, { color: COLORS.savings }]}>
-              30%
-            </Text>
-            <Text style={styles.infoLabel}>Max savings</Text>
-          </View>
-        </View>
+        {/* ── Bento Grid ── */}
+        <Animated.View style={[styles.section, slideUp(fadeBento)]}>
+          <Text style={styles.sectionTitle}>Browse</Text>
+          <View style={styles.bentoGrid}>
+            {/* Row 1: Large | Small */}
+            <View style={styles.bentoRow}>
+              <BentoCategory cat={CATEGORIES[0]} navigation={navigation} isLarge />
+              <View style={styles.bentoColSmall}>
+                <BentoCategory cat={CATEGORIES[1]} navigation={navigation} />
+                <View style={{ height: COL_GAP }} />
+                <BentoCategory cat={CATEGORIES[2]} navigation={navigation} />
+              </View>
+            </View>
 
-        {/* Categories */}
-        <Animated.View
-          style={[
-            styles.section,
-            {
-              opacity: fadeAnimCats,
-              transform: [
-                {
-                  translateY: fadeAnimCats.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [20, 0],
-                  }),
-                },
-              ],
-            },
-          ]}
-        >
-          <Text style={styles.sectionTitle}>Categories</Text>
-          <View style={styles.categoryGrid}>
-            {CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat.id}
-                style={styles.categoryItem}
-                activeOpacity={0.6}
-                onPress={() =>
-                  navigation.navigate("Search", { query: cat.query })
-                }
-              >
-                <View style={styles.categoryIcon}>
-                  <Ionicons
-                    name={cat.icon}
-                    size={22}
-                    color={COLORS.textSecondary}
-                  />
-                </View>
-                <Text style={styles.categoryName}>{cat.name}</Text>
-              </TouchableOpacity>
-            ))}
+            {/* Row 2: Small | Large */}
+            <View style={[styles.bentoRow, { marginTop: COL_GAP }]}>
+              <View style={styles.bentoColSmall}>
+                <BentoCategory cat={CATEGORIES[3]} navigation={navigation} />
+                <View style={{ height: COL_GAP }} />
+                <BentoCategory cat={CATEGORIES[4]} navigation={navigation} />
+              </View>
+              <BentoCategory cat={CATEGORIES[5]} navigation={navigation} isLarge />
+            </View>
+
+            {/* Row 3: two equal */}
+            <View style={[styles.bentoRow, { marginTop: COL_GAP }]}>
+              <BentoCategory cat={CATEGORIES[6]} navigation={navigation} isLarge />
+              <BentoCategory cat={CATEGORIES[7]} navigation={navigation} isLarge />
+            </View>
           </View>
         </Animated.View>
 
-        {/* Trending */}
-        <Animated.View
-          style={[
-            styles.section,
-            {
-              opacity: fadeAnimTrend,
-              transform: [
-                {
-                  translateY: fadeAnimTrend.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [20, 0],
-                  }),
-                },
-              ],
-            },
-          ]}
-        >
+        {/* ── Trending Price Drops ── */}
+        <Animated.View style={[styles.section, slideUp(fadeTrend)]}>
           <Text style={styles.sectionTitle}>Trending Price Drops</Text>
           {TRENDING.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.trendingItem}
-              activeOpacity={0.6}
-              onPress={() =>
-                navigation.navigate("Search", {
-                  query: item.name.split(" (")[0],
-                })
-              }
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={styles.trendingName} numberOfLines={1}>
-                  {item.name}
-                </Text>
-                <Text style={styles.trendingMeta}>
-                  Best on {item.platform} · Save {item.saving}
-                </Text>
-              </View>
-              <Text style={styles.trendingPrice}>{item.best}</Text>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color={COLORS.textTertiary}
-              />
-            </TouchableOpacity>
+            <TrendingCard key={item.id} item={item} navigation={navigation} />
           ))}
         </Animated.View>
 
+        {/* Bottom padding for floating nav */}
         <View style={{ height: 100 }} />
       </ScrollView>
     </View>
@@ -265,60 +241,78 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  headerGradient: {
+  scrollContent: {
+    paddingBottom: 0,
+  },
+
+  // ── Hero ──
+  hero: {
     paddingTop: 60,
-    paddingHorizontal: SPACING.xl,
-    paddingBottom: SPACING.xxxl,
-    borderBottomLeftRadius: RADIUS.xl,
-    borderBottomRightRadius: RADIUS.xl,
+    paddingHorizontal: H_PADDING,
+    paddingBottom: SPACING.xl,
+    borderBottomLeftRadius: RADIUS.xxl,
+    borderBottomRightRadius: RADIUS.xxl,
     marginBottom: SPACING.xl,
     ...SHADOWS.md,
   },
-  headerTop: {
+  heroTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: SPACING.xl,
+    marginBottom: SPACING.lg,
   },
-  greeting: {
-    ...FONTS.caption,
+  heroLabel: {
+    ...FONTS.badge,
     color: COLORS.textAccent,
+    letterSpacing: 1.4,
     marginBottom: 4,
-    textTransform: "uppercase",
-    letterSpacing: 1,
   },
-  title: {
+  heroTitle: {
     ...FONTS.h1,
   },
   avatarBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "rgba(2, 6, 23, 0.5)",
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "rgba(0, 0, 0, 0.60)",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: COLORS.borderLight,
   },
-  // Search
-  searchBar: {
+  accentStrip: {
+    height: 1,
+    backgroundColor: "rgba(6, 182, 212, 0.25)",
+    marginBottom: SPACING.lg,
+    borderRadius: 1,
+  },
+  searchCta: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: SPACING.md,
-    minHeight: 52,
-    backgroundColor: "rgba(2, 6, 23, 0.55)",
+    height: 52,
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
     borderRadius: RADIUS.full,
     borderWidth: 1,
     borderColor: COLORS.borderLight,
+    paddingHorizontal: SPACING.sm,
+    marginBottom: SPACING.xl,
     gap: SPACING.sm,
     ...SHADOWS.sm,
   },
-  searchPlaceholder: {
+  searchCtaIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(53,80,112,0.35)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  searchCtaText: {
     ...FONTS.body,
     flex: 1,
-    color: COLORS.textSecondary,
+    color: COLORS.textTertiary,
   },
-  searchIconBg: {
+  searchCtaArrow: {
     backgroundColor: COLORS.accent,
     width: 32,
     height: 32,
@@ -326,96 +320,131 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  // Info Row
-  infoRow: {
+  statsRow: {
     flexDirection: "row",
-    marginHorizontal: SPACING.lg,
-    marginBottom: SPACING.xxl,
-    paddingVertical: SPACING.lg,
-    backgroundColor: COLORS.card,
+    backgroundColor: "rgba(0, 0, 0, 0.60)",
     borderRadius: RADIUS.lg,
-    ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.glassBorder,
+    paddingVertical: SPACING.lg,
   },
-  infoItem: {
+  statTile: {
     flex: 1,
     alignItems: "center",
   },
-  infoValue: {
+  statValue: {
     ...FONTS.h2,
-    color: COLORS.textPrimary,
     marginBottom: 4,
   },
-  infoLabel: {
+  statLabel: {
     ...FONTS.caption,
   },
-  infoDivider: {
+  statDivider: {
     width: 1,
     backgroundColor: COLORS.borderLight,
-    marginVertical: SPACING.sm,
+    marginVertical: SPACING.xs,
   },
-  // Sections
+
+  // ── Section ──
   section: {
+    paddingHorizontal: H_PADDING,
     marginBottom: SPACING.xxl,
-    paddingHorizontal: SPACING.lg,
   },
   sectionTitle: {
     ...FONTS.h3,
     marginBottom: SPACING.lg,
   },
-  // Categories
-  categoryGrid: {
+
+  // ── Bento Grid ──
+  bentoGrid: {},
+  bentoRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    gap: COL_GAP,
   },
-  categoryItem: {
-    width: "23%",
+  bentoColSmall: {
+    flex: 1,
+  },
+  bentoTile: {
+    borderRadius: RADIUS.lg,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: COLORS.glassBorder,
+    backgroundColor: COLORS.card,
+    justifyContent: "flex-end",
+    padding: SPACING.md,
+    ...SHADOWS.sm,
+  },
+  bentoLarge: {
+    width: TILE_LARGE,
+    height: TILE_LARGE,
+    flex: undefined,
+  },
+  bentoSmall: {
+    flex: 1,
+    height: (TILE_LARGE - COL_GAP) / 2,
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: SPACING.xl,
+    justifyContent: "flex-start",
+    gap: SPACING.sm,
+    paddingVertical: SPACING.sm,
   },
-  categoryIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.cardAlt,
+  bentoIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: SPACING.sm,
-    ...SHADOWS.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
-  categoryName: {
-    ...FONTS.caption,
-    textAlign: "center",
+  bentoLabel: {
+    ...FONTS.captionBold,
+    color: COLORS.textSecondary,
+    marginTop: SPACING.sm,
   },
-  // Trending
-  trendingItem: {
+  bentoLabelLarge: {
+    ...FONTS.bodyBold,
+  },
+
+  // ── Trending ──
+  trendCard: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: SPACING.lg,
-    paddingHorizontal: SPACING.md,
-    backgroundColor: COLORS.cardAlt,
-    borderRadius: RADIUS.md,
-    marginBottom: SPACING.sm,
-    ...SHADOWS.sm,
+    padding: SPACING.md,
+    borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.glassBorder,
+    backgroundColor: COLORS.glassSurface,
+    marginBottom: SPACING.sm,
     gap: SPACING.md,
+    overflow: "hidden",
+    ...SHADOWS.sm,
   },
-  trendingName: {
+  trendDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  trendName: {
     ...FONTS.bodyBold,
-    marginBottom: 4,
+    marginBottom: 2,
+    fontSize: 14,
   },
-  trendingMeta: {
+  trendMeta: {
     ...FONTS.caption,
+    fontSize: 12,
   },
-  trendingPrice: {
+  trendRight: {
+    alignItems: "flex-end",
+    minWidth: 58,
+  },
+  trendPrice: {
     ...FONTS.priceSmall,
+    fontSize: 16,
+  },
+  trendSave: {
+    ...FONTS.caption,
+    fontSize: 11,
     color: COLORS.savings,
-    marginRight: SPACING.xs,
   },
 });
 

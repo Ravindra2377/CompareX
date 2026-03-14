@@ -108,21 +108,27 @@ class PlatformScraperService {
           (async function() {
             const log = (msg) => {
               try {
-                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Zepto] ' + msg}));
+                window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Zepto-API] ' + msg}));
               } catch(e) {}
             };
-            
+
             try {
-              log('Starting search for: ${query}');
-              
+              log('Starting API search for: ${query}');
+
+              // Controller to abort if API takes too long (fall through to DOM parser)
+              const controller = new AbortController();
+              const apiTimeout = setTimeout(() => controller.abort(), 3000);
+
               const response = await fetch('https://api.zepto.co.in/api/v1/search', {
                 method: 'POST',
+                signal: controller.signal,
                 headers: {
                   'Content-Type': 'application/json',
                   'accept': 'application/json',
-                  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-                  'origin': 'https://www.zeptonow.com',
-                  'referer': 'https://www.zeptonow.com/',
+                  'origin': 'https://www.zepto.com',
+                  'referer': 'https://www.zepto.com/',
+                  'x-app-version': '12.0.0',
+                  'x-channel': 'WEB',
                   'Cookie': document.cookie
                 },
                 body: JSON.stringify({
@@ -133,64 +139,72 @@ class PlatformScraperService {
                   intentId: "281d2279-058b-4b13-b541-69aa1c27806f"
                 })
               });
-              
-              log('Response status: ' + response.status);
-              
+
+              clearTimeout(apiTimeout);
+              log('API status: ' + response.status);
+
               if (!response.ok) {
-                const errorText = await response.text();
-                log('Error response: ' + errorText.substring(0, 200));
                 throw new Error('API returned ' + response.status);
               }
-              
+
               const data = await response.json();
-              log('Got data, results count: ' + (data.results?.length || 0));
-              
-              const products = (data.results || []).map(p => {
+              const rawItems = data.results || data.items || data.data || [];
+              log('API returned ' + rawItems.length + ' items');
+
+              if (rawItems.length === 0) {
+                throw new Error('API returned 0 results');
+              }
+
+              // Zepto prices are in paise (÷100)
+              const toRupees = (v) => {
+                if (!v && v !== 0) return 0;
+                const n = typeof v === 'string' ? parseFloat(v) : v;
+                if (!Number.isFinite(n) || n <= 0) return 0;
+                return n > 9999 ? Math.round(n / 100) : Math.round(n);
+              };
+
+              const products = rawItems.map(p => {
                 const rawSelling = p.sellingPrice ?? p.discountedSellingPrice ?? p.price ?? 0;
                 const rawDiscount = p.discountAmount ?? 0;
                 const rawMrp = p.mrp ?? p.original_price ?? 0;
-
-                const price = rawSelling / 100;
-                let mrp = rawMrp / 100;
-
+                const price = toRupees(rawSelling);
+                let mrp = toRupees(rawMrp);
                 if (mrp <= price && rawDiscount > 0) {
-                  mrp = (rawSelling + rawDiscount) / 100;
+                  mrp = toRupees(rawSelling + rawDiscount);
                 }
-
                 return {
-                  product_name: p.name,
+                  product_name: p.name || p.display_name || '',
                   brand: p.brand || '',
-                  price: price,
+                  price,
                   mrp: mrp > price ? mrp : price,
-                  image_url: p.image || '',
-                  product_url: (p.slug && p.id) ? \`https://www.zepto.com/pn/\${p.slug}/pvid/\${p.id}\` : '',
+                  image_url: p.image || p.imageUrl || '',
+                  product_url: (p.slug && p.id)
+                    ? \`https://www.zepto.com/pn/\${p.slug}/pvid/\${p.id}\`
+                    : '',
                   in_stock: p.in_stock !== false,
-                  weight: p.weight || '',
+                  weight: p.weight || p.quantity || '',
                   platform: 'Zepto'
                 };
-              });
-              
-              log('Parsed products: ' + products.length);
-              
+              }).filter(p => p.product_name && p.price > 0);
+
+              log('Parsed ' + products.length + ' products via API');
+
               window.ReactNativeWebView.postMessage(JSON.stringify({
                 type: 'SEARCH_RESULTS',
                 platform: 'Zepto',
-                products: products,
+                products,
                 success: true
               }));
+
             } catch (error) {
-              log('Error: ' + error.message);
-              window.ReactNativeWebView.postMessage(JSON.stringify({
-                type: 'SEARCH_RESULTS',
-                platform: 'Zepto',
-                error: error.message,
-                success: false,
-                products: []
-              }));
+              // API failed or timed out — DOM parser will handle it via onLoadEnd/injection.
+              log('API failed (' + error.message + '), DOM parser will take over');
+              // Don't send a failure message — SearchScreen will wait for the DOM injection.
             }
           })();
         `,
       },
+
 
       BigBasket: {
         searchScript: (query) => `

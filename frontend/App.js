@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "./config/theme";
 
 // Auth Screens
@@ -29,60 +30,70 @@ const TAB_ICONS = {
   Profile: { active: "person", inactive: "person-outline" },
 };
 
-const MainTabs = () => (
-  <Tab.Navigator
-    screenOptions={({ route }) => ({
-      headerShown: false,
-      tabBarIcon: ({ focused, color, size }) => {
-        const iconName = focused
-          ? TAB_ICONS[route.name].active
-          : TAB_ICONS[route.name].inactive;
-        return <Ionicons name={iconName} size={24} color={color} />;
-      },
-      tabBarActiveTintColor: COLORS.accent,
-      tabBarInactiveTintColor: COLORS.textTertiary,
-      tabBarStyle: {
-        backgroundColor: COLORS.surface,
-        borderTopWidth: 1,
-        borderTopColor: COLORS.border,
-        elevation: 12,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: -4 },
-        shadowOpacity: 0.24,
-        shadowRadius: 14,
-        height: 82,
-        paddingTop: 8,
-        paddingBottom: 24,
-        position: "absolute",
-      },
+const MainTabs = () => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  // Minimum padding if < 8px (e.g., Android with gesture nav at the very bottom)
+  const safeBottom = Math.max(bottomInset, 8);
 
-      tabBarLabelStyle: {
-        fontSize: 10,
-        fontWeight: "600",
-      },
-      tabBarShowLabel: false,
-    })}
-  >
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Search" component={SearchScreen} />
-    <Tab.Screen name="Wishlist" component={WishlistScreen} />
-    <Tab.Screen name="Profile" component={ProfileScreen} />
-  </Tab.Navigator>
-);
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color }) => {
+          const iconName = focused
+            ? TAB_ICONS[route.name].active
+            : TAB_ICONS[route.name].inactive;
+          return (
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <Ionicons name={iconName} size={24} color={color} />
+              {focused && (
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: -6,
+                    width: 4,
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: COLORS.accent,
+                  }}
+                />
+              )}
+            </View>
+          );
+        },
+        tabBarActiveTintColor: COLORS.accent,
+        tabBarInactiveTintColor: "rgba(148,163,184,0.45)",
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: "rgba(0, 0, 0, 0.96)",
+          borderTopWidth: 1,
+          borderTopColor: "rgba(44, 44, 44, 0.80)",
+          height: 56 + safeBottom,
+          paddingBottom: safeBottom,
+          paddingTop: 8,
+          elevation: 0,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.6,
+          shadowRadius: 12,
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Wishlist" component={WishlistScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+};
+
 
 const AppNav = () => {
   const { isLoading, userToken } = useContext(AuthContext);
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: COLORS.background,
-        }}
-      >
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.accent} />
       </View>
     );
@@ -134,6 +145,15 @@ const AppNav = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.background,
+  },
+});
 
 export default function App() {
   return (
