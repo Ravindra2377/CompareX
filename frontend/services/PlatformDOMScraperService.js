@@ -1129,8 +1129,8 @@ class PlatformDOMScraperService {
               log('URL: ' + window.location.href);
               log('Title: ' + document.title);
 
-              const MAX_WAIT_MS = 15000;
-              const POLL_MS = 1000;
+              const MAX_WAIT_MS = 8000;  // Align with platform timeout
+              const POLL_MS = 400;       // ⬇ was 1000ms
               let pollElapsed = 0;
               let hasSentZepto = false;
 
@@ -1404,9 +1404,10 @@ class PlatformDOMScraperService {
                 const productLinks = document.querySelectorAll('a[href*="/pn/"], a[href*="/product/"]');
                 const divCount = document.querySelectorAll('div').length;
                 const linkCount = document.querySelectorAll('a').length;
-                log('Poll @' + (pollElapsed / 1000).toFixed(0) + 's: productLinks=' + productLinks.length + ', divs=' + divCount + ', links=' + linkCount);
+                log('Poll @' + (pollElapsed / 1000).toFixed(1) + 's: productLinks=' + productLinks.length + ', divs=' + divCount + ', links=' + linkCount);
 
                 if (productLinks.length > 0 || pollElapsed >= MAX_WAIT_MS) {
+                  if (observer) { try { observer.disconnect(); } catch(e) {} }
                   doExtract();
                 } else {
                   pollElapsed += POLL_MS;
@@ -1414,6 +1415,25 @@ class PlatformDOMScraperService {
                 }
               };
 
+              // MutationObserver: trigger the instant /pn/ links appear — no poll delay.
+              let observer = null;
+              try {
+                observer = new MutationObserver(() => {
+                  if (hasSentZepto) return;
+                  const productLinks = document.querySelectorAll('a[href*="/pn/"], a[href*="/product/"]');
+                  if (productLinks.length > 0) {
+                    log('MutationObserver fired: ' + productLinks.length + ' product links detected instantly');
+                    observer.disconnect();
+                    observer = null;
+                    doExtract();
+                  }
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+              } catch(e) {
+                log('MutationObserver unavailable: ' + e.message + ' — falling back to polling');
+              }
+
+              // Poll is still the safety net in case MutationObserver misses the first batch.
               setTimeout(poll, POLL_MS);
             } catch (error) {
               log('FATAL ERROR: ' + error.message);
