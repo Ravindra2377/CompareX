@@ -12,6 +12,8 @@ on:
 jobs:
   build-android-apk:
     runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     defaults:
       run:
         working-directory: frontend
@@ -30,6 +32,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate Expo token
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "EXPO_TOKEN secret is missing."
+            echo "Add it in GitHub: Settings -> Secrets and variables -> Actions -> New repository secret"
+            exit 1
+          fi
+
       - name: Setup EAS CLI
         uses: expo/expo-github-action@v8
         with:
@@ -37,6 +47,8 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build APK (EAS Cloud)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas build --platform android --profile preview --non-interactive --wait
 
       - name: Build artifact hint
