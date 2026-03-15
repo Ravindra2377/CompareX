@@ -216,13 +216,24 @@ class PlatformDOMScraperService {
                     log('DEBUG: Blinkit ancestor fallback candidates: ' + candidateDivs.length + ' from price divs=' + priceDivs.length);
                   }
 
-                  // Deduplicate: keep only the innermost (leaf-level) matching divs.
-                  // A parent container that wraps multiple products will also match,
-                  // so discard any div that has another matching div as a descendant.
+                  // Deduplicate: keep only the innermost (leaf-level) matching divs that HAVE a reasonable length or likely contain a title.
+                  // If a div is very small (< 40 chars), it's probably just the price/ADD tag.
+                  // We want the card that contains both.
                   const candidateSet = new Set(candidateDivs);
                   productCards = candidateDivs.filter(div => {
-                    return !Array.from(div.querySelectorAll('div')).some(child => candidateSet.has(child));
+                    const isLeaf = !Array.from(div.querySelectorAll('div')).some(child => candidateSet.has(child));
+                    if (isLeaf && div.textContent.length < 50) {
+                       // This leaf is too small to have a name. Look at parent.
+                       return false; 
+                    }
+                    return isLeaf;
                   });
+                  
+                  if (productCards.length === 0 && candidateDivs.length > 0) {
+                    productCards = candidateDivs.filter(div => {
+                      return !Array.from(div.querySelectorAll('div')).some(child => candidateSet.has(child));
+                    });
+                  }
 
                   log('DEBUG: Blinkit price+ADD candidates: ' + candidateDivs.length + ', leaf cards: ' + productCards.length);
                 }
@@ -244,9 +255,7 @@ class PlatformDOMScraperService {
                 if (productCards.length > 0) {
                   const firstCard = productCards[0];
                   log('First card tag: ' + firstCard.tagName + ', classes: ' + firstCard.className.substring(0, 50));
-                  const allText = firstCard.textContent;
-                  log('First card FULL TEXT: ' + allText);
-                  log('First card HTML structure: ' + firstCard.innerHTML.substring(0, 200));
+                  log('First card FULL TEXT: ' + firstCard.textContent);
                 }
                 
                 productCards.forEach((card, index) => {
@@ -1014,7 +1023,7 @@ class PlatformDOMScraperService {
               }
             };
 
-            const extractMeta = (text) => {
+            const extractMeta = (card, text) => {
               const raw = String(text || '');
               const compact = raw.replace(/\s+/g, ' ').trim();
 
@@ -1029,21 +1038,33 @@ class PlatformDOMScraperService {
                 ratingCount = unit === 'k' ? Math.round(base * 1000) : unit === 'm' ? Math.round(base * 1000000) : Math.round(base);
               }
 
-              const rupees = [];
-              const rupeeRegex = /₹\s*([0-9]+(?:\.[0-9]+)?)/g;
-              let rupeeMatch;
-              while ((rupeeMatch = rupeeRegex.exec(compact)) !== null) {
-                const parsed = parseFloat(rupeeMatch[1]);
-                if (!Number.isNaN(parsed)) rupees.push(parsed);
-              }
-              const validRupees = rupees.filter((v) => Number.isFinite(v) && v > 0);
+              // Robust MRP detection using DOM
+              let mrp = 0;
+              try {
+                // Look for elements with strikethrough or specific Zepto MRP identifiers
+                const mrpEl = Array.from(card.querySelectorAll('*')).find(el => {
+                  const style = window.getComputedStyle(el);
+                  const isStrikethrough = style.textDecoration.includes('line-through');
+                  const isMrpClass = /mrp|original/i.test(el.className || '') || (el.getAttribute('data-testid') || '').includes('mrp');
+                  return (isStrikethrough || isMrpClass) && /₹/.test(el.textContent || '');
+                });
+                if (mrpEl) {
+                  mrp = parseFloat(mrpEl.textContent.replace(/[^0-9.]/g, ''));
+                }
+              } catch(e) {}
 
-              const mrpMatch = compact.match(/\bMRP\b[^₹]*₹\s*([0-9]+(?:\.[0-9]+)?)/i);
-              const mrp = mrpMatch ? parseFloat(mrpMatch[1]) : (validRupees.length > 1 ? Math.max(...validRupees) : 0);
+              // Fallback to regex if DOM check failed
+              if (!mrp) {
+                const mrpMatch = compact.match(/\bMRP\b[^₹]*₹\s*([0-9]+(?:\.[0-9]+)?)/i);
+                if (mrpMatch) {
+                   mrp = parseFloat(mrpMatch[1]);
+                }
+              }
 
               const discountPercentMatch = compact.match(/(\d{1,2})\s*%\s*OFF|OFF\s*(\d{1,2})\s*%/i);
               const discountPercent = discountPercentMatch ? parseInt(discountPercentMatch[1] || discountPercentMatch[2], 10) : 0;
 
+              // Extract discount value, ensuring we don't pick up the selling price.
               const discountValueMatch = compact.match(/(?:save|off)\s*₹\s*([0-9]+(?:\.[0-9]+)?)|₹\s*([0-9]+(?:\.[0-9]+)?)\s*OFF/i);
               const discountValue = discountValueMatch ? parseFloat(discountValueMatch[1] || discountValueMatch[2]) : 0;
 
@@ -1058,9 +1079,17 @@ class PlatformDOMScraperService {
               };
             };
 
-            const extractBestPrice = (cardText, meta) => {
+            const extractBestPrice = (card, cardText, meta) => {
               if (!cardText) return 0;
 
+              // 1. Target the High-Priority Tag (Zepto uses <h4> for the actual selling price)
+              const h4Price = card.querySelector('h4');
+              if (h4Price && /₹/.test(h4Price.textContent)) {
+                const val = parseFloat(h4Price.textContent.replace(/[^0-9.]/g, ''));
+                if (val > 0) return val;
+              }
+
+              // 2. Fallback to selectors with strict exclusion of discount/MRP labels
               const rupeeRegex = /₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/g;
               const candidates = [];
               let match;
@@ -1070,57 +1099,39 @@ class PlatformDOMScraperService {
                 const value = parseFloat(raw);
                 if (!Number.isFinite(value) || value <= 0 || value > 99999) continue;
 
-                const around = cardText
-                  .substring(Math.max(0, match.index - 28), match.index + match[0].length + 28)
-                  .toLowerCase();
-                const after = cardText
-                  .substring(match.index + match[0].length, match.index + match[0].length + 10)
-                  .toLowerCase();
-
-                const isMrp = /\bmrp\b|list\s*price|market\s*price/.test(around);
-                const isDiscount = /save|discount/.test(around) || /\boff\b/.test(around) || /^\s*off\b/.test(after);
-                const hasSaleCue = /price|selling|sale|our\s*price|at\s*₹|only\s*₹|\badd\b|\bbuy\b|\bcart\b/.test(around);
-
+                // Check context nodes directly to avoid "OFF" or "MRP" confusion
+                const el = Array.from(card.querySelectorAll('*')).find(e => 
+                  e.textContent && e.textContent.includes(match[0]) && e.children.length === 0
+                );
+                
                 let score = 0;
-                if (isMrp) score -= 40;
-                if (isDiscount) score -= 45;
-                if (hasSaleCue) score += 14;
+                if (el) {
+                  const parentText = el.parentElement ? el.parentElement.textContent || '' : '';
+                  const ownText = el.textContent || '';
+                  
+                  // STRICT EXCLUSION: If the text contains OFF, SAVE, or MRP, it's NOT the selling price.
+                  if (/OFF|SAVE|MRP|DISCOUNT|%|ORIGINAL/i.test(ownText) || /OFF|SAVE|MRP|DISCOUNT|%|ORIGINAL/i.test(parentText)) {
+                    score -= 100;
+                  }
+                  
+                  // STRIKETHROUGH CHECK
+                  try {
+                    const style = window.getComputedStyle(el);
+                    if (style.textDecoration.includes('line-through')) score -= 80;
+                  } catch(e) {}
+                }
 
-                candidates.push({ value, score, pos: match.index, isMrp, isDiscount, hasSaleCue });
+                const around = cardText
+                  .substring(Math.max(0, match.index - 20), match.index + match[0].length + 20)
+                  .toLowerCase();
+                
+                if (/\bprice\b|selling|\ball\b|\bsale\b/.test(around)) score += 20;
+
+                candidates.push({ value, score });
               }
 
               if (!candidates.length) return 0;
-
-              // Strong rule: if we have MRP and discount amount, infer selling price first.
-              const expectedFromDiscount =
-                (meta && meta.mrp > 0 && meta.discount_value > 0)
-                  ? Math.round((meta.mrp - meta.discount_value) * 100) / 100
-                  : 0;
-
-              if (expectedFromDiscount > 0) {
-                const matchCandidate = candidates.find((c) => Math.abs(c.value - expectedFromDiscount) < 0.51);
-                if (matchCandidate) {
-                  return matchCandidate.value;
-                }
-                return expectedFromDiscount;
-              }
-
-              const sellingCandidates = candidates.filter((c) => !c.isMrp && !c.isDiscount);
-              if (sellingCandidates.length) {
-                sellingCandidates.sort((a, b) => {
-                  if (Number(b.hasSaleCue) !== Number(a.hasSaleCue)) return Number(b.hasSaleCue) - Number(a.hasSaleCue);
-                  if (a.value !== b.value) return a.value - b.value;
-                  return a.pos - b.pos;
-                });
-                return sellingCandidates[0].value;
-              }
-
-              candidates.sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score;
-                if (a.value !== b.value) return a.value - b.value;
-                return a.pos - b.pos;
-              });
-
+              candidates.sort((a, b) => b.score - a.score || a.value - b.value);
               return candidates[0].value;
             };
             
@@ -1240,13 +1251,22 @@ class PlatformDOMScraperService {
                     }
                     
                     const cardText = card.textContent || '';
-                    const meta = extractMeta(cardText);
+                    const meta = extractMeta(card, cardText);
                     
                     // Try to find selling price from rupee candidates with context-aware scoring.
-                    let price;
-                    const bestPrice = extractBestPrice(cardText, meta);
-                    if (bestPrice > 0) {
+                    let price = null;
+                    const bestPrice = extractBestPrice(card, cardText, meta);
+                    if (bestPrice >= 5 && bestPrice <= 10000) {
                       price = String(bestPrice);
+                    }
+                    
+                    if (!price) {
+                      // try alternate extraction — look for ₹ symbol directly
+                      const rupeeMatch = cardText.match(/₹\s*(\d+(?:\.\d+)?)/);
+                      const rupeePrice = rupeeMatch ? parseFloat(rupeeMatch[1]) : 0;
+                      if (rupeePrice >= 5 && rupeePrice <= 10000) {
+                        price = String(rupeePrice);
+                      }
                     }
                     
                     // Fallback: Find numbers NOT followed by units
@@ -1321,8 +1341,9 @@ class PlatformDOMScraperService {
                       const toPrice = (raw) => {
                         const n = typeof raw === 'string' ? parseFloat(raw) : raw;
                         if (!Number.isFinite(n) || n <= 0) return 0;
-                        if (n > 9999 && n <= 999999) return Math.round(n / 100);
-                        if (n > 0 && n <= 9999) return Math.round(n);
+                        // Zepto uses paise internally for many fields
+                        if (n > 999 && n <= 999999) return Math.round(n / 100);
+                        if (n > 0 && n <= 999) return Math.round(n);
                         return 0;
                       };
 
@@ -1331,9 +1352,9 @@ class PlatformDOMScraperService {
                         if (typeof name !== 'string' || name.trim().length < 3) return;
 
                         // Zepto specific price logic: sellingPrice/discountedSellingPrice are final prices in paise.
-                        const rawSelling = obj?.sellingPrice ?? obj?.discountedSellingPrice ?? obj?.selling_price ?? obj?.finalPrice ?? obj?.offerPrice ?? obj?.price;
+                        const rawSelling = obj?.discountedSellingPrice ?? obj?.sellingPrice ?? obj?.discounted_price ?? obj?.selling_price ?? obj?.finalPrice ?? obj?.price;
                         const rawMrp = obj?.mrp ?? obj?.original_price ?? obj?.originalPrice;
-                        const rawDiscount = obj?.discountAmount ?? 0;
+                        const rawDiscount = obj?.discountAmount ?? obj?.discount_amount ?? 0;
 
                         const price = toPrice(rawSelling);
                         let mrp = toPrice(rawMrp);
@@ -1352,16 +1373,17 @@ class PlatformDOMScraperService {
                           brand: '',
                           price,
                           mrp: mrp > price ? mrp : price,
-                          image_url: obj?.image_url || obj?.imageUrl || obj?.image || '',
+                          image_url: obj?.image_url || obj?.imageUrl || obj?.image || obj?.images?.[0] || '',
                           product_url: (function() {
-                            let url = obj?.deep_link || obj?.url || '';
+                            let url = obj?.deep_link || obj?.product_url || obj?.url || '';
                             if (url && url.startsWith('/')) {
                               url = 'https://www.zepto.com' + url;
                             }
                             return url;
                           })(),
-                          in_stock: true,
-                          weight: obj?.quantity || obj?.unit || '',
+                          in_stock: (obj?.in_stock ?? obj?.is_available ?? true),
+                          weight: obj?.formatted_quantity || obj?.quantity || obj?.unit || '',
+                          discount_percent: obj?.discount_percent ?? (mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0),
                           platform: 'Zepto'
                         });
                       };
@@ -1445,6 +1467,170 @@ class PlatformDOMScraperService {
                 success: false,
                 products: []
               }));
+            }
+          })();
+        `,
+      },
+ 
+      Instamart: {
+        searchUrl: (query) =>
+          'https://www.swiggy.com/instamart/search?query=' + encodeURIComponent(query),
+        parseScript: () => `
+          (function () {
+            // Remove the running guard to allow re-injection after navigation
+            // if (window.__instamartParserRunning) return;
+            window.__instamartParserRunning = true;
+            
+            var sendMsg = function(data) {
+              try {
+                if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+                  window.ReactNativeWebView.postMessage(data);
+                } else if (window.__rnMsg) {
+                  window.__rnMsg(data);
+                }
+              } catch(e) {
+                // Silently fail if bridge is not ready
+              }
+            };
+            var log = function(msg) {
+              sendMsg(JSON.stringify({
+                type: 'LOG', 
+                message: '[Instamart-DOM] ' + msg
+              }));
+            };
+
+            log("===== SCRIPT EXECUTING (V5-DYNAMIC) =====");
+            log("URL: " + window.location.href);
+            log("ReadyState: " + document.readyState);
+
+            try {
+              var startTime = Date.now();
+              var scrollCount = 0;
+
+              var interval = setInterval(function() {
+                window.scrollBy(0, 800);
+                scrollCount++;
+
+                var buttons = [].slice.call(document.querySelectorAll('div[role="button"], button'));
+                var addButtons = [];
+                for (var i = 0; i < buttons.length; i++) {
+                  var btn = buttons[i];
+                  var btnText = (btn.innerText || "").trim().toUpperCase();
+                  var btnAria = (btn.getAttribute('aria-label') || "").toUpperCase();
+                  if (btnText === "ADD" || btnText.indexOf("ADD ITEM") !== -1 || btnAria.indexOf("ADD ITEM TO CART") !== -1) {
+                    addButtons.push(btn);
+                  }
+                }
+
+                var cards = [];
+                for (var j = 0; j < addButtons.length; j++) {
+                  var b = addButtons[j];
+                  var parent = b.parentElement;
+                  var cardFound = null;
+                  // Go up higher to reach the product-card container that has name+price
+                  while (parent && parent !== document.body) {
+                    var tid = (parent.getAttribute('data-testid') || "").toLowerCase();
+                    if (tid.indexOf('product-card') !== -1 || tid.indexOf('item-container') !== -1) {
+                      cardFound = parent;
+                      break;
+                    }
+                    parent = parent.parentElement;
+                  }
+                  // Fallback: if no testid, find first parent with > 50 chars of text
+                  if (!cardFound) {
+                    parent = b.parentElement;
+                    while (parent && parent !== document.body) {
+                      if ((parent.innerText || "").length > 50 && parent.querySelector('img')) {
+                        cardFound = parent;
+                        break;
+                      }
+                      parent = parent.parentElement;
+                    }
+                  }
+                  if (cardFound) cards.push(cardFound);
+                }
+
+                var uniqueCards = [];
+                for (var k = 0; k < cards.length; k++) {
+                  var exists = false;
+                  for (var l = 0; l < uniqueCards.length; l++) {
+                    if (uniqueCards[l] === cards[k]) { exists = true; break; }
+                  }
+                  if (!exists) uniqueCards.push(cards[k]);
+                }
+                
+                log("Poll @ " + ((Date.now() - startTime) / 1000).toFixed(1) + "s : scroll=" + scrollCount + ", candidates=" + uniqueCards.length);
+
+                if (uniqueCards.length > 0 || Date.now() - startTime > 10000) {
+                  clearInterval(interval);
+                  var products = [];
+                  
+                  for (var m = 0; m < uniqueCards.length; m++) {
+                    var card = uniqueCards[m];
+                    var cardInner = card.innerText || "";
+                    var imgs = card.querySelectorAll('img');
+                    var imgUrl = (imgs && imgs.length > 0) ? imgs[0].src : "";
+
+                    var priceOut = null;
+                    // Improved price regex to handle commas and decimals
+                    var pMatch = cardInner.match(/₹\s?([0-9,]+(?:\.\d+)?)/);
+                    if (pMatch) {
+                      priceOut = parseFloat(pMatch[1].replace(/,/g, ''));
+                    } else {
+                      var fallbackMatch = cardInner.match(/\d+(?:\.\d+)?$/m);
+                      if (fallbackMatch) priceOut = parseFloat(fallbackMatch[0]);
+                    }
+
+                    var nameOut = "Unknown Item";
+                    var divs = [].slice.call(card.querySelectorAll('div, span, p'));
+                    // Look for name-like elements first (usually first few divs)
+                    for (var n = 0; n < divs.length; n++) {
+                      var t = (divs[n].innerText || "").trim();
+                      // Name heuristic: 4-100 chars, no currency, no "ADD", no "% OFF"
+                      // If it has "MINS" it might be the delivery time, skip it unless it's a long string
+                      if (t.length > 4 && t.length < 120 && 
+                          t.indexOf('₹') === -1 && 
+                          t.indexOf('ADD') === -1 && 
+                          t.indexOf('% OFF') === -1 &&
+                          (t.indexOf('MINS') === -1 || t.length > 20)) {
+                        nameOut = t;
+                        break;
+                      }
+                    }
+
+                    if (m < 3) {
+                       log("Candidate[" + m + "] Name: " + nameOut + " Price: " + priceOut + " Text: " + cardInner.substring(0, 100).replace(/\\n/g, ' '));
+                    }
+
+                    if (nameOut && priceOut && nameOut !== "Unknown Item" && priceOut > 0) {
+                      products.push({
+                        product_name: nameOut,
+                        raw_product_name: nameOut,
+                        price: priceOut,
+                        mrp: priceOut,
+                        image_url: imgUrl,
+                        product_url: window.location.href,
+                        in_stock: true,
+                        platform: "Instamart"
+                      });
+                    }
+                  }
+
+                  log("Parsed " + products.length + " products");
+
+                  if (sendMsg) {
+                    sendMsg(JSON.stringify({
+                        type: 'SEARCH_RESULTS',
+                        platform: "Instamart",
+                        products: products,
+                        success: true,
+                        sessionId: window.__COMPAREX_SESSION_ID__ || null
+                    }));
+                  }
+                }
+              }, 600);
+            } catch (err) {
+              log("FATAL ERROR: " + err.message);
             }
           })();
         `,

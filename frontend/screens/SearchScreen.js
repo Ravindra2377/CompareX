@@ -40,12 +40,18 @@ const SUGGESTIONS = [
   "Oil",
 ];
 
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
-const ENABLE_BACKEND_FALLBACK = false;
+const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
+const ENABLE_BACKEND_FALLBACK = true;
 const ENABLE_BACKEND_COLLECTION = false;
-const DEFAULT_PLATFORM_TIMEOUT_MS = 8000;   // ⬇ was 14s
-const OVERALL_SEARCH_TIMEOUT_MS = 12000;    // ⬇ was 45s
-const SEARCH_DEBOUNCE_MS = 250;
+const DEFAULT_PLATFORM_TIMEOUT_MS = 15000;
+const OVERALL_SEARCH_TIMEOUT_MS = 25000;
+const PLATFORM_TIMEOUTS = {
+  Blinkit: 12000,
+  Zepto: 12000,
+  BigBasket: 12000,
+  Instamart: 18000,
+};
+const SEARCH_DEBOUNCE_MS = 400;
 const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial results faster
 
 // Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
@@ -472,10 +478,10 @@ const SearchScreen = ({ navigation, route }) => {
       clearTimeout(platformTimeoutsRef.current[platform]);
     }
 
-    const timeoutMs = DEFAULT_PLATFORM_TIMEOUT_MS;
+    const timeoutMs = PLATFORM_TIMEOUTS[platform] || DEFAULT_PLATFORM_TIMEOUT_MS;
 
     platformTimeoutsRef.current[platform] = setTimeout(() => {
-      if (sessionId !== searchSessionIdRef.current) {
+      if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
         return;
       }
       if (!platformResultsRef.current[platform]) {
@@ -507,7 +513,7 @@ const SearchScreen = ({ navigation, route }) => {
     sessionId,
     delayMs = PARTIAL_AGGREGATION_DELAY_MS,
   ) {
-    if (sessionId !== searchSessionIdRef.current) {
+    if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
       return;
     }
 
@@ -550,6 +556,13 @@ const SearchScreen = ({ navigation, route }) => {
         );
       }
 
+      if (platform === "Instamart") {
+        return (
+          current.includes("swiggy.com") &&
+          current.includes("/instamart/search")
+        );
+      }
+
       return false;
     },
     [],
@@ -563,6 +576,12 @@ const SearchScreen = ({ navigation, route }) => {
     const reasonKey = "";
     const injectKey = `${sessionForKey}:${currentUrl || "no-url"}${reasonKey}`;
 
+    // Don't inject on about:blank or invalid URLs — no cookie access
+    if (!currentUrl || currentUrl === "about:blank" || !currentUrl.startsWith("http")) {
+      console.log(`[Search] Skipping injection on invalid URL: ${currentUrl}`);
+      return;
+    }
+
     // Prevent duplicate injection for the same platform+URL in this session.
     if (injectedPlatformsRef.current[platform] === injectKey) {
       return;
@@ -570,11 +589,10 @@ const SearchScreen = ({ navigation, route }) => {
     injectedPlatformsRef.current[platform] = injectKey;
 
     const platformToken = connectedPlatformTokensRef.current[platform] || null;
-    const parseScript = PlatformDOMScraperService.getParseScript(
-      platform,
-      platformToken,
-    );
-    if (!parseScript) {
+    let parseScript = PlatformDOMScraperService.getParseScript(platform, platformToken);
+    const apiScript = null;
+
+    if (!parseScript && !apiScript) {
       console.log(`[Search] No parser available for ${platform}`);
       return;
     }
@@ -583,6 +601,8 @@ const SearchScreen = ({ navigation, route }) => {
     const sessionPreamble = `window.__COMPAREX_SESSION_ID__ = ${JSON.stringify(
       sessionId,
     )}; true;`;
+
+    console.log(`[Search] EXECUTING injectDomParser for ${platform} (${reason}) - script length: ${parseScript ? parseScript.length : 0}`);
 
     try {
       console.log(
@@ -609,7 +629,7 @@ const SearchScreen = ({ navigation, route }) => {
       `;
 
       webViewRefs.current[platform]?.injectJavaScript(
-        sessionPreamble + probe + parseScript,
+        sessionPreamble + probe + (apiScript || "") + (parseScript || ""),
       );
     } catch (err) {
       console.error(`[Search] Failed to inject parser for ${platform}:`, err);
@@ -691,7 +711,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   const getConnectedPlatformsSnapshot = useCallback(async () => {
     try {
-      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
+      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Instamart"];
       const parsed = storedTokensRef.current || {};
 
       const tokenMap = {};
@@ -706,7 +726,7 @@ const SearchScreen = ({ navigation, route }) => {
       return supportedPlatforms.sort();
     } catch (e) {
       console.error("[Search] Error reading connections:", e);
-      return ["BigBasket", "Blinkit", "Zepto"];
+      return ["BigBasket", "Blinkit", "Zepto", "Instamart"];
     }
   }, []);
 
@@ -914,7 +934,7 @@ const SearchScreen = ({ navigation, route }) => {
         }
 
         // Reject late messages from older searches when sessionId is provided
-        if (data.sessionId && data.sessionId !== searchSessionIdRef.current) {
+        if (data.sessionId && Number(data.sessionId) !== Number(searchSessionIdRef.current)) {
           console.log(
             `[Search] Ignoring ${platform} results for old session ${data.sessionId} (current: ${searchSessionIdRef.current})`,
           );
@@ -1066,7 +1086,7 @@ const SearchScreen = ({ navigation, route }) => {
   // to avoid re-triggering the fallback check.
   const writePlatformResult = React.useCallback(
     (platform, products, success, errorMsg, sessionId) => {
-      if (sessionId !== searchSessionIdRef.current) return; // stale session, ignore
+      if (Number(sessionId) !== Number(searchSessionIdRef.current)) return; // stale session, ignore
       setPlatformResults((prev) => {
         const prevEntry = prev[platform];
         // Don't overwrite a good prior result with an empty one
@@ -1122,8 +1142,15 @@ const SearchScreen = ({ navigation, route }) => {
 
       const response = await api.get("/compare", {
         headers: { "X-User-Tokens": JSON.stringify(tokensForHeader) },
-        params: { q: fallbackQuery, lat: 12.9716, lng: 77.5946 },
+        params: { 
+          q: fallbackQuery, 
+          lat: 12.9716, 
+          lng: 77.5946,
+          sessionId: sessionId 
+        },
       });
+
+      console.log(`[Search] Backend fallback response status: ${response.status}`);
 
       const platformMatches = (listingPlatform, expectedPlatform) => {
         const lp = String(listingPlatform || "")
@@ -1195,7 +1222,7 @@ const SearchScreen = ({ navigation, route }) => {
     const monitor = getGlobalMonitor();
     monitor.mark("search-aggregate-start");
     // Verify this is for the current search session
-    if (sessionId !== searchSessionIdRef.current) {
+    if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
       console.log(
         `[Search] Ignoring aggregation for old session ${sessionId} (current: ${searchSessionIdRef.current})`,
       );
@@ -1550,6 +1577,7 @@ const SearchScreen = ({ navigation, route }) => {
     Blinkit: { color: "#FFCE00", icon: "flash", label: "Blinkit" },
     Zepto: { color: "#9747FF", icon: "rocket", label: "Zepto" },
     BigBasket: { color: "#84C225", icon: "basket", label: "BigBasket" },
+    Instamart: { color: "#F36E21", icon: "cart", label: "Instamart" },
   };
 
   const renderSearchProgress = () => {
@@ -1658,7 +1686,7 @@ const SearchScreen = ({ navigation, route }) => {
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Live Price Compare</Text>
             <Text style={styles.headerSubtitle}>
-              Scan Blinkit, Zepto, and BigBasket in one search.
+              Scan Blinkit, Zepto, BigBasket, and Instamart in one search.
             </Text>
           </View>
         </View>
@@ -1723,7 +1751,6 @@ const SearchScreen = ({ navigation, route }) => {
             currentWebViewUrlsRef.current[platform] = nativeEvent.url;
             console.log(`[Search] ${platform} load start: ${nativeEvent.url}`);
             // Try inject immediately — the URL already contains the search query
-            // so we can fire the API call without waiting for onLoadEnd.
             const searchUrl = searchUrls[platform];
             if (canInjectForPlatform(platform, nativeEvent.url, searchUrl)) {
               // Small delay to let the cookie jar settle
@@ -1760,6 +1787,7 @@ function getPlatformUrl(platform) {
     Blinkit: "https://blinkit.com/",
     Zepto: "https://www.zepto.com/",
     BigBasket: "https://www.bigbasket.com/",
+    Instamart: "https://www.swiggy.com/instamart/",
   };
   return urls[platform] || "about:blank";
 }

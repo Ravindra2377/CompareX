@@ -496,6 +496,8 @@ const buildPlatformSearchUrl = (platformName, query) => {
     return `https://www.zepto.com/search?query=${q}`;
   if (platformName.includes("bigbasket"))
     return `https://www.bigbasket.com/ps/?q=${q}`;
+  if (platformName.includes("instamart"))
+    return `https://www.swiggy.com/instamart/search?query=${q}`;
   return "";
 };
 

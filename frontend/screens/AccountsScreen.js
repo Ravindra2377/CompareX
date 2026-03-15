@@ -46,6 +46,15 @@ const PLATFORMS = [
     icon: "basket",
     requiredTokens: ["sessionid", "_bb_vid"],
   },
+  {
+    id: "Instamart",
+    name: "Instamart",
+    loginUrl: "https://www.swiggy.com/instamart",
+    testUrl: "https://www.swiggy.com/api/instamart/search?query=milk",
+    color: "#FF5200",
+    icon: "cart",
+    requiredTokens: ["_sid", "sid", "user_id", "profile", "swiggy_user_info", "user_info", "_is_logged_in"],
+  },
 ];
 
 export default function AccountsScreen() {
@@ -75,10 +84,17 @@ export default function AccountsScreen() {
 
           // Other platforms: Check if any required token exists
           const hasRequiredToken = platform.requiredTokens.some(
-            (tokenKey) =>
-              platformTokens[tokenKey] ||
-              (platformTokens.cookie &&
-                platformTokens.cookie.includes(tokenKey)),
+            (tokenKey) => {
+              const fromVal = platformTokens[tokenKey];
+              const fromCookie = platformTokens.cookie && platformTokens.cookie.includes(tokenKey);
+              const result = !!(fromVal || fromCookie);
+              
+              if (platform.id === 'Instamart') {
+                console.log(`[Accounts-Debug] Checking ${tokenKey}: val=${!!fromVal}, cookie=${!!fromCookie} -> ${result}`);
+              }
+              
+              return result;
+            }
           );
           status[platform.id] = hasRequiredToken;
         });
@@ -315,6 +331,52 @@ export default function AccountsScreen() {
               payload[key] = ls[key];
             }
           }
+        }
+        
+        // INSTAMART (SWIGGY)
+        else if (host.includes('swiggy')) {
+          // Debug keys for developer
+          log('Swiggy LS Keys: ' + Object.keys(ls).join(', '));
+          
+          // Cookies (might be HttpOnly, but check anyway)
+          if (cookies && (cookies.includes('_sid') || cookies.includes('sid') || cookies.includes('_is_logged_in'))) {
+            payload['cookie'] = cookies;
+            log('✓ Found Swiggy/Instamart cookies');
+            isValid = true;
+          }
+          
+          // localStorage markers
+          if (ls.user_id && ls.user_id !== "0" && ls.user_id !== 0) {
+            payload['user_id'] = ls.user_id;
+            log('✓ Found Swiggy user_id: ' + ls.user_id);
+            isValid = true;
+          }
+          
+          if (ls.user || ls.profile || ls.member || ls.swiggy_user_info || ls.user_info) {
+            payload['profile'] = ls.user || ls.profile || ls.member || ls.swiggy_user_info || ls.user_info;
+            log('✓ Found Swiggy user profile');
+            isValid = true;
+          }
+
+          // Headers/Tokens
+          if (ls.auth_headers || ls.swiggy_auth_headers) {
+            payload['auth_headers'] = ls.auth_headers || ls.swiggy_auth_headers;
+            log('✓ Found Swiggy API auth headers');
+            isValid = true;
+          }
+          
+          // Legacy session marker
+          if (ls._is_logged_in) {
+            payload['_is_logged_in'] = ls._is_logged_in;
+            isValid = true;
+          }
+          
+          // Sometimes stored as stringified JSON in 'user'
+          try {
+            if (ls.user && JSON.parse(ls.user).id) {
+               isValid = true;
+            }
+          } catch(e) {}
         }
 
         // Send if valid

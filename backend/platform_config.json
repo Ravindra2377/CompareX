@@ -35,5 +35,15 @@
       "cookie": "PASTE_YOUR_COOKIE_HERE",
       "x-csrf-token": "PASTE_YOUR_CSRF_TOKEN_HERE"
     }
-  }
+  },
+  "instamart": {
+    "base_url": "https://www.swiggy.com/api/instamart/search/v2",
+    "actor_id": "smacient/swiggy-instamart-data-extractor",
+    "headers": {
+      "content-type": "application/json",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "x-instamart-session-id": "PASTE_YOUR_SESSION_ID_HERE"
+    }
+  },
+  "apify_api_key": "PASTE_YOUR_APIFY_API_KEY_HERE"
 }

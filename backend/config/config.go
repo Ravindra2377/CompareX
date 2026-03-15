@@ -11,14 +11,15 @@ type PlatformConfig struct {
 	Headers map[string]string `json:"headers"`
 	Params  map[string]string `json:"params"`
 	Payload map[string]string `json:"payload"`
+	ActorID string            `json:"actor_id"`
 }
 
 type Config struct {
-	Blinkit   PlatformConfig `json:"blinkit"`
-	Zepto     PlatformConfig `json:"zepto"`
-	Swiggy    PlatformConfig `json:"swiggy"`
-	BigBasket PlatformConfig `json:"bigbasket"`
-	Zomato    PlatformConfig `json:"zomato"`
+	Blinkit     PlatformConfig `json:"blinkit"`
+	Zepto       PlatformConfig `json:"zepto"`
+	Instamart   PlatformConfig `json:"instamart"`
+	BigBasket   PlatformConfig `json:"bigbasket"`
+	ApifyApiKey string         `json:"apify_api_key"`
 }
 
 var AppConfig Config

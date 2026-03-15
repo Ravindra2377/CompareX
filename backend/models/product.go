@@ -29,6 +29,7 @@ type PlatformListing struct {
 	Offers         []string  `json:"offers,omitempty"`    // e.g. ["10% cashback", "Use code SAVE20"]
 	DeepLink       string    `json:"deep_link,omitempty"` // URL or app deep link
 	ScrapedAt      time.Time `json:"scraped_at"`
+	Quantity       string    `json:"quantity,omitempty"`
 }
 
 // CompareResult is the API response for a comparison query
