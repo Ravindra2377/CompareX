@@ -274,6 +274,28 @@ class PlatformScraperService {
         `,
       },
 
+      Amazon: {
+        searchScript: (query) => `
+          (async function() {
+            // Amazon has strong bot protection for direct API fetches.
+            // We intentionally throw here to immediately trigger the DOM Scraper fallback strategy.
+            try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Amazon-API] Skipping direct fetch, forcing DOM fallback'})); } catch(e) {}
+            throw new Error("Force DOM Fallback");
+          })();
+        `,
+      },
+
+      Flipkart: {
+        searchScript: (query) => `
+          (async function() {
+            // Flipkart has strong bot protection for direct API fetches.
+            // We intentionally throw here to immediately trigger the DOM Scraper fallback strategy.
+            try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Flipkart-API] Skipping direct fetch, forcing DOM fallback'})); } catch(e) {}
+            throw new Error("Force DOM Fallback");
+          })();
+        `,
+      },
+
     };
   }
 

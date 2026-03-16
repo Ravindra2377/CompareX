@@ -35,6 +35,8 @@ export const COLORS = {
   platformBlinkit:   "#FAC82A",   // Blinkit yellow
   platformZepto:     "#8B5CF6",   // Zepto purple
   platformBigBasket: "#F97316",   // BigBasket orange
+  platformAmazon:    "#FF9900",   // Amazon orange
+  platformFlipkart:  "#2874F0",   // Flipkart blue
 
   // ── Text (halation-safe off-whites) ───────────────────────────────
   // Using 87 / 60 / 38% opacity off-white instead of hard #FFF

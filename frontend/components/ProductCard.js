@@ -14,6 +14,8 @@ const PLATFORM_COLORS = {
   Blinkit: COLORS.platformBlinkit,
   Zepto: COLORS.platformZepto,
   BigBasket: COLORS.platformBigBasket,
+  Amazon: COLORS.platformAmazon,
+  Flipkart: COLORS.platformFlipkart,
 };
 
 const formatPrice = (value) => {

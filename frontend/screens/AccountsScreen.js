@@ -46,6 +46,24 @@ const PLATFORMS = [
     icon: "basket",
     requiredTokens: ["sessionid", "_bb_vid"],
   },
+  {
+    id: "Amazon",
+    name: "Amazon",
+    loginUrl: "https://www.amazon.in/ap/signin?openid.return_to=https%3A%2F%2Fwww.amazon.in%2F&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=inflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0",
+    testUrl: "https://www.amazon.in/s?k=milk",
+    color: "#FF9900",
+    icon: "cart",
+    requiredTokens: ["session-id"],
+  },
+  {
+    id: "Flipkart",
+    name: "Flipkart",
+    loginUrl: "https://www.flipkart.com/",
+    testUrl: "https://www.flipkart.com/search?q=milk",
+    color: "#2874F0",
+    icon: "bag",
+    requiredTokens: ["T"],
+  },
 ];
 
 export default function AccountsScreen() {
@@ -79,7 +97,7 @@ export default function AccountsScreen() {
               const fromVal = platformTokens[tokenKey];
               const fromCookie = platformTokens.cookie && platformTokens.cookie.includes(tokenKey);
               
-              return result;
+              return !!(fromVal || fromCookie);
             }
           );
           status[platform.id] = hasRequiredToken;
@@ -316,6 +334,25 @@ export default function AccountsScreen() {
             if (key.toLowerCase().includes('csrf') || key.toLowerCase().includes('token')) {
               payload[key] = ls[key];
             }
+          }
+        }
+
+        // AMAZON
+        else if (host.includes('amazon')) {
+          if (cookies && cookies.includes('session-id')) {
+            payload['cookie'] = cookies;
+            log('✓ Found Amazon session cookies');
+            isValid = true;
+          }
+        }
+
+        // FLIPKART
+        else if (host.includes('flipkart')) {
+          if (cookies && cookies.includes('T=')) {
+            payload['cookie'] = cookies;
+            if (ls.snData) payload['snData'] = ls.snData;
+            log('✓ Found Flipkart session cookies');
+            isValid = true;
           }
         }
         

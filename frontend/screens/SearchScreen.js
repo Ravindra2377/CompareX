@@ -40,7 +40,7 @@ const SUGGESTIONS = [
   "Oil",
 ];
 
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
+const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Amazon", "Flipkart"];
 const ENABLE_BACKEND_FALLBACK = true;
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 15000;
@@ -49,6 +49,8 @@ const PLATFORM_TIMEOUTS = {
   Blinkit: 12000,
   Zepto: 12000,
   BigBasket: 12000,
+  Amazon: 15000,
+  Flipkart: 15000,
 };
 const SEARCH_DEBOUNCE_MS = 400;
 const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial results faster
@@ -251,7 +253,6 @@ const extractNumericPrice = (raw) => {
 
   if (typeof raw === "number") {
     if (!Number.isFinite(raw) || raw <= 0) return 0;
-    if (raw > 10000) return Math.round((raw / 100) * 100) / 100;
     return Math.round(raw * 100) / 100;
   }
 
@@ -263,18 +264,17 @@ const extractNumericPrice = (raw) => {
     return 0;
   }
 
-  const currencyMatch = text.match(/(?:₹|rs\.?|inr)\s*([0-9]+(?:\.[0-9]+)?)/i);
+  const currencyMatch = text.match(/(?:₹|rs\.?|inr)\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i);
   if (currencyMatch?.[1]) {
-    const parsed = parseFloat(currencyMatch[1]);
+    const parsed = parseFloat(currencyMatch[1].replace(/,/g, ''));
     if (!Number.isFinite(parsed) || parsed <= 0) return 0;
     return Math.round(parsed * 100) / 100;
   }
 
-  const genericMatch = text.match(/([0-9]+(?:\.[0-9]+)?)/);
+  const genericMatch = text.match(/([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/);
   if (!genericMatch?.[1]) return 0;
-  const parsed = parseFloat(genericMatch[1]);
+  const parsed = parseFloat(genericMatch[1].replace(/,/g, ''));
   if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-  if (parsed > 10000) return Math.round((parsed / 100) * 100) / 100;
   return Math.round(parsed * 100) / 100;
 };
 
@@ -288,13 +288,13 @@ const extractLabeledPriceHints = (rawText) => {
   }
 
   const priceMatch = compact.match(
-    /\bprice\b\s*:?\s*₹\s*([0-9]+(?:\.[0-9]+)?)/i,
+    /\bprice\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
   );
-  const mrpMatch = compact.match(/\bmrp\b\s*:?\s*₹\s*([0-9]+(?:\.[0-9]+)?)/i);
+  const mrpMatch = compact.match(/\bmrp\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i);
 
   return {
-    price: priceMatch?.[1] ? parseFloat(priceMatch[1]) : 0,
-    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1]) : 0,
+    price: priceMatch?.[1] ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0,
+    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1].replace(/,/g, '')) : 0,
   };
 };
 
@@ -1591,6 +1591,8 @@ const SearchScreen = ({ navigation, route }) => {
     Blinkit: { color: "#FFCE00", icon: "flash", label: "Blinkit" },
     Zepto: { color: "#9747FF", icon: "rocket", label: "Zepto" },
     BigBasket: { color: "#84C225", icon: "basket", label: "BigBasket" },
+    Amazon: { color: "#FF9900", icon: "cart", label: "Amazon" },
+    Flipkart: { color: "#2874F0", icon: "bag", label: "Flipkart" },
   };
 
   const renderSearchProgress = () => {
