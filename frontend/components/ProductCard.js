@@ -14,7 +14,6 @@ const PLATFORM_COLORS = {
   Blinkit: COLORS.platformBlinkit,
   Zepto: COLORS.platformZepto,
   BigBasket: COLORS.platformBigBasket,
-  Instamart: "#F36E21",
 };
 
 const formatPrice = (value) => {

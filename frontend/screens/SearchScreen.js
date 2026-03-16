@@ -40,7 +40,7 @@ const SUGGESTIONS = [
   "Oil",
 ];
 
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Instamart"];
+const PLATFORMS = ["Blinkit", "Zepto", "BigBasket"];
 const ENABLE_BACKEND_FALLBACK = true;
 const ENABLE_BACKEND_COLLECTION = false;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 15000;
@@ -49,7 +49,6 @@ const PLATFORM_TIMEOUTS = {
   Blinkit: 12000,
   Zepto: 12000,
   BigBasket: 12000,
-  Instamart: 18000,
 };
 const SEARCH_DEBOUNCE_MS = 400;
 const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial results faster
@@ -145,48 +144,70 @@ const sanitizeProductName = (rawName) => {
   return cleaned;
 };
 
+const normalizeUnits = (str) => {
+  return str
+    .replace(/\b0\.5\s*l\b/gi, "500ml")
+    .replace(/\b1\s*l\b/gi, "1000ml")
+    .replace(/\b0\.25\s*l\b/gi, "250ml")
+    .replace(/\blitres?\b/gi, "l")
+    .replace(/\b1\s*kg\b/gi, "1000g")
+    .replace(/\b0\.5\s*kg\b/gi, "500g")
+    .replace(/\b0\.25\s*kg\b/gi, "250g")
+    .replace(/\bgrams?\b/gi, "g")
+    .replace(/\bgm\b/gi, "g");
+};
+
 const getProductMatchKey = (name) => {
-  const clean = sanitizeProductName(name).toLowerCase();
+  let clean = sanitizeProductName(name).toLowerCase();
   if (!clean) return "";
 
+  // Normalize units before stripping punctuation
+  clean = normalizeUnits(clean);
+
+  // Strip punctuation and unnecessary words
   const stopWords = new Set([
-    "fresh",
-    "new",
-    "original",
-    "pack",
-    "pouch",
-    "bottle",
-    "net",
-    "quantity",
-    "medium",
-    "large",
-    "small",
-    "gram",
-    "grams",
-    "kg",
-    "g",
-    "gm",
-    "ml",
-    "l",
-    "ltr",
-    "litre",
-    "litres",
-    "pc",
-    "pcs",
+    "fresh", "new", "original", "pack", "pouch", "bottle", "net",
+    "quantity", "medium", "large", "small", "pc", "pcs", "the", "a", "an", "of"
   ]);
 
-  const normalized = clean
+  let baseWords = clean
     .replace(/\([^)]*\)/g, " ")
-    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/[^a-z0-9.\s]/g, " ")
     .split(/\s+/)
-    .map((t) => t.trim())
+    .map(t => t.trim())
     .filter(Boolean)
-    .map((t) => (t.length > 3 && t.endsWith("s") ? t.slice(0, -1) : t))
-    .filter((t) => !stopWords.has(t))
-    .filter((t) => !/^\d+(\.\d+)?$/.test(t));
+    .filter(t => !stopWords.has(t));
 
-  if (!normalized.length) return clean.slice(0, 30);
-  return normalized.slice(0, 4).join(" ");
+  let normalized = baseWords.join(" ");
+
+  // Standardize spaces between numbers and units
+  normalized = normalized
+    .replace(/(\d+)\s+(ml|g|kg|l)\b/g, "$1$2")
+    .replace(/(ml|g|kg|l)\b/g, " $1")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  // Extract primary quantity to append at the end
+  let qtyMatch = normalized.match(/\b\d+(?:\.\d+)?\s?(ml|g|kg|l)\b/);
+  let qty = qtyMatch ? qtyMatch[0].replace(/\s+/g, "") : "";
+
+  // If quantity was extracted, remove it from the main string
+  if (qty) {
+    normalized = normalized.replace(new RegExp(qtyMatch[0], "g"), "").replace(/\s+/g, " ").trim();
+  }
+
+  // Remove completely isolated numbers (often model numbers or garbage without units if a qty exists)
+  normalized = normalized.split(/\s+/).filter(t => !/^\d+(\.\d+)?$/.test(t)).join(" ");
+
+  let finalWords = normalized.split(/\s+/).slice(0, 4);
+  
+  // Plural deduplication for matching words
+  finalWords = finalWords.map(t => (t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t));
+
+  const key = (finalWords.join(" ") + (qty ? " " + qty : "")).trim();
+  
+  if (!key) return clean.slice(0, 30);
+  return key;
 };
 
 const selectBestDisplayName = (listings = [], fallback = "") => {
@@ -556,13 +577,6 @@ const SearchScreen = ({ navigation, route }) => {
         );
       }
 
-      if (platform === "Instamart") {
-        return (
-          current.includes("swiggy.com") &&
-          current.includes("/instamart/search")
-        );
-      }
-
       return false;
     },
     [],
@@ -711,7 +725,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   const getConnectedPlatformsSnapshot = useCallback(async () => {
     try {
-      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Instamart"];
+      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
       const parsed = storedTokensRef.current || {};
 
       const tokenMap = {};
@@ -726,7 +740,7 @@ const SearchScreen = ({ navigation, route }) => {
       return supportedPlatforms.sort();
     } catch (e) {
       console.error("[Search] Error reading connections:", e);
-      return ["BigBasket", "Blinkit", "Zepto", "Instamart"];
+      return ["BigBasket", "Blinkit", "Zepto"];
     }
   }, []);
 
@@ -1577,7 +1591,6 @@ const SearchScreen = ({ navigation, route }) => {
     Blinkit: { color: "#FFCE00", icon: "flash", label: "Blinkit" },
     Zepto: { color: "#9747FF", icon: "rocket", label: "Zepto" },
     BigBasket: { color: "#84C225", icon: "basket", label: "BigBasket" },
-    Instamart: { color: "#F36E21", icon: "cart", label: "Instamart" },
   };
 
   const renderSearchProgress = () => {
@@ -1686,7 +1699,7 @@ const SearchScreen = ({ navigation, route }) => {
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Live Price Compare</Text>
             <Text style={styles.headerSubtitle}>
-              Scan Blinkit, Zepto, BigBasket, and Instamart in one search.
+              Scan Blinkit, Zepto, and BigBasket in one search.
             </Text>
           </View>
         </View>
@@ -1787,7 +1800,6 @@ function getPlatformUrl(platform) {
     Blinkit: "https://blinkit.com/",
     Zepto: "https://www.zepto.com/",
     BigBasket: "https://www.bigbasket.com/",
-    Instamart: "https://www.swiggy.com/instamart/",
   };
   return urls[platform] || "about:blank";
 }

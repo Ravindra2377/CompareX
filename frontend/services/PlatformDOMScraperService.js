@@ -216,18 +216,23 @@ class PlatformDOMScraperService {
                     log('DEBUG: Blinkit ancestor fallback candidates: ' + candidateDivs.length + ' from price divs=' + priceDivs.length);
                   }
 
-                  // Deduplicate: keep only the innermost (leaf-level) matching divs that HAVE a reasonable length or likely contain a title.
-                  // If a div is very small (< 40 chars), it's probably just the price/ADD tag.
-                  // We want the card that contains both.
+                  // Deduplicate: find the smallest candidate div that contains the full product info (>= 40 chars).
                   const candidateSet = new Set(candidateDivs);
-                  productCards = candidateDivs.filter(div => {
-                    const isLeaf = !Array.from(div.querySelectorAll('div')).some(child => candidateSet.has(child));
-                    if (isLeaf && div.textContent.length < 50) {
-                       // This leaf is too small to have a name. Look at parent.
-                       return false; 
+                  const validCards = new Set();
+                  
+                  candidateDivs.forEach(div => {
+                    if (div.textContent.length >= 40) {
+                      const hasValidChild = Array.from(div.querySelectorAll('div')).some(child => {
+                        return candidateSet.has(child) && child.textContent.length >= 40;
+                      });
+                      
+                      if (!hasValidChild) {
+                        validCards.add(div);
+                      }
                     }
-                    return isLeaf;
                   });
+                  
+                  productCards = Array.from(validCards);
                   
                   if (productCards.length === 0 && candidateDivs.length > 0) {
                     productCards = candidateDivs.filter(div => {
@@ -1472,169 +1477,6 @@ class PlatformDOMScraperService {
         `,
       },
  
-      Instamart: {
-        searchUrl: (query) =>
-          'https://www.swiggy.com/instamart/search?query=' + encodeURIComponent(query),
-        parseScript: () => `
-          (function () {
-            // Remove the running guard to allow re-injection after navigation
-            // if (window.__instamartParserRunning) return;
-            window.__instamartParserRunning = true;
-            
-            var sendMsg = function(data) {
-              try {
-                if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-                  window.ReactNativeWebView.postMessage(data);
-                } else if (window.__rnMsg) {
-                  window.__rnMsg(data);
-                }
-              } catch(e) {
-                // Silently fail if bridge is not ready
-              }
-            };
-            var log = function(msg) {
-              sendMsg(JSON.stringify({
-                type: 'LOG', 
-                message: '[Instamart-DOM] ' + msg
-              }));
-            };
-
-            log("===== SCRIPT EXECUTING (V5-DYNAMIC) =====");
-            log("URL: " + window.location.href);
-            log("ReadyState: " + document.readyState);
-
-            try {
-              var startTime = Date.now();
-              var scrollCount = 0;
-
-              var interval = setInterval(function() {
-                window.scrollBy(0, 800);
-                scrollCount++;
-
-                var buttons = [].slice.call(document.querySelectorAll('div[role="button"], button'));
-                var addButtons = [];
-                for (var i = 0; i < buttons.length; i++) {
-                  var btn = buttons[i];
-                  var btnText = (btn.innerText || "").trim().toUpperCase();
-                  var btnAria = (btn.getAttribute('aria-label') || "").toUpperCase();
-                  if (btnText === "ADD" || btnText.indexOf("ADD ITEM") !== -1 || btnAria.indexOf("ADD ITEM TO CART") !== -1) {
-                    addButtons.push(btn);
-                  }
-                }
-
-                var cards = [];
-                for (var j = 0; j < addButtons.length; j++) {
-                  var b = addButtons[j];
-                  var parent = b.parentElement;
-                  var cardFound = null;
-                  // Go up higher to reach the product-card container that has name+price
-                  while (parent && parent !== document.body) {
-                    var tid = (parent.getAttribute('data-testid') || "").toLowerCase();
-                    if (tid.indexOf('product-card') !== -1 || tid.indexOf('item-container') !== -1) {
-                      cardFound = parent;
-                      break;
-                    }
-                    parent = parent.parentElement;
-                  }
-                  // Fallback: if no testid, find first parent with > 50 chars of text
-                  if (!cardFound) {
-                    parent = b.parentElement;
-                    while (parent && parent !== document.body) {
-                      if ((parent.innerText || "").length > 50 && parent.querySelector('img')) {
-                        cardFound = parent;
-                        break;
-                      }
-                      parent = parent.parentElement;
-                    }
-                  }
-                  if (cardFound) cards.push(cardFound);
-                }
-
-                var uniqueCards = [];
-                for (var k = 0; k < cards.length; k++) {
-                  var exists = false;
-                  for (var l = 0; l < uniqueCards.length; l++) {
-                    if (uniqueCards[l] === cards[k]) { exists = true; break; }
-                  }
-                  if (!exists) uniqueCards.push(cards[k]);
-                }
-                
-                log("Poll @ " + ((Date.now() - startTime) / 1000).toFixed(1) + "s : scroll=" + scrollCount + ", candidates=" + uniqueCards.length);
-
-                if (uniqueCards.length > 0 || Date.now() - startTime > 10000) {
-                  clearInterval(interval);
-                  var products = [];
-                  
-                  for (var m = 0; m < uniqueCards.length; m++) {
-                    var card = uniqueCards[m];
-                    var cardInner = card.innerText || "";
-                    var imgs = card.querySelectorAll('img');
-                    var imgUrl = (imgs && imgs.length > 0) ? imgs[0].src : "";
-
-                    var priceOut = null;
-                    // Improved price regex to handle commas and decimals
-                    var pMatch = cardInner.match(/₹\s?([0-9,]+(?:\.\d+)?)/);
-                    if (pMatch) {
-                      priceOut = parseFloat(pMatch[1].replace(/,/g, ''));
-                    } else {
-                      var fallbackMatch = cardInner.match(/\d+(?:\.\d+)?$/m);
-                      if (fallbackMatch) priceOut = parseFloat(fallbackMatch[0]);
-                    }
-
-                    var nameOut = "Unknown Item";
-                    var divs = [].slice.call(card.querySelectorAll('div, span, p'));
-                    // Look for name-like elements first (usually first few divs)
-                    for (var n = 0; n < divs.length; n++) {
-                      var t = (divs[n].innerText || "").trim();
-                      // Name heuristic: 4-100 chars, no currency, no "ADD", no "% OFF"
-                      // If it has "MINS" it might be the delivery time, skip it unless it's a long string
-                      if (t.length > 4 && t.length < 120 && 
-                          t.indexOf('₹') === -1 && 
-                          t.indexOf('ADD') === -1 && 
-                          t.indexOf('% OFF') === -1 &&
-                          (t.indexOf('MINS') === -1 || t.length > 20)) {
-                        nameOut = t;
-                        break;
-                      }
-                    }
-
-                    if (m < 3) {
-                       log("Candidate[" + m + "] Name: " + nameOut + " Price: " + priceOut + " Text: " + cardInner.substring(0, 100).replace(/\\n/g, ' '));
-                    }
-
-                    if (nameOut && priceOut && nameOut !== "Unknown Item" && priceOut > 0) {
-                      products.push({
-                        product_name: nameOut,
-                        raw_product_name: nameOut,
-                        price: priceOut,
-                        mrp: priceOut,
-                        image_url: imgUrl,
-                        product_url: window.location.href,
-                        in_stock: true,
-                        platform: "Instamart"
-                      });
-                    }
-                  }
-
-                  log("Parsed " + products.length + " products");
-
-                  if (sendMsg) {
-                    sendMsg(JSON.stringify({
-                        type: 'SEARCH_RESULTS',
-                        platform: "Instamart",
-                        products: products,
-                        success: true,
-                        sessionId: window.__COMPAREX_SESSION_ID__ || null
-                    }));
-                  }
-                }
-              }, 600);
-            } catch (err) {
-              log("FATAL ERROR: " + err.message);
-            }
-          })();
-        `,
-      },
     };
   }
 
