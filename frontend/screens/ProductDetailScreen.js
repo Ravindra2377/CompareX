@@ -324,6 +324,20 @@ const ProductDetailScreen = ({ route, navigation }) => {
                 // Fall back to web URL.
               }
             }
+          } else if (Platform.OS === "android" && platform.includes("amazon") && p?.productUrl) {
+            // Amazon specific intent structure provided by the scraper
+            const amazonIntent = p.productUrl; // Note: For Amazon, our scraper puts the intent:// link in deep_link or product_url
+            // To be safe, check if deep_link exists
+            const intentToTry = p.deep_link || (p.productUrl.startsWith('intent://') ? p.productUrl : null);
+            
+            if (intentToTry) {
+               try {
+                 await Linking.openURL(intentToTry);
+                 return;
+               } catch {
+                 // Fall back to web URL
+               }
+            } 
           }
 
           await Linking.openURL(fallbackWebUrl);
@@ -496,6 +510,10 @@ const buildPlatformSearchUrl = (platformName, query) => {
     return `https://www.zepto.com/search?query=${q}`;
   if (platformName.includes("bigbasket"))
     return `https://www.bigbasket.com/ps/?q=${q}`;
+  if (platformName.includes("amazon"))
+    return `https://www.amazon.in/s?k=${q}`;
+  if (platformName.includes("flipkart"))
+    return `https://www.flipkart.com/search?q=${q}`;
   return "";
 };
 

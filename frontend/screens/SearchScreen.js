@@ -425,6 +425,7 @@ const SearchScreen = ({ navigation, route }) => {
   const [searchUrls, setSearchUrls] = useState({});
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [tipIndex, setTipIndex] = useState(0);
+  const [captchaPlatform, setCaptchaPlatform] = useState(null); // Platform currently showing CAPTCHA
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const pulseLoopRef = useRef(null);
 
@@ -577,6 +578,20 @@ const SearchScreen = ({ navigation, route }) => {
         );
       }
 
+      if (platform === "Amazon") {
+        return (
+          current.includes("amazon.in") &&
+          (current.includes("/s?") || current.includes("/s/") || current.includes("k=") || current.includes("captcha"))
+        );
+      }
+
+      if (platform === "Flipkart") {
+        return (
+          current.includes("flipkart.com") &&
+          (current.includes("/search") || current.includes("q="))
+        );
+      }
+
       return false;
     },
     [],
@@ -725,7 +740,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   const getConnectedPlatformsSnapshot = useCallback(async () => {
     try {
-      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto"];
+      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Amazon", "Flipkart"];
       const parsed = storedTokensRef.current || {};
 
       const tokenMap = {};
@@ -740,7 +755,7 @@ const SearchScreen = ({ navigation, route }) => {
       return supportedPlatforms.sort();
     } catch (e) {
       console.error("[Search] Error reading connections:", e);
-      return ["BigBasket", "Blinkit", "Zepto"];
+      return ["BigBasket", "Blinkit", "Zepto", "Amazon", "Flipkart"];
     }
   }, []);
 
@@ -808,6 +823,7 @@ const SearchScreen = ({ navigation, route }) => {
     lastSearchKeyRef.current = searchKey;
     setCurrentSearchQuery(q);
     currentSearchQueryRef.current = q;
+    setCaptchaPlatform(null); // Reset CAPTCHA state on new search
 
     // Clear injected flags
     injectedPlatformsRef.current = {};
@@ -1123,6 +1139,9 @@ const SearchScreen = ({ navigation, route }) => {
           connectedPlatformsRef.current.length ||
           state.connectedPlatforms.length;
         if (respondedCount >= expectedCount) {
+          if (errorMsg && errorMsg.includes("CAPTCHA")) {
+            setCaptchaPlatform(platform);
+          }
           if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
           scheduleAggregateResults(sessionId, 0);
         } else if (success && products?.length > 0) {
@@ -1701,7 +1720,7 @@ const SearchScreen = ({ navigation, route }) => {
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Live Price Compare</Text>
             <Text style={styles.headerSubtitle}>
-              Scan Blinkit, Zepto, and BigBasket in one search.
+              Scan Blinkit, Zepto, BigBasket, Amazon, and Flipkart in one search.
             </Text>
           </View>
         </View>
@@ -1716,6 +1735,20 @@ const SearchScreen = ({ navigation, route }) => {
           autoFocus={!hasSearched && query === ""}
         />
       </LinearGradient>
+
+      {captchaPlatform && (
+        <View style={styles.captchaOverlay}>
+          <Text style={styles.captchaText}>
+            Please solve the CAPTCHA for {captchaPlatform} to continue saving.
+          </Text>
+          <TouchableOpacity
+            style={styles.captchaDismissBtn}
+            onPress={() => setCaptchaPlatform(null)}
+          >
+            <Text style={styles.captchaDismissTxt}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <FlatList
         data={results}
@@ -1737,7 +1770,7 @@ const SearchScreen = ({ navigation, route }) => {
           key={platform}
           ref={(ref) => (webViewRefs.current[platform] = ref)}
           source={{ uri: searchUrls[platform] || getPlatformUrl(platform) }}
-          style={styles.hiddenWebView}
+          style={captchaPlatform === platform ? styles.visibleWebView : styles.hiddenWebView}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           cacheEnabled={true}
@@ -1784,7 +1817,11 @@ const SearchScreen = ({ navigation, route }) => {
           onNavigationStateChange={(navState) => {
             currentWebViewUrlsRef.current[platform] = navState.url;
           }}
-          userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          userAgent={
+            platform === "Amazon"
+              ? "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+              : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          }
           incognito={false}
           sharedCookiesEnabled={true}
           thirdPartyCookiesEnabled={true}
@@ -1802,6 +1839,8 @@ function getPlatformUrl(platform) {
     Blinkit: "https://blinkit.com/",
     Zepto: "https://www.zepto.com/",
     BigBasket: "https://www.bigbasket.com/",
+    Amazon: "https://www.amazon.in/",
+    Flipkart: "https://www.flipkart.com/",
   };
   return urls[platform] || "about:blank";
 }
@@ -1828,6 +1867,35 @@ const styles = StyleSheet.create({
     fontSize: 42,
     lineHeight: 44,
     marginBottom: SPACING.xs,
+  },
+  visibleWebView: {
+    flex: 1,
+    height: 400,
+    marginTop: 10,
+    backgroundColor: '#fff',
+  },
+  captchaOverlay: {
+    padding: SPACING.lg,
+    backgroundColor: COLORS.warningLight,
+    borderBottomWidth: 1,
+    borderColor: "rgba(245, 158, 11, 0.3)",
+    alignItems: "center",
+  },
+  captchaText: {
+    ...FONTS.bodyBold,
+    color: COLORS.warning,
+    textAlign: "center",
+    marginBottom: SPACING.sm,
+  },
+  captchaDismissBtn: {
+    backgroundColor: COLORS.warning,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.md,
+  },
+  captchaDismissTxt: {
+    ...FONTS.bodyBold,
+    color: "#fff",
   },
   headerSubtitle: {
     ...FONTS.body,
