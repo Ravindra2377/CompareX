@@ -1638,9 +1638,11 @@ class PlatformDOMScraperService {
               };
 
               const sendResults = (products, success, error) => {
+                log('Sending ' + (products ? products.length : 0) + ' results (success=' + success + ')');
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'Flipkart',
+                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
                   success: success,
                   products: products,
                   error: error || null
@@ -1649,94 +1651,146 @@ class PlatformDOMScraperService {
 
               const extractProducts = () => {
                 const products = [];
-                const seenLinks = new Set();
+                const productGroups = new Map(); // normalizedHref -> {name, image, card, link}
 
-                const linkElems = document.querySelectorAll('a[target="_blank"][rel="noopener noreferrer"]');
-                const productCards = [];
+                // Find all potential product links (p = product, dl = direct link)
+                const allLinks = document.querySelectorAll('a[href*="/p/"], a[href*="/dl/"]');
                 
-                linkElems.forEach(a => {
-                  if (!a.href || seenLinks.has(a.href)) return;
-                  if (!a.href.includes('/p/') && !a.href.includes('/dl/')) return;
-                  const p = a.closest('div[data-id]') || a.parentElement?.parentElement;
-                  if (p) {
-                    seenLinks.add(a.href);
-                    productCards.push({card: p, link: a});
-                  }
+                allLinks.forEach(a => {
+                  try {
+                    const href = a.href;
+                    if (!href || href.includes('flipkart.com/help') || href.includes('/buying-guide/')) return;
+                    
+                    // Normalize href to group elements of the same product (pid is the unique identifier)
+                    let normalizedHref = href;
+                    try {
+                      const url = new URL(href);
+                      const pid = url.searchParams.get('pid');
+                      normalizedHref = url.origin + url.pathname + (pid ? '?pid=' + pid : '');
+                    } catch(e) {}
+
+                    let group = productGroups.get(normalizedHref);
+                    if (!group) {
+                      group = { name: '', image: '', card: null, link: a };
+                      productGroups.set(normalizedHref, group);
+                    }
+
+                    // Accumulate information from different elements pointing to the same product
+                    const title = a.getAttribute('title');
+                    if (title && title.length > group.name.length) group.name = title;
+
+                    const img = a.querySelector('img');
+                    if (img && img.src && !group.image) group.image = img.src;
+
+                    // Identify the overall product card (container)
+                    // .sl_M_D is a common grid container, div[data-id] is common in list view
+                    const card = a.closest('div[data-id]') || a.closest('.sl_M_D') || a.closest('._1AtVbE') || a.parentElement?.parentElement;
+                    if (card && (!group.card || card.contains(group.card))) {
+                      group.card = card;
+                    }
+                  } catch(e) {}
                 });
 
-                if (productCards.length === 0) {
-                  const allLinks = document.querySelectorAll('a[href*="/p/"]');
-                  allLinks.forEach(a => {
-                    if (!a.href || seenLinks.has(a.href)) return;
-                    const p = a.closest('div[data-id]') || a.parentElement?.parentElement;
-                    if (p && p.textContent && p.textContent.includes('\\u20b9')) {
-                      seenLinks.add(a.href);
-                      productCards.push({card: p, link: a});
-                    }
-                  });
-                }
+                log('Found ' + productGroups.size + ' unique Flipkart product candidates');
 
-                log('Found ' + productCards.length + ' Flipkart candidate pairs');
-                
-                productCards.forEach((item, i) => {
+                productGroups.forEach((group, href) => {
                   try {
-                    const card = item.card;
-                    let name = item.link.getAttribute('title') || '';
+                    const card = group.card || group.link;
+                    const cardText = card.textContent || '';
+                    
+                    // 1. Name Extraction - try multiple known classes and fallbacks
+                    let name = group.name;
                     if (!name || name.length < 5) {
-                      const nameEl = card.querySelector('.KzDlHZ') || card.querySelector('._4rR01T') || card.querySelector('.IRpwTa');
+                      // KzDlHZ: new list title, IRpwTa: grid title, others are legacy or variations
+                      const nameEl = card.querySelector('.KzDlHZ, ._4rR01T, .IRpwTa, .k7wcnx, .pIpigb, .atJtCj, .Qum9aC, .W_SDR8');
                       if (nameEl) name = nameEl.textContent.trim();
                     }
                     if (!name || name.length < 5) {
-                      const divs = Array.from(item.link.querySelectorAll('div'));
-                      for (let d of divs) {
-                        if (d.textContent && d.textContent.trim().length > 10) {
-                          name = d.textContent.trim();
-                          break;
-                        }
-                      }
+                      name = group.link.textContent?.trim() || '';
                     }
-                    if (!name || name.length < 5) {
-                      name = item.link.textContent?.trim() || '';
-                    }
-                    if (!name || name.length < 5) return;
                     
+                    // Clean up name
+                    name = name.replace(/Add to Compare/gi, '').replace(/\\s+/g, ' ').trim();
+                    if (!name || name.length < 5) return;
+
+                    // 2. Price Extraction
                     let price = 0;
                     let mrp = 0;
-                    
-                    const cardText = card.textContent || '';
-                    const priceMatches = cardText.match(/\\u20b9([0-9,]+)/g);
-                    
-                    if (priceMatches && priceMatches.length > 0) {
-                      price = parseFloat(priceMatches[0].replace(/[^0-9]/g, ''));
-                      if (priceMatches.length > 1) {
-                        mrp = parseFloat(priceMatches[1].replace(/[^0-9]/g, ''));
-                      } else {
-                        mrp = price;
+
+                    const parseVal = (s) => parseFloat(String(s || "").replace(/[^0-9.]/g, "")) || 0;
+
+                    // A: Try specific known selectors (highest priority)
+                    // .Nx9Wp0, ._30jeq3, ._25b6y8 (selling); .yRaY8j, ._3I9_1k, ._27M-N_ (MRP)
+                    const sEl = card.querySelector('.Nx9Wp0, ._30jeq3, ._16Jk6d, ._25b6y8');
+                    const mEl = card.querySelector('.yRaY8j, ._3I9_1k, ._3pw69H, ._27M-N_');
+
+                    if (sEl) price = parseVal(sEl.textContent);
+                    if (mEl) mrp = parseVal(mEl.textContent);
+
+                    // B: Brute force leaf-node search for ₹ markers
+                    if (price <= 0) {
+                      const all = card.querySelectorAll('*');
+                      const found = [];
+                      all.forEach(el => {
+                        const t = el.textContent.trim();
+                        // If it's a leaf (no children with text that also has ₹) and contains ₹
+                        if ((t.startsWith('₹') || t.startsWith('\u20b9'))) {
+                          const hasRupeeChild = Array.from(el.children).some(c => c.textContent.includes('₹'));
+                          if (!hasRupeeChild) {
+                            const val = parseVal(t);
+                            if (val > 0) found.push({ el, val });
+                          }
+                        }
+                      });
+
+                      if (found.length > 0) {
+                        // First one is usually selling price, second is MRP
+                        price = found[0].val;
+                        if (found.length > 1 && mrp <= 0) mrp = found[1].val;
                       }
                     }
-                    
-                    if (price <= 0) return;
-                    if (mrp < price) mrp = price;
-                    
-                    const imgEl = card.querySelector('img');
-                    
-                    if (i === 0) {
-                      log('First product: ' + name.substring(0, 60) + ', price: ' + price);
+
+                    // C: Last resort regex - ONLY if still 0
+                    if (price <= 0) {
+                      // Split by ₹ to avoid smashing numbers
+                      const parts = cardText.split(/[₹\u20b9]/);
+                      const vals = parts.map(p => {
+                        const m = p.match(/^([0-9,]+(?:\.[0-9]+)?)/);
+                        return m ? parseVal(m[1]) : 0;
+                      }).filter(v => v > 0);
+
+                      if (vals.length > 0) {
+                        price = vals[0];
+                        if (vals.length > 1 && mrp <= 0) mrp = vals[1];
+                      }
                     }
-                    
+
+                    if (price <= 0) return;
+                    if (mrp <= 0) mrp = price;
+                    if (mrp < price) mrp = price;
+
+                    // 3. Image
+                    let image = group.image;
+                    if (!image) {
+                      const imgEl = card.querySelector('img');
+                      image = imgEl ? imgEl.src : '';
+                    }
+
                     products.push({
                       product_name: name,
                       raw_product_name: name,
                       brand: '',
                       price: price,
                       mrp: mrp,
-                      image_url: imgEl ? imgEl.src : '',
-                      product_url: item.link.href,
+                      image_url: image,
+                      product_url: href,
                       in_stock: !cardText.toLowerCase().includes('out of stock'),
                       weight: '',
                       platform: 'Flipkart'
                     });
-                  } catch(e) {}
+                  } catch(e) {
+                    log('Error parsing Flipkart product group: ' + e.message);
+                  }
                 });
                 
                 return products;
@@ -1750,7 +1804,8 @@ class PlatformDOMScraperService {
                 const poll = () => {
                   attempt++;
                   const links = document.querySelectorAll('a[href*="/p/"]');
-                  const rupeePresent = (document.body.textContent || '').includes('\\u20b9');
+                  const bodyTxt = document.body.textContent || '';
+                  const rupeePresent = bodyTxt.includes('₹') || bodyTxt.includes('\\u20b9');
                   log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 's: productLinks=' + links.length + ', hasRupee=' + rupeePresent);
                   
                   if (links.length > 2 && rupeePresent) {
