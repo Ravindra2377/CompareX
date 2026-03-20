@@ -45,5 +45,13 @@
       "x-instamart-session-id": "PASTE_YOUR_SESSION_ID_HERE"
     }
   },
+  "flipkart": {
+    "base_url": "https://www.flipkart.com/search",
+    "actor_id": "apify/flipkart-scraper"
+  },
+  "amazon": {
+    "base_url": "https://www.amazon.in/s",
+    "actor_id": "fast_scraper/amazon-product-scraper"
+  },
   "apify_api_key": "PASTE_YOUR_APIFY_API_KEY_HERE"
 }

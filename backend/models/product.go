@@ -42,6 +42,7 @@ type CompareResult struct {
 type ComparedProduct struct {
 	Name      string            `json:"name"`
 	Category  string            `json:"category,omitempty"`
+	ImageURL  string            `json:"image_url,omitempty"`
 	BestPrice float64           `json:"best_price"`
 	Listings  []PlatformListing `json:"listings"`
 }

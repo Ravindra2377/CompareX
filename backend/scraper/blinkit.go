@@ -191,11 +191,26 @@ func (b *BlinkitScraper) Search(ctx context.Context, query string, lat, lng floa
 				}
 			}
 
+			// Try multiple image fields
+			imageURL := getString(item, "image_url")
+			if imageURL == "" {
+				imageID := getString(item, "image_id")
+				if imageID == "" {
+					imageID = getString(item, "product_image_id")
+				}
+				if imageID != "" {
+					// Blinkit images usually need an extension. Default to .png if missing.
+					ext := ".png"
+					imageURL = fmt.Sprintf("https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=450/da/cms-assets/cms/product/%s%s", imageID, ext)
+				}
+			}
+
 			l := models.PlatformListing{
 				Platform:       "Blinkit",
 				ProductName:    name,
 				Price:          price,
 				MRP:            mrp,
+				ImageURL:       imageURL,
 				Discount:       discountInfo,
 				InStock:        inStock,
 				DeliveryTime:   "10-15 mins",

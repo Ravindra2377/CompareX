@@ -69,17 +69,27 @@ class PlatformScraperService {
               const data = await response.json();
               log('Got data, products count: ' + (data.products?.length || 0));
               
-              const products = (data.products || []).map(p => ({
-                product_name: p.name || p.product_name,
-                brand: p.brand || '',
-                price: p.price || 0,
-                mrp: p.mrp || p.price || 0,
-                image_url: p.image_url || '',
-                product_url: 'https://blinkit.com' + (p.url || ''),
-                in_stock: p.available !== false,
-                weight: p.unit || '',
-                platform: 'Blinkit'
-              }));
+              const products = (data.products || []).map(p => {
+                let image_url = p.image_url || p.image?.url || '';
+                if (!image_url && p.image_id) {
+                  image_url = \`https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=450/da/cms-assets/cms/product/\${p.image_id}.png\`;
+                }
+                // Blinkit optimization: use higher resolution if possible
+                if (image_url && image_url.includes('w=90')) {
+                  image_url = image_url.replace('w=90', 'w=450');
+                }
+                return {
+                  product_name: p.name || p.product_name,
+                  brand: p.brand || '',
+                  price: p.price || 0,
+                  mrp: p.mrp || p.price || 0,
+                  image_url: image_url,
+                  product_url: 'https://blinkit.com' + (p.url || ''),
+                  in_stock: p.available !== false,
+                  weight: p.unit || '',
+                  platform: 'Blinkit'
+                };
+              });
               
               log('Parsed products: ' + products.length);
               
@@ -177,7 +187,7 @@ class PlatformScraperService {
                   brand: p.brand || '',
                   price,
                   mrp: mrp > price ? mrp : price,
-                  image_url: p.image || p.imageUrl || '',
+                  image_url: p.image || p.imageUrl || p.image_url || (p.image_id ? \`https://cdn.zeptonow.com/production/tr:w-640,ar-1200-1200,pr-true,f-auto,q-80/cms/product_variant/\${p.image_id}.jpeg\` : ''),
                   product_url: (p.slug && p.id)
                     ? \`https://www.zepto.com/pn/\${p.slug}/pvid/\${p.id}\`
                     : '',
@@ -246,7 +256,7 @@ class PlatformScraperService {
                 brand: p.p_brand || '',
                 price: p.pricing?.price || 0,
                 mrp: p.pricing?.mrp || p.pricing?.price || 0,
-                image_url: p.p_img_url || '',
+                image_url: p.p_img_url || p.image_url || p.img_url || (p.images && p.images[0]?.m) || (p.images && p.images[0]?.l) || '',
                 product_url: p.absolute_url || '',
                 in_stock: p.is_available !== false,
                 weight: p.w || '',

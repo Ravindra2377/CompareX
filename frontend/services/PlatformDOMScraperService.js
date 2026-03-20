@@ -177,7 +177,7 @@ class PlatformDOMScraperService {
                 const products = [];
                 
                 // Try multiple selector strategies
-                let productCards = document.querySelectorAll('[class*="Product"][class*="Card"], [class*="product-card"], div[class*="ProductCard"]');
+                let productCards = document.querySelectorAll('[data-test-id="product-pod"], [data-test-id="product-card"], [class*="Product"][class*="Card"], [class*="product-card"], div[class*="ProductCard"]');
                 if (productCards.length === 0) {
                   productCards = document.querySelectorAll('a[href*="/p/"], a[href*="/pn/"], a[href*="/product/"]');
                 }
@@ -345,7 +345,11 @@ class PlatformDOMScraperService {
 
                     const price = priceText ? parseFloat(priceText.replace(/[^0-9.]/g, '')) : 0;
                     const imgEl = card.querySelector('img');
-                    const image = imgEl ? imgEl.src : '';
+                    let image = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : '';
+                    // Blinkit optimization: use higher resolution image if possible
+                    if (image && image.includes('w=90')) {
+                      image = image.replace('w=90', 'w=450');
+                    }
                     const nestedAnchor = card.querySelector('a[href]');
                     const closestAnchor = card.closest ? card.closest('a[href]') : null;
                     let productUrl =
@@ -939,7 +943,15 @@ class PlatformDOMScraperService {
                     
                     const price = priceText ? parseFloat(String(priceText).replace(/[^0-9.]/g, '')) : 0;
                     const imgEl = card.querySelector('img');
-                    const image = imgEl ? imgEl.src : '';
+                    let image = imgEl ? (imgEl.getAttribute('data-src') || imgEl.getAttribute('data-srcset') || imgEl.getAttribute('srcset') || imgEl.src || '') : '';
+                    
+                    // BigBasket specific: if it's a placeholder SVG, try to find a better one
+                    if (image.includes('data:image/svg+xml') || !image.includes('bbassets.com')) {
+                      const betterImg = card.querySelector('img[src*="bbassets.com"], img[data-src*="bbassets.com"]');
+                      if (betterImg) {
+                        image = betterImg.getAttribute('data-src') || betterImg.src;
+                      }
+                    }
                     
                     if (index === 0) {
                       log('First product - name: ' + (name || 'NOT FOUND') + ', priceText: "' + priceText + '", price: ' + price);
@@ -1298,9 +1310,13 @@ class PlatformDOMScraperService {
                     }
                     
                     const imgEl = card.querySelector('img');
+                    let image = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : '';
+                    if (image && image.includes('w=')) {
+                      image = image.replace(/w=\d+/, 'w=450');
+                    }
                     
                     if (index === 0) {
-                      log('First product: ' + name.substring(0, 50) + ', price: ' + price);
+                      log('First product: ' + name.substring(0, 50) + ', price: ' + price + ', hasImage: ' + !!image);
                     }
                     
                     if (name && price && parseFloat(price) > 0) {
@@ -1317,7 +1333,7 @@ class PlatformDOMScraperService {
                         brand: '',
                         price: parsedPrice,
                         mrp: meta.mrp || parsedPrice,
-                        image_url: imgEl ? imgEl.src : '',
+                        image_url: image,
                         product_url: productUrl,
                         in_stock: true,
                         weight: meta.quantity || '',
@@ -1547,6 +1563,32 @@ class PlatformDOMScraperService {
                     const mrp = mrpMatch ? parseFloat(mrpMatch[0]) : price;
                     
                     const imgEl = card.querySelector('.s-image');
+                    let image = '';
+                    if (imgEl) {
+                      // Try data-a-dynamic-image (JSON of resolutions)
+                      const dynamicImage = imgEl.getAttribute('data-a-dynamic-image');
+                      if (dynamicImage) {
+                        try {
+                          const urls = Object.keys(JSON.parse(dynamicImage));
+                          if (urls.length > 0) image = urls[urls.length - 1]; // Pick last (usually highest res)
+                        } catch(e) {}
+                      }
+                      
+                      // Fallback to srcset
+                      if (!image) {
+                        const srcset = imgEl.getAttribute('srcset');
+                        if (srcset) {
+                          const parts = srcset.split(',');
+                          const lastLink = parts[parts.length - 1].trim().split(' ')[0];
+                          if (lastLink) image = lastLink;
+                        }
+                      }
+                      
+                      // Fallback to data-src or src
+                      if (!image) {
+                        image = imgEl.getAttribute('data-src') || imgEl.src;
+                      }
+                    }
                     // Try multiple selectors for product links on Amazon mobile
                     const urlEl = card.querySelector('h2 a') 
                                || card.querySelector('a[href*="/dp/"]') 
@@ -1653,8 +1695,8 @@ class PlatformDOMScraperService {
                 const products = [];
                 const productGroups = new Map(); // normalizedHref -> {name, image, card, link}
 
-                // Find all potential product links (p = product, dl = direct link)
-                const allLinks = document.querySelectorAll('a[href*="/p/"], a[href*="/dl/"]');
+                // Find all potential product links (p = product, dl = direct link, pid = product id)
+                const allLinks = document.querySelectorAll('a[href*="/p/"], a[href*="/dl/"], a[href*="pid="], a[href*="/itm/"]');
                 
                 allLinks.forEach(a => {
                   try {
@@ -1682,9 +1724,9 @@ class PlatformDOMScraperService {
                     const img = a.querySelector('img');
                     if (img && img.src && !group.image) group.image = img.src;
 
-                    // Identify the overall product card (container)
                     // .sl_M_D is a common grid container, div[data-id] is common in list view
-                    const card = a.closest('div[data-id]') || a.closest('.sl_M_D') || a.closest('._1AtVbE') || a.parentElement?.parentElement;
+                    // Also check for k7wcnx (link itself as card)
+                    const card = a.closest('div[data-id]') || a.closest('.sl_M_D') || a.closest('._1AtVbE') || a.closest('.k7wcnx') || a.parentElement?.parentElement;
                     if (card && (!group.card || card.contains(group.card))) {
                       group.card = card;
                     }
@@ -1702,15 +1744,21 @@ class PlatformDOMScraperService {
                     let name = group.name;
                     if (!name || name.length < 5) {
                       // KzDlHZ: new list title, IRpwTa: grid title, others are legacy or variations
-                      const nameEl = card.querySelector('.KzDlHZ, ._4rR01T, .IRpwTa, .k7wcnx, .pIpigb, .atJtCj, .Qum9aC, .W_SDR8');
+                      // Adding more generic fallbacks: [class*="title"], [class*="name"]
+                      const nameEl = card.querySelector('.KzDlHZ, ._4rR01T, .IRpwTa, .k7wcnx, .pIpigb, .atJtCj, .Qum9aC, .W_SDR8, [class*="title" i], [class*="name" i]');
                       if (nameEl) name = nameEl.textContent.trim();
+                    }
+                    if (!name || name.length < 5) {
+                      // Try h1/h2/h3 as a last resort name source
+                      const heading = card.querySelector('h1, h2, h3, h4');
+                      if (heading) name = heading.textContent.trim();
                     }
                     if (!name || name.length < 5) {
                       name = group.link.textContent?.trim() || '';
                     }
                     
                     // Clean up name
-                    name = name.replace(/Add to Compare/gi, '').replace(/\\s+/g, ' ').trim();
+                    name = name.replace(/Add to Compare/gi, '').replace(/\s+/g, ' ').trim();
                     if (!name || name.length < 5) return;
 
                     // 2. Price Extraction
@@ -1721,8 +1769,9 @@ class PlatformDOMScraperService {
 
                     // A: Try specific known selectors (highest priority)
                     // .Nx9Wp0, ._30jeq3, ._25b6y8 (selling); .yRaY8j, ._3I9_1k, ._27M-N_ (MRP)
-                    const sEl = card.querySelector('.Nx9Wp0, ._30jeq3, ._16Jk6d, ._25b6y8');
-                    const mEl = card.querySelector('.yRaY8j, ._3I9_1k, ._3pw69H, ._27M-N_');
+                    // Adding generic fallback: [class*="price" i]
+                    const sEl = card.querySelector('.Nx9Wp0, ._30jeq3, ._16Jk6d, ._25b6y8, [class*="price" i]:not([class*="mrp" i]):not([class*="strike" i])');
+                    const mEl = card.querySelector('.yRaY8j, ._3I9_1k, ._3pw69H, ._27M-N_, [class*="mrp" i], [class*="strike" i]');
 
                     if (sEl) price = parseVal(sEl.textContent);
                     if (mEl) mrp = parseVal(mEl.textContent);
@@ -1798,17 +1847,18 @@ class PlatformDOMScraperService {
 
               try {
                 let attempt = 0;
-                const maxAttempts = 16;
+                const maxAttempts = 30; // Increased to 15s
                 const pollInterval = 500;
                 
                 const poll = () => {
                   attempt++;
-                  const links = document.querySelectorAll('a[href*="/p/"]');
+                  // Broaden link selector to include any product-like ID or listing
+                  const links = document.querySelectorAll('a[href*="/p/"], a[href*="pid="], a[href*="/dl/"], a.k7wcnx');
                   const bodyTxt = document.body.textContent || '';
-                  const rupeePresent = bodyTxt.includes('₹') || bodyTxt.includes('\\u20b9');
-                  log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 's: productLinks=' + links.length + ', hasRupee=' + rupeePresent);
+                  const rupeePresent = bodyTxt.includes('₹') || bodyTxt.includes('\u20b9');
+                  log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 's: links=' + links.length + ', hasRupee=' + rupeePresent + ', title=' + document.title.substring(0,25));
                   
-                  if (links.length > 2 && rupeePresent) {
+                  if (links.length > 0 && rupeePresent) {
                     const products = extractProducts();
                     log('Parsed ' + products.length + ' products');
                     if (products.length > 0) {

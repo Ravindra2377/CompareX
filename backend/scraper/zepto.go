@@ -170,12 +170,25 @@ func (z *ZeptoScraper) Search(ctx context.Context, query string, lat, lng float6
 			slug := getString(variant, "slug")
 			deepLink := fmt.Sprintf("https://zeptonow.com/product/%s/%s", slug, id)
 
+			imageURL := getString(variant, "image_url")
+			if imageURL == "" {
+				imageID := getString(variant, "image_id")
+				if imageID == "" {
+					imageID = getString(variant, "product_image_id")
+				}
+				if imageID != "" {
+					// Zepto images usually need .jpeg extension
+					imageURL = fmt.Sprintf("https://cdn.zeptonow.com/production/tr:w-640,ar-1200-1200,pr-true,f-auto,q-80/cms/product_variant/%s.jpeg", imageID)
+				}
+			}
+
 			if name != "" && price > 0 {
 				l := models.PlatformListing{
 					Platform:       "Zepto",
 					ProductName:    name,
 					Price:          price,
 					MRP:            mrp,
+					ImageURL:       imageURL,
 					Discount:       discountInfo,
 					InStock:        getBool(variant, "isAvailable"),
 					DeliveryTime:   "10 mins",

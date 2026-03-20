@@ -19,6 +19,8 @@ type Config struct {
 	Zepto       PlatformConfig `json:"zepto"`
 	Instamart   PlatformConfig `json:"instamart"`
 	BigBasket   PlatformConfig `json:"bigbasket"`
+	Flipkart    PlatformConfig `json:"flipkart"`
+	Amazon      PlatformConfig `json:"amazon"`
 	ApifyApiKey string         `json:"apify_api_key"`
 }
 

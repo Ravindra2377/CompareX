@@ -129,12 +129,18 @@ func (bb *BigBasketScraper) Search(ctx context.Context, query string, lat, lng f
 					}
 				}
 
+				imageURL := getString(item, "p_img_url")
+				if imageURL == "" {
+					imageURL = getString(item, "image_url")
+				}
+
 				l := models.PlatformListing{
 					Platform:       "BigBasket",
 					ProductName:    name,
 					Brand:          brand,
 					Price:          sp,
 					MRP:            mrp,
+					ImageURL:       imageURL,
 					Discount:       discountInfo,
 					InStock:        true,
 					DeliveryTime:   "2-4 hours",

@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Animated,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import GlassCard from "./GlassCard";
@@ -38,7 +39,10 @@ const ProductCard = ({ product, onPress }) => {
     totalPlatforms = 3,
     discount,
     bestPlatform = "",
+    image_url: imageURL,
   } = product;
+
+  const [imageError, setImageError] = useState(false);
 
   const effectivePrice = Number(price) > 0 ? Number(price) : 0;
   const effectiveOriginalPrice =
@@ -85,6 +89,25 @@ const ProductCard = ({ product, onPress }) => {
           glowColor={accentColor}
         >
           <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              {imageURL && !imageError ? (
+                <Image
+                  source={{ uri: imageURL }}
+                  style={styles.image}
+                  resizeMode="contain"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <View style={styles.imagePlaceholder}>
+                  <Ionicons
+                    name="image-outline"
+                    size={28}
+                    color={COLORS.textTertiary}
+                  />
+                </View>
+              )}
+            </View>
+
             <View style={styles.info}>
               <Text style={styles.name} numberOfLines={2}>
                 {name}
@@ -201,12 +224,38 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: SPACING.sm,   // extra room for accent bar
+    paddingLeft: SPACING.xs,
+    paddingVertical: SPACING.sm,
+  },
+  imageContainer: {
+    width: 90,
+    height: 90,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: RADIUS.md,
+    marginRight: SPACING.md,
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  imagePlaceholder: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
   },
   info: { flex: 1 },
   name: {
     ...FONTS.h3,
-    marginBottom: 4,
+    fontSize: 15,
+    marginBottom: 2,
+    color: COLORS.textPrimary,
   },
   brand: {
     ...FONTS.caption,

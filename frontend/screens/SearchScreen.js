@@ -1436,7 +1436,7 @@ const SearchScreen = ({ navigation, route }) => {
           listings.length > 0
             ? listings.reduce((a, b) => (a.price < b.price ? a : b)).platform
             : "",
-        image: first.image_url || "",
+        image_url: first.image_url || "",
       };
     });
 

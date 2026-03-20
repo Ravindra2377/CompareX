@@ -30,7 +30,7 @@ type Service struct {
 }
 
 // AllPlatforms lists all supported platforms for the "Not Available" display
-var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket", "Instamart"}
+var AllPlatforms = []string{"Blinkit", "Zepto", "BigBasket", "Instamart", "Flipkart", "Amazon"}
 
 // NewService creates a new scraper service
 func NewService(redisAddr string) *Service {
@@ -57,6 +57,8 @@ func NewService(redisAddr string) *Service {
 		NewZeptoScraper(),
 		NewBigBasketScraper(),
 		NewInstamartScraper(),
+		NewFlipkartScraper(),
+		NewAmazonScraper(),
 	}
 
 	log.Printf("✅ Scraper service initialized with %d platforms (HTTP mode)", len(s.scrapers))
@@ -243,6 +245,10 @@ func getPlatformURL(platform, query string) string {
 		return fmt.Sprintf("https://www.swiggy.com/search?query=%s", query)
 	case "Zomato":
 		return fmt.Sprintf("https://www.zomato.com/bangalore/delivery?q=%s", query)
+	case "Flipkart":
+		return fmt.Sprintf("https://www.flipkart.com/search?q=%s", query)
+	case "Amazon":
+		return fmt.Sprintf("https://www.amazon.in/s?k=%s", query)
 	default:
 		return ""
 	}
@@ -272,9 +278,10 @@ func groupByPlatform(listings []models.PlatformListing, query string) []models.C
 		}
 	}
 
-	// Find best price (among available items)
+	// Find best price and image (among available items)
 	bestPrice := 0.0
 	bestName := query
+	imageURL := ""
 	for _, l := range orderedListings {
 		if l.Price > 0 {
 			if bestPrice == 0 || l.Price < bestPrice {
@@ -282,11 +289,15 @@ func groupByPlatform(listings []models.PlatformListing, query string) []models.C
 				bestName = l.ProductName
 			}
 		}
+		if imageURL == "" && l.ImageURL != "" {
+			imageURL = l.ImageURL
+		}
 	}
 
 	product := models.ComparedProduct{
 		Name:      bestName,
 		BestPrice: bestPrice,
+		ImageURL:  imageURL,
 		Listings:  orderedListings,
 	}
 

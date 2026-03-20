@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
@@ -18,15 +18,18 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
     deliveryTime = "",
     deliveryCharge = 0,
     inStock = true,
+    image_url: imageURL,
   } = platform;
 
+  const [imageError, setImageError] = useState(false);
+
   const isAvailable = inStock && price > 0;
-  const icon = PLATFORM_ICONS[name.toLowerCase()] || "storefront-outline";
+  const iconName = PLATFORM_ICONS[name.toLowerCase()] || "storefront-outline";
 
   if (!isAvailable) {
     return (
       <View style={[styles.row, styles.unavailable]}>
-        <Ionicons name={icon} size={18} color={COLORS.textTertiary} />
+        <Ionicons name={iconName} size={18} color={COLORS.textTertiary} />
         <Text style={[styles.name, { color: COLORS.textTertiary }]}>
           {name}
         </Text>
@@ -41,11 +44,22 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
       onPress={onOpenStore}
       activeOpacity={0.6}
     >
-      <Ionicons
-        name={icon}
-        size={18}
-        color={isCheapest ? COLORS.savings : COLORS.textSecondary}
-      />
+      <View style={styles.imageIconContainer}>
+        {imageURL && !imageError ? (
+          <Image
+            source={{ uri: imageURL }}
+            style={styles.platformImage}
+            resizeMode="contain"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <Ionicons
+            name={iconName}
+            size={20}
+            color={isCheapest ? COLORS.savings : COLORS.textSecondary}
+          />
+        )}
+      </View>
       <View style={styles.info}>
         <Text style={styles.name}>{name}</Text>
         {deliveryTime ? (
@@ -97,6 +111,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.borderLight,
     gap: SPACING.md,
+  },
+  imageIconContainer: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+  platformImage: {
+    width: "100%",
+    height: "100%",
   },
   cheapest: {
     backgroundColor: "rgba(16, 185, 129, 0.08)", // Faint emerald wash

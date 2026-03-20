@@ -174,32 +174,26 @@ func TestScrapeAllPlatformsConcurrency(t *testing.T) {
 	assert.Len(t, listings, 3)
 }
 
-func TestGroupByPlatform(t *testing.T) {
+func TestGroupByPlatformWithImage(t *testing.T) {
 	listings := []models.PlatformListing{
 		{
 			Platform:    "Blinkit",
-			ProductName: "Rice 1kg",
-			Price:       100,
+			ProductName: "Milk",
+			Price:       50,
+			ImageURL:    "https://example.com/blinkit.jpg",
 		},
 		{
 			Platform:    "Zepto",
-			ProductName: "Rice 1kg",
-			Price:       95,
-		},
-		{
-			Platform:    "BigBasket",
-			ProductName: "Rice 1kg",
-			Price:       90,
+			ProductName: "Milk",
+			Price:       48,
+			ImageURL:    "https://example.com/zepto.jpg",
 		},
 	}
 
-	result := groupByPlatform(listings, "rice")
+	result := groupByPlatform(listings, "milk")
 
-	assert.Greater(t, len(result), 0)
-	// Should group similar products together
-	for _, product := range result {
-		assert.Greater(t, len(product.Listings), 0)
-	}
+	require.NotEmpty(t, result)
+	assert.Equal(t, "https://example.com/blinkit.jpg", result[0].ImageURL) // Picks first available
 }
 
 func TestEnsureAllPlatforms(t *testing.T) {
