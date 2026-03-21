@@ -1,41 +1,27 @@
 /**
- * GlassCard — A reusable glassmorphism card component.
+ * GlassCard — A clean elevated card component.
  *
- * Uses expo-linear-gradient for a translucent frosted look.
- * Pass `style`, `gradientColors`, or `glowColor` to customize.
+ * Luxury monochrome design with subtle shadows.
+ * Pass `style`, `accentColor` to customize.
  */
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { COLORS, RADIUS, SHADOWS } from "../config/theme";
 
 const GlassCard = ({
   children,
   style,
-  gradientColors = COLORS.gradientCard,
-  glowColor,
   accentColor,
   noPad = false,
 }) => {
   return (
-    <View
-      style={[
-        styles.wrapper,
-        glowColor ? { shadowColor: glowColor, ...SHADOWS.glow } : SHADOWS.md,
-        style,
-      ]}
-    >
+    <View style={[styles.wrapper, SHADOWS.sm, style]}>
       {accentColor && (
         <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
       )}
-      <LinearGradient
-        colors={gradientColors}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.gradient, noPad && styles.noPad]}
-      >
+      <View style={[styles.innerContainer, noPad && styles.noPad]}>
         {children}
-      </LinearGradient>
+      </View>
     </View>
   );
 };
@@ -45,9 +31,10 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.lg,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: COLORS.glassBorder,
+    borderColor: COLORS.border,
+    backgroundColor: "#FFFFFF",
   },
-  gradient: {
+  innerContainer: {
     padding: 16,
   },
   noPad: {

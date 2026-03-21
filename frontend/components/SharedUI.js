@@ -156,7 +156,7 @@ export const SectionHeader = ({ title, subtitle, actionText, onAction }) => {
 
 const styles = StyleSheet.create({
   surfaceCard: {
-    backgroundColor: COLORS.card,
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.lg,
@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
   },
   button: {
     minHeight: 50,
-    borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.lg,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.xl,
     paddingVertical: SPACING.md,
     flexDirection: "row",
     alignItems: "center",
@@ -191,16 +191,16 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
   },
   buttonPrimary: {
-    backgroundColor: COLORS.accent,
-    borderColor: COLORS.accentStrong,
+    backgroundColor: COLORS.textPrimary,
+    borderColor: COLORS.textPrimary,
   },
   buttonSecondary: {
     backgroundColor: COLORS.cardAlt,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
   },
   buttonGhost: {
     backgroundColor: "transparent",
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
   },
   buttonDisabled: {
     opacity: 0.55,
@@ -213,13 +213,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   buttonTextPrimary: {
-    color: COLORS.textInverse,
+    color: "#FFFFFF",
   },
   buttonTextSecondary: {
     color: COLORS.textPrimary,
   },
   buttonTextDisabled: {
-    color: COLORS.textSecondary,
+    color: COLORS.textTertiary,
   },
   inputWrap: {
     flexDirection: "row",
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     minHeight: 52,
     paddingHorizontal: SPACING.lg,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
     borderRadius: RADIUS.md,
     marginBottom: SPACING.md,
     backgroundColor: COLORS.cardAlt,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     ...FONTS.captionBold,
-    color: COLORS.warning,
+    color: COLORS.accentGold,
   },
   reviewCount: {
     ...FONTS.caption,

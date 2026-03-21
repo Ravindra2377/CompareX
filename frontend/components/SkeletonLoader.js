@@ -9,8 +9,8 @@ import { View, StyleSheet, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { COLORS, SPACING, RADIUS } from "../config/theme";
 
-const SHIMMER_DARK = "rgba(35, 52, 80, 0.6)";
-const SHIMMER_LIGHT = "rgba(53, 80, 112, 0.9)";
+const SHIMMER_DARK = "rgba(0, 0, 0, 0.04)";
+const SHIMMER_LIGHT = "rgba(0, 0, 0, 0.08)";
 
 const ShimmerBlock = ({ style, shimmerX }) => {
   const translateX = shimmerX.interpolate({
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.md,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.glassBorder,
-    backgroundColor: COLORS.glassSurface,
+    borderColor: COLORS.border,
+    backgroundColor: "#FFFFFF",
     overflow: "hidden",
   },
   accentBarSkeleton: {

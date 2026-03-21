@@ -88,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.backgroundDark,
   },
   heroBg: {
     ...StyleSheet.absoluteFillObject,
@@ -103,20 +103,21 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxl,
   },
   eyebrow: {
-    ...FONTS.captionBold,
-    color: COLORS.textAccent,
-    marginBottom: SPACING.xs,
-    textTransform: "uppercase",
+    ...FONTS.eyebrow,
+    marginBottom: SPACING.sm,
   },
   logo: {
-    ...FONTS.h1,
-    marginBottom: SPACING.xs,
+    ...FONTS.luxury,
+    fontSize: 38,
+    marginBottom: SPACING.sm,
   },
   tagline: {
-    ...FONTS.body,
+    ...FONTS.luxurySub,
   },
   form: {
-    borderColor: COLORS.borderLight,
+    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.xl,
   },
   formTitle: {
     ...FONTS.h2,

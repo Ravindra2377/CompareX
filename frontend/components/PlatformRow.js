@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.lg,
-    backgroundColor: COLORS.card,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.md,
-    marginBottom: SPACING.md,
+    marginBottom: SPACING.sm,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
     gap: SPACING.md,
   },
   imageIconContainer: {
@@ -117,22 +117,22 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: COLORS.border,
   },
   platformImage: {
     width: "100%",
     height: "100%",
   },
   cheapest: {
-    backgroundColor: "rgba(16, 185, 129, 0.08)", // Faint emerald wash
+    backgroundColor: COLORS.savingsLight,
     borderColor: COLORS.savings,
   },
   unavailable: {
-    opacity: 0.5,
-    backgroundColor: COLORS.background,
+    opacity: 0.45,
+    backgroundColor: COLORS.cardAlt,
   },
   info: {
     flex: 1,
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   price: {
     ...FONTS.priceSmall,
     fontSize: 18,
+    fontWeight: "400",
   },
   freeTag: {
     ...FONTS.badge,
@@ -165,12 +166,11 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   bestBadge: {
-    backgroundColor: COLORS.savings,
+    backgroundColor: COLORS.textPrimary,
     paddingHorizontal: SPACING.sm,
     paddingVertical: 4,
     borderRadius: RADIUS.full,
     marginLeft: SPACING.sm,
-    ...SHADOWS.glow,
   },
   bestText: {
     ...FONTS.badge,

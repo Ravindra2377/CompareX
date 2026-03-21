@@ -44,7 +44,7 @@ const RegisterScreen = ({ navigation }) => {
           onPress={() => navigation.goBack()}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         >
-          <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.textOnDark} />
         </TouchableOpacity>
 
         <Text style={styles.heading}>Create Account</Text>
@@ -106,7 +106,7 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.backgroundDark,
   },
   heroBg: {
     ...StyleSheet.absoluteFillObject,
@@ -121,15 +121,18 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxxl,
   },
   heading: {
-    ...FONTS.h1,
+    ...FONTS.luxury,
+    fontSize: 32,
     marginBottom: SPACING.xs,
   },
   subtitle: {
-    ...FONTS.body,
+    ...FONTS.luxurySub,
     marginBottom: SPACING.xxl,
   },
   formCard: {
-    borderColor: COLORS.borderLight,
+    backgroundColor: "#FFFFFF",
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.xl,
   },
   createBtn: {
     marginTop: SPACING.sm,

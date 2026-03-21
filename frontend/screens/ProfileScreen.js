@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
 const STATS = [
   { label: "Searches", value: "24" },
@@ -49,7 +49,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
-    backgroundColor: COLORS.surface,
+    borderBottomColor: COLORS.border,
+    backgroundColor: "#FFFFFF",
   },
   userSection: {
     flexDirection: "row",
@@ -152,15 +152,14 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: COLORS.card,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.textPrimary,
+    borderWidth: 0,
     alignItems: "center",
     justifyContent: "center",
   },
   avatarText: {
-    ...FONTS.h2,
-    color: COLORS.textSecondary,
+    ...FONTS.h2Dark,
+    fontSize: 20,
   },
   userInfo: {
     flex: 1,
@@ -179,8 +178,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.cardAlt,
+    backgroundColor: "#FFFFFF",
     marginBottom: SPACING.xxl,
+    ...SHADOWS.sm,
   },
   statItem: {
     flex: 1,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: COLORS.border,
   },
   menuSection: {
     marginHorizontal: SPACING.xl,
@@ -209,9 +209,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.cardAlt,
+    backgroundColor: "#FFFFFF",
     marginBottom: SPACING.sm,
     gap: SPACING.lg,
+    ...SHADOWS.sm,
   },
   menuInfo: {
     flex: 1,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.lg,
     borderWidth: 1,
     borderColor: COLORS.errorLight,
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.full,
     gap: SPACING.sm,
     backgroundColor: COLORS.errorLight,
   },

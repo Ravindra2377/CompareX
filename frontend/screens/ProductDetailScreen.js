@@ -367,7 +367,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
 
       {/* Header */}
       <View style={styles.header}>
@@ -378,9 +378,9 @@ const ProductDetailScreen = ({ route, navigation }) => {
           }}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         >
-          <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
+          <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Compare</Text>
+        <Text style={styles.headerTitle}>Details</Text>
         <TouchableOpacity
           onPress={toggleSave}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
@@ -388,7 +388,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
           <Animated.View style={{ transform: [{ scale: heartScale }] }}>
             <Ionicons
               name={saved ? "heart" : "heart-outline"}
-              size={24}
+              size={22}
               color={saved ? COLORS.error : COLORS.textSecondary}
             />
           </Animated.View>
@@ -398,10 +398,8 @@ const ProductDetailScreen = ({ route, navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Product summary */}
         <View style={styles.productSection}>
+          <Text style={styles.productBrand}>{product?.brand || "Product"}</Text>
           <Text style={styles.productName}>{displayTitle}</Text>
-          {product?.brand && (
-            <Text style={styles.productBrand}>{product.brand}</Text>
-          )}
 
           <View style={styles.priceRow}>
             {referencePrice > 0 && (
@@ -414,26 +412,32 @@ const ProductDetailScreen = ({ route, navigation }) => {
 
           <View style={styles.metaTopRow}>
             <Text style={styles.metaTopItem}>
-              Qty: {firstWithQuantity || "-"}
+              Qty: {firstWithQuantity || "—"}
             </Text>
             <Text style={styles.metaTopItem}>
               Rating:{" "}
               {displayRating > 0
                 ? `${displayRating}${displayRatingCount > 0 ? ` (${displayRatingCount})` : ""}`
-                : "-"}
+                : "—"}
             </Text>
           </View>
-          <View style={styles.metaTopRow}>
-            <Text style={styles.metaTopItem}>
-              MRP: {displayMrp > 0 ? `₹${displayMrp}` : "-"}
-            </Text>
-            <Text style={styles.metaTopItem}>
-              Discount:{" "}
+        </View>
+
+        {/* Meta info row */}
+        <View style={styles.metaInfoRow}>
+          <View style={styles.metaInfoItem}>
+            <Text style={styles.metaInfoLabel}>MRP</Text>
+            <Text style={styles.metaInfoValue}>{displayMrp > 0 ? `₹${displayMrp}` : "—"}</Text>
+          </View>
+          <View style={styles.metaInfoDivider} />
+          <View style={styles.metaInfoItem}>
+            <Text style={styles.metaInfoLabel}>Discount</Text>
+            <Text style={styles.metaInfoValue}>
               {displayDiscountPercent > 0
                 ? `${displayDiscountPercent}%`
                 : displayDiscountValue > 0
                   ? `₹${displayDiscountValue}`
-                  : "-"}
+                  : "—"}
             </Text>
           </View>
         </View>
@@ -531,41 +535,72 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-    ...SHADOWS.sm,
+    backgroundColor: "#FFFFFF",
   },
   headerTitle: {
     ...FONTS.h3,
+    fontWeight: "400",
   },
   productSection: {
     paddingHorizontal: SPACING.xl,
     paddingTop: SPACING.xxl,
     paddingBottom: SPACING.lg,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
   },
   productName: {
     ...FONTS.h1,
-    marginBottom: 4,
+    fontSize: 28,
+    lineHeight: 34,
+    marginBottom: SPACING.md,
   },
   productBrand: {
-    ...FONTS.caption,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: SPACING.md,
-    color: COLORS.textTertiary,
+    ...FONTS.eyebrow,
+    fontSize: 10,
+    marginBottom: SPACING.sm,
   },
   metaTopRow: {
     flexDirection: "row",
-    gap: SPACING.md,
+    gap: SPACING.lg,
     marginTop: SPACING.sm,
   },
   metaTopItem: {
-    ...FONTS.captionBold,
-    color: COLORS.textSecondary,
-  },
-  rawTopText: {
     ...FONTS.caption,
-    color: COLORS.textTertiary,
-    marginTop: SPACING.sm,
+    color: COLORS.textSecondary,
+    fontSize: 13,
+  },
+  metaInfoRow: {
+    flexDirection: "row",
+    marginHorizontal: SPACING.xl,
+    marginTop: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    backgroundColor: "#FFFFFF",
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    ...SHADOWS.sm,
+    marginBottom: SPACING.md,
+  },
+  metaInfoItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  metaInfoLabel: {
+    ...FONTS.caption,
+    fontSize: 11,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 4,
+  },
+  metaInfoValue: {
+    ...FONTS.bodyBold,
+    fontSize: 15,
+  },
+  metaInfoDivider: {
+    width: 1,
+    backgroundColor: COLORS.border,
+    marginVertical: SPACING.xs,
   },
   priceRow: {
     flexDirection: "row",
@@ -573,26 +608,26 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
   },
   bestPrice: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: COLORS.savings,
+    ...FONTS.price,
+    color: COLORS.textPrimary,
   },
   worstPrice: {
     ...FONTS.caption,
     textDecorationLine: "line-through",
+    fontSize: 16,
   },
   savingsRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: SPACING.sm,
     marginHorizontal: SPACING.xl,
-    marginBottom: SPACING.xl,
+    marginBottom: SPACING.lg,
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.lg,
-    backgroundColor: "rgba(16, 185, 129, 0.1)",
+    backgroundColor: COLORS.savingsLight,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: "rgba(16, 185, 129, 0.3)",
+    borderColor: "rgba(45, 140, 90, 0.15)",
   },
   savingsText: {
     ...FONTS.captionBold,
@@ -602,11 +637,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    backgroundColor: COLORS.cardAlt,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.md,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
     marginBottom: SPACING.xxl,
   },
   statItem: {
@@ -623,7 +658,7 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: COLORS.border,
     marginVertical: SPACING.sm,
   },
   section: {
@@ -633,7 +668,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...FONTS.captionBold,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 1,
     color: COLORS.textSecondary,
     marginBottom: SPACING.md,
   },

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { NavigationContainer, DarkTheme } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { COLORS } from "./config/theme";
+import { COLORS, SHADOWS, FONTS } from "./config/theme";
 
 // Auth Screens
 import LoginScreen from "./screens/LoginScreen";
@@ -32,7 +32,6 @@ const TAB_ICONS = {
 
 const MainTabs = () => {
   const { bottom: bottomInset } = useSafeAreaInsets();
-  // Minimum padding if < 8px (e.g., Android with gesture nav at the very bottom)
   const safeBottom = Math.max(bottomInset, 8);
 
   return (
@@ -54,28 +53,25 @@ const MainTabs = () => {
                     width: 4,
                     height: 4,
                     borderRadius: 2,
-                    backgroundColor: COLORS.accent,
+                    backgroundColor: COLORS.accentGold,
                   }}
                 />
               )}
             </View>
           );
         },
-        tabBarActiveTintColor: COLORS.accent,
-        tabBarInactiveTintColor: "rgba(148,163,184,0.45)",
+        tabBarActiveTintColor: COLORS.accentGold,
+        tabBarInactiveTintColor: COLORS.textTertiary,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "rgba(0, 0, 0, 0.96)",
+          backgroundColor: "#FFFFFF",
           borderTopWidth: 1,
-          borderTopColor: "rgba(44, 44, 44, 0.80)",
+          borderTopColor: COLORS.border,
           height: 56 + safeBottom,
           paddingBottom: safeBottom,
           paddingTop: 8,
-          elevation: 0,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.6,
-          shadowRadius: 12,
+          elevation: 8,
+          ...SHADOWS.sm,
         },
       })}
     >
@@ -94,20 +90,20 @@ const AppNav = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.accent} />
+        <ActivityIndicator size="large" color={COLORS.accentGold} />
       </View>
     );
   }
 
   const customTheme = {
-    ...DarkTheme,
+    ...DefaultTheme,
     colors: {
-      ...DarkTheme.colors,
+      ...DefaultTheme.colors,
       background: COLORS.background,
-      card: COLORS.surface,
+      card: "#FFFFFF",
       text: COLORS.textPrimary,
       border: COLORS.border,
-      primary: COLORS.accent,
+      primary: COLORS.accentGold,
       notification: COLORS.warning,
     },
   };
@@ -128,10 +124,27 @@ const AppNav = () => {
               component={AccountsScreen}
               options={{
                 headerShown: true,
-                title: "Link Accounts",
-                headerStyle: { backgroundColor: COLORS.surface },
+                title: "ACCOUNTS",
+                headerTitleStyle: {
+                  fontSize: 10,
+                  fontWeight: "900",
+                  letterSpacing: 2,
+                  color: COLORS.textPrimary,
+                },
+                headerStyle: { backgroundColor: "#FFFFFF" },
                 headerTintColor: COLORS.textPrimary,
                 headerShadowVisible: false,
+                headerLeft: ({ canGoBack, onPress }) => (
+                  canGoBack && (
+                    <Ionicons 
+                      name="arrow-back" 
+                      size={20} 
+                      color={COLORS.textPrimary} 
+                      onPress={onPress}
+                      style={{ marginLeft: 16 }}
+                    />
+                  )
+                ),
               }}
             />
           </>

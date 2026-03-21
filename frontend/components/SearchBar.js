@@ -23,7 +23,7 @@ const SearchBar = ({
         returnKeyType="search"
         autoCorrect={false}
         autoFocus={autoFocus}
-        selectionColor={COLORS.accent}
+        selectionColor={COLORS.accentGold}
       />
       {value ? (
         <TouchableOpacity
@@ -44,18 +44,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(20, 34, 56, 0.92)",
+    backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.full,
     paddingHorizontal: SPACING.lg,
-    minHeight: 58,
+    minHeight: 50,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
     gap: SPACING.sm,
   },
   input: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "400",
     color: COLORS.textPrimary,
     paddingVertical: 2,
   },

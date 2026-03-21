@@ -1531,17 +1531,12 @@ const SearchScreen = ({ navigation, route }) => {
     if (!hasSearched) {
       return (
         <View style={styles.emptyState}>
-          <LinearGradient
-            colors={COLORS.gradientCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.emptyCard}
-          >
+          <View style={styles.emptyCard}>
             <View style={styles.emptyIconWrap}>
               <Ionicons
                 name="search-outline"
-                size={44}
-                color={COLORS.textAccent}
+                size={36}
+                color={COLORS.textTertiary}
               />
             </View>
             <Text style={styles.emptyTitle}>Search for a product</Text>
@@ -1554,7 +1549,7 @@ const SearchScreen = ({ navigation, route }) => {
               <Ionicons
                 name="layers-outline"
                 size={14}
-                color={COLORS.textAccent}
+                color={COLORS.textSecondary}
               />
               <Text style={styles.platformBadgeText}>
                 {state.connectedPlatforms.length} live sources ready
@@ -1566,7 +1561,7 @@ const SearchScreen = ({ navigation, route }) => {
                 <Ionicons
                   name="warning-outline"
                   size={24}
-                  color={COLORS.error}
+                  color={COLORS.warning}
                 />
                 <Text style={styles.warningText}>
                   No platforms connected. Go to Accounts tab to link your
@@ -1590,7 +1585,7 @@ const SearchScreen = ({ navigation, route }) => {
                 ))}
               </View>
             </View>
-          </LinearGradient>
+          </View>
         </View>
       );
     }
@@ -1625,14 +1620,14 @@ const SearchScreen = ({ navigation, route }) => {
       <View style={styles.loaderContainer}>
         {/* Title row */}
         <View style={styles.loaderTitleRow}>
-          <Ionicons name="search" size={16} color={COLORS.accent} />
-          <Text style={styles.loaderStatusText}>Live Price Scan</Text>
+          <Ionicons name="search" size={16} color={COLORS.textPrimary} />
+          <Text style={styles.loaderStatusText}>Scanning Prices</Text>
         </View>
         <Text style={styles.loaderDetail}>
           {completedCount === 0
             ? "Opening platforms..."
             : completedCount < totalCount
-              ? `${completedCount}/${totalCount} done - more coming`
+              ? `${completedCount}/${totalCount} done — more coming`
               : "All platforms scanned"}
         </Text>
 
@@ -1641,7 +1636,7 @@ const SearchScreen = ({ navigation, route }) => {
           {state.connectedPlatforms.map((platform) => {
             const isDone = !!platformResults[platform];
             const meta = PLATFORM_META[platform] || {
-              color: COLORS.accent,
+              color: COLORS.textPrimary,
               icon: "search",
               label: platform,
             };
@@ -1653,8 +1648,8 @@ const SearchScreen = ({ navigation, route }) => {
                   styles.platformStatusCard,
                   isDone
                     ? {
-                        borderColor: meta.color,
-                        backgroundColor: meta.color + "18",
+                        borderColor: COLORS.textPrimary,
+                        backgroundColor: COLORS.accentMuted,
                       }
                     : { opacity: pulseAnim },
                 ]}
@@ -1662,13 +1657,13 @@ const SearchScreen = ({ navigation, route }) => {
                 <Ionicons
                   name={isDone ? "checkmark-circle" : meta.icon}
                   size={18}
-                  color={isDone ? meta.color : COLORS.textSecondary}
+                  color={isDone ? COLORS.savings : COLORS.textTertiary}
                   style={styles.platformStatusIcon}
                 />
                 <Text
                   style={[
                     styles.platformStatusName,
-                    isDone && { color: meta.color },
+                    isDone && { color: COLORS.textPrimary },
                   ]}
                 >
                   {meta.label}
@@ -1696,7 +1691,7 @@ const SearchScreen = ({ navigation, route }) => {
           <Ionicons
             name="bulb"
             size={13}
-            color={COLORS.warning}
+            color={COLORS.accentGold}
             style={styles.tipIcon}
           />
           <Text style={styles.tipLabel}>Tip</Text>
@@ -1708,20 +1703,13 @@ const SearchScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <PerformanceDebugPanel enabled={false} />
-      <LinearGradient
-        colors={COLORS.gradientHero}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
+      <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.headerTitle}>Live Price Compare</Text>
-            <Text style={styles.headerSubtitle}>
-              Scan Blinkit, Zepto, BigBasket, Amazon, and Flipkart in one search.
-            </Text>
+            <Text style={styles.headerLabel}>COMPAREX</Text>
+            <Text style={styles.headerTitle}>Collection</Text>
           </View>
         </View>
         <SearchBar
@@ -1734,7 +1722,7 @@ const SearchScreen = ({ navigation, route }) => {
           }}
           autoFocus={!hasSearched && query === ""}
         />
-      </LinearGradient>
+      </View>
 
       {captchaPlatform && (
         <View style={styles.captchaOverlay}>
@@ -1851,22 +1839,27 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    paddingTop: 60,
-    paddingBottom: 22,
+    paddingTop: 56,
+    paddingBottom: 18,
     paddingHorizontal: SPACING.lg,
+    backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
-    borderColor: COLORS.borderLight,
-    ...SHADOWS.md,
+    borderBottomColor: COLORS.border,
+    ...SHADOWS.sm,
     zIndex: 10,
   },
   headerTopRow: {
     marginBottom: SPACING.md,
   },
+  headerLabel: {
+    ...FONTS.eyebrow,
+    fontSize: 10,
+    marginBottom: SPACING.xs,
+  },
   headerTitle: {
     ...FONTS.h1,
-    fontSize: 42,
-    lineHeight: 44,
-    marginBottom: SPACING.xs,
+    fontSize: 32,
+    lineHeight: 36,
   },
   visibleWebView: {
     flex: 1,
@@ -1878,7 +1871,7 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     backgroundColor: COLORS.warningLight,
     borderBottomWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.3)",
+    borderColor: "rgba(212, 168, 83, 0.2)",
     alignItems: "center",
   },
   captchaText: {
@@ -1888,7 +1881,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
   },
   captchaDismissBtn: {
-    backgroundColor: COLORS.warning,
+    backgroundColor: COLORS.textPrimary,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.md,
@@ -1897,165 +1890,21 @@ const styles = StyleSheet.create({
     ...FONTS.bodyBold,
     color: "#fff",
   },
-  headerSubtitle: {
-    ...FONTS.body,
-    color: COLORS.textSecondary,
-  },
-  loaderContainer: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.lg,
-    paddingBottom: SPACING.md,
-  },
-  loaderStatusText: {
-    ...FONTS.captionBold,
-    color: COLORS.accent,
-    textAlign: "center",
-  },
-  loaderDetail: {
-    marginTop: 2,
-    ...FONTS.caption,
-    textAlign: "center",
-    marginBottom: SPACING.sm,
-  },
-  progressTrack: {
-    height: 8,
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.border,
-    overflow: "hidden",
-    marginHorizontal: SPACING.xl,
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.accent,
-  },
-  loaderHint: {
-    ...FONTS.caption,
-    color: COLORS.textSecondary,
-    textAlign: "center",
-    marginTop: SPACING.sm,
-  },
-  list: {
-    padding: SPACING.lg,
-    paddingBottom: 100, // space for tab bar
-  },
-  hiddenWebView: {
-    position: "absolute",
-    width: 1,
-    height: 1,
-    opacity: 0,
-    left: -9999,
-    top: -9999,
-  },
-  emptyState: {
-    paddingTop: SPACING.xl,
-    paddingHorizontal: SPACING.lg,
-  },
-  emptyCard: {
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.xl,
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.xxl,
-    ...SHADOWS.md,
-  },
-  emptyIconWrap: {
-    width: 84,
-    height: 84,
-    borderRadius: 42,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(6, 182, 212, 0.14)",
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-  },
-  emptyTitle: {
-    ...FONTS.h2,
-    marginTop: SPACING.lg,
-    textAlign: "center",
-  },
-  emptySubtitle: {
-    ...FONTS.body,
-    marginTop: SPACING.sm,
-    textAlign: "center",
-  },
-  platformBadge: {
-    marginTop: SPACING.lg,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: SPACING.xs,
-    backgroundColor: COLORS.cardAlt,
-  },
-  platformBadgeText: {
-    ...FONTS.captionBold,
-    color: COLORS.textAccent,
-  },
-  warning: {
-    flexDirection: "row",
-    backgroundColor: COLORS.warningLight,
-    borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.3)",
-    borderRadius: RADIUS.md,
-    padding: SPACING.lg,
-    marginTop: SPACING.xl,
-    alignItems: "center",
-  },
-  warningText: {
-    flex: 1,
-    marginLeft: SPACING.sm,
-    color: COLORS.warning,
-    fontSize: 14,
-  },
-  suggestions: {
-    marginTop: SPACING.xl,
-    width: "100%",
-  },
-  suggestTitle: {
-    ...FONTS.bodyBold,
-    marginBottom: SPACING.md,
-    color: COLORS.textSecondary,
-  },
-  chips: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: SPACING.sm,
-    justifyContent: "center",
-  },
-  chipButton: {
-    backgroundColor: COLORS.cardAlt,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
-    minWidth: 84,
-    alignItems: "center",
-  },
-  chip: {
-    color: COLORS.textSecondary,
-    fontSize: 13,
-    fontWeight: "600",
-  },
   loaderContainer: {
     paddingHorizontal: SPACING.md,
     paddingTop: SPACING.lg,
     paddingBottom: SPACING.md,
-    backgroundColor: COLORS.surface,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.border,
+    ...SHADOWS.sm,
   },
   loaderStatusText: {
     fontSize: 15,
-    fontWeight: "700",
-    color: COLORS.accent,
+    fontWeight: "600",
+    color: COLORS.textPrimary,
     textAlign: "center",
     letterSpacing: 0.3,
   },
@@ -2083,17 +1932,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: SPACING.sm,
     paddingHorizontal: 4,
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: COLORS.border,
-    backgroundColor: COLORS.card,
+    backgroundColor: COLORS.cardAlt,
   },
   platformStatusIcon: {
     marginBottom: 3,
   },
   platformStatusName: {
     fontSize: 11,
-    fontWeight: "600",
+    fontWeight: "500",
     color: COLORS.textSecondary,
     textAlign: "center",
   },
@@ -2104,7 +1953,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   progressTrack: {
-    height: 5,
+    height: 4,
     borderRadius: RADIUS.full,
     backgroundColor: COLORS.border,
     overflow: "hidden",
@@ -2113,23 +1962,23 @@ const styles = StyleSheet.create({
   progressFill: {
     height: "100%",
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.accent,
+    backgroundColor: COLORS.textPrimary,
   },
   tipBox: {
     flexDirection: "row",
     alignItems: "flex-start",
-    backgroundColor: COLORS.card,
+    backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.sm,
     paddingHorizontal: SPACING.sm,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: COLORS.divider,
+    borderColor: COLORS.border,
     marginTop: 2,
   },
   tipLabel: {
     fontSize: 10,
-    fontWeight: "700",
-    color: "#F59E0B",
+    fontWeight: "600",
+    color: COLORS.accentGold,
     marginRight: 4,
     flexShrink: 0,
     textTransform: "uppercase",
@@ -2144,6 +1993,115 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     flex: 1,
     lineHeight: 16,
+  },
+  list: {
+    padding: SPACING.lg,
+    paddingBottom: 100,
+  },
+  hiddenWebView: {
+    position: "absolute",
+    width: 1,
+    height: 1,
+    opacity: 0,
+    left: -9999,
+    top: -9999,
+  },
+  emptyState: {
+    paddingTop: SPACING.xl,
+    paddingHorizontal: SPACING.lg,
+  },
+  emptyCard: {
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.xl,
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.xxl,
+    backgroundColor: "#FFFFFF",
+    ...SHADOWS.sm,
+  },
+  emptyIconWrap: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.cardAlt,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  emptyTitle: {
+    ...FONTS.h2,
+    marginTop: SPACING.lg,
+    textAlign: "center",
+  },
+  emptySubtitle: {
+    ...FONTS.body,
+    marginTop: SPACING.sm,
+    textAlign: "center",
+  },
+  platformBadge: {
+    marginTop: SPACING.lg,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.xs,
+    backgroundColor: COLORS.cardAlt,
+  },
+  platformBadgeText: {
+    ...FONTS.captionBold,
+    color: COLORS.textSecondary,
+  },
+  warning: {
+    flexDirection: "row",
+    backgroundColor: COLORS.warningLight,
+    borderWidth: 1,
+    borderColor: "rgba(212, 168, 83, 0.2)",
+    borderRadius: RADIUS.md,
+    padding: SPACING.lg,
+    marginTop: SPACING.xl,
+    alignItems: "center",
+  },
+  warningText: {
+    flex: 1,
+    marginLeft: SPACING.sm,
+    color: COLORS.warning,
+    fontSize: 14,
+  },
+  suggestions: {
+    marginTop: SPACING.xl,
+    width: "100%",
+  },
+  suggestTitle: {
+    ...FONTS.bodyBold,
+    marginBottom: SPACING.md,
+    color: COLORS.textSecondary,
+    textAlign: "center",
+  },
+  chips: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: SPACING.sm,
+    justifyContent: "center",
+  },
+  chipButton: {
+    backgroundColor: COLORS.cardAlt,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.full,
+    minWidth: 84,
+    alignItems: "center",
+  },
+  chip: {
+    color: COLORS.textSecondary,
+    fontSize: 13,
+    fontWeight: "500",
   },
   loaderHint: {
     fontSize: 11,

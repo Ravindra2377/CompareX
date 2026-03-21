@@ -381,7 +381,7 @@ export default function AccountsScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
 
       <LinearGradient colors={COLORS.gradientCard} style={styles.header}>
         <Text style={styles.headerTitle}>Link Accounts</Text>
@@ -392,7 +392,7 @@ export default function AccountsScreen() {
 
       <ScrollView contentContainerStyle={styles.list}>
         <View style={styles.infoCard}>
-          <Ionicons name="information-circle" size={24} color="#4A90E2" />
+          <Ionicons name="information-circle" size={24} color={COLORS.accentGold} />
           <Text style={styles.infoText}>
             Tap "Connect" and log in to each platform. Your credentials stay
             secure in the app.
@@ -516,14 +516,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     borderBottomLeftRadius: RADIUS.lg,
     borderBottomRightRadius: RADIUS.lg,
-    ...SHADOWS.md,
   },
   headerTitle: {
-    ...FONTS.h1,
+    ...FONTS.h1Dark,
     marginBottom: SPACING.xs,
   },
   headerSubtitle: {
-    ...FONTS.body,
+    ...FONTS.bodyDark,
   },
   list: {
     padding: SPACING.md,
@@ -531,31 +530,31 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flexDirection: "row",
-    backgroundColor: "rgba(56, 189, 248, 0.1)",
+    backgroundColor: COLORS.accentLight,
     borderRadius: RADIUS.md,
     padding: SPACING.lg,
     marginBottom: SPACING.xl,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(56, 189, 248, 0.2)",
+    borderColor: "rgba(196, 162, 101, 0.2)",
   },
   infoText: {
     flex: 1,
     marginLeft: SPACING.md,
     ...FONTS.body,
-    color: "#38BDF8",
+    color: COLORS.accentGold,
   },
   card: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: COLORS.card,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.md,
     ...SHADOWS.sm,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
   },
   cardLeft: {
     flexDirection: "row",
@@ -569,7 +568,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: SPACING.md,
-    ...SHADOWS.glow,
   },
   cardInfo: {
     flex: 1,
@@ -594,29 +592,28 @@ const styles = StyleSheet.create({
   },
   buttonConnect: {
     flexDirection: "row",
-    backgroundColor: COLORS.accent,
+    backgroundColor: COLORS.textPrimary,
     paddingHorizontal: SPACING.lg,
     paddingVertical: 10,
     borderRadius: RADIUS.full,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.accentStrong,
+    borderWidth: 0,
     gap: 6,
   },
   buttonConnectText: {
-    color: COLORS.textInverse,
+    color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: "600",
   },
   buttonReconnect: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.cardAlt,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
   },
   buttonDisconnect: {
     width: 40,
@@ -626,7 +623,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(239, 68, 68, 0.3)",
+    borderColor: "rgba(196, 84, 84, 0.15)",
   },
   modalContainer: {
     flex: 1,
@@ -639,7 +636,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     paddingTop: 60,
     paddingBottom: SPACING.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -661,7 +658,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: COLORS.border,
   },
   webview: {
     flex: 1,

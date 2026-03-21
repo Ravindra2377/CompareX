@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 import { AppButton } from "../components/SharedUI";
 
 const MOCK_ITEMS = [];
@@ -58,7 +58,7 @@ const WishlistScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
 
       <View style={styles.header}>
         <Text style={FONTS.h1}>Wishlist</Text>
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
-    backgroundColor: COLORS.surface,
+    borderBottomColor: COLORS.border,
+    backgroundColor: "#FFFFFF",
   },
   count: {
     ...FONTS.caption,
@@ -120,9 +120,10 @@ const styles = StyleSheet.create({
     marginTop: SPACING.sm,
     borderWidth: 1,
     borderColor: COLORS.border,
-    backgroundColor: COLORS.cardAlt,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.md,
     gap: SPACING.lg,
+    ...SHADOWS.sm,
   },
   itemInfo: {
     flex: 1,

@@ -230,14 +230,14 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 90,
     height: 90,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.md,
     marginRight: SPACING.md,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: COLORS.border,
   },
   image: {
     width: "100%",
@@ -248,12 +248,13 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.03)",
+    backgroundColor: COLORS.cardAlt,
   },
   info: { flex: 1 },
   name: {
     ...FONTS.h3,
     fontSize: 15,
+    fontWeight: "500",
     marginBottom: 2,
     color: COLORS.textPrimary,
   },
@@ -261,7 +262,9 @@ const styles = StyleSheet.create({
     ...FONTS.caption,
     color: COLORS.textTertiary,
     marginBottom: SPACING.sm,
-    letterSpacing: 0.8,
+    letterSpacing: 1,
+    fontSize: 10,
+    textTransform: "uppercase",
   },
   priceRow: {
     flexDirection: "row",
@@ -272,12 +275,14 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     ...FONTS.badge,
-    color: COLORS.textAccent,
+    color: COLORS.textSecondary,
     marginBottom: 2,
+    letterSpacing: 1,
   },
   price: {
     ...FONTS.price,
-    lineHeight: 30,
+    fontSize: 22,
+    lineHeight: 28,
   },
   mrpBlock: { paddingBottom: 3 },
   mrpLabel: {
@@ -295,7 +300,7 @@ const styles = StyleSheet.create({
   savingsChip: {
     backgroundColor: COLORS.savingsLight,
     borderWidth: 1,
-    borderColor: "rgba(34, 197, 94, 0.3)",
+    borderColor: "rgba(45, 140, 90, 0.15)",
     paddingHorizontal: SPACING.sm,
     height: 24,
     borderRadius: RADIUS.full,
@@ -312,7 +317,7 @@ const styles = StyleSheet.create({
   discountBadge: {
     backgroundColor: COLORS.warningLight,
     borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.38)",
+    borderColor: "rgba(212, 168, 83, 0.2)",
     paddingHorizontal: 7,
     height: 24,
     borderRadius: RADIUS.full,
@@ -330,7 +335,7 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
   },
   platformPill: {
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.cardAlt,
     paddingHorizontal: SPACING.sm,
     paddingVertical: 4,
     borderRadius: RADIUS.full,
@@ -342,14 +347,14 @@ const styles = StyleSheet.create({
   platformText: {
     ...FONTS.caption,
     fontSize: 11,
-    fontWeight: "600",
+    fontWeight: "500",
   },
   arrowWrap: {
     marginLeft: SPACING.md,
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.cardAlt,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
