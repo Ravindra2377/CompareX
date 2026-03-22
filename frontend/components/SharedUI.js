@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SPACING, RADIUS, FONTS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 
 export const SurfaceCard = ({ children, style }) => (
   <View style={[styles.surfaceCard, style]}>{children}</View>
@@ -37,7 +37,7 @@ export const AppButton = ({
         disabled && styles.buttonDisabled,
         style,
       ]}
-      activeOpacity={0.85}
+      activeOpacity={0.8}
     >
       {icon ? (
         <Ionicons
@@ -101,7 +101,6 @@ export const ScreenHeader = ({ title, subtitle, rightAction }) => (
   </View>
 );
 
-// Badge
 export const Badge = ({ label, color = COLORS.textAccent, bgColor, style }) => {
   const bg = bgColor || COLORS.accentLight;
   return (
@@ -111,7 +110,6 @@ export const Badge = ({ label, color = COLORS.textAccent, bgColor, style }) => {
   );
 };
 
-// Price Tag
 export const PriceTag = ({ price, originalPrice, size = "md" }) => {
   const priceStyle = size === "lg" ? FONTS.price : FONTS.priceSmall;
   return (
@@ -124,7 +122,6 @@ export const PriceTag = ({ price, originalPrice, size = "md" }) => {
   );
 };
 
-// Rating Row
 export const RatingRow = ({ rating, reviewCount }) => {
   return (
     <View style={styles.ratingRow}>
@@ -135,7 +132,6 @@ export const RatingRow = ({ rating, reviewCount }) => {
   );
 };
 
-// Section Header
 export const SectionHeader = ({ title, subtitle, actionText, onAction }) => {
   return (
     <View style={styles.sectionHeader}>
@@ -157,10 +153,9 @@ export const SectionHeader = ({ title, subtitle, actionText, onAction }) => {
 const styles = StyleSheet.create({
   surfaceCard: {
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.lg,
+    borderRadius: RADIUS.xl,
+    padding: SPACING.xl,
+    ...SHADOWS.md,
   },
   screenHeader: {
     flexDirection: "row",
@@ -180,30 +175,31 @@ const styles = StyleSheet.create({
     ...FONTS.caption,
   },
   button: {
-    minHeight: 50,
-    borderRadius: RADIUS.full,
-    paddingHorizontal: SPACING.xl,
+    minHeight: 52,
+    borderRadius: RADIUS.lg,
+    paddingHorizontal: SPACING.xxl,
     paddingVertical: SPACING.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "transparent",
+    borderWidth: 0,
   },
   buttonPrimary: {
-    backgroundColor: COLORS.textPrimary,
-    borderColor: COLORS.textPrimary,
+    backgroundColor: COLORS.primary,
+    ...SHADOWS.glow,
   },
   buttonSecondary: {
     backgroundColor: COLORS.cardAlt,
+    borderWidth: 1,
     borderColor: COLORS.border,
   },
   buttonGhost: {
     backgroundColor: "transparent",
+    borderWidth: 1,
     borderColor: COLORS.border,
   },
   buttonDisabled: {
-    opacity: 0.55,
+    opacity: 0.45,
   },
   buttonIcon: {
     marginRight: 8,
@@ -226,8 +222,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     minHeight: 52,
     paddingHorizontal: SPACING.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     borderRadius: RADIUS.md,
     marginBottom: SPACING.md,
     backgroundColor: COLORS.cardAlt,
@@ -243,7 +237,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xs,
-    borderRadius: RADIUS.xs,
+    borderRadius: RADIUS.sm,
   },
   badgeText: {
     ...FONTS.badge,
@@ -265,7 +259,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     ...FONTS.captionBold,
-    color: COLORS.accentGold,
+    color: COLORS.warning,
   },
   reviewCount: {
     ...FONTS.caption,

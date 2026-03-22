@@ -1,9 +1,3 @@
-/**
- * GlassCard — A clean elevated card component.
- *
- * Luxury monochrome design with subtle shadows.
- * Pass `style`, `accentColor` to customize.
- */
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { COLORS, RADIUS, SHADOWS } from "../config/theme";
@@ -15,7 +9,7 @@ const GlassCard = ({
   noPad = false,
 }) => {
   return (
-    <View style={[styles.wrapper, SHADOWS.sm, style]}>
+    <View style={[styles.wrapper, SHADOWS.md, style]}>
       {accentColor && (
         <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
       )}
@@ -30,8 +24,6 @@ const styles = StyleSheet.create({
   wrapper: {
     borderRadius: RADIUS.lg,
     overflow: "hidden",
-    borderWidth: 1,
-    borderColor: COLORS.border,
     backgroundColor: "#FFFFFF",
   },
   innerContainer: {

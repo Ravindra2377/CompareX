@@ -1,16 +1,13 @@
 /**
- * SkeletonLoader — Bento Grid skeleton with sweep shimmer.
- *
- * Replaces the old single-card skeleton with a grid that mirrors
- * the ProductCard list layout while data loads.
+ * SkeletonLoader — Modern skeleton with sweep shimmer (Aurora design).
  */
 import React from "react";
 import { View, StyleSheet, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { COLORS, SPACING, RADIUS } from "../config/theme";
 
-const SHIMMER_DARK = "rgba(0, 0, 0, 0.04)";
-const SHIMMER_LIGHT = "rgba(0, 0, 0, 0.08)";
+const SHIMMER_DARK = "rgba(100, 116, 139, 0.06)";
+const SHIMMER_LIGHT = "rgba(100, 116, 139, 0.12)";
 
 const ShimmerBlock = ({ style, shimmerX }) => {
   const translateX = shimmerX.interpolate({
@@ -81,10 +78,13 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: SPACING.md,
     borderRadius: RADIUS.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     backgroundColor: "#FFFFFF",
     overflow: "hidden",
+    shadowColor: "#64748B",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
   },
   accentBarSkeleton: {
     position: "absolute",

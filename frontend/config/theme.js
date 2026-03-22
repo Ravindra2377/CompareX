@@ -1,66 +1,82 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// CompareX — Aurora Design System v2
+// Modern vibrant palette · clean surfaces · scalable tokens
+// ─────────────────────────────────────────────────────────────────────────────
+
 const COLORS = {
   // ── Core backgrounds ──────────────────────────────────────────────
-  primary:      "#0A0A0A",
-  primaryLight: "#141414",
-  background:   "#F5F5F3",   // warm off-white (collection screens)
-  backgroundDark: "#0A0A0A", // dark hero screens
-  surface:      "#FFFFFF",
-  surfaceDark:  "#141414",
-  card:         "#FFFFFF",
-  cardAlt:      "#F0EFED",
-  cardDark:     "#1A1A1A",
-  border:       "#E5E5E3",
-  borderDark:   "#2A2A2A",
-  borderLight:  "#EBEBEB",
-  divider:      "#E8E8E6",
+  primary:        "#5B5AE6",        // brand purple
+  primaryLight:   "#7A6CF6",        // brand purple light
+  brandPurple:    "#5B5AE6",
+  brandPurpleLight: "#7A6CF6",
+  background:     "#F8FAFC",        // slate-50 — cool off-white
+  backgroundDark: "#0F172A",        // slate-900 — rich dark
+  surface:        "#FFFFFF",
+  surfaceDark:    "#1E293B",        // slate-800
+  card:           "#FFFFFF",
+  cardAlt:        "#F1F5F9",        // slate-100
+  cardDark:       "#1E293B",
+  border:         "#E2E8F0",        // slate-200
+  borderDark:     "#334155",        // slate-700
+  borderLight:    "#F1F5F9",        // slate-100
+  divider:        "#E2E8F0",
 
   // ── Glassmorphism ─────────────────────────────────────────────────
-  glassSurface:   "rgba(255, 255, 255, 0.85)",
-  glassSurfaceDark: "rgba(20, 20, 20, 0.90)",
-  glassBorder:    "rgba(0, 0, 0, 0.06)",
-  glassBorderDark: "rgba(255, 255, 255, 0.08)",
-  glassHighlight: "rgba(0, 0, 0, 0.03)",
+  glassSurface:     "rgba(255, 255, 255, 0.80)",
+  glassSurfaceDark: "rgba(15, 23, 42, 0.85)",
+  glassBorder:      "rgba(148, 163, 184, 0.15)",
+  glassBorderDark:  "rgba(255, 255, 255, 0.10)",
+  glassHighlight:   "rgba(255, 255, 255, 0.60)",
 
   // ── Accent ────────────────────────────────────────────────────────
-  accent:      "#1A1A1A",   // near-black CTA
-  accentGold:  "#C4A265",   // warm gold luxury accent
-  accentLight: "rgba(196, 162, 101, 0.12)",
-  accentStrong:"#0A0A0A",
-  accentMuted: "rgba(26, 26, 26, 0.08)",
+  accent:       "#4F46E5",          // indigo primary CTA
+  accentGold:   "#4F46E5",         // mapped to primary for compat
+  accentLight:  "rgba(79, 70, 229, 0.10)",
+  accentStrong: "#3730A3",
+  accentMuted:  "rgba(79, 70, 229, 0.06)",
+  secondary:    "#0EA5E9",          // sky-500
+  secondaryLight: "rgba(14, 165, 233, 0.10)",
+  violet:       "#7C3AED",          // violet-600
+  violetLight:  "rgba(124, 58, 237, 0.10)",
 
   // ── Semantic ──────────────────────────────────────────────────────
-  savings:      "#2D8C5A",
-  savingsLight: "rgba(45, 140, 90, 0.08)",
-  warning:      "#D4A853",
-  warningLight: "rgba(212, 168, 83, 0.08)",
-  error:        "#C45454",
-  errorLight:   "rgba(196, 84, 84, 0.08)",
+  savings:      "#10B981",          // emerald-500
+  savingsLight: "rgba(16, 185, 129, 0.08)",
+  savingsDark:  "#059669",
+  warning:      "#F59E0B",          // amber-500
+  warningLight: "rgba(245, 158, 11, 0.08)",
+  error:        "#EF4444",          // red-500
+  errorLight:   "rgba(239, 68, 68, 0.08)",
+  info:         "#3B82F6",          // blue-500
+  infoLight:    "rgba(59, 130, 246, 0.08)",
 
-  // ── Platform accent colors ─────────────────────────────────────────
-  platformBlinkit:   "#D4A853",
-  platformZepto:     "#7B6BA5",
-  platformBigBasket: "#8B9A6B",
-  platformAmazon:    "#C4A265",
-  platformFlipkart:  "#6B7B9A",
+  // ── Platform accent colors ────────────────────────────────────────
+  platformBlinkit:   "#EAB308",     // yellow-500
+  platformZepto:     "#8B5CF6",     // violet-500
+  platformBigBasket: "#22C55E",     // green-500
+  platformAmazon:    "#F97316",     // orange-500
+  platformFlipkart:  "#3B82F6",     // blue-500
 
   // ── Text ──────────────────────────────────────────────────────────
-  textPrimary:   "#1A1A1A",
-  textSecondary: "#6B6B6B",
-  textTertiary:  "#9B9B9B",
+  textPrimary:   "#0F172A",         // slate-900
+  textSecondary: "#64748B",         // slate-500
+  textTertiary:  "#94A3B8",         // slate-400
   textOnDark:    "#FFFFFF",
-  textOnDarkSec: "rgba(255,255,255,0.65)",
-  textOnDarkTer: "rgba(255,255,255,0.40)",
+  textOnDarkSec: "rgba(255,255,255,0.70)",
+  textOnDarkTer: "rgba(255,255,255,0.45)",
   textInverse:   "#FFFFFF",
-  textAccent:    "#C4A265",
+  textAccent:    "#4F46E5",
 
   // ── Gradients ─────────────────────────────────────────────────────
-  gradientHero:    ["#0A0A0A", "#111111", "#1A1A1A"],
-  gradientCard:    ["#FFFFFF", "#FAFAF8"],
-  gradientCardDark:["rgba(26,26,26,0.98)", "rgba(14,14,14,0.98)"],
-  gradientAccent:  ["#1A1A1A", "#2A2A2A"],
-  gradientSavings: ["#2D8C5A", "#237A4A"],
-  gradientGlass:   ["rgba(255,255,255,0.95)", "rgba(245,245,243,0.90)"],
-  gradientGold:    ["#C4A265", "#D4B275"],
+  gradientHero:     ["#312E81", "#4F46E5", "#6366F1"],       // indigo depth
+  gradientCard:     ["#FFFFFF", "#F8FAFC"],
+  gradientCardDark: ["rgba(30,41,59,0.98)", "rgba(15,23,42,0.98)"],
+  gradientAccent:   ["#4F46E5", "#7C3AED"],                  // indigo → violet
+  gradientSavings:  ["#10B981", "#059669"],
+  gradientGlass:    ["rgba(255,255,255,0.95)", "rgba(248,250,252,0.90)"],
+  gradientGold:     ["#4F46E5", "#6366F1"],
+  gradientWarm:     ["#F97316", "#EAB308"],                   // orange → yellow
+  gradientCool:     ["#0EA5E9", "#6366F1"],                   // sky → indigo
 };
 
 const SPACING = {
@@ -71,14 +87,14 @@ const SPACING = {
   xl:   20,
   xxl:  24,
   xxxl: 32,
-  huge: 40,
+  huge: 48,
 };
 
 const RADIUS = {
-  xs:  4,
-  sm:  8,
-  md:  12,
-  lg:  16,
+  xs:  6,
+  sm:  10,
+  md:  14,
+  lg:  18,
   xl:  24,
   xxl: 32,
   full: 999,
@@ -87,106 +103,120 @@ const RADIUS = {
 const SHADOWS = {
   none: {},
   sm: {
-    shadowColor: "#000",
+    shadowColor: "#64748B",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.06,
-    shadowRadius: 4,
+    shadowRadius: 3,
     elevation: 2,
   },
   md: {
-    shadowColor: "#000",
+    shadowColor: "#64748B",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
-    elevation: 6,
+    elevation: 5,
   },
   lg: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
+    shadowColor: "#5B5AE6",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 30,
     elevation: 10,
   },
-  glow: {
-    shadowColor: "#C4A265",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.20,
-    shadowRadius: 16,
+  navbar: {
+    shadowColor: "#5B5AE6",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 30,
     elevation: 8,
   },
+  glow: {
+    shadowColor: "#5B5AE6",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 12,
+  },
   glowSoft: {
-    shadowColor: "#C4A265",
+    shadowColor: "#6366F1",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 4,
   },
   dark: {
-    shadowColor: "#000",
+    shadowColor: "#0F172A",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 8,
   },
+  colored: (color) => ({
+    shadowColor: color,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.20,
+    shadowRadius: 12,
+    elevation: 6,
+  }),
 };
 
 const FONTS = {
   h1: {
-    fontSize: 34,
-    fontWeight: "300",
-    color: "#1A1A1A",
-    letterSpacing: -0.5,
+    fontSize: 32,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.8,
   },
   h1Dark: {
-    fontSize: 34,
-    fontWeight: "300",
+    fontSize: 32,
+    fontWeight: "700",
     color: "#FFFFFF",
-    letterSpacing: -0.5,
+    letterSpacing: -0.8,
   },
   h2: {
     fontSize: 24,
-    fontWeight: "400",
-    color: "#1A1A1A",
-    letterSpacing: -0.3,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.4,
   },
   h2Dark: {
     fontSize: 24,
-    fontWeight: "400",
+    fontWeight: "700",
     color: "#FFFFFF",
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
   },
   h3: {
     fontSize: 18,
-    fontWeight: "500",
-    color: "#1A1A1A",
+    fontWeight: "600",
+    color: "#0F172A",
     letterSpacing: -0.2,
   },
   h3Dark: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: "600",
     color: "#FFFFFF",
     letterSpacing: -0.2,
   },
   body: {
     fontSize: 15,
     fontWeight: "400",
-    color: "#6B6B6B",
+    color: "#64748B",
     lineHeight: 22,
   },
   bodyDark: {
     fontSize: 15,
     fontWeight: "400",
-    color: "rgba(255,255,255,0.65)",
+    color: "rgba(255,255,255,0.70)",
     lineHeight: 22,
   },
   bodyBold: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "600",
-    color: "#1A1A1A",
+    color: "#0F172A",
     lineHeight: 22,
   },
   bodyBoldDark: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "600",
     color: "#FFFFFF",
     lineHeight: 22,
@@ -194,69 +224,69 @@ const FONTS = {
   caption: {
     fontSize: 13,
     fontWeight: "400",
-    color: "#9B9B9B",
+    color: "#94A3B8",
     lineHeight: 18,
   },
   captionDark: {
     fontSize: 13,
     fontWeight: "400",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.45)",
     lineHeight: 18,
   },
   captionBold: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#6B6B6B",
+    color: "#64748B",
     letterSpacing: 0.2,
   },
   captionBoldDark: {
     fontSize: 13,
     fontWeight: "600",
-    color: "rgba(255,255,255,0.65)",
+    color: "rgba(255,255,255,0.70)",
     letterSpacing: 0.2,
   },
   price: {
     fontSize: 28,
-    fontWeight: "300",
-    color: "#1A1A1A",
+    fontWeight: "700",
+    color: "#0F172A",
     letterSpacing: -0.5,
   },
   priceDark: {
     fontSize: 28,
-    fontWeight: "300",
+    fontWeight: "700",
     color: "#FFFFFF",
     letterSpacing: -0.5,
   },
   priceSmall: {
     fontSize: 18,
-    fontWeight: "400",
-    color: "#1A1A1A",
+    fontWeight: "600",
+    color: "#0F172A",
   },
   badge: {
     fontSize: 10,
-    fontWeight: "600",
+    fontWeight: "700",
     textTransform: "uppercase",
-    letterSpacing: 1.2,
+    letterSpacing: 1,
   },
   luxury: {
-    fontSize: 42,
-    fontWeight: "200",
+    fontSize: 40,
+    fontWeight: "800",
     color: "#FFFFFF",
-    letterSpacing: 1,
+    letterSpacing: -1,
   },
   luxurySub: {
     fontSize: 16,
-    fontWeight: "300",
-    color: "rgba(255,255,255,0.55)",
-    letterSpacing: 0.8,
+    fontWeight: "400",
+    color: "rgba(255,255,255,0.65)",
+    letterSpacing: 0.2,
     lineHeight: 24,
   },
   eyebrow: {
     fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 3,
+    fontWeight: "700",
+    letterSpacing: 2,
     textTransform: "uppercase",
-    color: "#C4A265",
+    color: "#6366F1",
   },
 };
 

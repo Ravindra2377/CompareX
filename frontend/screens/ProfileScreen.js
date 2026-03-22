@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StatusBar,
+  TextInput,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
+import LocationService from "../services/LocationService";
 
 const STATS = [
   { label: "Searches", value: "24" },
@@ -46,6 +49,31 @@ import { useNavigation } from "@react-navigation/native";
 const ProfileScreen = () => {
   const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [locationCity, setLocationCity] = useState("");
+  const [locationPincode, setLocationPincode] = useState("");
+  const [locationEditing, setLocationEditing] = useState(false);
+
+  useEffect(() => {
+    LocationService.init().then((loc) => {
+      setLocationCity(loc.city || "");
+      setLocationPincode(loc.pincode || "");
+    });
+  }, []);
+
+  const saveLocation = async () => {
+    if (!locationPincode || locationPincode.length < 5) {
+      Alert.alert("Invalid Pincode", "Please enter a valid pincode.");
+      return;
+    }
+    await LocationService.setLocation({
+      latitude: LocationService.getLocation().latitude,
+      longitude: LocationService.getLocation().longitude,
+      city: locationCity,
+      pincode: locationPincode,
+    });
+    setLocationEditing(false);
+    Alert.alert("Location Saved", "Your delivery location has been updated. New searches will use this location.");
+  };
 
   return (
     <View style={styles.container}>
@@ -79,6 +107,54 @@ const ProfileScreen = () => {
               {i < STATS.length - 1 && <View style={styles.statDivider} />}
             </React.Fragment>
           ))}
+        </View>
+
+        {/* Location Settings */}
+        <View style={styles.locationSection}>
+          <View style={styles.locationHeader}>
+            <View style={styles.locationIconWrap}>
+              <Ionicons name="location" size={18} color={COLORS.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.locationTitle}>Delivery Location</Text>
+              <Text style={styles.locationSubtitle}>
+                {locationEditing ? "Set your delivery pincode" : `${locationCity || "Not set"} • ${locationPincode || "—"}`}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setLocationEditing(!locationEditing)}
+              style={styles.locationEditBtn}
+            >
+              <Ionicons
+                name={locationEditing ? "close" : "create-outline"}
+                size={18}
+                color={COLORS.primary}
+              />
+            </TouchableOpacity>
+          </View>
+          {locationEditing && (
+            <View style={styles.locationForm}>
+              <TextInput
+                style={styles.locationInput}
+                value={locationCity}
+                onChangeText={setLocationCity}
+                placeholder="City (e.g. Bengaluru)"
+                placeholderTextColor={COLORS.textTertiary}
+              />
+              <TextInput
+                style={styles.locationInput}
+                value={locationPincode}
+                onChangeText={setLocationPincode}
+                placeholder="Pincode (e.g. 560001)"
+                placeholderTextColor={COLORS.textTertiary}
+                keyboardType="numeric"
+                maxLength={6}
+              />
+              <TouchableOpacity style={styles.locationSaveBtn} onPress={saveLocation}>
+                <Text style={styles.locationSaveTxt}>Save Location</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {/* Menu */}
@@ -137,9 +213,8 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
     backgroundColor: "#FFFFFF",
+    ...SHADOWS.sm,
   },
   userSection: {
     flexDirection: "row",
@@ -149,13 +224,13 @@ const styles = StyleSheet.create({
     gap: SPACING.lg,
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: COLORS.textPrimary,
-    borderWidth: 0,
+    width: 52,
+    height: 52,
+    borderRadius: RADIUS.lg,
+    backgroundColor: COLORS.primary,
     alignItems: "center",
     justifyContent: "center",
+    ...SHADOWS.glowSoft,
   },
   avatarText: {
     ...FONTS.h2Dark,
@@ -175,9 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.lg,
     backgroundColor: "#FFFFFF",
     marginBottom: SPACING.xxl,
     ...SHADOWS.sm,
@@ -201,14 +274,71 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.xl,
     marginBottom: SPACING.xxl,
   },
+  locationSection: {
+    marginHorizontal: SPACING.xl,
+    marginBottom: SPACING.xxl,
+    backgroundColor: "#FFFFFF",
+    borderRadius: RADIUS.lg,
+    padding: SPACING.lg,
+    ...SHADOWS.sm,
+  },
+  locationHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.md,
+  },
+  locationIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.accentLight,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  locationTitle: {
+    ...FONTS.bodyBold,
+  },
+  locationSubtitle: {
+    ...FONTS.caption,
+    marginTop: 1,
+  },
+  locationEditBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.cardAlt,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  locationForm: {
+    marginTop: SPACING.md,
+    gap: SPACING.sm,
+  },
+  locationInput: {
+    backgroundColor: COLORS.cardAlt,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    ...FONTS.body,
+    color: COLORS.textPrimary,
+  },
+  locationSaveBtn: {
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.md,
+    paddingVertical: SPACING.sm,
+    alignItems: "center",
+    marginTop: SPACING.xs,
+  },
+  locationSaveTxt: {
+    ...FONTS.bodyBold,
+    color: "#FFFFFF",
+  },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.lg,
     backgroundColor: "#FFFFFF",
     marginBottom: SPACING.sm,
     gap: SPACING.lg,
@@ -230,9 +360,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    borderWidth: 1,
-    borderColor: COLORS.errorLight,
-    borderRadius: RADIUS.full,
+    borderRadius: RADIUS.lg,
     gap: SPACING.sm,
     backgroundColor: COLORS.errorLight,
   },

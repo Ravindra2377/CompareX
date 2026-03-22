@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Platform } from "react-native";
+import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS, SHADOWS, FONTS } from "./config/theme";
 
@@ -19,6 +20,9 @@ import ProductDetailScreen from "./screens/ProductDetailScreen";
 import WishlistScreen from "./screens/WishlistScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AccountsScreen from "./screens/AccountsScreen";
+import InAppBrowser from "./components/InAppBrowser";
+import CustomTabBar from "./components/CustomTabBar";
+import * as Haptics from "expo-haptics";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,43 +40,12 @@ const MainTabs = () => {
 
   return (
     <Tab.Navigator
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarIcon: ({ focused, color }) => {
-          const iconName = focused
-            ? TAB_ICONS[route.name].active
-            : TAB_ICONS[route.name].inactive;
-          return (
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Ionicons name={iconName} size={24} color={color} />
-              {focused && (
-                <View
-                  style={{
-                    position: "absolute",
-                    bottom: -6,
-                    width: 4,
-                    height: 4,
-                    borderRadius: 2,
-                    backgroundColor: COLORS.accentGold,
-                  }}
-                />
-              )}
-            </View>
-          );
-        },
-        tabBarActiveTintColor: COLORS.accentGold,
+        tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.textTertiary,
         tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: "#FFFFFF",
-          borderTopWidth: 1,
-          borderTopColor: COLORS.border,
-          height: 56 + safeBottom,
-          paddingBottom: safeBottom,
-          paddingTop: 8,
-          elevation: 8,
-          ...SHADOWS.sm,
-        },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -90,7 +63,7 @@ const AppNav = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.accentGold} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
@@ -103,7 +76,7 @@ const AppNav = () => {
       card: "#FFFFFF",
       text: COLORS.textPrimary,
       border: COLORS.border,
-      primary: COLORS.accentGold,
+      primary: COLORS.primary,
       notification: COLORS.warning,
     },
   };
@@ -118,6 +91,11 @@ const AppNav = () => {
               name="ProductDetail"
               component={ProductDetailScreen}
               options={{ animation: "slide_from_right" }}
+            />
+            <Stack.Screen
+              name="InAppBrowser"
+              component={InAppBrowser}
+              options={{ animation: "slide_from_bottom" }}
             />
             <Stack.Screen
               name="Accounts"

@@ -131,7 +131,6 @@ const styles = StyleSheet.create({
   },
   formCard: {
     backgroundColor: "#FFFFFF",
-    borderColor: COLORS.border,
     borderRadius: RADIUS.xl,
   },
   createBtn: {
