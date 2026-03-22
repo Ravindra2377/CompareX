@@ -146,7 +146,7 @@ const HomeScreen = ({ navigation }) => {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={[styles.statValue, { color: COLORS.accentGold }]}>30%</Text>
+                <Text style={[styles.statValue, { color: COLORS.secondary }]}>30%</Text>
                 <Text style={styles.statLabel}>Max Savings</Text>
               </View>
             </View>
@@ -194,18 +194,11 @@ const HomeScreen = ({ navigation }) => {
             ))}
           </View>
 
-          {/* Quick search CTA */}
-          <TouchableOpacity
-            style={styles.searchCta}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("Search")}
-          >
-            <Ionicons name="search-outline" size={18} color={COLORS.textTertiary} />
-            <Text style={styles.searchCtaText}>Search eggs, milk, bread…</Text>
-          </TouchableOpacity>
+          {/* Quick search CTA removed - redundant with footer and hero CTA */}
         </Animated.View>
 
-        <View style={{ height: 100 }} />
+        {/* Extra space to ensure last cards are fully visible above floating navbar */}
+        <View style={{ height: 120 }} />
       </ScrollView>
     </View>
   );
@@ -220,9 +213,9 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
 
-  // ── Hero (Dark luxury section) ──
+  // ── Hero (Vibrant gradient section) ──
   hero: {
-    minHeight: SCREEN_H * 0.55,
+    minHeight: SCREEN_H * 0.52,
     paddingTop: 60,
     paddingHorizontal: H_PADDING,
     paddingBottom: SPACING.xxxl,
@@ -240,19 +233,17 @@ const styles = StyleSheet.create({
   logoutBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    borderRadius: RADIUS.md,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
   },
   heroContent: {
     marginBottom: SPACING.xxxl,
   },
   heroTitle: {
     ...FONTS.luxury,
-    lineHeight: 50,
+    lineHeight: 48,
     marginBottom: SPACING.lg,
   },
   heroSubtitle: {
@@ -261,7 +252,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: "row",
     borderTopWidth: 1,
-    borderTopColor: "rgba(255, 255, 255, 0.1)",
+    borderTopColor: "rgba(255, 255, 255, 0.15)",
     paddingTop: SPACING.xl,
     marginBottom: SPACING.xxl,
   },
@@ -279,7 +270,7 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
     marginVertical: SPACING.xs,
   },
   ctaButton: {
@@ -288,15 +279,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
     height: 56,
-    borderRadius: RADIUS.full,
+    borderRadius: RADIUS.lg,
     gap: SPACING.sm,
     ...SHADOWS.lg,
   },
   ctaText: {
     fontSize: 16,
-    fontWeight: "500",
-    color: COLORS.textPrimary,
-    letterSpacing: 0.5,
+    fontWeight: "600",
+    color: COLORS.primary,
+    letterSpacing: 0.3,
   },
 
   // ── Light Section ──
@@ -331,19 +322,17 @@ const styles = StyleSheet.create({
   categoryIconWrap: {
     width: 64,
     height: 64,
-    borderRadius: 32,
+    borderRadius: RADIUS.lg,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: COLORS.border,
     ...SHADOWS.sm,
   },
   categoryLabel: {
     ...FONTS.caption,
     fontSize: 12,
     color: COLORS.textSecondary,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 
   // ── Trending ──
@@ -356,10 +345,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: SPACING.lg,
     backgroundColor: "#FFFFFF",
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.lg,
     marginBottom: SPACING.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     gap: SPACING.md,
     ...SHADOWS.sm,
   },
@@ -397,9 +384,7 @@ const styles = StyleSheet.create({
     marginHorizontal: H_PADDING,
     height: 52,
     backgroundColor: "#FFFFFF",
-    borderRadius: RADIUS.full,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.xl,
     gap: SPACING.sm,
     ...SHADOWS.sm,

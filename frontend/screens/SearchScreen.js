@@ -58,7 +58,6 @@ const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial 
 // Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
 // Blocks images, fonts, analytics, and stylesheets to cut WebView load time by 1.5-3s.
 const BLOCKED_RESOURCE_EXTENSIONS = [
-  '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico',
   '.woff', '.woff2', '.ttf', '.eot',
   '.css',
   '.mp4', '.webm',
@@ -961,6 +960,11 @@ const SearchScreen = ({ navigation, route }) => {
           data.products = data.products.map((product) =>
             normalizeIncomingProduct(product, platform),
           );
+          
+          if (platform === 'Amazon' && data.products.length > 0) {
+            const sample = data.products[0];
+            console.log(`[Debug-Amazon] Incoming product after normalize: name="${(sample.product_name || '').substring(0, 40)}", image_url="${(sample.image_url || 'EMPTY').substring(0, 80)}", platform=${sample.platform}`);
+          }
         }
 
         // Reject late messages from older searches when sessionId is provided
@@ -1436,7 +1440,10 @@ const SearchScreen = ({ navigation, route }) => {
           listings.length > 0
             ? listings.reduce((a, b) => (a.price < b.price ? a : b)).platform
             : "",
-        image_url: first.image_url || "",
+        image_url:
+          first.image_url ||
+          uniqueListings.find((listing) => listing.image_url)?.image_url ||
+          "",
       };
     });
 

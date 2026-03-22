@@ -47,7 +47,10 @@ const PlatformRow = ({ platform, isCheapest = false, onOpenStore }) => {
       <View style={styles.imageIconContainer}>
         {imageURL && !imageError ? (
           <Image
-            source={{ uri: imageURL }}
+            source={{
+              uri: imageURL,
+              headers: { 'Referer': 'https://www.google.com/' },
+            }}
             style={styles.platformImage}
             resizeMode="contain"
             onError={() => setImageError(true)}
@@ -105,22 +108,18 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.lg,
     backgroundColor: "#FFFFFF",
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.lg,
     marginBottom: SPACING.sm,
     ...SHADOWS.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     gap: SPACING.md,
   },
   imageIconContainer: {
-    width: 40,
-    height: 40,
+    width: 42,
+    height: 42,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.cardAlt,
-    borderRadius: RADIUS.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
   },
   platformImage: {
     width: "100%",
@@ -128,10 +127,11 @@ const styles = StyleSheet.create({
   },
   cheapest: {
     backgroundColor: COLORS.savingsLight,
-    borderColor: COLORS.savings,
+    borderWidth: 1,
+    borderColor: "rgba(16, 185, 129, 0.20)",
   },
   unavailable: {
-    opacity: 0.45,
+    opacity: 0.40,
     backgroundColor: COLORS.cardAlt,
   },
   info: {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   price: {
     ...FONTS.priceSmall,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: "600",
   },
   freeTag: {
     ...FONTS.badge,
@@ -166,11 +166,12 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   bestBadge: {
-    backgroundColor: COLORS.textPrimary,
+    backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.sm,
     paddingVertical: 4,
     borderRadius: RADIUS.full,
     marginLeft: SPACING.sm,
+    ...SHADOWS.glowSoft,
   },
   bestText: {
     ...FONTS.badge,

@@ -159,12 +159,11 @@ const normalizeListingPrice = (listing) => {
   }
 
   // Price validation: reject extreme outliers
-  // If price has extreme discount (>75%), it's likely a parsing error or flash sale
+  // If price has extreme discount (>90%), it's likely a parsing error
   // Use MRP as fallback in such cases
   if (mrp > 0 && price > 0) {
     const discountRatio = ((mrp - price) / mrp) * 100;
-    if (discountRatio > 75) {
-      // Extreme discount - likely parsing error. Use MRP as safer fallback
+    if (discountRatio > 90) {
       return mrp;
     }
   }
@@ -309,45 +308,47 @@ const ProductDetailScreen = ({ route, navigation }) => {
 
       console.log(`[ProductDetail] Opening ${p.name}: ${fallbackWebUrl}`);
 
-      const openWithFallback = async () => {
+      // On Android, Linking.openURL with the web URL opens the native app 
+      // automatically if it's installed (via Android App Links / verified intents).
+      // On iOS, the same applies for universal links.
+      // This is the simplest and most reliable approach.
+      const openInApp = async () => {
         try {
-          if (Platform.OS === "android" && platform.includes("blinkit")) {
-            const intentUrl = buildAndroidIntentUrl(
-              fallbackWebUrl,
-              "com.grofers.customerapp",
-            );
-            if (intentUrl) {
-              try {
-                await Linking.openURL(intentUrl);
-                return;
-              } catch {
-                // Fall back to web URL.
-              }
-            }
-          } else if (Platform.OS === "android" && platform.includes("amazon") && p?.productUrl) {
-            // Amazon specific intent structure provided by the scraper
-            const amazonIntent = p.productUrl; // Note: For Amazon, our scraper puts the intent:// link in deep_link or product_url
-            // To be safe, check if deep_link exists
-            const intentToTry = p.deep_link || (p.productUrl.startsWith('intent://') ? p.productUrl : null);
-            
-            if (intentToTry) {
-               try {
-                 await Linking.openURL(intentToTry);
-                 return;
-               } catch {
-                 // Fall back to web URL
-               }
-            } 
-          }
-
           await Linking.openURL(fallbackWebUrl);
         } catch (err) {
           console.error(`[ProductDetail] Failed to open URL:`, err);
-          Alert.alert("Cannot Open", "Unable to open this product link");
+          // If direct URL fails, try Android intent as fallback
+          if (Platform.OS === "android") {
+            const appPackages = {
+              blinkit: "com.grofers.customerapp",
+              zepto: "com.zeptoconsumerapp",
+              bigbasket: "com.bigbasket.mobileapp",
+              amazon: "com.amazon.mShop.android.shopping",
+              flipkart: "com.flipkart.android",
+            };
+            const packageName = appPackages[platform];
+            if (packageName) {
+              const intentUrl = buildAndroidIntentUrl(fallbackWebUrl, packageName);
+              if (intentUrl) {
+                try {
+                  await Linking.openURL(intentUrl);
+                  return;
+                } catch {
+                  // Intent also failed
+                }
+              }
+            }
+          }
+          // Last resort: in-app browser
+          navigation.navigate("InAppBrowser", {
+            url: fallbackWebUrl,
+            title: product?.name || p?.name || "",
+            platform: p?.name || "",
+          });
         }
       };
 
-      openWithFallback();
+      openInApp();
     },
     [product?.name],
   );
@@ -533,21 +534,18 @@ const styles = StyleSheet.create({
     paddingTop: 56,
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
     backgroundColor: "#FFFFFF",
+    ...SHADOWS.sm,
   },
   headerTitle: {
     ...FONTS.h3,
-    fontWeight: "400",
+    fontWeight: "600",
   },
   productSection: {
     paddingHorizontal: SPACING.xl,
     paddingTop: SPACING.xxl,
     paddingBottom: SPACING.lg,
     backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
   },
   productName: {
     ...FONTS.h1,
@@ -576,9 +574,7 @@ const styles = StyleSheet.create({
     marginTop: SPACING.lg,
     paddingVertical: SPACING.lg,
     backgroundColor: "#FFFFFF",
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: RADIUS.lg,
     ...SHADOWS.sm,
     marginBottom: SPACING.md,
   },
@@ -625,9 +621,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.lg,
     backgroundColor: COLORS.savingsLight,
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    borderColor: "rgba(45, 140, 90, 0.15)",
+    borderRadius: RADIUS.lg,
   },
   savingsText: {
     ...FONTS.captionBold,
@@ -638,10 +632,8 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
     backgroundColor: "#FFFFFF",
-    borderRadius: RADIUS.md,
+    borderRadius: RADIUS.lg,
     ...SHADOWS.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     marginBottom: SPACING.xxl,
   },
   statItem: {

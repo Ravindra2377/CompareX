@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -29,6 +29,16 @@ const formatPrice = (value) => {
   }).format(numeric);
 };
 
+const normalizeImageUrl = (rawUrl) => {
+  if (!rawUrl || typeof rawUrl !== "string") return "";
+  let url = rawUrl.trim().replace(/^['\"]|['\"]$/g, "");
+  if (!url || url.startsWith("data:")) return "";
+  if (url.startsWith("//")) url = `https:${url}`;
+  if (url.includes(" ")) url = url.split(" ")[0];
+  if (url.includes("&amp;")) url = url.replace(/&amp;/g, "&");
+  return url;
+};
+
 const ProductCard = ({ product, onPress }) => {
   const {
     name = "Product",
@@ -40,9 +50,20 @@ const ProductCard = ({ product, onPress }) => {
     discount,
     bestPlatform = "",
     image_url: imageURL,
+    listings = [],
   } = product;
 
+  const imageCandidates = useMemo(() => {
+    const candidates = [imageURL, ...listings.map((listing) => listing?.image_url)]
+      .map(normalizeImageUrl)
+      .filter(Boolean);
+    return Array.from(new Set(candidates));
+  }, [imageURL, listings]);
+
   const [imageError, setImageError] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const resolvedImageURL = imageCandidates[imageIndex] || "";
 
   const effectivePrice = Number(price) > 0 ? Number(price) : 0;
   const effectiveOriginalPrice =
@@ -90,12 +111,18 @@ const ProductCard = ({ product, onPress }) => {
         >
           <View style={styles.content}>
             <View style={styles.imageContainer}>
-              {imageURL && !imageError ? (
+              {resolvedImageURL && !imageError ? (
                 <Image
-                  source={{ uri: imageURL }}
+                  source={{ uri: resolvedImageURL }}
                   style={styles.image}
                   resizeMode="contain"
-                  onError={() => setImageError(true)}
+                  onError={() => {
+                    if (imageIndex < imageCandidates.length - 1) {
+                      setImageIndex((prev) => prev + 1);
+                      return;
+                    }
+                    setImageError(true);
+                  }}
                 />
               ) : (
                 <View style={styles.imagePlaceholder}>
@@ -224,20 +251,18 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: SPACING.xs,
-    paddingVertical: SPACING.sm,
+    paddingLeft: SPACING.sm,
+    paddingVertical: SPACING.md,
   },
   imageContainer: {
-    width: 90,
-    height: 90,
+    width: 88,
+    height: 88,
     backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.md,
     marginRight: SPACING.md,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
   image: {
     width: "100%",
@@ -254,7 +279,7 @@ const styles = StyleSheet.create({
   name: {
     ...FONTS.h3,
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: "600",
     marginBottom: 2,
     color: COLORS.textPrimary,
   },
@@ -299,8 +324,6 @@ const styles = StyleSheet.create({
   },
   savingsChip: {
     backgroundColor: COLORS.savingsLight,
-    borderWidth: 1,
-    borderColor: "rgba(45, 140, 90, 0.15)",
     paddingHorizontal: SPACING.sm,
     height: 24,
     borderRadius: RADIUS.full,
@@ -316,8 +339,6 @@ const styles = StyleSheet.create({
   },
   discountBadge: {
     backgroundColor: COLORS.warningLight,
-    borderWidth: 1,
-    borderColor: "rgba(212, 168, 83, 0.2)",
     paddingHorizontal: 7,
     height: 24,
     borderRadius: RADIUS.full,
@@ -339,26 +360,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.sm,
     paddingVertical: 4,
     borderRadius: RADIUS.full,
-    borderWidth: 1,
-    borderColor: COLORS.border,
     flexDirection: "row",
     alignItems: "center",
   },
   platformText: {
     ...FONTS.caption,
     fontSize: 11,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   arrowWrap: {
     marginLeft: SPACING.md,
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: COLORS.cardAlt,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.accentLight,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
 });
 

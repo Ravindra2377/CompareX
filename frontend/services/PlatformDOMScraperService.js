@@ -369,6 +369,7 @@ class PlatformDOMScraperService {
                     
                     if (index === 0) {
                       log('First product - name: ' + (name || 'NOT FOUND') + ', price: ' + price);
+                       log('First product - name: ' + (name || 'NOT FOUND') + ', priceText: "' + priceText + '", image: ' + (image || 'NOT FOUND'));
                     }
                     
                     if (name && name.length > 3 && price > 0) {
@@ -942,29 +943,19 @@ class PlatformDOMScraperService {
                     }
                     
                     const price = priceText ? parseFloat(String(priceText).replace(/[^0-9.]/g, '')) : 0;
-                    const imgEl = card.querySelector('img');
-                    let image = imgEl ? (imgEl.getAttribute('data-src') || imgEl.getAttribute('data-srcset') || imgEl.getAttribute('srcset') || imgEl.src || '') : '';
-                    
-                    // BigBasket specific: if it's a placeholder SVG, try to find a better one
-                    if (image.includes('data:image/svg+xml') || !image.includes('bbassets.com')) {
-                      const betterImg = card.querySelector('img[src*="bbassets.com"], img[data-src*="bbassets.com"]');
-                      if (betterImg) {
-                        image = betterImg.getAttribute('data-src') || betterImg.src;
-                      }
-                    }
-                    
                     if (index === 0) {
                       log('First product - name: ' + (name || 'NOT FOUND') + ', priceText: "' + priceText + '", price: ' + price);
                     }
                     
                     if (name && price > 0) {
                       products.push({
+                        _card: card, // Temporarily hold for image extraction
                         product_name: name,
                         raw_product_name: rawName || name,
                         brand: card.querySelector('[qa="brand"]')?.textContent?.trim() || '',
                         price: price,
                         mrp: meta.mrp || price,
-                        image_url: image,
+                        image_url: '', // Will fetch after
                         product_url: (function() {
                           let url = card.querySelector('a')?.href || '';
                           if (url && url.startsWith('/')) {
@@ -990,19 +981,189 @@ class PlatformDOMScraperService {
                   }
                 });
                 
-                log('Attempt ' + attempt + ' parsed ' + products.length + ' products');
+                // Fetch photos after results using DOM
+                products.forEach(p => {
+                  try {
+                    const card = p._card;
+                    let image = '';
+                    
+                    const allImgs = card.querySelectorAll('img');
+                    for (const img of allImgs) {
+                      const attrs = [img.getAttribute('srcset'), img.getAttribute('data-srcset'), img.getAttribute('src'), img.getAttribute('data-src')];
+                      for (const a of attrs) {
+                        if (!a) continue;
+                        const parts = a.split(',');
+                        for (const part of parts) {
+                           const url = part.trim().split(' ')[0];
+                           if (url && !url.startsWith('data:') && !url.includes('transparentImg') && !url.includes('.svg')) {
+                             image = url;
+                             break;
+                           }
+                        }
+                        if (image) break;
+                      }
+                      if (image) break;
+                    }
 
-                if (products.length > 0) {
-                  sendResults(products, true, null);
-                  return;
+                    if (!image) {
+                      const noscript = card.querySelector('noscript');
+                      if (noscript) {
+                        const m = (noscript.textContent || '').match(/src=['"]([^'"]+)['"]/i);
+                        if (m && m[1] && !m[1].startsWith('data:')) {
+                          image = m[1];
+                        }
+                      }
+                    }
+
+                    if (!image) {
+                      // Ultra-fast, no-regex extraction to prevent JS thread freezing
+                      let searchHTML = String(card.outerHTML || '');
+                      if (card.tagName === 'A' && card.parentElement) {
+                        searchHTML += String(card.parentElement.outerHTML || '');
+                      }
+                      
+                      const tokens = searchHTML.split(/["']/);
+                      for (const t of tokens) {
+                         const cleanT = t.trim();
+                         if ((cleanT.includes('bbassets.com') || cleanT.includes('bigbasket.com')) && 
+                             !cleanT.includes('transparentImg') && 
+                             !cleanT.includes('.svg') &&
+                             cleanT.length > 15 && 
+                             cleanT.length < 400 &&
+                             (cleanT.startsWith('http') || cleanT.startsWith('//') || cleanT.startsWith('/'))) {
+                            image = cleanT;
+                            break;
+                         }
+                      }
+                    }
+
+                    if (image) {
+                      image = String(image).trim().replace(/^['\"]|['\"]$/g, '');
+                      if (image.startsWith('//')) image = 'https:' + image;
+                      if (image.startsWith('/')) image = 'https://www.bigbasket.com' + image;
+                      if (image.includes(' ')) image = image.split(' ')[0];
+                      if (image.includes('&amp;')) image = image.replace(/&amp;/g, '&');
+                    }
+                    
+                    p.image_url = image;
+                    delete p._card; // Clean up DOM reference before sending to React Native
+                  } catch (e) {}
+                  
+                  // Filter out bad URLs
+                  if (p.image_url && (p.image_url.startsWith('data:') || p.image_url === 'about:blank')) {
+                    p.image_url = '';
+                  }
+                });
+                
+                const finalize = () => {
+                  log('Attempt ' + attempt + ' parsed ' + products.length + ' products');
+                  if (products.length > 0) {
+                    sendResults(products, true, null);
+                  }
+                };
+
+                if (products.length > 0 && products.some(p => !p.image_url)) {
+                   try {
+                     const query = new URLSearchParams(window.location.search).get('q') || window.location.pathname.split('/').pop();
+                     const url = 'https://www.bigbasket.com/listing-svc/v2/products?type=pc&iss=false&page=1&tab_type=%5B%22all%22%5D&sorted_on=relevance&q=' + encodeURIComponent(query) + '&slug=' + encodeURIComponent(query.toLowerCase());
+                     log('Fetching missing images from BigBasket API: ' + url);
+                     
+                     fetch(url, { headers: { 'accept': 'application/json', 'x-channel': 'BB-WEB' } })
+                       .then(async res => {
+                          log('API Response status: ' + res.status);
+                          if (!res.ok) {
+                             const errBody = await res.text();
+                             log('API Error Body: ' + errBody.substring(0, 500));
+                             return { tabs: [] };
+                          }
+                          return res.json();
+                       })
+                       .then(data => {
+                          const apiProducts = (data.tabs && data.tabs[0] && data.tabs[0].product_info && data.tabs[0].product_info.products) || data.products || [];
+                          log('API returned ' + apiProducts.length + ' products');
+                          
+                          if (apiProducts.length > 0) {
+                             const first = apiProducts[0];
+                             var brandName = (first.brand && first.brand.name) || '';
+                             log('API first: desc="' + (first.desc || '') + '", brand="' + brandName + '", hasImages=' + !!(first.images && first.images.length));
+                          }
+
+                          // BigBasket API: name = brand.name + desc, image = images[0].m
+                          const getFullName = (p) => {
+                             var brand = (p.brand && p.brand.name) || '';
+                             var desc = p.desc || p.p_name || p.name || '';
+                             return (brand + ' ' + desc).trim();
+                          };
+                          const getImage = (p) => {
+                             if (p.images && p.images[0]) {
+                                return p.images[0].m || p.images[0].l || p.images[0].xl || p.images[0].s || '';
+                             }
+                             return p.p_img_url || p.image_url || p.image || '';
+                          };
+
+                          let fixedCount = 0;
+                          products.forEach((p, idx) => {
+                             if (!p.image_url && p.product_name) {
+                                const cleanPName = p.product_name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                                if (!cleanPName || cleanPName.length < 3) return;
+
+                                // Try to find matching API product by name similarity
+                                var match = null;
+                                var bestScore = 0;
+                                for (var ai = 0; ai < apiProducts.length; ai++) {
+                                   var a = apiProducts[ai];
+                                   var aFullName = getFullName(a).toLowerCase().replace(/[^a-z0-9]/g, '');
+                                   if (!aFullName || aFullName.length < 3) continue;
+                                   
+                                   // Check substring containment both ways
+                                   if (cleanPName.includes(aFullName) || aFullName.includes(cleanPName)) {
+                                      var score = Math.min(aFullName.length, cleanPName.length);
+                                      if (score > bestScore) { bestScore = score; match = a; }
+                                   }
+                                   // Also try prefix match (first 12 chars)
+                                   var prefix = Math.min(12, aFullName.length, cleanPName.length);
+                                   if (prefix >= 6 && aFullName.substring(0, prefix) === cleanPName.substring(0, prefix)) {
+                                      if (prefix > bestScore) { bestScore = prefix; match = a; }
+                                   }
+                                }
+                                
+                                if (match) {
+                                   p.image_url = getImage(match);
+                                   if (p.image_url) {
+                                      fixedCount++;
+                                      if (fixedCount <= 3) log('MAPPED: "' + p.product_name + '" => img=' + p.image_url.substring(0, 80));
+                                   }
+                                } else {
+                                   // Fallback: assign by index position
+                                   if (idx < apiProducts.length) {
+                                      var fallbackImg = getImage(apiProducts[idx]);
+                                      if (fallbackImg) {
+                                         p.image_url = fallbackImg;
+                                         fixedCount++;
+                                         if (fixedCount <= 3) log('INDEX-MAPPED[' + idx + ']: "' + p.product_name + '" => img=' + fallbackImg.substring(0, 80));
+                                      }
+                                   }
+                                }
+                             }
+                          });
+                          log('Successfully mapped ' + fixedCount + ' missing images via API');
+                          finalize();
+                       })
+                       .catch(e => {
+                          log('Fetch images error: ' + e.message);
+                          finalize();
+                       });
+                   } catch (e) {
+                      log('Fetch API wrapper error: ' + e.message);
+                      finalize();
+                   }
+                } else if (products.length > 0) {
+                   finalize();
+                } else if (attempt < 3) {
+                   setTimeout(() => runParse(attempt + 1), 1500);
+                } else {
+                   sendResults([], false, 'No products parsed from BigBasket');
                 }
-
-                if (attempt < 3) {
-                  setTimeout(() => runParse(attempt + 1), 1500);
-                  return;
-                }
-
-                sendResults([], false, 'No products parsed from BigBasket');
               };
 
               setTimeout(() => runParse(1), 3000);
@@ -1522,14 +1683,42 @@ class PlatformDOMScraperService {
                          if (!card.querySelector('h2')) return;
                     }
 
-                    const nameEl = card.querySelector('h2 a span') || card.querySelector('.a-size-medium') || card.querySelector('h2 a') || card.querySelector('h2');
-                    if (!nameEl) {
-                        log('Card ' + i + ': No name element found.');
-                        return;
+                    // Amazon mobile WebView: DOM structures vary wildly between cards.
+                    // Brand and title are often split across multiple disparate elements.
+                    // Gather all potential text fragments and concatenate them.
+                    var nameFragments = [];
+                    var textNodes = card.querySelectorAll('h2, span.a-size-mini, span.a-size-base-plus, span.a-text-normal, span.a-size-medium, .s-title-instructions-style span');
+                    
+                    for (var j = 0; j < textNodes.length; j++) {
+                        var txt = textNodes[j].textContent.trim();
+                        // Filter out empty, very short, prices, and UI garbage
+                        if (txt && txt.length > 2 && !txt.includes('₹') && txt !== 'More like this' && txt !== 'Results') {
+                            // Deduplicate (handles nested elements like h2 > span where both have the same text)
+                            var isDuplicate = false;
+                            for (var k = 0; k < nameFragments.length; k++) {
+                                // If the fragment is already fully contained in an existing fragment, or exactly matches
+                                if (nameFragments[k] === txt || nameFragments[k].indexOf(txt) !== -1 || txt.indexOf(nameFragments[k]) !== -1) {
+                                    // Keep the longer and more descriptive one
+                                    if (txt.length > nameFragments[k].length) {
+                                        nameFragments[k] = txt;
+                                    }
+                                    isDuplicate = true;
+                                    break;
+                                }
+                            }
+                            if (!isDuplicate) {
+                                nameFragments.push(txt);
+                            }
+                        }
                     }
-                    const name = nameEl.textContent.trim();
-                    if (name.length < 5) {
-                        log('Card ' + i + ': Name too short: "' + name + '"');
+                    
+                    var name = nameFragments.join(' ').trim();
+                    
+                    if (i < 5) {
+                        log('Card ' + i + ': Fragments=' + JSON.stringify(nameFragments) + ', FINAL="' + (name || '').substring(0, 80) + '"');
+                    }
+                    
+                    if (!name || name.length < 5) {
                         return;
                     }
                     
@@ -1537,18 +1726,22 @@ class PlatformDOMScraperService {
                     const priceEl = priceWrapper ? priceWrapper.querySelector('.a-price-whole') : card.querySelector('.a-price-whole');
                     let price = 0;
                     
+                    if (i < 3) {
+                        log('Card ' + i + ': name="' + name.substring(0, 50) + '", hasPriceWrapper=' + !!priceWrapper + ', hasPriceEl=' + !!priceEl + ', priceElText="' + (priceEl ? priceEl.textContent : 'N/A') + '"');
+                    }
+                    
                     if (!priceEl) {
                         log('Card ' + i + ': No .a-price-whole found, trying text content for price.');
-                        const rupeeMatch = card.textContent.match(/₹\\s*([0-9,]+(\\.[0-9]+)?)/);
+                        const rupeeMatch = card.textContent.match(/₹[ ]*([0-9,]+([.][0-9]+)?)/);
                         if (rupeeMatch) {
                             price = parseFloat(rupeeMatch[1].replace(/,/g, ''));
                             log('Card ' + i + ': Price from text content: ' + price);
                         } else {
-                            log('Card ' + i + ': No price found in .a-price-whole or text content.');
+                            log('Card ' + i + ': No price found. text=' + card.textContent.substring(0, 150));
                             return;
                         }
                     } else {
-                        const priceMatch = (priceEl.textContent || '').replace(/,/g, '').match(/\\d+(\\.\\d+)?/);
+                        const priceMatch = (priceEl.textContent || '').replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/);
                         price = priceMatch ? parseFloat(priceMatch[0]) : 0;
                         log('Card ' + i + ': Price from .a-price-whole: ' + price);
                     }
@@ -1559,14 +1752,21 @@ class PlatformDOMScraperService {
                     }
                     
                     const mrpEl = card.querySelector('.a-text-price .a-offscreen');
-                    const mrpMatch = mrpEl ? (mrpEl.textContent || '').replace(/,/g, '').match(/\\d+(\\.\\d+)?/) : null;
+                    const mrpMatch = mrpEl ? (mrpEl.textContent || '').replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/) : null;
                     const mrp = mrpMatch ? parseFloat(mrpMatch[0]) : price;
                     
-                    const imgEl = card.querySelector('.s-image');
                     let image = '';
-                    if (imgEl) {
+                    const allImgs = card.querySelectorAll('.s-image, img');
+                    
+                    if (i === 0 && allImgs.length > 0) {
+                      const firstImg = allImgs[0];
+                      const attrs = Array.from(firstImg.attributes).map(a => a.name + '="' + a.value + '"').join(', ');
+                      log('DEBUG IMG ATTRS: ' + attrs);
+                    }
+
+                    for (let img of allImgs) {
                       // Try data-a-dynamic-image (JSON of resolutions)
-                      const dynamicImage = imgEl.getAttribute('data-a-dynamic-image');
+                      const dynamicImage = img.getAttribute('data-a-dynamic-image');
                       if (dynamicImage) {
                         try {
                           const urls = Object.keys(JSON.parse(dynamicImage));
@@ -1574,21 +1774,34 @@ class PlatformDOMScraperService {
                         } catch(e) {}
                       }
                       
-                      // Fallback to srcset
+                      // Fallback to srcset / src
                       if (!image) {
-                        const srcset = imgEl.getAttribute('srcset');
-                        if (srcset) {
-                          const parts = srcset.split(',');
-                          const lastLink = parts[parts.length - 1].trim().split(' ')[0];
-                          if (lastLink) image = lastLink;
+                        const attrs = [img.getAttribute('srcset'), img.getAttribute('data-srcset'), img.getAttribute('src'), img.getAttribute('data-src')];
+                        for (let a of attrs) {
+                          if (!a) continue;
+                          const parts = a.split(',');
+                          for (let p of parts) {
+                             const url = p.trim().split(' ')[0];
+                             if (url && !url.startsWith('data:') && !url.includes('grey-pixel') && !url.includes('.svg') && !url.includes('sprite')) {
+                               image = url;
+                               break;
+                             }
+                          }
+                          if (image) break;
                         }
                       }
-                      
-                      // Fallback to data-src or src
-                      if (!image) {
-                        image = imgEl.getAttribute('data-src') || imgEl.src;
-                      }
+                      if (image) break;
                     }
+
+                    if (i < 2) log('Card ' + i + ' final image: ' + (image || 'EMPTY'));
+                    if (image) {
+                      image = String(image).trim().replace(/^['\"]|['\"]$/g, '');
+                      if (image.startsWith('//')) image = 'https:' + image;
+                      if (image.startsWith('/')) image = 'https://www.amazon.in' + image;
+                      if (image.includes(' ')) image = image.split(' ')[0];
+                      if (image.includes('&amp;')) image = image.replace(/&amp;/g, '&');
+                    }
+
                     // Try multiple selectors for product links on Amazon mobile
                     const urlEl = card.querySelector('h2 a') 
                                || card.querySelector('a[href*="/dp/"]') 
@@ -1614,13 +1827,17 @@ class PlatformDOMScraperService {
                       brand: '',
                       price: price,
                       mrp: mrp > price ? mrp : price,
-                      image_url: imgEl ? imgEl.src : '',
+                      image_url: image || '',
                       product_url: finalUrl,
                       deep_link: deepLink,
                       in_stock: true,
                       weight: '',
                       platform: 'Amazon'
                     });
+                    
+                    if (products.length <= 3) {
+                       log('Extracted valid Amazon product: ' + name + ', image: ' + (image || 'EMPTY'));
+                    }
                   } catch(e) {}
                 });
                 return products;

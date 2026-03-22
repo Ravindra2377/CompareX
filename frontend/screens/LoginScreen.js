@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   heroBg: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.3,
+    opacity: 0.4,
   },
   content: {
     flex: 1,
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
   },
   form: {
     backgroundColor: "#FFFFFF",
-    borderColor: COLORS.border,
     borderRadius: RADIUS.xl,
   },
   formTitle: {
