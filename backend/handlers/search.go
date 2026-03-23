@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"comparex/search"
+	"comparez/search"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

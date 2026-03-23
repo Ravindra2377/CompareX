@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comprehensive unit test suite developed for CompareX covering both backend (Go) and frontend (React Native) codebases with 77 total tests achieving 96% average coverage.
+Comprehensive unit test suite developed for CompareZ covering both backend (Go) and frontend (React Native) codebases with 77 total tests achieving 96% average coverage.
 
 ## Backend Tests (Go) - 44 Tests
 
@@ -139,9 +139,9 @@ Key features tested:
 ### Backend Tests
 
 ```
-✅ comparex/models - 5/5 PASS (0.541s)
-✅ comparex/handlers - 12/12 PASS (0.754s)
-✅ comparex/scraper - 17/17 PASS (3.045s including timeout test)
+✅ CompareZ/models - 5/5 PASS (0.541s)
+✅ CompareZ/handlers - 12/12 PASS (0.754s)
+✅ CompareZ/scraper - 17/17 PASS (3.045s including timeout test)
 ───────────────────────────────────────
 ✅ Total: 44 tests PASS
 ```

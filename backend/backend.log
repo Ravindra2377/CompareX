@@ -1,5 +1,5 @@
 
-2026/03/07 17:02:52 [35m/Users/chethannv/Downloads/CompareX/backend/database/db.go:22
+2026/03/07 17:02:52 [35m/Users/chethannv/Downloads/CompareZ/backend/database/db.go:22
 [0m[31m[error] [0mfailed to initialize database, got error failed to connect to `user=user database=pricepilot`:
 	[::1]:5432 (localhost): dial error: dial tcp [::1]:5432: connect: connection refused
 	127.0.0.1:5432 (localhost): dial error: dial tcp 127.0.0.1:5432: connect: connection refused

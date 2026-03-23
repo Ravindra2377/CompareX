@@ -48,7 +48,7 @@ const RegisterScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <Text style={styles.heading}>Create Account</Text>
-        <Text style={styles.subtitle}>Join CompareX and start saving</Text>
+        <Text style={styles.subtitle}>Join CompareZ and start saving</Text>
 
         <SurfaceCard style={styles.formCard}>
           <TextField

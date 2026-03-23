@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.logoSection}>
           <Text style={styles.eyebrow}>Smart Grocery Assistant</Text>
-          <Text style={styles.logo}>CompareX</Text>
+          <Text style={styles.logo}>CompareZ</Text>
           <Text style={styles.tagline}>
             Compare prices across platforms and buy smarter every day.
           </Text>

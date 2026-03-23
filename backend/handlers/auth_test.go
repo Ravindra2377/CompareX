@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
-	"comparex/database"
-	"comparex/models"
+	"comparez/database"
+	"comparez/models"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"

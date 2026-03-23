@@ -1,4 +1,4 @@
-# CompareX - Restructured Architecture
+# CompareZ - Restructured Architecture
 
 ## 🔑 Key Changes
 

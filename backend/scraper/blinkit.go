@@ -1,8 +1,8 @@
 package scraper
 
 import (
-	"comparex/config"
-	"comparex/models"
+	"comparez/config"
+	"comparez/models"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-var blinkitDebugLogging = os.Getenv("COMPAREX_DEBUG_SCRAPERS") == "1"
+var blinkitDebugLogging = os.Getenv("CompareZ_DEBUG_SCRAPERS") == "1"
 
 type BlinkitScraper struct {
 	client *http.Client

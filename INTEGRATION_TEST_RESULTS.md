@@ -7,7 +7,7 @@ Comprehensive end-to-end tests validating the product search and comparison use 
 ### Screenshots Context
 
 1. **Screenshot 1**: Blinkit product detail page showing "Amul Gold Full Cream Fresh Milk" at ₹29 (MRP ₹33)
-2. **Screenshot 2**: CompareX app comparison showing same product across 2 platforms with best price (Zepto: ₹4) and savings (₹28)
+2. **Screenshot 2**: CompareZ app comparison showing same product across 2 platforms with best price (Zepto: ₹4) and savings (₹28)
 
 ---
 

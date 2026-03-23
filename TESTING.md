@@ -1,6 +1,6 @@
-# CompareX Test Suite Documentation
+# CompareZ Test Suite Documentation
 
-This document describes the comprehensive test suite for the CompareX project, including both backend (Go) and frontend (React Native) tests.
+This document describes the comprehensive test suite for the CompareZ project, including both backend (Go) and frontend (React Native) tests.
 
 ## Project Structure
 

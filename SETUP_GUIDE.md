@@ -1,4 +1,4 @@
-# CompareX Setup Guide
+# CompareZ Setup Guide
 
 ## Why Search Returns No Results
 

@@ -404,7 +404,7 @@ CREATE TABLE price_history (
 PORT=8080
 
 # Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/comparex
+DATABASE_URL=postgresql://user:pass@localhost:5432/CompareZ
 
 # Redis (for caching)
 REDIS_ADDR=localhost:6379

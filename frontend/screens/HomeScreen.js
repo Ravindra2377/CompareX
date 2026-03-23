@@ -117,7 +117,7 @@ const HomeScreen = ({ navigation }) => {
           >
             {/* Top bar */}
             <View style={styles.heroTop}>
-              <Text style={styles.heroEyebrow}>COMPAREX</Text>
+              <Text style={styles.heroEyebrow}>CompareZ</Text>
               <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
                 <Ionicons name="log-out-outline" size={18} color={COLORS.textOnDarkSec} />
               </TouchableOpacity>

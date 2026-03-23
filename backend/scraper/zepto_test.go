@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"comparex/config"
+	"comparez/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

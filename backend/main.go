@@ -1,11 +1,11 @@
 package main
 
 import (
-	"comparex/database"
-	"comparex/handlers"
-	"comparex/models"
-	"comparex/scraper"
-	"comparex/search"
+	"comparez/database"
+	"comparez/handlers"
+	"comparez/models"
+	"comparez/scraper"
+	"comparez/search"
 	"net/http"
 	"os"
 
@@ -43,7 +43,7 @@ func main() {
 	// Routes
 	e.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{
-			"message": "Welcome to CompareX API",
+			"message": "Welcome to CompareZ API",
 			"status":  "healthy",
 		})
 	})

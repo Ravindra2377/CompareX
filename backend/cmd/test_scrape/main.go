@@ -1,7 +1,7 @@
 package main
 
 import (
-	"comparex/scraper"
+	"comparez/scraper"
 	"context"
 	"encoding/json"
 	"fmt"

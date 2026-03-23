@@ -133,7 +133,7 @@ let globalMonitor = null;
 
 export function getGlobalMonitor() {
   if (!globalMonitor) {
-    globalMonitor = new PerformanceMonitor("CompareX");
+    globalMonitor = new PerformanceMonitor("CompareZ");
   }
   return globalMonitor;
 }

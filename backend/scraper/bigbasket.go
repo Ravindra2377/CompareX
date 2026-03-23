@@ -1,8 +1,8 @@
 package scraper
 
 import (
-	"comparex/config"
-	"comparex/models"
+	"comparez/config"
+	"comparez/models"
 	"context"
 	"encoding/json"
 	"fmt"

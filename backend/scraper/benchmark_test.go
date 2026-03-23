@@ -1,7 +1,7 @@
 package scraper
 
 import (
-	"comparex/models"
+	"comparez/models"
 	"context"
 	"fmt"
 	"testing"

@@ -3,7 +3,7 @@ package database
 import (
 	"testing"
 
-	"comparex/models"
+	"comparez/models"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

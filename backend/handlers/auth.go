@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"comparex/database"
-	"comparex/models"
+	"comparez/database"
+	"comparez/models"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"

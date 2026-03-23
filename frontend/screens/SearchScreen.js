@@ -626,7 +626,7 @@ const SearchScreen = ({ navigation, route }) => {
     }
 
     const sessionId = searchSessionIdRef.current;
-    const sessionPreamble = `window.__COMPAREX_SESSION_ID__ = ${JSON.stringify(
+    const sessionPreamble = `window.__CompareZ_SESSION_ID__ = ${JSON.stringify(
       sessionId,
     )}; true;`;
 
@@ -1715,7 +1715,7 @@ const SearchScreen = ({ navigation, route }) => {
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.headerLabel}>COMPAREX</Text>
+            <Text style={styles.headerLabel}>CompareZ</Text>
             <Text style={styles.headerTitle}>Collection</Text>
           </View>
         </View>

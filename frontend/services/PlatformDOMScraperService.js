@@ -512,7 +512,7 @@ class PlatformDOMScraperService {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'Blinkit',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  sessionId: window.__CompareZ_SESSION_ID__ || null,
                   products: products,
                   success: true
                 }));
@@ -541,7 +541,7 @@ class PlatformDOMScraperService {
               window.ReactNativeWebView.postMessage(JSON.stringify({
                 type: 'SEARCH_RESULTS',
                 platform: 'Blinkit',
-                sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                sessionId: window.__CompareZ_SESSION_ID__ || null,
                 error: error.message,
                 success: false,
                 products: []
@@ -719,7 +719,7 @@ class PlatformDOMScraperService {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'BigBasket',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  sessionId: window.__CompareZ_SESSION_ID__ || null,
                   products: products || [],
                   success: !!success,
                   error: error || null,
@@ -1172,7 +1172,7 @@ class PlatformDOMScraperService {
               window.ReactNativeWebView.postMessage(JSON.stringify({
                 type: 'SEARCH_RESULTS',
                 platform: 'BigBasket',
-                sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                sessionId: window.__CompareZ_SESSION_ID__ || null,
                 error: error.message,
                 success: false,
                 products: []
@@ -1598,7 +1598,7 @@ class PlatformDOMScraperService {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'Zepto',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  sessionId: window.__CompareZ_SESSION_ID__ || null,
                   products: products,
                   success: true
                 }));
@@ -1644,7 +1644,7 @@ class PlatformDOMScraperService {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'Zepto',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  sessionId: window.__CompareZ_SESSION_ID__ || null,
                   error: error.message,
                   success: false,
                   products: []
@@ -1901,7 +1901,7 @@ class PlatformDOMScraperService {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                   type: 'SEARCH_RESULTS',
                   platform: 'Flipkart',
-                  sessionId: window.__COMPAREX_SESSION_ID__ || null,
+                  sessionId: window.__CompareZ_SESSION_ID__ || null,
                   success: success,
                   products: products,
                   error: error || null

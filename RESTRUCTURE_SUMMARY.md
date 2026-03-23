@@ -1,4 +1,4 @@
-# CompareX - Complete Restructure Summary
+# CompareZ - Complete Restructure Summary
 
 ## 🔄 What Changed?
 

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"comparex/scraper"
+	"comparez/scraper"
 	"encoding/json"
 	"log"
 	"net/http"

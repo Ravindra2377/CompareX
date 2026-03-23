@@ -46,7 +46,7 @@ describe("Product Search & Comparison Workflow", () => {
   });
 
   it("should parse and store comparison data (screenshot example)", () => {
-    // Screenshot 2: CompareX comparison results
+    // Screenshot 2: CompareZ comparison results
     const comparisonData = {
       productName: "Amul Gold Full Cream Fresh Milk Pouch Full Cream",
       quantity: "500ml",

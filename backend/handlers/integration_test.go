@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"comparex/models"
+	"comparez/models"
 	"testing"
 	"time"
 

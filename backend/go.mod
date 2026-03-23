@@ -1,4 +1,4 @@
-module comparex
+module comparez
 
 go 1.24.0
 

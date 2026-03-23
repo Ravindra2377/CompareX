@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// CompareX — Aurora Design System v2
+// CompareZ — Aurora Design System v2
 // Modern vibrant palette · clean surfaces · scalable tokens
 // ─────────────────────────────────────────────────────────────────────────────
 

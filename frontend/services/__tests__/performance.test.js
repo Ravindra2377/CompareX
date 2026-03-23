@@ -1,5 +1,5 @@
 /**
- * Performance tests for CompareX frontend.
+ * Performance tests for CompareZ frontend.
  *
  * Coverage:
  *  - PerformanceMonitor: timing, marks, measures, frame-drop tracking

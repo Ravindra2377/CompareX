@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const LOCATION_STORAGE_KEY = "@comparex_location";
+const LOCATION_STORAGE_KEY = "@CompareZ_location";
 
 // Default: Bangalore coordinates
 const DEFAULT_LOCATION = {

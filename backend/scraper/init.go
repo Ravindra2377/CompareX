@@ -1,7 +1,7 @@
 package scraper
 
 import (
-	"comparex/config"
+	"comparez/config"
 	"log"
 )
 
