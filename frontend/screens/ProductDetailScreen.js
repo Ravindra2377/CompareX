@@ -531,10 +531,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 56,
+    paddingTop: 64,       // Normalized
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     ...SHADOWS.sm,
   },
   headerTitle: {
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     paddingTop: SPACING.xxl,
     paddingBottom: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
   },
   productName: {
     ...FONTS.h1,
@@ -566,14 +566,13 @@ const styles = StyleSheet.create({
   metaTopItem: {
     ...FONTS.caption,
     color: COLORS.textSecondary,
-    fontSize: 13,
   },
   metaInfoRow: {
     flexDirection: "row",
     marginHorizontal: SPACING.xl,
     marginTop: SPACING.lg,
     paddingVertical: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     ...SHADOWS.sm,
     marginBottom: SPACING.md,
@@ -584,14 +583,12 @@ const styles = StyleSheet.create({
   },
   metaInfoLabel: {
     ...FONTS.caption,
-    fontSize: 11,
     textTransform: "uppercase",
     letterSpacing: 0.8,
     marginBottom: 4,
   },
   metaInfoValue: {
     ...FONTS.bodyBold,
-    fontSize: 15,
   },
   metaInfoDivider: {
     width: 1,
@@ -631,7 +628,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     ...SHADOWS.sm,
     marginBottom: SPACING.xxl,

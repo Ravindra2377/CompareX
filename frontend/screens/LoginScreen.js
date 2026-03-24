@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
   },
   logo: {
     ...FONTS.luxury,
-    fontSize: 38,
+    fontSize: 40,         // Normalized (8*5)
     marginBottom: SPACING.sm,
   },
   tagline: {
     ...FONTS.luxurySub,
   },
   form: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.xl,
   },
   formTitle: {

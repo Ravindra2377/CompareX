@@ -1,7 +1,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SPACING, RADIUS, SHADOWS } from "../config/theme";
+import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 import * as Haptics from "expo-haptics";
 
 const SearchBar = ({
@@ -10,12 +10,20 @@ const SearchBar = ({
   placeholder = "Search products...",
   onClear,
   autoFocus = false,
+  testID,
 }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.iconWrap}>
+      <TouchableOpacity
+        style={styles.iconWrap}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          // Search is already reactive, but this button matches the Appium test script requirement
+        }}
+        accessibilityLabel="searchButton"
+      >
         <Ionicons name="search" size={18} color={COLORS.primary} />
-      </View>
+      </TouchableOpacity>
       <TextInput
         style={styles.input}
         value={value}
@@ -26,6 +34,8 @@ const SearchBar = ({
         autoCorrect={false}
         autoFocus={autoFocus}
         selectionColor={COLORS.primary}
+        testID={testID}
+        accessibilityLabel={testID || "searchInput"}
       />
       {value ? (
         <TouchableOpacity
@@ -35,6 +45,7 @@ const SearchBar = ({
           }}
           hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
           style={styles.clearBtn}
+          accessibilityLabel="clearSearchButton"
         >
           <Ionicons name="close-circle" size={18} color={COLORS.textTertiary} />
         </TouchableOpacity>
@@ -50,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.md,
-    minHeight: 52,
+    minHeight: 56,
     gap: SPACING.sm,
     ...SHADOWS.sm,
   },
@@ -64,7 +75,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 15,
+    ...FONTS.body,
     fontWeight: "500",
     color: COLORS.textPrimary,
     paddingVertical: 2,

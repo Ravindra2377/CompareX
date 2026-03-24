@@ -21,6 +21,7 @@ export const AppButton = ({
   disabled = false,
   style,
   textStyle,
+  testID,
 }) => {
   const isPrimary = variant === "primary";
   const isGhost = variant === "ghost";
@@ -38,6 +39,7 @@ export const AppButton = ({
         style,
       ]}
       activeOpacity={0.8}
+      testID={testID}
     >
       {icon ? (
         <Ionicons
@@ -71,6 +73,7 @@ export const TextField = ({
   keyboardType,
   autoCapitalize = "none",
   rightAccessory,
+  testID,
 }) => (
   <View style={styles.inputWrap}>
     {icon ? (
@@ -86,6 +89,7 @@ export const TextField = ({
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
       autoCorrect={false}
+      testID={testID}
     />
     {rightAccessory || null}
   </View>
@@ -152,7 +156,7 @@ export const SectionHeader = ({ title, subtitle, actionText, onAction }) => {
 
 const styles = StyleSheet.create({
   surfaceCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.xl,
     padding: SPACING.xl,
     ...SHADOWS.md,
@@ -175,10 +179,10 @@ const styles = StyleSheet.create({
     ...FONTS.caption,
   },
   button: {
-    minHeight: 52,
+    minHeight: 56,        // Strict 8pt (8*7)
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.xxl,
-    paddingVertical: SPACING.md,
+    paddingVertical: SPACING.sm,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -206,7 +210,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...FONTS.bodyBold,
-    fontSize: 15,
   },
   buttonTextPrimary: {
     color: "#FFFFFF",
@@ -220,7 +223,7 @@ const styles = StyleSheet.create({
   inputWrap: {
     flexDirection: "row",
     alignItems: "center",
-    minHeight: 52,
+    minHeight: 56,        // Strict 8pt (8*7)
     paddingHorizontal: SPACING.lg,
     borderRadius: RADIUS.md,
     marginBottom: SPACING.md,
@@ -229,9 +232,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 15,
-    color: COLORS.textPrimary,
-    paddingVertical: 4,
+    ...FONTS.body,
+    paddingVertical: SPACING.xs,
   },
   badge: {
     alignSelf: "flex-start",

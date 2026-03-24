@@ -149,8 +149,9 @@ const ProfileScreen = () => {
                 placeholderTextColor={COLORS.textTertiary}
                 keyboardType="numeric"
                 maxLength={6}
+                testID="pincodeInput"
               />
-              <TouchableOpacity style={styles.locationSaveBtn} onPress={saveLocation}>
+              <TouchableOpacity style={styles.locationSaveBtn} onPress={saveLocation} testID="pincodeSaveBtn">
                 <Text style={styles.locationSaveTxt}>Save Location</Text>
               </TouchableOpacity>
             </View>
@@ -193,6 +194,7 @@ const ProfileScreen = () => {
           style={styles.logoutBtn}
           onPress={logout}
           activeOpacity={0.6}
+          testID="profileLogoutBtn"
         >
           <Ionicons name="log-out-outline" size={20} color={COLORS.error} />
           <Text style={styles.logoutText}>Sign Out</Text>
@@ -210,10 +212,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 64,       // Normalized
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     ...SHADOWS.sm,
   },
   userSection: {
@@ -224,8 +226,8 @@ const styles = StyleSheet.create({
     gap: SPACING.lg,
   },
   avatar: {
-    width: 52,
-    height: 52,
+    width: 56,            // Normalized (8*7)
+    height: 56,
     borderRadius: RADIUS.lg,
     backgroundColor: COLORS.primary,
     alignItems: "center",
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.xl,
     paddingVertical: SPACING.lg,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     marginBottom: SPACING.xxl,
     ...SHADOWS.sm,
   },
@@ -277,7 +279,7 @@ const styles = StyleSheet.create({
   locationSection: {
     marginHorizontal: SPACING.xl,
     marginBottom: SPACING.xxl,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     ...SHADOWS.sm,
@@ -288,9 +290,9 @@ const styles = StyleSheet.create({
     gap: SPACING.md,
   },
   locationIconWrap: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,            // Normalized (8*5)
+    height: 40,
+    borderRadius: 20,
     backgroundColor: COLORS.accentLight,
     justifyContent: "center",
     alignItems: "center",
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.md,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     marginBottom: SPACING.sm,
     gap: SPACING.lg,
     ...SHADOWS.sm,

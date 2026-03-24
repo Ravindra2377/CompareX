@@ -82,9 +82,9 @@ const COLORS = {
 const SPACING = {
   xs:   4,
   sm:   8,
-  md:   12,
+  md:   16,        // Normalized from 12
   lg:   16,
-  xl:   20,
+  xl:   24,        // Normalized from 20
   xxl:  24,
   xxxl: 32,
   huge: 48,
@@ -186,61 +186,61 @@ const FONTS = {
     letterSpacing: -0.4,
   },
   h3: {
-    fontSize: 18,
+    fontSize: 16,        // Optimized for 8pt grid
     fontWeight: "600",
     color: "#0F172A",
     letterSpacing: -0.2,
   },
   h3Dark: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#FFFFFF",
     letterSpacing: -0.2,
   },
   body: {
-    fontSize: 15,
+    fontSize: 14,        // Standard production size
     fontWeight: "400",
     color: "#64748B",
-    lineHeight: 22,
+    lineHeight: 20,      // 1.4x line height
   },
   bodyDark: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "400",
     color: "rgba(255,255,255,0.70)",
-    lineHeight: 22,
+    lineHeight: 20,
   },
   bodyBold: {
-    fontSize: 15,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "700",   // Increased weight for hierarchy
     color: "#0F172A",
-    lineHeight: 22,
+    lineHeight: 20,
   },
   bodyBoldDark: {
-    fontSize: 15,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "700",
     color: "#FFFFFF",
-    lineHeight: 22,
+    lineHeight: 20,
   },
   caption: {
-    fontSize: 13,
+    fontSize: 12,        // Standard caption size
     fontWeight: "400",
     color: "#94A3B8",
-    lineHeight: 18,
+    lineHeight: 16,
   },
   captionDark: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "400",
     color: "rgba(255,255,255,0.45)",
-    lineHeight: 18,
+    lineHeight: 16,
   },
   captionBold: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     color: "#64748B",
     letterSpacing: 0.2,
   },
   captionBoldDark: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     color: "rgba(255,255,255,0.70)",
     letterSpacing: 0.2,

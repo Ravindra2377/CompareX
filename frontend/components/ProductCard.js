@@ -103,6 +103,7 @@ const ProductCard = ({ product, onPress }) => {
     >
       <Animated.View
         style={[styles.wrapper, { transform: [{ scale: scaleAnim }] }]}
+        testID={`productCard_${bestPlatform || "best"}`}
       >
         <GlassCard
           gradientColors={COLORS.gradientCard}
@@ -277,10 +278,8 @@ const styles = StyleSheet.create({
   },
   info: { flex: 1 },
   name: {
-    ...FONTS.h3,
-    fontSize: 15,
-    fontWeight: "600",
-    marginBottom: 2,
+    ...FONTS.bodyBold,
+    marginBottom: 4,
     color: COLORS.textPrimary,
   },
   brand: {
@@ -306,10 +305,10 @@ const styles = StyleSheet.create({
   },
   price: {
     ...FONTS.price,
-    fontSize: 22,
-    lineHeight: 28,
+    fontSize: 24,         // Refined for card layout
+    lineHeight: 32,
   },
-  mrpBlock: { paddingBottom: 3 },
+  mrpBlock: { paddingBottom: 4 },
   mrpLabel: {
     ...FONTS.caption,
     fontSize: 10,
@@ -370,9 +369,9 @@ const styles = StyleSheet.create({
   },
   arrowWrap: {
     marginLeft: SPACING.md,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: COLORS.accentLight,
     alignItems: "center",
     justifyContent: "center",

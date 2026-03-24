@@ -97,10 +97,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 64,       // Normalized
     paddingHorizontal: SPACING.xl,
     paddingBottom: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     ...SHADOWS.sm,
   },
   count: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.lg,
     paddingHorizontal: SPACING.md,
     marginTop: SPACING.sm,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     gap: SPACING.lg,
     ...SHADOWS.sm,

@@ -444,6 +444,7 @@ export default function AccountsScreen() {
                 <TouchableOpacity
                   style={styles.buttonConnect}
                   onPress={() => openLogin(platform)}
+                  testID={`connectBtn_${platform.id}`}
                 >
                   <Text style={styles.buttonConnectText}>Connect</Text>
                   <Ionicons name="arrow-forward" size={16} color="#fff" />
@@ -511,8 +512,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    paddingTop: 60,
-    paddingBottom: 30,
+    paddingTop: 64,       // Normalized
+    paddingBottom: SPACING.xxxl,
     paddingHorizontal: SPACING.xl,
     borderBottomLeftRadius: RADIUS.lg,
     borderBottomRightRadius: RADIUS.lg,
@@ -548,7 +549,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.md,
@@ -594,11 +595,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: COLORS.textPrimary,
     paddingHorizontal: SPACING.lg,
-    paddingVertical: 10,
+    paddingVertical: SPACING.sm,
     borderRadius: RADIUS.full,
     alignItems: "center",
     borderWidth: 0,
-    gap: 6,
+    gap: SPACING.sm,
   },
   buttonConnectText: {
     color: "#FFFFFF",
@@ -634,9 +635,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: SPACING.xl,
-    paddingTop: 60,
+    paddingTop: 64,       // Normalized
     paddingBottom: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },

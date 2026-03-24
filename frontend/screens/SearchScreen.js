@@ -1586,6 +1586,7 @@ const SearchScreen = ({ navigation, route }) => {
                     onPress={() => setQuery(s)}
                     activeOpacity={0.85}
                     style={styles.chipButton}
+                    testID={`searchSuggestion_${s}`}
                   >
                     <Text style={styles.chip}>{s}</Text>
                   </TouchableOpacity>
@@ -1728,6 +1729,7 @@ const SearchScreen = ({ navigation, route }) => {
             setHasSearched(false);
           }}
           autoFocus={!hasSearched && query === ""}
+          testID="searchInput"
         />
       </View>
 
@@ -1757,6 +1759,8 @@ const SearchScreen = ({ navigation, route }) => {
         contentContainerStyle={styles.list}
         ListHeaderComponent={renderSearchProgress}
         ListEmptyComponent={renderEmpty}
+        testID="resultsList"
+        accessibilityLabel="resultsList"
       />
 
       {/* Hidden WebViews: always mounted to pre-warm platforms for faster parallel searches */}
@@ -1901,7 +1905,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     paddingTop: SPACING.lg,
     paddingBottom: SPACING.md,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.md,
     borderWidth: 1,
@@ -1909,9 +1913,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.sm,
   },
   loaderStatusText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.textPrimary,
+    ...FONTS.bodyBold,
     textAlign: "center",
     letterSpacing: 0.3,
   },
@@ -1919,12 +1921,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 6,
+    gap: SPACING.sm,
   },
   loaderDetail: {
-    marginTop: 4,
-    fontSize: 12,
-    color: COLORS.textSecondary,
+    marginTop: SPACING.xs,
+    ...FONTS.caption,
     textAlign: "center",
     marginBottom: SPACING.md,
   },
@@ -1932,32 +1933,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: SPACING.md,
-    gap: 6,
+    gap: SPACING.sm,
   },
   platformStatusCard: {
     flex: 1,
     alignItems: "center",
     paddingVertical: SPACING.sm,
-    paddingHorizontal: 4,
+    paddingHorizontal: SPACING.sm,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.cardAlt,
   },
   platformStatusIcon: {
-    marginBottom: 3,
+    marginBottom: SPACING.xs,
   },
   platformStatusName: {
-    fontSize: 11,
-    fontWeight: "500",
-    color: COLORS.textSecondary,
+    ...FONTS.caption,
+    fontSize: 12,
+    fontWeight: "600",
     textAlign: "center",
   },
   platformStatusCount: {
-    fontSize: 10,
+    ...FONTS.badge,
     color: COLORS.textTertiary,
-    marginTop: 2,
+    marginTop: SPACING.xs,
     textAlign: "center",
+    fontSize: 10,
   },
   progressTrack: {
     height: 4,
@@ -1969,7 +1971,7 @@ const styles = StyleSheet.create({
   progressFill: {
     height: "100%",
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.textPrimary,
+    backgroundColor: COLORS.primary,
   },
   tipBox: {
     flexDirection: "row",
@@ -1977,10 +1979,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.cardAlt,
     borderRadius: RADIUS.sm,
     paddingHorizontal: SPACING.sm,
-    paddingVertical: 6,
+    paddingVertical: SPACING.sm,
     borderWidth: 1,
     borderColor: COLORS.border,
-    marginTop: 2,
+    marginTop: SPACING.xs,
   },
   tipLabel: {
     fontSize: 10,
@@ -2024,7 +2026,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xl,
     paddingHorizontal: SPACING.xl,
     paddingVertical: SPACING.xxl,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     ...SHADOWS.sm,
   },
   emptyIconWrap: {
@@ -2106,9 +2108,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chip: {
-    color: COLORS.textSecondary,
-    fontSize: 13,
-    fontWeight: "500",
+    ...FONTS.caption,
+    fontWeight: "600",
   },
   loaderHint: {
     fontSize: 11,

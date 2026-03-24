@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxl,
   },
   formCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.xl,
   },
   createBtn: {

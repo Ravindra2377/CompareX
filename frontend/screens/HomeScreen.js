@@ -156,6 +156,7 @@ const HomeScreen = ({ navigation }) => {
               style={styles.ctaButton}
               activeOpacity={0.85}
               onPress={() => navigation.navigate("Search")}
+              testID="homeSearchCta"
             >
               <Text style={styles.ctaText}>Start Comparing</Text>
               <Ionicons name="arrow-forward" size={18} color={COLORS.textPrimary} />
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   // ── Hero (Vibrant gradient section) ──
   hero: {
     minHeight: SCREEN_H * 0.52,
-    paddingTop: 60,
+    paddingTop: 64,       // Normalized (8*8)
     paddingHorizontal: H_PADDING,
     paddingBottom: SPACING.xxxl,
     justifyContent: "space-between",
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...FONTS.h2Dark,
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
   statLabel: {
     ...FONTS.captionDark,
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     height: 56,
     borderRadius: RADIUS.lg,
     gap: SPACING.sm,
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     alignItems: "center",
     justifyContent: "center",
     ...SHADOWS.sm,
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: SPACING.lg,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.sm,
     gap: SPACING.md,
@@ -355,8 +356,7 @@ const styles = StyleSheet.create({
   },
   trendName: {
     ...FONTS.bodyBold,
-    fontSize: 14,
-    marginBottom: 2,
+    marginBottom: SPACING.xs,
   },
   trendMeta: {
     ...FONTS.caption,
@@ -382,8 +382,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: H_PADDING,
-    height: 52,
-    backgroundColor: "#FFFFFF",
+    height: 56,           // Standardized with search bar
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.xl,
     gap: SPACING.sm,
