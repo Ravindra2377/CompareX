@@ -1,6 +1,8 @@
 describe('CompareZ Search Flow', () => {
   beforeAll(async () => {
     await device.launchApp();
+    await device.disableSynchronization();
+    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for the initial load
   });
 
   beforeEach(async () => {

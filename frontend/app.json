@@ -31,6 +31,14 @@
         "projectId": "ec01b9de-1d85-4ca6-a808-0055cf954368"
       }
     },
-    "owner": "panvi"
+    "owner": "panvi",
+    "plugins": [
+      [
+        "@config-plugins/detox",
+        {
+          "subdomain": "com.panviravindra.comparez"
+        }
+      ]
+    ]
   }
 }

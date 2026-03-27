@@ -1,6 +1,8 @@
 describe('CompareZ Navigation Flow', () => {
   beforeAll(async () => {
     await device.launchApp();
+    await device.disableSynchronization();
+    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for initial load
   });
 
   beforeEach(async () => {

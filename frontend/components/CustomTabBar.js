@@ -99,6 +99,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                 onPress={onPress}
                 style={styles.tab}
                 activeOpacity={1}
+                testID={`nav-${route.name.toLowerCase()}`}
               >
                 <Animated.View style={{ transform: [{ scale: animatedScale }] }}>
                   {renderIcon()}

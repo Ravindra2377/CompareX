@@ -1,0 +1,743 @@
+16:07:54.361 detox[1978754] [90mB[39m node_modules/.bin/detox test -c android.emu.debug
+  data: {
+    "id": "8c13ac8e-7cf7-ee9a-326d-c1e49fb6e3a4",
+    "detoxConfig": {
+      "configurationName": "android.emu.debug",
+      "apps": {
+        "default": {
+          "type": "android.apk",
+          "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug",
+          "reversePorts": [
+            8081
+          ]
+        }
+      },
+      "artifacts": {
+        "rootDir": "e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z",
+        "plugins": {
+          "log": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "screenshot": {
+            "shouldTakeAutomaticSnapshots": true,
+            "keepOnlyFailedTestsArtifacts": true,
+            "enabled": true
+          },
+          "video": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": true
+          },
+          "instruments": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "uiHierarchy": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          }
+        }
+      },
+      "behavior": {
+        "init": {
+          "keepLockFile": false,
+          "reinstallApp": true,
+          "exposeGlobals": true
+        },
+        "cleanup": {
+          "shutdownDevice": false
+        },
+        "launchApp": "auto"
+      },
+      "cli": {
+        "configuration": "android.emu.debug",
+        "start": true
+      },
+      "commands": [
+        {
+          "appName": "default",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug"
+        }
+      ],
+      "device": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Pixel_3a_API_30_x86"
+        }
+      },
+      "logger": {
+        "level": "info",
+        "overrideConsole": true,
+        "options": {
+          "showLoggerName": true,
+          "showPid": true,
+          "showLevel": false,
+          "showMetadata": false,
+          "basepath": "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src",
+          "prefixers": {},
+          "stringifiers": {}
+        }
+      },
+      "testRunner": {
+        "retries": 0,
+        "forwardEnv": false,
+        "detached": false,
+        "bail": false,
+        "noRetryArgs": [
+          "shard"
+        ],
+        "jest": {
+          "setupTimeout": 120000,
+          "teardownTimeout": 30000,
+          "retryAfterCircusRetries": false,
+          "reportWorkerAssign": true
+        },
+        "args": {
+          "$0": "jest",
+          "_": [],
+          "config": "e2e/jest.config.js",
+          "--": []
+        }
+      },
+      "session": {
+        "autoStart": true,
+        "debugSynchronization": 10000
+      }
+    },
+    "detoxIPCServer": "primary-1978754",
+    "testResults": [],
+    "testSessionIndex": 0,
+    "workersCount": 0
+  }
+16:07:54.373 detox[1978754] [90mi[39m Server path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + ipc.config.id /tmp/detox.primary-1978754
+16:07:54.376 detox[1978754] [90mi[39m starting server on  /tmp/detox.primary-1978754 
+16:07:54.376 detox[1978754] [90mi[39m starting TLS server false
+16:07:54.376 detox[1978754] [90mi[39m starting server as Unix || Windows Socket
+16:07:54.387 detox[1978754] [90mi[39m Detox server listening on localhost:33711...
+16:07:54.397 detox[1978754] [90mi[39m Serialized the session state at: /tmp/8c13ac8e-7cf7-ee9a-326d-c1e49fb6e3a4.detox.json
+16:07:54.399 detox[1978754] [90mB[39m jest --config e2e/jest.config.js
+16:07:55.238 detox[1978775] [90mi[39m Service path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + id 
+16:07:55.239 detox[1978775] [90mi[39m requested connection to  primary-1978754 /tmp/detox.primary-1978754
+16:07:55.239 detox[1978775] [90mi[39m Connecting client on Unix Socket : /tmp/detox.primary-1978754
+16:07:55.241 detox[1978754] [90mi[39m ## socket connection to server detected ##
+16:07:55.245 detox[1978775] [90mi[39m retrying reset
+16:07:55.247 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  registerContext , { id: 'secondary-1978775' }
+16:07:55.251 detox[1978754] [90mi[39m received event of :  registerContext { id: 'secondary-1978775' }
+16:07:55.252 detox[1978754] [90mi[39m dispatching event to socket  :  registerContextDone {
+  testResults: [],
+  testSessionIndex: 0,
+  unsafe_earlyTeardown: undefined
+}
+16:07:55.253 detox[1978775] [90mi[39m ## received events ##
+16:07:55.254 detox[1978775] [90mi[39m detected event registerContextDone { testResults: [], testSessionIndex: 0 }
+16:07:55.415 detox[1978775] [90mB[39m e2e/search.test.js
+16:07:55.442 detox[1978775] [90mB[39m set up environment
+16:07:55.444 detox[1978754] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+16:07:55.444 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  registerWorker , { workerId: 'w1' }
+16:07:55.445 detox[1978754] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+16:07:55.445 detox[1978754] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-1978754  :   sessionStateUpdate { workersCount: 1 }
+16:07:55.445 detox[1978775] [90mi[39m ## received events ##
+16:07:55.446 detox[1978775] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+16:07:55.863 detox[1978775] [90mi[39m ## received events ##
+16:07:55.863 detox[1978775] [90mi[39m detected event sessionStateUpdate { workersCount: 1 }
+16:07:55.871 detox[1978754] [90mB[39m connection :33711<->:55018
+16:07:55.873 detox[1978775] [90mi[39m opened web socket to: ws://localhost:33711
+16:07:55.877 detox[1978775] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:55.880 detox[1978754] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:55.880 detox[1978754] [90mi[39m created session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:55.881 detox[1978754] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+16:07:55.882 detox[1978754] [90mi[39m tester joined session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:55.884 detox[1978775] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+16:07:55.957 detox[1978754] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:55.957 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:56.022 detox[1978754] [90mB[39m init
+  args: ()
+16:07:56.026 detox[1978754] [90mE[39m init
+16:07:56.027 detox[1978754] [90mB[39m allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Pixel_3a_API_30_x86"
+    }
+  }
+16:07:56.049 detox[1978754] [90mE[39m allocate
+  error: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+16:07:56.049 detox[1978754] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.050 detox[1978775] [90mi[39m ## received events ##
+16:07:56.051 detox[1978775] [90mi[39m detected event allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.052 detox[1978775] [90mE[39m set up environment
+  error: DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+      at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)
+      at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)
+      at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)
+      at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22
+16:07:56.052 detox[1978775] [90mB[39m tear down environment
+16:07:56.053 detox[1978775] [90mB[39m onBeforeCleanup
+  args: ()
+16:07:56.058 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.json.log { append: true }
+16:07:56.058 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.log { append: true }
+16:07:56.059 detox[1978775] [90mE[39m onBeforeCleanup
+16:07:56.066 detox[1978754] [90mi[39m tester exited session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.066 detox[1978754] [90mE[39m connection :33711<->:55018
+16:07:56.067 detox[1978775] [90mE[39m tear down environment
+16:07:56.068 detox[1978775] [90mE[39m e2e/search.test.js
+16:07:56.098 detox[1978775] [90mB[39m e2e/navigation.test.js
+16:07:56.102 detox[1978775] [90mB[39m set up environment
+16:07:56.103 detox[1978754] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+16:07:56.103 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  registerWorker , { workerId: 'w1' }
+16:07:56.106 detox[1978754] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+16:07:56.107 detox[1978775] [90mi[39m ## received events ##
+16:07:56.107 detox[1978775] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+16:07:56.111 detox[1978754] [90mB[39m connection :33711<->:55030
+16:07:56.112 detox[1978775] [90mi[39m opened web socket to: ws://localhost:33711
+16:07:56.112 detox[1978775] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:56.114 detox[1978754] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:56.114 detox[1978754] [90mi[39m created session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.114 detox[1978754] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+16:07:56.114 detox[1978754] [90mi[39m tester joined session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.114 detox[1978775] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+16:07:56.115 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:56.116 detox[1978754] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:56.116 detox[1978754] [90mB[39m allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Pixel_3a_API_30_x86"
+    }
+  }
+16:07:56.146 detox[1978754] [90mE[39m allocate
+  error: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+16:07:56.147 detox[1978754] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.147 detox[1978775] [90mi[39m ## received events ##
+16:07:56.148 detox[1978775] [90mi[39m detected event allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.149 detox[1978775] [90mE[39m set up environment
+  error: DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+      at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)
+      at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)
+      at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)
+      at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22
+16:07:56.149 detox[1978775] [90mB[39m tear down environment
+16:07:56.149 detox[1978775] [90mB[39m onBeforeCleanup
+  args: ()
+16:07:56.151 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.json.log { append: true }
+16:07:56.151 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.log { append: true }
+16:07:56.151 detox[1978775] [90mE[39m onBeforeCleanup
+16:07:56.153 detox[1978754] [90mi[39m tester exited session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.153 detox[1978754] [90mE[39m connection :33711<->:55030
+16:07:56.153 detox[1978775] [90mE[39m tear down environment
+16:07:56.154 detox[1978775] [90mE[39m e2e/navigation.test.js
+16:07:56.162 detox[1978775] [90mB[39m e2e/appium.test.js
+16:07:56.166 detox[1978775] [90mB[39m set up environment
+16:07:56.167 detox[1978754] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+16:07:56.167 detox[1978754] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+16:07:56.167 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  registerWorker , { workerId: 'w1' }
+16:07:56.168 detox[1978775] [90mi[39m ## received events ##
+16:07:56.168 detox[1978775] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+16:07:56.171 detox[1978754] [90mB[39m connection :33711<->:55040
+16:07:56.172 detox[1978775] [90mi[39m opened web socket to: ws://localhost:33711
+16:07:56.173 detox[1978775] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:56.174 detox[1978754] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"74d1bc44-b301-3acf-5bae-9395839cf361","role":"tester"},"messageId":0}
+16:07:56.175 detox[1978754] [90mi[39m created session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.175 detox[1978754] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+16:07:56.175 detox[1978754] [90mi[39m tester joined session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.176 detox[1978775] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+16:07:56.178 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:56.179 detox[1978754] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_30_x86' }
+  }
+}
+16:07:56.180 detox[1978754] [90mB[39m allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Pixel_3a_API_30_x86"
+    }
+  }
+16:07:56.218 detox[1978754] [90mE[39m allocate
+  error: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+16:07:56.219 detox[1978754] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.219 detox[1978775] [90mi[39m ## received events ##
+16:07:56.220 detox[1978775] [90mi[39m detected event allocateDeviceDone {
+  error: {
+    name: 'DetoxRuntimeError',
+    message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+    stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+      '\n' +
+      'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+      '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+      '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+      '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+      '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+  }
+}
+16:07:56.220 detox[1978775] [90mE[39m set up environment
+  error: DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'
+  
+  HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1
+      at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)
+      at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)
+      at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)
+      at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22
+16:07:56.221 detox[1978775] [90mB[39m tear down environment
+16:07:56.221 detox[1978775] [90mB[39m onBeforeCleanup
+  args: ()
+16:07:56.223 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.json.log { append: true }
+16:07:56.223 detox[1978775] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-03-27 10-37-54Z/detox_pid_1978775.log { append: true }
+16:07:56.223 detox[1978775] [90mE[39m onBeforeCleanup
+16:07:56.229 detox[1978754] [90mi[39m tester exited session 74d1bc44-b301-3acf-5bae-9395839cf361
+16:07:56.229 detox[1978754] [90mE[39m connection :33711<->:55040
+16:07:56.229 detox[1978775] [90mE[39m tear down environment
+16:07:56.229 detox[1978775] [90mE[39m e2e/appium.test.js
+16:07:56.242 detox[1978775] [90mi[39m dispatching event to  primary-1978754 /tmp/detox.primary-1978754  :  reportTestResults , {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/appium.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+16:07:56.243 detox[1978754] [90mi[39m received event of :  reportTestResults {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/appium.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+16:07:56.254 detox[1978754] [90mi[39m dispatching event to socket  :  reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/appium.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+16:07:56.258 detox[1978754] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-1978754  :   sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/appium.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+16:07:56.258 detox[1978775] [90mi[39m ## received events ##
+16:07:56.260 detox[1978775] [90mi[39m detected event reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/appium.test.js',
+      testExecError: {
+        name: 'DetoxRuntimeError',
+        message: "Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1',
+        stack: "DetoxRuntimeError: Cannot boot Android Emulator with the name: 'Pixel_3a_API_30_x86'\n" +
+          '\n' +
+          'HINT: Make sure you choose one of the available emulators: Medium_Phone_API_36.1\n' +
+          '    at AVDValidator._assertAVDMatch (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:36:13)\n' +
+          '    at AVDValidator.validate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/AVDValidator.js:18:16)\n' +
+          '    at async EmulatorAllocDriver.allocate (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/drivers/android/emulator/EmulatorAllocDriver.js:56:5)\n' +
+          '    at async /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src/devices/allocation/DeviceAllocator.js:44:22'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+16:07:56.270 detox[1978775] [90mi[39m connection closed primary-1978754 /tmp/detox.primary-1978754 0 tries remaining of 0
+16:07:56.271 detox[1978775] [90mi[39m secondary-1978775 exceeded connection rety amount of  or stopRetrying flag set.
+16:07:56.272 detox[1978754] [90mi[39m server socket error Error: read ECONNRESET
+    at Pipe.onStreamRead (node:internal/stream_base_commons:218:20) {
+  errno: -104,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+16:07:56.273 detox[1978754] [90mi[39m socket disconnected secondary-1978775
+16:07:56.356 detox[1978754] [90mE[39m Command failed with exit code = 1:
+jest --config e2e/jest.config.js
+16:07:56.358 detox[1978754] [90mB[39m cleanup
+  args: ()
+16:07:56.360 detox[1978754] [90mE[39m cleanup
+16:07:56.361 detox[1978754] [90mi[39m Detox server has been closed gracefully
+16:07:56.364 detox[1978754] [90mE[39m node_modules/.bin/detox test -c android.emu.debug
