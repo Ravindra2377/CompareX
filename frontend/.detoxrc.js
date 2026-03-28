@@ -6,7 +6,7 @@ module.exports = {
       config: 'e2e/jest.config.js'
     },
     jest: {
-      setupTimeout: 120000
+      setupTimeout: 300000
     }
   },
   apps: {
@@ -22,6 +22,9 @@ module.exports = {
     },
     'android.debug': {
       type: 'android.apk',
+      // When CI steps run with a working directory of `frontend`, use relative paths.
+      // The CI runner sets `working-directory: frontend`, so the build command should
+      // `cd android` (not `cd frontend/android`).
       binaryPath: 'android/app/build/outputs/apk/debug/app-debug.apk',
       build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
       reversePorts: [
@@ -50,8 +53,24 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_3a_API_30_x86'
-      }
+        // Allow overriding the AVD name via environment variable (useful for CI)
+        avdName: process.env.DETOX_AVD_NAME || 'Pixel_3a_API_30_x86'
+      },
+      util: {
+        launchArgs: {
+          detoxAndroidIdlingResourceProxy: 'false',
+          detoxDeadlockDetection: 'false',
+        },
+      },
+    }
+  },
+  // Artifact collection: store logs/screenshots/videos for CI debugging
+  artifacts: {
+    rootDir: 'e2e/artifacts',
+    plugins: {
+      log: { enabled: true },
+      screenshot: { shouldTakeAutomaticSnapshots: true, keepOnlyFailedTestsArtifacts: true },
+      video: { enabled: true, keepOnlyFailedTestsArtifacts: true }
     }
   },
   configurations: {

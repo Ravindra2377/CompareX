@@ -1,0 +1,99 @@
+name: Detox E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  detox-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN || vars.EXPO_TOKEN }}
+      NODE_OPTIONS: --experimental-vm-modules
+      CI: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Cache AVD
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ runner.os }}-api30
+
+      - name: Install System Dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpulse0 libglu1-mesa
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps --prefer-offline --no-audit
+
+      - name: Generate Native Android Directory
+        working-directory: frontend
+        run: npx expo prebuild --platform android --non-interactive
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Run Detox Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
+          CI: 1
+          REACT_NATIVE_PACKAGER_HOSTNAME: 127.0.0.1
+          EXPO_PACKAGER_HOSTNAME: 127.0.0.1
+          ORG_GRADLE_PROJECT_reactNativeArchitectures: x86_64
+          ORG_GRADLE_PROJECT_newArchEnabled: false
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=512m"
+        with:
+          api-level: 30
+          arch: x86_64
+          avd-name: Pixel_3a_API_30_x86
+          force-avd-creation: false
+          disable-animations: true
+          # Direct hardware flags for guaranteed RAM allocation
+          emulator-options: -no-window -gpu swiftshader_indirect -no-audio -accel off -memory 4096 -cores 2
+          working-directory: frontend
+          script: |
+            # Kill memory-hungry background services
+            adb shell am force-stop com.google.android.gms
+            # Suppress system error dialogs that steal focus
+            adb shell settings put global show_error_dialogs 0
+            adb shell settings put global show_annoying_app_errors 0
+            # Wake, Unlock, and go to Home to ensure focus
+            adb shell input keyevent 82
+            adb shell wm dismiss-keyguard
+            adb shell input keyevent 3
+            # De-animate to save RAM
+            adb shell settings put global window_animation_scale 0.0
+            adb shell settings put global transition_animation_scale 0.0
+            adb shell settings put global animator_duration_scale 0.0
+            # Map ports and start Metro
+            adb reverse tcp:8081 tcp:8081 && cd .. && cd frontend && (npx expo start --no-dev --host localhost &) && npx wait-on http://localhost:8081 --timeout 600000 && npm run detox-build && sleep 15 && npm run detox-test
+
+      - name: Upload Detox artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detox-artifacts
+          path: frontend/e2e/artifacts

@@ -21,6 +21,7 @@ const SearchBar = ({
           // Search is already reactive, but this button matches the Appium test script requirement
         }}
         accessibilityLabel="searchButton"
+        testID="search-button"
       >
         <Ionicons name="search" size={18} color={COLORS.primary} />
       </TouchableOpacity>
