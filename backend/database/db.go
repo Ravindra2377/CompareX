@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -14,7 +15,7 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := strings.TrimSpace(os.Getenv("DATABASE_URL"))
 	if dsn == "" {
 		// Fallback for local dev if env not set, though docker-compose sets it.
 		dsn = "host=localhost user=user password=password dbname=pricepilot port=5432 sslmode=disable"
