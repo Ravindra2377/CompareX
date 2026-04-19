@@ -40,8 +40,9 @@ func Connect() {
 	}
 
 	if connErr != nil {
+		fmt.Printf("❌ DATABASE CONNECTION ERROR: %v\n", connErr)
 		log.Printf("⚠️  Database connection failed after 3 attempts: %v", connErr)
-		DB = nil // Explicitly set to nil so app knows it failed
+		DB = nil 
 		return
 	}
 
