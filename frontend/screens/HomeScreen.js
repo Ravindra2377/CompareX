@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
 import {
@@ -47,7 +48,10 @@ const CategoryPill = ({ cat, navigation }) => (
   <TouchableOpacity
     activeOpacity={0.7}
     style={styles.categoryPill}
-    onPress={() => navigation.navigate("Search", { query: cat.query })}
+    onPress={() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      navigation.navigate("Search", { query: cat.query });
+    }}
   >
     <View style={styles.categoryIconWrap}>
       <Ionicons name={cat.icon} size={20} color={COLORS.textPrimary} />
@@ -58,19 +62,21 @@ const CategoryPill = ({ cat, navigation }) => (
 
 const TrendingCard = ({ item, navigation }) => (
   <TouchableOpacity
-    style={styles.trendCard}
+    style={styles.trendCardWrapper}
     activeOpacity={0.7}
     onPress={() => navigation.navigate("Search", { query: item.name.split(" (")[0] })}
   >
-    <View style={styles.trendLeft}>
-      <Text style={styles.trendName} numberOfLines={1}>{item.name}</Text>
-      <Text style={styles.trendMeta}>{item.platform}</Text>
-    </View>
-    <View style={styles.trendRight}>
-      <Text style={styles.trendPrice}>{item.best}</Text>
-      <Text style={styles.trendSave}>save {item.saving}</Text>
-    </View>
-    <Ionicons name="chevron-forward" size={16} color={COLORS.textTertiary} />
+    <BlurView intensity={60} tint="light" style={styles.trendCard}>
+      <View style={styles.trendLeft}>
+        <Text style={styles.trendName} numberOfLines={1}>{item.name}</Text>
+        <Text style={styles.trendMeta}>{item.platform}</Text>
+      </View>
+      <View style={styles.trendRight}>
+        <Text style={styles.trendPrice}>{item.best}</Text>
+        <Text style={styles.trendSave}>save {item.saving}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={16} color={COLORS.textTertiary} />
+    </BlurView>
   </TouchableOpacity>
 );
 
@@ -81,16 +87,24 @@ const HomeScreen = ({ navigation }) => {
 
   const fadeHero = React.useRef(new Animated.Value(0)).current;
   const fadeContent = React.useRef(new Animated.Value(0)).current;
+  const floatAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     Animated.stagger(200, [
       Animated.timing(fadeHero, { toValue: 1, duration: 600, useNativeDriver: true }),
       Animated.timing(fadeContent, { toValue: 1, duration: 500, useNativeDriver: true }),
     ]).start();
+
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, { toValue: 1, duration: 3000, useNativeDriver: true }),
+        Animated.timing(floatAnim, { toValue: 0, duration: 3000, useNativeDriver: true }),
+      ])
+    ).start();
   }, []);
 
   const slideUp = (anim) => ({
-    opacity: anim,
+    opacity: 1, // Fix Detox visibility issue
     transform: [
       {
         translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }),
@@ -134,7 +148,14 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             {/* Stats row */}
-            <View style={styles.statsRow}>
+            <Animated.View style={[
+              styles.statsRow,
+              {
+                transform: [
+                  { translateY: floatAnim.interpolate({ inputRange: [0, 1], outputRange: [-4, 4] }) }
+                ]
+              }
+            ]}>
               <View style={styles.statItem}>
                 <Text style={styles.statValue}>5</Text>
                 <Text style={styles.statLabel}>Platforms</Text>
@@ -149,13 +170,16 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={[styles.statValue, { color: COLORS.secondary }]}>30%</Text>
                 <Text style={styles.statLabel}>Max Savings</Text>
               </View>
-            </View>
+            </Animated.View>
 
             {/* CTA Button */}
             <TouchableOpacity
               style={styles.ctaButton}
               activeOpacity={0.85}
-              onPress={() => navigation.navigate("Search")}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                navigation.navigate("Search");
+              }}
               testID="homeSearchCta"
             >
               <Text style={styles.ctaText}>Start Comparing</Text>
@@ -341,15 +365,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: H_PADDING,
     marginBottom: SPACING.xxl,
   },
+  trendCardWrapper: {
+    marginBottom: SPACING.sm,
+    borderRadius: RADIUS.lg,
+    overflow: "hidden",
+    ...SHADOWS.sm,
+  },
   trendCard: {
     flexDirection: "row",
     alignItems: "center",
     padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
-    marginBottom: SPACING.sm,
+    backgroundColor: "rgba(255, 255, 255, 0.7)", // Semi-transparent for glassmorphism
     gap: SPACING.md,
-    ...SHADOWS.sm,
   },
   trendLeft: {
     flex: 1,

@@ -16,7 +16,13 @@ import (
 func main() {
 	// Initialize Database
 	database.Connect()
-	database.DB.AutoMigrate(&models.User{})
+	if database.DB != nil {
+		database.DB.AutoMigrate(
+			&models.User{},
+			&models.SearchHistory{},
+			&models.WishlistItem{},
+		)
+	}
 
 	// Initialize Meilisearch
 	search.Connect()
@@ -88,6 +94,21 @@ func main() {
 	e.POST("/seed-products", handlers.SeedProducts)
 	e.GET("/compare", handlers.CompareProducts)     // Legacy scraper endpoint
 	e.POST("/tokens", handlers.BulkConnectAccounts) // Redirect to new endpoint
+
+	// Wishlist Routes
+	wishlist := e.Group("/wishlist")
+	{
+		wishlist.POST("", handlers.AddToWishlist)
+		wishlist.GET("", handlers.GetWishlist)
+		wishlist.DELETE("/:id", handlers.RemoveFromWishlist)
+	}
+
+	// User Search History Routes
+	history := e.Group("/history")
+	{
+		history.POST("", handlers.SaveSearchHistory)
+		history.GET("", handlers.GetUserSearchHistory)
+	}
 
 	// Start server
 	port := os.Getenv("PORT")

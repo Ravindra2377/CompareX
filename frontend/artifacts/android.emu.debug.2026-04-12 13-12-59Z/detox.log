@@ -1,0 +1,2503 @@
+18:42:59.405 detox[40167] B lifecycle node_modules/.bin/detox test --configuration android.emu.debug --loglevel trace --record-logs all
+  data: {
+    "id": "139bd723-baf3-ada1-250c-74605480fa20",
+    "detoxConfig": {
+      "configurationName": "android.emu.debug",
+      "apps": {
+        "default": {
+          "type": "android.apk",
+          "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+          "build": "cd android && ./build.sh",
+          "reversePorts": [
+            8081
+          ]
+        }
+      },
+      "artifacts": {
+        "rootDir": "artifacts/android.emu.debug.2026-04-12 13-12-59Z",
+        "plugins": {
+          "log": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "screenshot": {
+            "enabled": true,
+            "shouldTakeAutomaticSnapshots": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "video": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "instruments": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "uiHierarchy": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          }
+        }
+      },
+      "behavior": {
+        "init": {
+          "keepLockFile": false,
+          "reinstallApp": true,
+          "exposeGlobals": true
+        },
+        "cleanup": {
+          "shutdownDevice": false
+        },
+        "launchApp": "auto"
+      },
+      "cli": {
+        "recordLogs": "all",
+        "configuration": "android.emu.debug",
+        "loglevel": "trace",
+        "start": true
+      },
+      "commands": [
+        {
+          "appName": "default",
+          "build": "cd android && ./build.sh"
+        }
+      ],
+      "device": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Pixel_3a_API_34_extension_level_7_arm64-v8a"
+        }
+      },
+      "logger": {
+        "level": "trace",
+        "overrideConsole": true,
+        "options": {
+          "showLoggerName": true,
+          "showPid": true,
+          "showLevel": false,
+          "showMetadata": false,
+          "basepath": "/Users/chethannv/Desktop/comparez/CompareX/frontend/node_modules/detox/src",
+          "prefixers": {},
+          "stringifiers": {}
+        }
+      },
+      "testRunner": {
+        "retries": 0,
+        "forwardEnv": false,
+        "detached": false,
+        "bail": false,
+        "noRetryArgs": [
+          "shard"
+        ],
+        "jest": {
+          "setupTimeout": 120000,
+          "teardownTimeout": 30000,
+          "retryAfterCircusRetries": false,
+          "reportWorkerAssign": true
+        },
+        "args": {
+          "$0": "jest",
+          "_": [],
+          "config": "e2e/jest.config.js",
+          "--": []
+        }
+      },
+      "session": {
+        "autoStart": true,
+        "debugSynchronization": 10000
+      }
+    },
+    "detoxIPCServer": "primary-40167",
+    "testResults": [],
+    "testSessionIndex": 0,
+    "workersCount": 0
+  }
+18:42:59.409 detox[40167] i ipc Server path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + ipc.config.id /tmp/detox.primary-40167
+18:42:59.409 detox[40167] i ipc starting server on  /tmp/detox.primary-40167 
+18:42:59.409 detox[40167] i ipc starting TLS server false
+18:42:59.410 detox[40167] i ipc starting server as Unix || Windows Socket
+18:42:59.411 detox[40167] i ws-server Detox server listening on localhost:62696...
+18:42:59.413 detox[40167] i lifecycle Serialized the session state at: /private/var/folders/8d/zhvqxqh14dvbrk_rfmtg91n40000gn/T/139bd723-baf3-ada1-250c-74605480fa20.detox.json
+18:42:59.414 detox[40167] B lifecycle jest --config e2e/jest.config.js
+18:42:59.656 detox[40168] i ipc Service path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + id 
+18:42:59.659 detox[40168] i ipc requested connection to  primary-40167 /tmp/detox.primary-40167
+18:42:59.659 detox[40168] i ipc Connecting client on Unix Socket : /tmp/detox.primary-40167
+18:42:59.660 detox[40167] i ipc ## socket connection to server detected ##
+18:42:59.660 detox[40168] i ipc retrying reset
+18:42:59.660 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  registerContext , { id: 'secondary-40168' }
+18:42:59.661 detox[40167] i ipc received event of :  registerContext { id: 'secondary-40168' }
+18:42:59.661 detox[40167] i ipc dispatching event to socket  :  registerContextDone {
+  testResults: [],
+  testSessionIndex: 0,
+  unsafe_earlyTeardown: undefined
+}
+18:42:59.661 detox[40168] i ipc ## received events ##
+18:42:59.662 detox[40168] i ipc detected event registerContextDone { testResults: [], testSessionIndex: 0 }
+18:42:59.694 detox[40168] B lifecycle e2e/search.test.js
+18:42:59.703 detox[40168] B lifecycle set up environment
+18:42:59.704 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  registerWorker , { workerId: 'w1' }
+18:42:59.705 detox[40167] i ipc received event of :  registerWorker { workerId: 'w1' }
+18:42:59.705 detox[40167] i ipc dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+18:42:59.705 detox[40167] i ipc broadcasting event to all known sockets listening to  /tmp/detox.primary-40167  :   sessionStateUpdate { workersCount: 1 }
+18:42:59.705 detox[40168] i ipc ## received events ##
+18:42:59.705 detox[40168] i ipc detected event registerWorkerDone { workersCount: 1 }
+18:42:59.776 detox[40168] i ipc ## received events ##
+18:42:59.777 detox[40168] i ipc detected event sessionStateUpdate { workersCount: 1 }
+18:42:59.779 detox[40167] B ws-server@62697 connection :62696<->:62697
+18:42:59.780 detox[40168] i ws-client opened web socket to: ws://localhost:62696
+18:42:59.781 detox[40167] i ws-server@62697 get
+  data: {"type":"login","params":{"sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12","role":"tester"},"messageId":0}
+18:42:59.781 detox[40167] i ws-server created session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:42:59.781 detox[40168] i ws-client send message
+  data: {"type":"login","params":{"sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12","role":"tester"},"messageId":0}
+18:42:59.782 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+18:42:59.782 detox[40167] i ws-server tester joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:42:59.782 detox[40168] i ws-client get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+18:42:59.798 detox[40167] i ipc received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_34_extension_level_7_arm64-v8a' }
+  }
+}
+18:42:59.798 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_34_extension_level_7_arm64-v8a' }
+  }
+}
+18:42:59.811 detox[40167] B device init
+  args: ()
+18:42:59.812 detox[40167] E device init
+18:42:59.812 detox[40167] B device@0 allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Pixel_3a_API_34_extension_level_7_arm64-v8a"
+    }
+  }
+18:42:59.968 detox[40167] i device Detected emulator binary version { major: 36, minor: 4, patch: 10, toString: [Function: toString] }
+18:42:59.970 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb"  devices
+18:42:59.993 detox[40167] i child-process:EXEC_SUCCESS List of devices attached
+emulator-16272	device
+
+
+18:42:59.993 detox[40167] i device:TELNET_CONNECTING port: 16272, host: localhost
+18:43:00.001 detox[40167] i device:DEVICE_LOOKUP Found a matching & free device emulator-16272
+18:43:00.001 detox[40167] i device settled on emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)
+  data: {
+    "id": "emulator-16272",
+    "adbName": "emulator-16272",
+    "name": "emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)"
+  }
+18:43:00.001 detox[40167] E device@0 allocate
+18:43:00.001 detox[40167] B device@0 post-allocate: emulator-16272
+  data: {
+    "id": "emulator-16272",
+    "adbName": "emulator-16272",
+    "name": "emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)"
+  }
+18:43:00.001 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "getprop dev.bootcomplete"
+18:43:00.050 detox[40167] i child-process:EXEC_SUCCESS 1
+
+18:43:00.050 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "getprop ro.build.version.sdk"
+18:43:00.089 detox[40167] i child-process:EXEC_SUCCESS 34
+
+18:43:00.089 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global animator_duration_scale 0"
+18:43:00.145 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:00.146 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global window_animation_scale 0"
+18:43:00.199 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:00.199 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global transition_animation_scale 0"
+18:43:00.254 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:00.254 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "dumpsys power | grep \"^[ ]*m[UW].*=\""
+18:43:00.420 detox[40167] i child-process:EXEC_SUCCESS   mWakefulness=Awake
+  mWakefulnessChanging=false
+  mWakeLockSummary=0x0
+  mWakeUpWhenPluggedOrUnpluggedConfig=false
+  mWakeUpWhenPluggedOrUnpluggedInTheaterModeConfig=false
+  mUserActivityTimeoutOverrideFromWindowManager=-1
+  mUserInactiveOverrideFromWindowManager=false
+  mUserId=0
+  mWakeLockSummary=0x0
+  mUserInteractionBackoffMillis=60000
+
+18:43:00.420 detox[40167] E device@0 post-allocate: emulator-16272
+18:43:00.420 detox[40167] i ipc dispatching event to socket  :  allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:00.420 detox[40168] i ipc ## received events ##
+18:43:00.421 detox[40168] i ipc detected event allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:00.442 detox[40168] B artifacts-manager onBootDevice
+  args: ({"deviceId":"emulator-16272"})
+18:43:00.442 detox[40168] E artifacts-manager onBootDevice
+18:43:00.443 detox[40168] B device installUtilBinaries
+  args: ()
+18:43:00.443 detox[40168] E device installUtilBinaries
+18:43:00.443 detox[40168] B device selectApp
+  args: ("default")
+18:43:00.444 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/build-tools/36.1.0/aapt" dump badging "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk"
+18:43:00.463 detox[40168] i child-process:EXEC_SUCCESS package: name='com.panviravindra.comparez' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+uses-permission: name='android.permission.SYSTEM_ALERT_WINDOW'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.USE_BIOMETRIC'
+uses-permission: name='android.permission.USE_FINGERPRINT'
+uses-permission: name='com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+application-label:'frontend'
+application-label-af:'frontend'
+application-label-am:'frontend'
+application-label-ar:'frontend'
+application-label-as:'frontend'
+application-label-az:'frontend'
+application-label-be:'frontend'
+application-label-bg:'frontend'
+application-label-bn:'frontend'
+application-label-bs:'frontend'
+application-label-ca:'frontend'
+application-label-cs:'frontend'
+application-label-da:'frontend'
+application-label-de:'frontend'
+application-label-el:'frontend'
+application-label-en-AU:'frontend'
+application-label-en-CA:'frontend'
+application-label-en-GB:'frontend'
+application-label-en-IN:'frontend'
+application-label-en-XC:'frontend'
+application-label-es:'frontend'
+application-label-es-419:'frontend'
+application-label-es-ES:'frontend'
+application-label-es-US:'frontend'
+application-label-et:'frontend'
+application-label-eu:'frontend'
+application-label-fa:'frontend'
+application-label-fi:'frontend'
+application-label-fr:'frontend'
+application-label-fr-CA:'frontend'
+application-label-gl:'frontend'
+application-label-gu:'frontend'
+application-label-hi:'frontend'
+application-label-hr:'frontend'
+application-label-hu:'frontend'
+application-label-hy:'frontend'
+application-label-in:'frontend'
+application-label-is:'frontend'
+application-label-it:'frontend'
+application-label-iw:'frontend'
+application-label-ja:'frontend'
+application-label-ka:'frontend'
+application-label-kk:'frontend'
+application-label-km:'frontend'
+application-label-kn:'frontend'
+application-label-ko:'frontend'
+application-label-ky:'frontend'
+application-label-lo:'frontend'
+application-label-lt:'frontend'
+application-label-lv:'frontend'
+application-label-mk:'frontend'
+application-label-ml:'frontend'
+application-label-mn:'frontend'
+application-label-mr:'frontend'
+application-label-ms:'frontend'
+application-label-my:'frontend'
+application-label-nb:'frontend'
+application-label-ne:'frontend'
+application-label-nl:'frontend'
+application-label-or:'frontend'
+application-label-pa:'frontend'
+application-label-pl:'frontend'
+application-label-pt:'frontend'
+application-label-pt-BR:'frontend'
+application-label-pt-PT:'frontend'
+application-label-ro:'frontend'
+application-label-ru:'frontend'
+application-label-si:'frontend'
+application-label-sk:'frontend'
+application-label-sl:'frontend'
+application-label-sq:'frontend'
+application-label-sr:'frontend'
+application-label-sr-Latn:'frontend'
+application-label-sv:'frontend'
+application-label-sw:'frontend'
+application-label-ta:'frontend'
+application-label-te:'frontend'
+application-label-th:'frontend'
+application-label-tl:'frontend'
+application-label-tr:'frontend'
+application-label-uk:'frontend'
+application-label-ur:'frontend'
+application-label-uz:'frontend'
+application-label-vi:'frontend'
+application-label-zh-CN:'frontend'
+application-label-zh-HK:'frontend'
+application-label-zh-TW:'frontend'
+application-label-zu:'frontend'
+application-icon-120:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-160:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-240:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-320:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-480:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-640:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-65534:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application: label='frontend' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
+application-debuggable
+launchable-activity: name='com.panviravindra.comparez.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.portrait'
+  uses-implied-feature: name='android.hardware.screen.portrait' reason='one or more activities have specified a portrait orientation'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'af' 'am' 'ar' 'as' 'az' 'be' 'bg' 'bn' 'bs' 'ca' 'cs' 'da' 'de' 'el' 'en-AU' 'en-CA' 'en-GB' 'en-IN' 'en-XC' 'es' 'es-419' 'es-ES' 'es-US' 'et' 'eu' 'fa' 'fi' 'fr' 'fr-CA' 'gl' 'gu' 'hi' 'hr' 'hu' 'hy' 'in' 'is' 'it' 'iw' 'ja' 'ka' 'kk' 'km' 'kn' 'ko' 'ky' 'lo' 'lt' 'lv' 'mk' 'ml' 'mn' 'mr' 'ms' 'my' 'nb' 'ne' 'nl' 'or' 'pa' 'pl' 'pt' 'pt-BR' 'pt-PT' 'ro' 'ru' 'si' 'sk' 'sl' 'sq' 'sr' 'sr-Latn' 'sv' 'sw' 'ta' 'te' 'th' 'tl' 'tr' 'uk' 'ur' 'uz' 'vi' 'zh-CN' 'zh-HK' 'zh-TW' 'zu'
+densities: '120' '160' '240' '320' '480' '640' '65534'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'
+
+18:43:00.463 detox[40168] E device selectApp
+18:43:00.463 detox[40168] B device uninstallApp
+  args: ()
+18:43:00.463 detox[40168] B artifacts-manager onBeforeUninstallApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:00.463 detox[40168] E artifacts-manager onBeforeUninstallApp
+18:43:00.464 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list packages com.panviravindra.comparez"
+18:43:00.548 detox[40168] i child-process:EXEC_SUCCESS package:com.panviravindra.comparez
+package:com.panviravindra.comparez.test
+
+18:43:00.548 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 uninstall com.panviravindra.comparez
+18:43:00.871 detox[40168] i child-process:EXEC_SUCCESS Success
+
+18:43:00.872 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list packages com.panviravindra.comparez.test"
+18:43:01.092 detox[40168] i child-process:EXEC_SUCCESS package:com.panviravindra.comparez.test
+
+18:43:01.093 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 uninstall com.panviravindra.comparez.test
+18:43:01.727 detox[40168] i child-process:EXEC_SUCCESS Success
+
+18:43:01.728 detox[40168] E device uninstallApp
+18:43:01.728 detox[40168] B device selectApp
+  args: ("default")
+18:43:01.728 detox[40168] B device terminateApp
+  args: ()
+18:43:01.729 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:01.729 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:01.729 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:01.909 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:01.909 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:01.909 detox[40168] E artifacts-manager onTerminateApp
+18:43:01.909 detox[40168] E device terminateApp
+18:43:01.909 detox[40168] E device selectApp
+18:43:01.909 detox[40168] B device installApp
+  args: ()
+18:43:01.910 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/build-tools/36.1.0/aapt" dump xmlstrings "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" AndroidManifest.xml
+18:43:01.928 detox[40168] i child-process:EXEC_SUCCESS String pool of 100 unique UTF-16 non-sorted strings, 100 entries and 0 styles using 5648 bytes:
+String #0: theme
+String #1: label
+String #2: icon
+String #3: name
+String #4: permission
+String #5: protectionLevel
+String #6: enabled
+String #7: debuggable
+String #8: exported
+String #9: authorities
+String #10: grantUriPermissions
+String #11: launchMode
+String #12: screenOrientation
+String #13: configChanges
+String #14: value
+String #15: resource
+String #16: scheme
+String #17: minSdkVersion
+String #18: versionCode
+String #19: versionName
+String #20: windowSoftInputMode
+String #21: targetSdkVersion
+String #22: allowBackup
+String #23: supportsRtl
+String #24: extractNativeLibs
+String #25: usesCleartextTraffic
+String #26: directBootAware
+String #27: roundIcon
+String #28: compileSdkVersion
+String #29: compileSdkVersionCodename
+String #30: appComponentFactory
+String #31: enableOnBackInvokedCallback
+String #32: 1.0.0
+String #33: 16
+String #34: ALWAYS
+String #35: action
+String #36: activity
+String #37: android
+String #38: android.intent.action.MAIN
+String #39: android.intent.action.OPEN_DOCUMENT_TREE
+String #40: android.intent.action.VIEW
+String #41: android.intent.category.BROWSABLE
+String #42: android.intent.category.LAUNCHER
+String #43: android.permission.DUMP
+String #44: android.permission.INTERNET
+String #45: android.permission.READ_EXTERNAL_STORAGE
+String #46: android.permission.SYSTEM_ALERT_WINDOW
+String #47: android.permission.USE_BIOMETRIC
+String #48: android.permission.USE_FINGERPRINT
+String #49: android.permission.VIBRATE
+String #50: android.permission.WRITE_EXTERNAL_STORAGE
+String #51: android.support.FILE_PROVIDER_PATHS
+String #52: androidx.core.app.CoreComponentFactory
+String #53: androidx.emoji2.text.EmojiCompatInitializer
+String #54: androidx.lifecycle.ProcessLifecycleInitializer
+String #55: androidx.profileinstaller.ProfileInstallReceiver
+String #56: androidx.profileinstaller.ProfileInstallerInitializer
+String #57: androidx.profileinstaller.action.BENCHMARK_OPERATION
+String #58: androidx.profileinstaller.action.INSTALL_PROFILE
+String #59: androidx.profileinstaller.action.SAVE_PROFILE
+String #60: androidx.profileinstaller.action.SKIP_FILE
+String #61: androidx.startup
+String #62: androidx.startup.InitializationProvider
+String #63: application
+String #64: category
+String #65: com.facebook.react.devsupport.DevSettingsActivity
+String #66: com.facebook.soloader.enabled
+String #67: com.panviravindra.comparez
+String #68: com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+String #69: com.panviravindra.comparez.FileSystemFileProvider
+String #70: com.panviravindra.comparez.MainActivity
+String #71: com.panviravindra.comparez.MainApplication
+String #72: com.panviravindra.comparez.androidx-startup
+String #73: com.panviravindra.comparez.fileprovider
+String #74: com.reactnativecommunity.webview.RNCWebViewFileProvider
+String #75: data
+String #76: expo.modules.adapters.react.apploader.RNHeadlessAppLoader
+String #77: expo.modules.filesystem.FileSystemFileProvider
+String #78: expo.modules.updates.ENABLED
+String #79: expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH
+String #80: expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS
+String #81: http://schemas.android.com/apk/res/android
+String #82: https
+String #83: intent
+String #84: intent-filter
+String #85: manifest
+String #86: meta-data
+String #87: org.chromium.intent.action.IS_READY_TO_PAY
+String #88: org.chromium.intent.action.PAY
+String #89: org.chromium.intent.action.UPDATE_PAYMENT_DETAILS
+String #90: org.unimodules.core.AppLoader#react-native-headless
+String #91: package
+String #92: permission
+String #93: platformBuildVersionCode
+String #94: platformBuildVersionName
+String #95: provider
+String #96: queries
+String #97: receiver
+String #98: uses-permission
+String #99: uses-sdk
+
+18:43:01.929 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/build-tools/36.1.0/aapt" dump xmlstrings "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" AndroidManifest.xml
+18:43:01.945 detox[40168] i child-process:EXEC_SUCCESS String pool of 43 unique UTF-16 non-sorted strings, 43 entries and 0 styles using 2180 bytes:
+String #0: theme
+String #1: label
+String #2: name
+String #3: debuggable
+String #4: exported
+String #5: priority
+String #6: targetPackage
+String #7: handleProfiling
+String #8: functionalTest
+String #9: minSdkVersion
+String #10: targetSdkVersion
+String #11: extractNativeLibs
+String #12: compileSdkVersion
+String #13: compileSdkVersionCodename
+String #14: 16
+String #15: Tests for com.panviravindra.comparez
+String #16: activity
+String #17: android
+String #18: android.intent.category.LAUNCHER
+String #19: android.permission.REORDER_TASKS
+String #20: android.test.runner
+String #21: androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity
+String #22: androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity
+String #23: androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity
+String #24: androidx.test.orchestrator
+String #25: androidx.test.runner.AndroidJUnitRunner
+String #26: androidx.test.services
+String #27: application
+String #28: category
+String #29: com.google.android.apps.common.testing.services
+String #30: com.panviravindra.comparez
+String #31: com.panviravindra.comparez.test
+String #32: http://schemas.android.com/apk/res/android
+String #33: instrumentation
+String #34: intent-filter
+String #35: manifest
+String #36: package
+String #37: platformBuildVersionCode
+String #38: platformBuildVersionName
+String #39: queries
+String #40: uses-library
+String #41: uses-permission
+String #42: uses-sdk
+
+18:43:01.945 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm -fr /data/local/tmp/detox"
+18:43:02.099 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:02.100 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "mkdir -p /data/local/tmp/detox"
+18:43:02.201 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:02.201 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 push "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" "/data/local/tmp/detox/Application.apk"
+18:43:03.740 detox[40168] i child-process:EXEC_SUCCESS /Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk: 1 file pushed, 0 skipped. 177.3 MB/s (113692951 bytes in 0.612s)
+
+18:43:03.741 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "getprop ro.build.version.sdk"
+18:43:03.894 detox[40168] i child-process:EXEC_SUCCESS 34
+
+18:43:03.896 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+18:43:04.657 detox[40168] i child-process:SPAWN_STDOUT Success
+
+18:43:04.665 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Application.apk exited with code #0
+18:43:04.665 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 push "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "/data/local/tmp/detox/Test.apk"
+18:43:04.709 detox[40168] i child-process:EXEC_SUCCESS /Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk: 1 file pushed, 0 skipped. 856.9 MB/s (5511394 bytes in 0.006s)
+
+18:43:04.710 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Test.apk
+18:43:04.799 detox[40168] i child-process:SPAWN_STDOUT Success
+
+18:43:04.800 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Test.apk exited with code #0
+18:43:04.800 detox[40168] B device reverseTcpPort
+  args: (8081)
+18:43:04.800 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:8081 tcp:8081
+18:43:04.819 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:04.819 detox[40168] E device reverseTcpPort
+18:43:04.819 detox[40168] E device installApp
+18:43:04.819 detox[40168] B device selectApp
+  args: ("default")
+18:43:04.819 detox[40168] B device terminateApp
+  args: ()
+18:43:04.819 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:04.820 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:04.820 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:04.867 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:04.868 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:04.868 detox[40168] E artifacts-manager onTerminateApp
+18:43:04.868 detox[40168] E device terminateApp
+18:43:04.868 detox[40168] E device selectApp
+18:43:04.868 detox[40168] E lifecycle set up environment
+18:43:05.196 detox[40168] i lifecycle search.test.js is assigned to emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)
+18:43:05.196 detox[40168] B lifecycle run the tests
+18:43:05.198 detox[40168] B artifacts-manager onRunDescribeStart
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+18:43:05.198 detox[40168] E artifacts-manager onRunDescribeStart
+18:43:05.198 detox[40168] B lifecycle CompareZ Search Flow
+18:43:05.198 detox[40168] B artifacts-manager onRunDescribeStart
+  args: ({"name":"CompareZ Search Flow"})
+18:43:05.199 detox[40168] E artifacts-manager onRunDescribeStart
+18:43:05.199 detox[40168] B lifecycle beforeAll
+18:43:05.199 detox[40168] B device launchApp
+  args: ()
+18:43:05.200 detox[40168] B device terminateApp
+  args: ("com.panviravindra.comparez")
+18:43:05.200 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:05.200 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:05.200 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:05.613 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:05.613 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:05.613 detox[40168] E artifacts-manager onTerminateApp
+18:43:05.613 detox[40168] E device terminateApp
+18:43:05.614 detox[40168] B artifacts-manager onBeforeLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}})
+18:43:05.614 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:05.689 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:04.000
+
+18:43:05.689 detox[40168] E artifacts-manager onBeforeLaunchApp
+18:43:05.689 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:62696 tcp:62696
+18:43:05.710 detox[40168] i child-process:EXEC_SUCCESS 62696
+
+18:43:05.711 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list instrumentation"
+18:43:05.831 detox[40168] i child-process:EXEC_SUCCESS instrumentation:com.example.firstapp.test/androidx.test.runner.AndroidJUnitRunner (target=com.example.firstapp)
+instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+
+18:43:05.832 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:06.335 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:43:07.984 detox[40168] i child-process:EXEC_SUCCESS u0_a201       6824   322   15162076  66044 0                   0 R com.panviravindra.comparez
+
+18:43:07.985 detox[40168] B artifacts-manager onLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"},"pid":6824})
+18:43:07.987 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:43:07.989 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:04.000\" --pid=6824 -f /sdcard/184259793_0.log"
+18:43:07.989 detox[40168] E artifacts-manager onLaunchApp
+18:43:08.291 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_0.log
+18:43:08.419 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_0.log
+
+18:43:16.563 detox[40168] i child-process:SPAWN_STDOUT INSTRUMENTATION_STATUS: class=com.panviravindra.comparez.DetoxTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.panviravindra.comparez.DetoxTest:
+INSTRUMENTATION_STATUS: test=runDetoxTests
+INSTRUMENTATION_STATUS_CODE: 1
+
+18:43:16.747 detox[40167] B ws-server@62794 connection :62696<->:62794
+18:43:16.763 detox[40167] i ws-server@62794 get
+  data: {"messageId":0,"type":"login","params":{"role":"app","sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}}
+18:43:16.765 detox[40167] i ws-server@62794 send
+  data: {
+    "messageId": 0,
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    }
+  }
+18:43:16.765 detox[40167] i ws-server app joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:16.766 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "appConnected"
+  }
+18:43:16.767 detox[40168] i ws-client get message
+  data: {"type":"appConnected"}
+   
+18:43:16.770 detox[40168] i ws-client send message
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:16.771 detox[40167] i ws-server@62697 get
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:16.771 detox[40167] i ws-server@62794 send
+  data: {
+    "type": "isReady",
+    "params": {},
+    "messageId": -1000
+  }
+18:43:26.771 detox[40168] i ws-client send message
+  data: {"type":"currentStatus","params":{},"messageId":1}
+18:43:26.773 detox[40167] i ws-server@62697 get
+  data: {"type":"currentStatus","params":{},"messageId":1}
+18:43:26.774 detox[40167] i ws-server@62794 send
+  data: {
+    "type": "currentStatus",
+    "params": {},
+    "messageId": 1
+  }
+18:43:28.602 detox[40167] i ws-server@62794 get
+  data: {"messageId":-1000,"type":"ready","params":{}}
+18:43:28.602 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": -1000,
+    "type": "ready",
+    "params": {}
+  }
+18:43:28.603 detox[40168] i ws-client get message
+  data: {"messageId":-1000,"type":"ready","params":{}}
+   
+18:43:28.603 detox[40168] B artifacts-manager onAppReady
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","pid":6824})
+18:43:28.604 detox[40168] E artifacts-manager onAppReady
+18:43:28.604 detox[40168] E device launchApp
+18:43:28.604 detox[40168] E lifecycle beforeAll
+18:43:28.605 detox[40168] B lifecycle should search for a product and show results
+18:43:28.605 detox[40168] i lifecycle CompareZ Search Flow: should search for a product and show results
+18:43:28.606 detox[40168] B artifacts-manager onTestStart
+  args: ({"title":"should search for a product and show results","fullName":"CompareZ Search Flow should search for a product and show results","status":"running","invocations":1})
+18:43:28.606 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:43:28.607 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:28.648 detox[40167] i ws-server@62794 get
+  data: {"messageId":1,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+18:43:28.648 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": 1,
+    "type": "currentStatusResult",
+    "params": {
+      "status": {
+        "app_status": "idle"
+      }
+    }
+  }
+18:43:28.648 detox[40168] i ws-client get message
+  data: {"messageId":1,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+   
+18:43:28.650 detox[40168] i ws-client:APP_STATUS The app seems to be idle
+18:43:28.748 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:27.000
+
+18:43:28.749 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:04.000" --pid=6824 -f /sdcard/184259793_0.log
+18:43:28.750 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:04.000\" --pid=6824 -f /sdcard/184259793_0.log" terminated with SIGINT
+18:43:28.750 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:43:28.751 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:27.000\" --pid=6824 -f /sdcard/184259793_1.log"
+18:43:28.751 detox[40168] E artifacts-manager onTestStart
+18:43:28.751 detox[40168] B lifecycle beforeEach
+18:43:28.751 detox[40168] E lifecycle beforeEach
+18:43:28.751 detox[40168] B lifecycle beforeEach
+18:43:28.751 detox[40168] B device launchApp
+  args: ({"newInstance":true})
+18:43:28.752 detox[40168] B device terminateApp
+  args: ("com.panviravindra.comparez")
+18:43:28.752 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:28.752 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:28.753 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:28.754 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner terminated with SIGINT
+18:43:28.754 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:28.754 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse --remove tcp:62696
+18:43:28.778 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:29.052 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_1.log
+18:43:29.260 detox[40167] i ws-server app exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:29.260 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "appDisconnected"
+  }
+18:43:29.260 detox[40167] E ws-server@62794 connection :62696<->:62794
+18:43:29.260 detox[40168] i ws-client get message
+  data: {"type":"appDisconnected"}
+   
+18:43:29.303 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_1.log
+
+18:43:29.479 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:29.479 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:29.479 detox[40168] E artifacts-manager onTerminateApp
+18:43:29.479 detox[40168] E device terminateApp
+18:43:29.479 detox[40168] B artifacts-manager onBeforeLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}})
+18:43:29.479 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:29.682 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:28.000
+
+18:43:29.682 detox[40168] E artifacts-manager onBeforeLaunchApp
+18:43:29.682 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:62696 tcp:62696
+18:43:29.703 detox[40168] i child-process:EXEC_SUCCESS 62696
+
+18:43:29.703 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list instrumentation"
+18:43:29.900 detox[40168] i child-process:EXEC_SUCCESS instrumentation:com.example.firstapp.test/androidx.test.runner.AndroidJUnitRunner (target=com.example.firstapp)
+instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+
+18:43:29.902 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:30.402 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:43:31.910 detox[40168] i child-process:EXEC_SUCCESS u0_a201       6976   322   15324636 110128 0                   0 R com.panviravindra.comparez
+
+18:43:31.910 detox[40168] B artifacts-manager onLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"},"pid":6976})
+18:43:31.911 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:43:31.911 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:43:31.911 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:32.047 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:31.000
+
+18:43:32.049 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:27.000" --pid=6824 -f /sdcard/184259793_1.log
+18:43:32.050 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:27.000\" --pid=6824 -f /sdcard/184259793_1.log" terminated with SIGINT
+18:43:32.051 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:31.000\" --pid=6976 -f /sdcard/184259793_1.log"
+18:43:32.051 detox[40168] E artifacts-manager onLaunchApp
+18:43:32.353 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_1.log
+18:43:32.431 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_1.log
+
+18:43:33.482 detox[40168] i child-process:SPAWN_STDOUT INSTRUMENTATION_STATUS: class=com.panviravindra.comparez.DetoxTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.panviravindra.comparez.DetoxTest:
+INSTRUMENTATION_STATUS: test=runDetoxTests
+INSTRUMENTATION_STATUS_CODE: 1
+
+18:43:33.505 detox[40167] B ws-server@62851 connection :62696<->:62851
+18:43:33.507 detox[40167] i ws-server@62851 get
+  data: {"messageId":0,"type":"login","params":{"role":"app","sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}}
+18:43:33.508 detox[40167] i ws-server@62851 send
+  data: {
+    "messageId": 0,
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    }
+  }
+18:43:33.508 detox[40167] i ws-server app joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:33.508 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "appConnected"
+  }
+18:43:33.508 detox[40168] i ws-client get message
+  data: {"type":"appConnected"}
+   
+18:43:33.508 detox[40168] i ws-client send message
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:33.509 detox[40167] i ws-server@62697 get
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:33.509 detox[40167] i ws-server@62851 send
+  data: {
+    "type": "isReady",
+    "params": {},
+    "messageId": -1000
+  }
+18:43:36.015 detox[40167] i ws-server@62851 get
+  data: {"messageId":-1000,"type":"ready","params":{}}
+18:43:36.015 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": -1000,
+    "type": "ready",
+    "params": {}
+  }
+18:43:36.016 detox[40168] i ws-client get message
+  data: {"messageId":-1000,"type":"ready","params":{}}
+   
+18:43:36.017 detox[40168] B artifacts-manager onAppReady
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","pid":6976})
+18:43:36.017 detox[40168] E artifacts-manager onAppReady
+18:43:36.017 detox[40168] E device launchApp
+18:43:36.018 detox[40168] E lifecycle beforeEach
+18:43:36.019 detox[40168] B lifecycle test_fn
+18:43:36.023 detox[40168] i ws-client send message
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"assertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}}]},"messageId":2}
+18:43:36.024 detox[40167] i ws-server@62697 get
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"assertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}}]},"messageId":2}
+18:43:36.024 detox[40167] i ws-server@62851 send
+  data: {
+    "type": "invoke",
+    "params": {
+      "target": {
+        "type": "Class",
+        "value": "com.wix.detox.espresso.DetoxAssertion"
+      },
+      "method": "assertMatcher",
+      "args": [
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "androidx.test.espresso.Espresso"
+            },
+            "method": "onView",
+            "args": [
+              {
+                "type": "Invocation",
+                "value": {
+                  "target": {
+                    "type": "Class",
+                    "value": "com.wix.detox.espresso.DetoxMatcher"
+                  },
+                  "method": "matcherForTestId",
+                  "args": [
+                    "homeSearchCta",
+                    {
+                      "type": "boolean",
+                      "value": false
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "com.wix.detox.espresso.DetoxMatcher"
+            },
+            "method": "matcherForSufficientlyVisible",
+            "args": [
+              {
+                "type": "Integer",
+                "value": 75
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "messageId": 2
+  }
+18:43:36.025 detox[40168] B ws-client expect element to be visible
+  data: {
+    "target": {
+      "type": "Class",
+      "value": "com.wix.detox.espresso.DetoxAssertion"
+    },
+    "method": "assertMatcher",
+    "args": [
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "androidx.test.espresso.Espresso"
+          },
+          "method": "onView",
+          "args": [
+            {
+              "type": "Invocation",
+              "value": {
+                "target": {
+                  "type": "Class",
+                  "value": "com.wix.detox.espresso.DetoxMatcher"
+                },
+                "method": "matcherForTestId",
+                "args": [
+                  "homeSearchCta",
+                  {
+                    "type": "boolean",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "com.wix.detox.espresso.DetoxMatcher"
+          },
+          "method": "matcherForSufficientlyVisible",
+          "args": [
+            {
+              "type": "Integer",
+              "value": 75
+            }
+          ]
+        }
+      }
+    ]
+  }
+  stack: Object.toBeVisible (/e2e/search.test.js:12:51)
+  Generator.next (<anonymous>)
+  asyncGeneratorStep (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+  _next (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+  /node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+  new Promise (<anonymous>)
+  Object.<anonymous> (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+  Promise.then.completed (/node_modules/jest-circus/build/utils.js:298:28)
+  new Promise (<anonymous>)
+  callAsyncCircusFn (/node_modules/jest-circus/build/utils.js:231:10)
+  _callCircusTest (/node_modules/jest-circus/build/run.js:316:40)
+  processTicksAndRejections (node:internal/process/task_queues:105:5)
+  _runTest (/node_modules/jest-circus/build/run.js:252:3)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:126:9)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:121:9)
+  run (/node_modules/jest-circus/build/run.js:71:3)
+  runAndTransformResultsToJestFormat (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+  jestAdapter (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+  runTestInternal (/node_modules/jest-runner/build/runTest.js:367:16)
+  runTest (/node_modules/jest-runner/build/runTest.js:444:34)
+18:43:36.259 detox[40167] i ws-server@62851 get
+  data: {"messageId":2,"type":"testFailed","params":{"details":"'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n","viewHierarchy":null}}
+18:43:36.259 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": 2,
+    "type": "testFailed",
+    "params": {
+      "details": "'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n",
+      "viewHierarchy": null
+    }
+  }
+18:43:36.260 detox[40168] i ws-client get message
+  data: {"messageId":2,"type":"testFailed","params":{"details":"'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n","viewHierarchy":null}}
+   
+18:43:36.260 detox[40168] E ws-client expect element to be visible
+  error: Test Failed: '(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.
+  Expected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)
+       Got: was null
+  
+  
+18:43:36.260 detox[40168] B artifacts-manager onTestFnFailure
+  args: ({"error":{"name":"DetoxRuntimeError"}})
+18:43:36.260 detox[40168] E artifacts-manager onTestFnFailure
+18:43:36.261 detox[40168] E lifecycle test_fn
+  error: Test Failed: '(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.
+  Expected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)
+       Got: was null
+  
+  
+18:43:36.261 detox[40168] B artifacts-manager onTestDone
+  args: ({"title":"should search for a product and show results","fullName":"CompareZ Search Flow should search for a product and show results","status":"failed","invocations":1,"timedOut":false})
+18:43:36.261 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:43:36.261 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:36.339 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:35.000
+
+18:43:36.341 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:31.000" --pid=6976 -f /sdcard/184259793_1.log
+18:43:36.342 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:31.000\" --pid=6976 -f /sdcard/184259793_1.log" terminated with SIGINT
+18:43:36.343 detox[40168] E artifacts-manager onTestDone
+18:43:36.344 detox[40168] E lifecycle should search for a product and show results
+18:43:36.344 detox[40168] i lifecycle CompareZ Search Flow: should search for a product and show results [FAIL]
+18:43:36.345 detox[40168] B lifecycle should allow clicking a suggestion chip
+18:43:36.345 detox[40168] i lifecycle CompareZ Search Flow: should allow clicking a suggestion chip
+18:43:36.346 detox[40168] B artifacts-manager onTestStart
+  args: ({"title":"should allow clicking a suggestion chip","fullName":"CompareZ Search Flow should allow clicking a suggestion chip","status":"running","invocations":1})
+18:43:36.346 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:43:36.347 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:35.000\" --pid=6976 -f /sdcard/184259793_2.log"
+18:43:36.347 detox[40168] E artifacts-manager onTestStart
+18:43:36.348 detox[40168] B lifecycle beforeEach
+18:43:36.348 detox[40168] E lifecycle beforeEach
+18:43:36.348 detox[40168] B lifecycle beforeEach
+18:43:36.348 detox[40168] B device launchApp
+  args: ({"newInstance":true})
+18:43:36.349 detox[40168] B device terminateApp
+  args: ("com.panviravindra.comparez")
+18:43:36.349 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:36.349 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:36.349 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:36.350 detox[40168] i artifact:ARTIFACT_SAVE saving ADBLogcatRecording to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Search Flow should search for a product and show results/device.log
+18:43:36.350 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 pull "/sdcard/184259793_1.log" "artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Search Flow should search for a product and show results/device.log"
+18:43:36.352 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner terminated with SIGINT
+18:43:36.352 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:36.353 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse --remove tcp:62696
+18:43:36.403 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:36.418 detox[40168] i child-process:EXEC_SUCCESS /sdcard/184259793_1.log: 1 file pulled, 0 skipped. 16.1 MB/s (57344 bytes in 0.003s)
+
+18:43:36.418 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm  \"/sdcard/184259793_1.log\""
+18:43:36.648 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_2.log
+18:43:36.703 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:36.703 detox[40168] i artifact:ARTIFACT_SAVE saving ADBLogcatRecording to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/emulator-16272 2026-04-12 13-13-36Z.startup.log
+18:43:36.703 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 pull "/sdcard/184259793_0.log" "artifacts/android.emu.debug.2026-04-12 13-12-59Z/emulator-16272 2026-04-12 13-13-36Z.startup.log"
+18:43:36.734 detox[40167] i ws-server app exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:36.734 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "appDisconnected"
+  }
+18:43:36.735 detox[40167] E ws-server@62851 connection :62696<->:62851
+18:43:36.735 detox[40168] i ws-client get message
+  data: {"type":"appDisconnected"}
+   
+18:43:36.751 detox[40168] i child-process:EXEC_SUCCESS /sdcard/184259793_0.log: 1 file pulled, 0 skipped. 10.0 MB/s (53248 bytes in 0.005s)
+
+18:43:36.751 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm  \"/sdcard/184259793_0.log\""
+18:43:36.808 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_2.log
+
+18:43:37.063 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:37.063 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:37.063 detox[40168] E artifacts-manager onTerminateApp
+18:43:37.063 detox[40168] E device terminateApp
+18:43:37.064 detox[40168] B artifacts-manager onBeforeLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}})
+18:43:37.064 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:37.133 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:37.166 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:36.000
+
+18:43:37.166 detox[40168] E artifacts-manager onBeforeLaunchApp
+18:43:37.166 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:62696 tcp:62696
+18:43:37.185 detox[40168] i child-process:EXEC_SUCCESS 62696
+
+18:43:37.185 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list instrumentation"
+18:43:37.284 detox[40168] i child-process:EXEC_SUCCESS instrumentation:com.example.firstapp.test/androidx.test.runner.AndroidJUnitRunner (target=com.example.firstapp)
+instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+
+18:43:37.284 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:37.785 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:43:37.971 detox[40168] i child-process:EXEC_SUCCESS u0_a201       7117   322   15191088  67048 0                   0 R com.panviravindra.comparez
+
+18:43:37.972 detox[40168] B artifacts-manager onLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"},"pid":7117})
+18:43:37.972 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:43:37.972 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:43:37.972 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:38.059 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:37.000
+
+18:43:38.060 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:35.000" --pid=6976 -f /sdcard/184259793_2.log
+18:43:38.061 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:35.000\" --pid=6976 -f /sdcard/184259793_2.log" terminated with SIGINT
+18:43:38.062 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:37.000\" --pid=7117 -f /sdcard/184259793_2.log"
+18:43:38.062 detox[40168] E artifacts-manager onLaunchApp
+18:43:38.362 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_2.log
+18:43:38.451 detox[40168] i child-process:EXEC_SUCCESS 12	/sdcard/184259793_2.log
+
+18:43:40.895 detox[40168] i child-process:SPAWN_STDOUT INSTRUMENTATION_STATUS: class=com.panviravindra.comparez.DetoxTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.panviravindra.comparez.DetoxTest:
+INSTRUMENTATION_STATUS: test=runDetoxTests
+INSTRUMENTATION_STATUS_CODE: 1
+
+18:43:41.026 detox[40167] B ws-server@62911 connection :62696<->:62911
+18:43:41.044 detox[40167] i ws-server@62911 get
+  data: {"messageId":0,"type":"login","params":{"role":"app","sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}}
+18:43:41.044 detox[40167] i ws-server@62911 send
+  data: {
+    "messageId": 0,
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    }
+  }
+18:43:41.047 detox[40167] i ws-server app joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:41.047 detox[40167] i ws-server@62697 send
+  data: {
+    "type": "appConnected"
+  }
+18:43:41.048 detox[40168] i ws-client get message
+  data: {"type":"appConnected"}
+   
+18:43:41.048 detox[40168] i ws-client send message
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:41.049 detox[40167] i ws-server@62697 get
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:43:41.049 detox[40167] i ws-server@62911 send
+  data: {
+    "type": "isReady",
+    "params": {},
+    "messageId": -1000
+  }
+18:43:45.433 detox[40167] i ws-server@62911 get
+  data: {"messageId":-1000,"type":"ready","params":{}}
+18:43:45.434 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": -1000,
+    "type": "ready",
+    "params": {}
+  }
+18:43:45.435 detox[40168] i ws-client get message
+  data: {"messageId":-1000,"type":"ready","params":{}}
+   
+18:43:45.435 detox[40168] B artifacts-manager onAppReady
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","pid":7117})
+18:43:45.436 detox[40168] E artifacts-manager onAppReady
+18:43:45.436 detox[40168] E device launchApp
+18:43:45.437 detox[40168] E lifecycle beforeEach
+18:43:45.437 detox[40168] B lifecycle test_fn
+18:43:45.441 detox[40168] i ws-client send message
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.EspressoDetox"},"method":"perform","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxViewActions"},"method":"click","args":[]}}]},"messageId":3}
+18:43:45.442 detox[40167] i ws-server@62697 get
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.EspressoDetox"},"method":"perform","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxViewActions"},"method":"click","args":[]}}]},"messageId":3}
+18:43:45.442 detox[40168] B ws-client tap
+  data: {
+    "target": {
+      "type": "Class",
+      "value": "com.wix.detox.espresso.EspressoDetox"
+    },
+    "method": "perform",
+    "args": [
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "com.wix.detox.espresso.DetoxMatcher"
+          },
+          "method": "matcherForTestId",
+          "args": [
+            "homeSearchCta",
+            {
+              "type": "boolean",
+              "value": false
+            }
+          ]
+        }
+      },
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "com.wix.detox.espresso.DetoxViewActions"
+          },
+          "method": "click",
+          "args": []
+        }
+      }
+    ]
+  }
+  stack: Object.tap (/e2e/search.test.js:31:43)
+  Generator.next (<anonymous>)
+  asyncGeneratorStep (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+  _next (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+  /node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+  new Promise (<anonymous>)
+  Object.<anonymous> (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+  Promise.then.completed (/node_modules/jest-circus/build/utils.js:298:28)
+  new Promise (<anonymous>)
+  callAsyncCircusFn (/node_modules/jest-circus/build/utils.js:231:10)
+  _callCircusTest (/node_modules/jest-circus/build/run.js:316:40)
+  processTicksAndRejections (node:internal/process/task_queues:105:5)
+  _runTest (/node_modules/jest-circus/build/run.js:252:3)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:126:9)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:121:9)
+  run (/node_modules/jest-circus/build/run.js:71:3)
+  runAndTransformResultsToJestFormat (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+  jestAdapter (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+  runTestInternal (/node_modules/jest-runner/build/runTest.js:367:16)
+  runTest (/node_modules/jest-runner/build/runTest.js:444:34)
+18:43:45.443 detox[40167] i ws-server@62911 send
+  data: {
+    "type": "invoke",
+    "params": {
+      "target": {
+        "type": "Class",
+        "value": "com.wix.detox.espresso.EspressoDetox"
+      },
+      "method": "perform",
+      "args": [
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "com.wix.detox.espresso.DetoxMatcher"
+            },
+            "method": "matcherForTestId",
+            "args": [
+              "homeSearchCta",
+              {
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          }
+        },
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "com.wix.detox.espresso.DetoxViewActions"
+            },
+            "method": "click",
+            "args": []
+          }
+        }
+      ]
+    },
+    "messageId": 3
+  }
+18:43:45.862 detox[40167] i ws-server@62911 get
+  data: {"messageId":3,"type":"testFailed","params":{"details":"No views in hierarchy found matching: (view.getTag() is \"homeSearchCta\" and view has effective visibility <VISIBLE>)\n","viewHierarchy":"<?xml version='1.0' encoding='UTF_8' standalone='yes' ?>\r\n<ViewHierarchy density=\"2.75\">\r\n  <DecorView class=\"com.android.internal.policy.DecorView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n    <LinearLayout class=\"android.widget.LinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n      <ViewStub class=\"android.view.ViewStub\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" \/>\r\n      <FrameLayout class=\"android.widget.FrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n        <FitWindowsLinearLayout class=\"androidx.appcompat.widget.FitWindowsLinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n          <ViewStubCompat class=\"androidx.appcompat.widget.ViewStubCompat\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" \/>\r\n          <ContentFrameLayout class=\"androidx.appcompat.widget.ContentFrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n            <ReactRootView class=\"com.facebook.react.ReactRootView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"0\" y=\"0\">\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <ProgressBarContainerView class=\"com.facebook.react.views.progressbar.ProgressBarContainerView\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\">\r\n                  <ProgressBar class=\"android.widget.ProgressBar\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\" \/>\r\n                <\/ProgressBarContainerView>\r\n              <\/ReactViewGroup>\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <DebuggingOverlay class=\"com.facebook.react.views.debuggingoverlay.DebuggingOverlay\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" \/>\r\n              <\/ReactViewGroup>\r\n              <ReactSafeAreaView class=\"com.facebook.react.views.safeareaview.ReactSafeAreaView\" width=\"1025\" height=\"279\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1886\">\r\n                <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"133\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1952\">\r\n                  <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1953\">\r\n                    <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1954\">\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"60\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"61\" y=\"1990\">\r\n                        <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"50\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"67\" y=\"1996\">\r\n                          <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"28\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"78\" y=\"1996\" text=\"!\" \/>\r\n                        <\/ReactViewGroup>\r\n                      <\/ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"808\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"144\" y=\"1990\">\r\n                        <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"783\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"169\" y=\"1990\" text=\"Open debugger to view warnings.\" \/>\r\n                      <\/ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"55\" height=\"55\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"965\" y=\"1993\">\r\n                        <ReactImageView class=\"com.facebook.react.views.image.ReactImageView\" width=\"22\" height=\"22\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"982\" y=\"2010\" \/>\r\n                      <\/ReactViewGroup>\r\n                    <\/ReactViewGroup>\r\n                  <\/ReactViewGroup>\r\n                <\/ReactViewGroup>\r\n              <\/ReactSafeAreaView>\r\n            <\/ReactRootView>\r\n          <\/ContentFrameLayout>\r\n        <\/FitWindowsLinearLayout>\r\n      <\/FrameLayout>\r\n    <\/LinearLayout>\r\n  <\/DecorView>\r\n<\/ViewHierarchy>"}}
+18:43:45.863 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": 3,
+    "type": "testFailed",
+    "params": {
+      "details": "No views in hierarchy found matching: (view.getTag() is \"homeSearchCta\" and view has effective visibility <VISIBLE>)\n",
+      "viewHierarchy": "<?xml version='1.0' encoding='UTF_8' standalone='yes' ?>\r\n<ViewHierarchy density=\"2.75\">\r\n  <DecorView class=\"com.android.internal.policy.DecorView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n    <LinearLayout class=\"android.widget.LinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n      <ViewStub class=\"android.view.ViewStub\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n      <FrameLayout class=\"android.widget.FrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n        <FitWindowsLinearLayout class=\"androidx.appcompat.widget.FitWindowsLinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n          <ViewStubCompat class=\"androidx.appcompat.widget.ViewStubCompat\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n          <ContentFrameLayout class=\"androidx.appcompat.widget.ContentFrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n            <ReactRootView class=\"com.facebook.react.ReactRootView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"0\" y=\"0\">\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <ProgressBarContainerView class=\"com.facebook.react.views.progressbar.ProgressBarContainerView\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\">\r\n                  <ProgressBar class=\"android.widget.ProgressBar\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\" />\r\n                </ProgressBarContainerView>\r\n              </ReactViewGroup>\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <DebuggingOverlay class=\"com.facebook.react.views.debuggingoverlay.DebuggingOverlay\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n              </ReactViewGroup>\r\n              <ReactSafeAreaView class=\"com.facebook.react.views.safeareaview.ReactSafeAreaView\" width=\"1025\" height=\"279\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1886\">\r\n                <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"133\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1952\">\r\n                  <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1953\">\r\n                    <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1954\">\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"60\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"61\" y=\"1990\">\r\n                        <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"50\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"67\" y=\"1996\">\r\n                          <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"28\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"78\" y=\"1996\" text=\"!\" />\r\n                        </ReactViewGroup>\r\n                      </ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"808\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"144\" y=\"1990\">\r\n                        <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"783\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"169\" y=\"1990\" text=\"Open debugger to view warnings.\" />\r\n                      </ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"55\" height=\"55\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"965\" y=\"1993\">\r\n                        <ReactImageView class=\"com.facebook.react.views.image.ReactImageView\" width=\"22\" height=\"22\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"982\" y=\"2010\" />\r\n                      </ReactViewGroup>\r\n                    </ReactViewGroup>\r\n                  </ReactViewGroup>\r\n                </ReactViewGroup>\r\n              </ReactSafeAreaView>\r\n            </ReactRootView>\r\n          </ContentFrameLayout>\r\n        </FitWindowsLinearLayout>\r\n      </FrameLayout>\r\n    </LinearLayout>\r\n  </DecorView>\r\n</ViewHierarchy>"
+    }
+  }
+18:43:45.865 detox[40168] i ws-client get message
+  data: {"messageId":3,"type":"testFailed","params":{"details":"No views in hierarchy found matching: (view.getTag() is \"homeSearchCta\" and view has effective visibility <VISIBLE>)\n","viewHierarchy":"<?xml version='1.0' encoding='UTF_8' standalone='yes' ?>\r\n<ViewHierarchy density=\"2.75\">\r\n  <DecorView class=\"com.android.internal.policy.DecorView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n    <LinearLayout class=\"android.widget.LinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n      <ViewStub class=\"android.view.ViewStub\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n      <FrameLayout class=\"android.widget.FrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n        <FitWindowsLinearLayout class=\"androidx.appcompat.widget.FitWindowsLinearLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n          <ViewStubCompat class=\"androidx.appcompat.widget.ViewStubCompat\" width=\"0\" height=\"0\" visibility=\"gone\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n          <ContentFrameLayout class=\"androidx.appcompat.widget.ContentFrameLayout\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n            <ReactRootView class=\"com.facebook.react.ReactRootView\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"0\" y=\"0\">\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <ProgressBarContainerView class=\"com.facebook.react.views.progressbar.ProgressBarContainerView\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\">\r\n                  <ProgressBar class=\"android.widget.ProgressBar\" width=\"99\" height=\"99\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"491\" y=\"1061\" />\r\n                </ProgressBarContainerView>\r\n              </ReactViewGroup>\r\n              <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\">\r\n                <DebuggingOverlay class=\"com.facebook.react.views.debuggingoverlay.DebuggingOverlay\" width=\"1080\" height=\"2220\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"0\" y=\"0\" />\r\n              </ReactViewGroup>\r\n              <ReactSafeAreaView class=\"com.facebook.react.views.safeareaview.ReactSafeAreaView\" width=\"1025\" height=\"279\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1886\">\r\n                <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"133\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1952\">\r\n                  <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1953\">\r\n                    <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"1025\" height=\"132\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!, Open debugger to view warnings.\" x=\"28\" y=\"1954\">\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"60\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"61\" y=\"1990\">\r\n                        <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"50\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"67\" y=\"1996\">\r\n                          <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"28\" height=\"50\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"!\" x=\"78\" y=\"1996\" text=\"!\" />\r\n                        </ReactViewGroup>\r\n                      </ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"808\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"144\" y=\"1990\">\r\n                        <ReactTextView class=\"com.facebook.react.views.text.ReactTextView\" width=\"783\" height=\"61\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" label=\"Open debugger to view warnings.\" x=\"169\" y=\"1990\" text=\"Open debugger to view warnings.\" />\r\n                      </ReactViewGroup>\r\n                      <ReactViewGroup class=\"com.facebook.react.views.view.ReactViewGroup\" width=\"55\" height=\"55\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"965\" y=\"1993\">\r\n                        <ReactImageView class=\"com.facebook.react.views.image.ReactImageView\" width=\"22\" height=\"22\" visibility=\"visible\" alpha=\"1.0\" focused=\"false\" x=\"982\" y=\"2010\" />\r\n                      </ReactViewGroup>\r\n                    </ReactViewGroup>\r\n                  </ReactViewGroup>\r\n                </ReactViewGroup>\r\n              </ReactSafeAreaView>\r\n            </ReactRootView>\r\n          </ContentFrameLayout>\r\n        </FitWindowsLinearLayout>\r\n      </FrameLayout>\r\n    </LinearLayout>\r\n  </DecorView>\r\n</ViewHierarchy>"}}
+   
+18:43:45.866 detox[40168] E ws-client tap
+  error: Test Failed: No views in hierarchy found matching: (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+  
+  
+  View Hierarchy:
+  <?xml version='1.0' encoding='UTF_8' standalone='yes' ?>
+  <ViewHierarchy density="2.75">
+    <DecorView class="com.android.internal.policy.DecorView" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+      <LinearLayout class="android.widget.LinearLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+        <ViewStub class="android.view.ViewStub" width="0" height="0" visibility="gone" alpha="1.0" focused="false" x="0" y="0" />
+        <FrameLayout class="android.widget.FrameLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+          <FitWindowsLinearLayout class="androidx.appcompat.widget.FitWindowsLinearLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+            <ViewStubCompat class="androidx.appcompat.widget.ViewStubCompat" width="0" height="0" visibility="gone" alpha="1.0" focused="false" x="0" y="0" />
+            <ContentFrameLayout class="androidx.appcompat.widget.ContentFrameLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+              <ReactRootView class="com.facebook.react.ReactRootView" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="0" y="0">
+                <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+                  <ProgressBarContainerView class="com.facebook.react.views.progressbar.ProgressBarContainerView" width="99" height="99" visibility="visible" alpha="1.0" focused="false" x="491" y="1061">
+                    <ProgressBar class="android.widget.ProgressBar" width="99" height="99" visibility="visible" alpha="1.0" focused="false" x="491" y="1061" />
+                  </ProgressBarContainerView>
+                </ReactViewGroup>
+                <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+                  <DebuggingOverlay class="com.facebook.react.views.debuggingoverlay.DebuggingOverlay" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0" />
+                </ReactViewGroup>
+                <ReactSafeAreaView class="com.facebook.react.views.safeareaview.ReactSafeAreaView" width="1025" height="279" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1886">
+                  <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="133" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1952">
+                    <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="132" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1953">
+                      <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="132" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1954">
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="60" height="61" visibility="visible" alpha="1.0" focused="false" label="!" x="61" y="1990">
+                          <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="50" height="50" visibility="visible" alpha="1.0" focused="false" label="!" x="67" y="1996">
+                            <ReactTextView class="com.facebook.react.views.text.ReactTextView" width="28" height="50" visibility="visible" alpha="1.0" focused="false" label="!" x="78" y="1996" text="!" />
+                          </ReactViewGroup>
+                        </ReactViewGroup>
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="808" height="61" visibility="visible" alpha="1.0" focused="false" label="Open debugger to view warnings." x="144" y="1990">
+                          <ReactTextView class="com.facebook.react.views.text.ReactTextView" width="783" height="61" visibility="visible" alpha="1.0" focused="false" label="Open debugger to view warnings." x="169" y="1990" text="Open debugger to view warnings." />
+                        </ReactViewGroup>
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="55" height="55" visibility="visible" alpha="1.0" focused="false" x="965" y="1993">
+                          <ReactImageView class="com.facebook.react.views.image.ReactImageView" width="22" height="22" visibility="visible" alpha="1.0" focused="false" x="982" y="2010" />
+                        </ReactViewGroup>
+                      </ReactViewGroup>
+                    </ReactViewGroup>
+                  </ReactViewGroup>
+                </ReactSafeAreaView>
+              </ReactRootView>
+            </ContentFrameLayout>
+          </FitWindowsLinearLayout>
+        </FrameLayout>
+      </LinearLayout>
+    </DecorView>
+  </ViewHierarchy>
+18:43:45.866 detox[40168] B artifacts-manager onTestFnFailure
+  args: ({"error":{"name":"DetoxRuntimeError"}})
+18:43:45.866 detox[40168] E artifacts-manager onTestFnFailure
+18:43:45.867 detox[40168] E lifecycle test_fn
+  error: Test Failed: No views in hierarchy found matching: (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+  
+  
+  View Hierarchy:
+  <?xml version='1.0' encoding='UTF_8' standalone='yes' ?>
+  <ViewHierarchy density="2.75">
+    <DecorView class="com.android.internal.policy.DecorView" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+      <LinearLayout class="android.widget.LinearLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+        <ViewStub class="android.view.ViewStub" width="0" height="0" visibility="gone" alpha="1.0" focused="false" x="0" y="0" />
+        <FrameLayout class="android.widget.FrameLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+          <FitWindowsLinearLayout class="androidx.appcompat.widget.FitWindowsLinearLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+            <ViewStubCompat class="androidx.appcompat.widget.ViewStubCompat" width="0" height="0" visibility="gone" alpha="1.0" focused="false" x="0" y="0" />
+            <ContentFrameLayout class="androidx.appcompat.widget.ContentFrameLayout" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+              <ReactRootView class="com.facebook.react.ReactRootView" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="0" y="0">
+                <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+                  <ProgressBarContainerView class="com.facebook.react.views.progressbar.ProgressBarContainerView" width="99" height="99" visibility="visible" alpha="1.0" focused="false" x="491" y="1061">
+                    <ProgressBar class="android.widget.ProgressBar" width="99" height="99" visibility="visible" alpha="1.0" focused="false" x="491" y="1061" />
+                  </ProgressBarContainerView>
+                </ReactViewGroup>
+                <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0">
+                  <DebuggingOverlay class="com.facebook.react.views.debuggingoverlay.DebuggingOverlay" width="1080" height="2220" visibility="visible" alpha="1.0" focused="false" x="0" y="0" />
+                </ReactViewGroup>
+                <ReactSafeAreaView class="com.facebook.react.views.safeareaview.ReactSafeAreaView" width="1025" height="279" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1886">
+                  <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="133" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1952">
+                    <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="132" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1953">
+                      <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="1025" height="132" visibility="visible" alpha="1.0" focused="false" label="!, Open debugger to view warnings." x="28" y="1954">
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="60" height="61" visibility="visible" alpha="1.0" focused="false" label="!" x="61" y="1990">
+                          <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="50" height="50" visibility="visible" alpha="1.0" focused="false" label="!" x="67" y="1996">
+                            <ReactTextView class="com.facebook.react.views.text.ReactTextView" width="28" height="50" visibility="visible" alpha="1.0" focused="false" label="!" x="78" y="1996" text="!" />
+                          </ReactViewGroup>
+                        </ReactViewGroup>
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="808" height="61" visibility="visible" alpha="1.0" focused="false" label="Open debugger to view warnings." x="144" y="1990">
+                          <ReactTextView class="com.facebook.react.views.text.ReactTextView" width="783" height="61" visibility="visible" alpha="1.0" focused="false" label="Open debugger to view warnings." x="169" y="1990" text="Open debugger to view warnings." />
+                        </ReactViewGroup>
+                        <ReactViewGroup class="com.facebook.react.views.view.ReactViewGroup" width="55" height="55" visibility="visible" alpha="1.0" focused="false" x="965" y="1993">
+                          <ReactImageView class="com.facebook.react.views.image.ReactImageView" width="22" height="22" visibility="visible" alpha="1.0" focused="false" x="982" y="2010" />
+                        </ReactViewGroup>
+                      </ReactViewGroup>
+                    </ReactViewGroup>
+                  </ReactViewGroup>
+                </ReactSafeAreaView>
+              </ReactRootView>
+            </ContentFrameLayout>
+          </FitWindowsLinearLayout>
+        </FrameLayout>
+      </LinearLayout>
+    </DecorView>
+  </ViewHierarchy>
+18:43:45.867 detox[40168] B artifacts-manager onTestDone
+  args: ({"title":"should allow clicking a suggestion chip","fullName":"CompareZ Search Flow should allow clicking a suggestion chip","status":"failed","invocations":1,"timedOut":false})
+18:43:45.867 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:43:45.867 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:45.967 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:45.000
+
+18:43:45.968 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:37.000" --pid=7117 -f /sdcard/184259793_2.log
+18:43:45.969 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:37.000\" --pid=7117 -f /sdcard/184259793_2.log" terminated with SIGINT
+18:43:45.969 detox[40168] E artifacts-manager onTestDone
+18:43:45.970 detox[40168] E lifecycle should allow clicking a suggestion chip
+18:43:45.970 detox[40168] i lifecycle CompareZ Search Flow: should allow clicking a suggestion chip [FAIL]
+18:43:45.970 detox[40168] B artifacts-manager onRunDescribeFinish
+  args: ({"name":"CompareZ Search Flow"})
+18:43:45.970 detox[40168] E artifacts-manager onRunDescribeFinish
+18:43:45.970 detox[40168] E lifecycle CompareZ Search Flow
+18:43:45.971 detox[40168] B artifacts-manager onRunDescribeFinish
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+18:43:45.971 detox[40168] E artifacts-manager onRunDescribeFinish
+18:43:45.971 detox[40168] E lifecycle run the tests
+18:43:45.984 detox[40168] B lifecycle tear down environment
+18:43:45.984 detox[40168] B artifacts-manager onBeforeCleanup
+  args: ()
+18:43:45.985 detox[40168] i artifact:ARTIFACT_SAVE saving ADBLogcatRecording to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Search Flow should allow clicking a suggestion chip/device.log
+18:43:45.985 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 pull "/sdcard/184259793_2.log" "artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Search Flow should allow clicking a suggestion chip/device.log"
+18:43:46.022 detox[40168] i child-process:EXEC_SUCCESS /sdcard/184259793_2.log: 1 file pulled, 0 skipped. 20.4 MB/s (65536 bytes in 0.003s)
+
+18:43:46.023 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm  \"/sdcard/184259793_2.log\""
+18:43:46.137 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:46.138 detox[40167] i ws-server@62697 get
+  data: {"type":"cleanup","params":{"stopRunner":false},"messageId":-49642}
+18:43:46.138 detox[40168] i artifact:ARTIFACT_SAVE saving FileArtifact to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/detox_pid_40168.json.log { append: true }
+18:43:46.138 detox[40168] i artifact:ARTIFACT_SAVE saving FileArtifact to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/detox_pid_40168.log { append: true }
+18:43:46.138 detox[40168] E artifacts-manager onBeforeCleanup
+18:43:46.138 detox[40168] i ws-client send message
+  data: {"type":"cleanup","params":{"stopRunner":false},"messageId":-49642}
+18:43:46.139 detox[40167] i ws-server@62911 send
+  data: {
+    "type": "cleanup",
+    "params": {
+      "stopRunner": false
+    },
+    "messageId": -49642
+  }
+18:43:46.163 detox[40167] i ws-server@62911 get
+  data: {"messageId":-49642,"type":"cleanupDone","params":{}}
+18:43:46.163 detox[40167] i ws-server@62697 send
+  data: {
+    "messageId": -49642,
+    "type": "cleanupDone",
+    "params": {}
+  }
+18:43:46.163 detox[40168] i ws-client get message
+  data: {"messageId":-49642,"type":"cleanupDone","params":{}}
+   
+18:43:46.164 detox[40167] i ws-server tester exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:46.164 detox[40167] i ws-server@62911 send
+  data: {
+    "type": "testerDisconnected",
+    "messageId": -1
+  }
+18:43:46.164 detox[40167] E ws-server@62697 connection :62696<->:62697
+18:43:46.165 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:46.166 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner terminated with SIGINT
+18:43:46.166 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse --remove tcp:62696
+18:43:46.167 detox[40167] i ipc received event of :  deallocateDevice {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:46.167 detox[40167] B device@0 free: emulator-16272
+  data: {}
+18:43:46.167 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  deallocateDevice , {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:46.168 detox[40167] E device@0 free: emulator-16272
+18:43:46.168 detox[40167] i ipc dispatching event to socket  :  deallocateDeviceDone {}
+18:43:46.168 detox[40168] i ipc ## received events ##
+18:43:46.168 detox[40168] i ipc detected event deallocateDeviceDone {}
+18:43:46.168 detox[40168] E lifecycle tear down environment
+18:43:46.168 detox[40168] E lifecycle e2e/search.test.js
+18:43:46.171 detox[40168] B lifecycle e2e/navigation.test.js
+18:43:46.175 detox[40168] B lifecycle set up environment
+18:43:46.175 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  registerWorker , { workerId: 'w1' }
+18:43:46.176 detox[40167] i ipc received event of :  registerWorker { workerId: 'w1' }
+18:43:46.176 detox[40167] i ipc dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+18:43:46.176 detox[40168] i ipc ## received events ##
+18:43:46.176 detox[40168] i ipc detected event registerWorkerDone { workersCount: 1 }
+18:43:46.177 detox[40167] B ws-server@62932 connection :62696<->:62932
+18:43:46.178 detox[40167] i ws-server@62932 get
+  data: {"type":"login","params":{"sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12","role":"tester"},"messageId":0}
+18:43:46.178 detox[40167] i ws-server@62932 send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    },
+    "messageId": 0
+  }
+18:43:46.178 detox[40167] i ws-server tester joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:46.178 detox[40167] i ipc received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_34_extension_level_7_arm64-v8a' }
+  }
+}
+18:43:46.178 detox[40168] i ws-client opened web socket to: ws://localhost:62696
+18:43:46.178 detox[40168] i ws-client send message
+  data: {"type":"login","params":{"sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12","role":"tester"},"messageId":0}
+18:43:46.178 detox[40168] i ws-client get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":true},"messageId":0}
+   
+18:43:46.178 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Pixel_3a_API_34_extension_level_7_arm64-v8a' }
+  }
+}
+18:43:46.179 detox[40167] B device@1 allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Pixel_3a_API_34_extension_level_7_arm64-v8a"
+    }
+  }
+18:43:46.186 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:46.209 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb"  devices
+18:43:46.226 detox[40167] i child-process:EXEC_SUCCESS List of devices attached
+emulator-16272	device
+
+
+18:43:46.226 detox[40167] i device:TELNET_CONNECTING port: 16272, host: localhost
+18:43:46.228 detox[40167] i device:DEVICE_LOOKUP Found a matching & free device emulator-16272
+18:43:46.229 detox[40167] i device settled on emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)
+  data: {
+    "id": "emulator-16272",
+    "adbName": "emulator-16272",
+    "name": "emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)"
+  }
+18:43:46.229 detox[40167] E device@1 allocate
+18:43:46.229 detox[40167] B device@1 post-allocate: emulator-16272
+  data: {
+    "id": "emulator-16272",
+    "adbName": "emulator-16272",
+    "name": "emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)"
+  }
+18:43:46.229 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "getprop dev.bootcomplete"
+18:43:46.339 detox[40167] i child-process:EXEC_SUCCESS 1
+
+18:43:46.339 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global animator_duration_scale 0"
+18:43:46.438 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:46.438 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global window_animation_scale 0"
+18:43:46.537 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:46.537 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "settings put global transition_animation_scale 0"
+18:43:46.606 detox[40167] i child-process:EXEC_SUCCESS 
+18:43:46.607 detox[40167] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "dumpsys power | grep \"^[ ]*m[UW].*=\""
+18:43:47.129 detox[40167] i child-process:EXEC_SUCCESS   mWakefulness=Awake
+  mWakefulnessChanging=false
+  mWakeLockSummary=0x0
+  mWakeUpWhenPluggedOrUnpluggedConfig=false
+  mWakeUpWhenPluggedOrUnpluggedInTheaterModeConfig=false
+  mUserActivityTimeoutOverrideFromWindowManager=-1
+  mUserInactiveOverrideFromWindowManager=false
+  mUserId=0
+  mWakeLockSummary=0x0
+  mUserInteractionBackoffMillis=60000
+
+18:43:47.130 detox[40167] E device@1 post-allocate: emulator-16272
+18:43:47.130 detox[40167] i ipc dispatching event to socket  :  allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:47.131 detox[40168] i ipc ## received events ##
+18:43:47.132 detox[40168] i ipc detected event allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:43:47.133 detox[40168] B artifacts-manager onBootDevice
+  args: ({"deviceId":"emulator-16272"})
+18:43:47.133 detox[40168] E artifacts-manager onBootDevice
+18:43:47.135 detox[40168] B device installUtilBinaries
+  args: ()
+18:43:47.135 detox[40168] E device installUtilBinaries
+18:43:47.136 detox[40168] B device selectApp
+  args: ("default")
+18:43:47.136 detox[40168] E device selectApp
+18:43:47.137 detox[40168] B device uninstallApp
+  args: ()
+18:43:47.137 detox[40168] B artifacts-manager onBeforeUninstallApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:47.137 detox[40168] E artifacts-manager onBeforeUninstallApp
+18:43:47.137 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list packages com.panviravindra.comparez"
+18:43:47.359 detox[40168] i child-process:EXEC_SUCCESS package:com.panviravindra.comparez
+package:com.panviravindra.comparez.test
+
+18:43:47.360 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 uninstall com.panviravindra.comparez
+18:43:47.828 detox[40167] i ws-server app exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:43:47.828 detox[40167] i ws-server@62932 send
+  data: {
+    "type": "appDisconnected"
+  }
+18:43:47.828 detox[40167] E ws-server@62911 connection :62696<->:62911
+18:43:47.828 detox[40168] i ws-client get message
+  data: {"type":"appDisconnected"}
+   
+18:43:48.583 detox[40168] i child-process:EXEC_SUCCESS Success
+
+18:43:48.584 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list packages com.panviravindra.comparez.test"
+18:43:48.828 detox[40168] i child-process:EXEC_SUCCESS package:com.panviravindra.comparez.test
+
+18:43:48.829 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 uninstall com.panviravindra.comparez.test
+18:43:49.864 detox[40168] i child-process:EXEC_SUCCESS Success
+
+18:43:49.864 detox[40168] E device uninstallApp
+18:43:49.864 detox[40168] B device selectApp
+  args: ("default")
+18:43:49.864 detox[40168] B device terminateApp
+  args: ()
+18:43:49.864 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:49.865 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:49.865 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:50.078 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:50.078 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:50.078 detox[40168] E artifacts-manager onTerminateApp
+18:43:50.078 detox[40168] E device terminateApp
+18:43:50.078 detox[40168] E device selectApp
+18:43:50.079 detox[40168] B device installApp
+  args: ()
+18:43:50.079 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/build-tools/36.1.0/aapt" dump xmlstrings "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" AndroidManifest.xml
+18:43:50.099 detox[40168] i child-process:EXEC_SUCCESS String pool of 100 unique UTF-16 non-sorted strings, 100 entries and 0 styles using 5648 bytes:
+String #0: theme
+String #1: label
+String #2: icon
+String #3: name
+String #4: permission
+String #5: protectionLevel
+String #6: enabled
+String #7: debuggable
+String #8: exported
+String #9: authorities
+String #10: grantUriPermissions
+String #11: launchMode
+String #12: screenOrientation
+String #13: configChanges
+String #14: value
+String #15: resource
+String #16: scheme
+String #17: minSdkVersion
+String #18: versionCode
+String #19: versionName
+String #20: windowSoftInputMode
+String #21: targetSdkVersion
+String #22: allowBackup
+String #23: supportsRtl
+String #24: extractNativeLibs
+String #25: usesCleartextTraffic
+String #26: directBootAware
+String #27: roundIcon
+String #28: compileSdkVersion
+String #29: compileSdkVersionCodename
+String #30: appComponentFactory
+String #31: enableOnBackInvokedCallback
+String #32: 1.0.0
+String #33: 16
+String #34: ALWAYS
+String #35: action
+String #36: activity
+String #37: android
+String #38: android.intent.action.MAIN
+String #39: android.intent.action.OPEN_DOCUMENT_TREE
+String #40: android.intent.action.VIEW
+String #41: android.intent.category.BROWSABLE
+String #42: android.intent.category.LAUNCHER
+String #43: android.permission.DUMP
+String #44: android.permission.INTERNET
+String #45: android.permission.READ_EXTERNAL_STORAGE
+String #46: android.permission.SYSTEM_ALERT_WINDOW
+String #47: android.permission.USE_BIOMETRIC
+String #48: android.permission.USE_FINGERPRINT
+String #49: android.permission.VIBRATE
+String #50: android.permission.WRITE_EXTERNAL_STORAGE
+String #51: android.support.FILE_PROVIDER_PATHS
+String #52: androidx.core.app.CoreComponentFactory
+String #53: androidx.emoji2.text.EmojiCompatInitializer
+String #54: androidx.lifecycle.ProcessLifecycleInitializer
+String #55: androidx.profileinstaller.ProfileInstallReceiver
+String #56: androidx.profileinstaller.ProfileInstallerInitializer
+String #57: androidx.profileinstaller.action.BENCHMARK_OPERATION
+String #58: androidx.profileinstaller.action.INSTALL_PROFILE
+String #59: androidx.profileinstaller.action.SAVE_PROFILE
+String #60: androidx.profileinstaller.action.SKIP_FILE
+String #61: androidx.startup
+String #62: androidx.startup.InitializationProvider
+String #63: application
+String #64: category
+String #65: com.facebook.react.devsupport.DevSettingsActivity
+String #66: com.facebook.soloader.enabled
+String #67: com.panviravindra.comparez
+String #68: com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+String #69: com.panviravindra.comparez.FileSystemFileProvider
+String #70: com.panviravindra.comparez.MainActivity
+String #71: com.panviravindra.comparez.MainApplication
+String #72: com.panviravindra.comparez.androidx-startup
+String #73: com.panviravindra.comparez.fileprovider
+String #74: com.reactnativecommunity.webview.RNCWebViewFileProvider
+String #75: data
+String #76: expo.modules.adapters.react.apploader.RNHeadlessAppLoader
+String #77: expo.modules.filesystem.FileSystemFileProvider
+String #78: expo.modules.updates.ENABLED
+String #79: expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH
+String #80: expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS
+String #81: http://schemas.android.com/apk/res/android
+String #82: https
+String #83: intent
+String #84: intent-filter
+String #85: manifest
+String #86: meta-data
+String #87: org.chromium.intent.action.IS_READY_TO_PAY
+String #88: org.chromium.intent.action.PAY
+String #89: org.chromium.intent.action.UPDATE_PAYMENT_DETAILS
+String #90: org.unimodules.core.AppLoader#react-native-headless
+String #91: package
+String #92: permission
+String #93: platformBuildVersionCode
+String #94: platformBuildVersionName
+String #95: provider
+String #96: queries
+String #97: receiver
+String #98: uses-permission
+String #99: uses-sdk
+
+18:43:50.099 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/build-tools/36.1.0/aapt" dump xmlstrings "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" AndroidManifest.xml
+18:43:50.117 detox[40168] i child-process:EXEC_SUCCESS String pool of 43 unique UTF-16 non-sorted strings, 43 entries and 0 styles using 2180 bytes:
+String #0: theme
+String #1: label
+String #2: name
+String #3: debuggable
+String #4: exported
+String #5: priority
+String #6: targetPackage
+String #7: handleProfiling
+String #8: functionalTest
+String #9: minSdkVersion
+String #10: targetSdkVersion
+String #11: extractNativeLibs
+String #12: compileSdkVersion
+String #13: compileSdkVersionCodename
+String #14: 16
+String #15: Tests for com.panviravindra.comparez
+String #16: activity
+String #17: android
+String #18: android.intent.category.LAUNCHER
+String #19: android.permission.REORDER_TASKS
+String #20: android.test.runner
+String #21: androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity
+String #22: androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity
+String #23: androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity
+String #24: androidx.test.orchestrator
+String #25: androidx.test.runner.AndroidJUnitRunner
+String #26: androidx.test.services
+String #27: application
+String #28: category
+String #29: com.google.android.apps.common.testing.services
+String #30: com.panviravindra.comparez
+String #31: com.panviravindra.comparez.test
+String #32: http://schemas.android.com/apk/res/android
+String #33: instrumentation
+String #34: intent-filter
+String #35: manifest
+String #36: package
+String #37: platformBuildVersionCode
+String #38: platformBuildVersionName
+String #39: queries
+String #40: uses-library
+String #41: uses-permission
+String #42: uses-sdk
+
+18:43:50.117 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm -fr /data/local/tmp/detox"
+18:43:50.301 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:50.301 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "mkdir -p /data/local/tmp/detox"
+18:43:50.442 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:50.442 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 push "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" "/data/local/tmp/detox/Application.apk"
+18:43:52.663 detox[40168] i child-process:EXEC_SUCCESS /Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk: 1 file pushed, 0 skipped. 246.4 MB/s (113692951 bytes in 0.440s)
+
+18:43:52.667 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+18:43:56.491 detox[40168] i child-process:SPAWN_STDOUT Success
+
+18:43:56.497 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Application.apk exited with code #0
+18:43:56.497 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 push "/Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "/data/local/tmp/detox/Test.apk"
+18:43:56.639 detox[40168] i child-process:EXEC_SUCCESS /Users/chethannv/Desktop/comparez/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk: 1 file pushed, 0 skipped. 194.2 MB/s (5511394 bytes in 0.027s)
+
+18:43:56.641 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Test.apk
+18:43:58.289 detox[40168] i child-process:SPAWN_STDOUT Success
+
+18:43:58.297 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell pm install -r -g -t /data/local/tmp/detox/Test.apk exited with code #0
+18:43:58.298 detox[40168] B device reverseTcpPort
+  args: (8081)
+18:43:58.298 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:8081 tcp:8081
+18:43:58.341 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:58.341 detox[40168] E device reverseTcpPort
+18:43:58.341 detox[40168] E device installApp
+18:43:58.341 detox[40168] B device selectApp
+  args: ("default")
+18:43:58.341 detox[40168] B device terminateApp
+  args: ()
+18:43:58.341 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:58.341 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:58.342 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:58.522 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:58.522 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:58.522 detox[40168] E artifacts-manager onTerminateApp
+18:43:58.522 detox[40168] E device terminateApp
+18:43:58.522 detox[40168] E device selectApp
+18:43:58.522 detox[40168] E lifecycle set up environment
+18:43:58.572 detox[40168] i lifecycle navigation.test.js is assigned to emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)
+18:43:58.573 detox[40168] B lifecycle run the tests
+18:43:58.573 detox[40168] B artifacts-manager onRunDescribeStart
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+18:43:58.573 detox[40168] E artifacts-manager onRunDescribeStart
+18:43:58.574 detox[40168] B lifecycle CompareZ Navigation Flow
+18:43:58.574 detox[40168] B artifacts-manager onRunDescribeStart
+  args: ({"name":"CompareZ Navigation Flow"})
+18:43:58.575 detox[40168] E artifacts-manager onRunDescribeStart
+18:43:58.577 detox[40168] B lifecycle beforeAll
+18:43:58.578 detox[40168] B device launchApp
+  args: ()
+18:43:58.579 detox[40168] B device terminateApp
+  args: ("com.panviravindra.comparez")
+18:43:58.579 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:58.579 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:43:58.579 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:43:58.732 detox[40168] i child-process:EXEC_SUCCESS 
+18:43:58.732 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:43:58.732 detox[40168] E artifacts-manager onTerminateApp
+18:43:58.732 detox[40168] E device terminateApp
+18:43:58.732 detox[40168] B artifacts-manager onBeforeLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}})
+18:43:58.732 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:43:58.816 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:43:57.000
+
+18:43:58.816 detox[40168] E artifacts-manager onBeforeLaunchApp
+18:43:58.816 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:62696 tcp:62696
+18:43:58.833 detox[40168] i child-process:EXEC_SUCCESS 62696
+
+18:43:58.833 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list instrumentation"
+18:43:58.980 detox[40168] i child-process:EXEC_SUCCESS instrumentation:com.example.firstapp.test/androidx.test.runner.AndroidJUnitRunner (target=com.example.firstapp)
+instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+
+18:43:58.981 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:43:59.482 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:44:01.171 detox[40168] i child-process:EXEC_FAIL ""/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+18:44:01.172 detox[40168] i child-process:EXEC_FAIL 
+18:44:01.172 detox[40168] i child-process:EXEC_FAIL 
+18:44:01.674 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:44:01.969 detox[40168] i child-process:EXEC_SUCCESS u0_a203       7410   322   15191088  69620 0                   0 R com.panviravindra.comparez
+
+18:44:01.970 detox[40168] B artifacts-manager onLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"},"pid":7410})
+18:44:01.970 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:44:01.971 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:57.000\" --pid=7410 -f /sdcard/184259793_3.log"
+18:44:01.971 detox[40168] E artifacts-manager onLaunchApp
+18:44:02.273 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_3.log
+18:44:02.392 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_3.log
+
+18:44:09.390 detox[40168] i child-process:SPAWN_STDOUT INSTRUMENTATION_STATUS: class=com.panviravindra.comparez.DetoxTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.panviravindra.comparez.DetoxTest:
+INSTRUMENTATION_STATUS: test=runDetoxTests
+INSTRUMENTATION_STATUS_CODE: 1
+
+18:44:09.593 detox[40167] B ws-server@63031 connection :62696<->:63031
+18:44:09.616 detox[40167] i ws-server@63031 get
+  data: {"messageId":0,"type":"login","params":{"role":"app","sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}}
+18:44:09.616 detox[40167] i ws-server@63031 send
+  data: {
+    "messageId": 0,
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    }
+  }
+18:44:09.616 detox[40167] i ws-server app joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:44:09.617 detox[40167] i ws-server@62932 send
+  data: {
+    "type": "appConnected"
+  }
+18:44:09.617 detox[40168] i ws-client get message
+  data: {"type":"appConnected"}
+   
+18:44:09.618 detox[40167] i ws-server@62932 get
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:44:09.618 detox[40168] i ws-client send message
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:44:09.619 detox[40167] i ws-server@63031 send
+  data: {
+    "type": "isReady",
+    "params": {},
+    "messageId": -1000
+  }
+18:44:19.619 detox[40168] i ws-client send message
+  data: {"type":"currentStatus","params":{},"messageId":1}
+18:44:19.621 detox[40167] i ws-server@62932 get
+  data: {"type":"currentStatus","params":{},"messageId":1}
+18:44:19.621 detox[40167] i ws-server@63031 send
+  data: {
+    "type": "currentStatus",
+    "params": {},
+    "messageId": 1
+  }
+18:44:21.621 detox[40167] i ws-server@63031 get
+  data: {"messageId":-1000,"type":"ready","params":{}}
+18:44:21.622 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": -1000,
+    "type": "ready",
+    "params": {}
+  }
+18:44:21.623 detox[40168] i ws-client get message
+  data: {"messageId":-1000,"type":"ready","params":{}}
+   
+18:44:21.624 detox[40168] B artifacts-manager onAppReady
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","pid":7410})
+18:44:21.624 detox[40168] E artifacts-manager onAppReady
+18:44:21.624 detox[40168] E device launchApp
+18:44:21.626 detox[40168] E lifecycle beforeAll
+18:44:21.627 detox[40168] B lifecycle should navigate between Home, Search, and Profile
+18:44:21.627 detox[40168] i lifecycle CompareZ Navigation Flow: should navigate between Home, Search, and Profile
+18:44:21.629 detox[40168] B artifacts-manager onTestStart
+  args: ({"title":"should navigate between Home, Search, and Profile","fullName":"CompareZ Navigation Flow should navigate between Home, Search, and Profile","status":"running","invocations":1})
+18:44:21.630 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:44:21.630 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:44:21.664 detox[40167] i ws-server@63031 get
+  data: {"messageId":1,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+18:44:21.664 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": 1,
+    "type": "currentStatusResult",
+    "params": {
+      "status": {
+        "app_status": "idle"
+      }
+    }
+  }
+18:44:21.665 detox[40168] i ws-client get message
+  data: {"messageId":1,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+   
+18:44:21.665 detox[40168] i ws-client:APP_STATUS The app seems to be idle
+18:44:21.771 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:44:20.000
+
+18:44:21.773 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:43:57.000" --pid=7410 -f /sdcard/184259793_3.log
+18:44:21.773 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:43:57.000\" --pid=7410 -f /sdcard/184259793_3.log" terminated with SIGINT
+18:44:21.773 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:44:21.774 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:44:20.000\" --pid=7410 -f /sdcard/184259793_4.log"
+18:44:21.774 detox[40168] E artifacts-manager onTestStart
+18:44:21.774 detox[40168] B lifecycle beforeEach
+18:44:21.774 detox[40168] E lifecycle beforeEach
+18:44:21.774 detox[40168] B lifecycle beforeEach
+18:44:21.775 detox[40168] B device launchApp
+  args: ({"newInstance":true})
+18:44:21.775 detox[40168] B device terminateApp
+  args: ("com.panviravindra.comparez")
+18:44:21.775 detox[40168] B artifacts-manager onBeforeTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:44:21.775 detox[40168] E artifacts-manager onBeforeTerminateApp
+18:44:21.777 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:44:21.777 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner terminated with SIGINT
+18:44:21.777 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "am force-stop com.panviravindra.comparez"
+18:44:21.778 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse --remove tcp:62696
+18:44:21.818 detox[40168] i child-process:EXEC_SUCCESS 
+18:44:22.075 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_4.log
+18:44:22.234 detox[40167] i ws-server app exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:44:22.234 detox[40167] i ws-server@62932 send
+  data: {
+    "type": "appDisconnected"
+  }
+18:44:22.234 detox[40167] E ws-server@63031 connection :62696<->:63031
+18:44:22.234 detox[40168] i ws-client get message
+  data: {"type":"appDisconnected"}
+   
+18:44:22.250 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_4.log
+
+18:44:22.414 detox[40168] i child-process:EXEC_SUCCESS 
+18:44:22.414 detox[40168] B artifacts-manager onTerminateApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez"})
+18:44:22.414 detox[40168] E artifacts-manager onTerminateApp
+18:44:22.414 detox[40168] E device terminateApp
+18:44:22.415 detox[40168] B artifacts-manager onBeforeLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}})
+18:44:22.415 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:44:22.643 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:44:21.000
+
+18:44:22.643 detox[40168] E artifacts-manager onBeforeLaunchApp
+18:44:22.643 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse tcp:62696 tcp:62696
+18:44:22.674 detox[40168] i child-process:EXEC_SUCCESS 62696
+
+18:44:22.674 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "pm list instrumentation"
+18:44:22.877 detox[40168] i child-process:EXEC_SUCCESS instrumentation:com.example.firstapp.test/androidx.test.runner.AndroidJUnitRunner (target=com.example.firstapp)
+instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+
+18:44:22.878 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:44:23.379 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "ps | grep \"com\.panviravindra\.comparez$\""
+18:44:24.930 detox[40168] i child-process:EXEC_SUCCESS u0_a203       7556   322   15328204 113420 0                   0 R com.panviravindra.comparez
+
+18:44:24.931 detox[40168] B artifacts-manager onLaunchApp
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:62696","detoxSessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"},"pid":7556})
+18:44:24.931 detox[40168] i artifact:ARTIFACT_START starting ADBLogcatRecording
+18:44:24.931 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:44:24.931 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:44:25.090 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:44:24.000
+
+18:44:25.092 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:44:20.000" --pid=7410 -f /sdcard/184259793_4.log
+18:44:25.093 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:44:20.000\" --pid=7410 -f /sdcard/184259793_4.log" terminated with SIGINT
+18:44:25.094 detox[40168] i child-process:SPAWN_CMD /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:44:24.000\" --pid=7556 -f /sdcard/184259793_4.log"
+18:44:25.094 detox[40168] E artifacts-manager onLaunchApp
+18:44:25.395 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell du /sdcard/184259793_4.log
+18:44:25.541 detox[40168] i child-process:EXEC_SUCCESS 4	/sdcard/184259793_4.log
+
+18:44:29.186 detox[40168] i child-process:SPAWN_STDOUT INSTRUMENTATION_STATUS: class=com.panviravindra.comparez.DetoxTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.panviravindra.comparez.DetoxTest:
+INSTRUMENTATION_STATUS: test=runDetoxTests
+INSTRUMENTATION_STATUS_CODE: 1
+
+18:44:29.373 detox[40167] B ws-server@63088 connection :62696<->:63088
+18:44:29.388 detox[40167] i ws-server@63088 get
+  data: {"messageId":0,"type":"login","params":{"role":"app","sessionId":"cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12"}}
+18:44:29.389 detox[40167] i ws-server@63088 send
+  data: {
+    "messageId": 0,
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": true
+    }
+  }
+18:44:29.389 detox[40167] i ws-server app joined session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:44:29.389 detox[40167] i ws-server@62932 send
+  data: {
+    "type": "appConnected"
+  }
+18:44:29.389 detox[40167] i ws-server@62932 get
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:44:29.389 detox[40167] i ws-server@63088 send
+  data: {
+    "type": "isReady",
+    "params": {},
+    "messageId": -1000
+  }
+18:44:29.389 detox[40168] i ws-client get message
+  data: {"type":"appConnected"}
+   
+18:44:29.389 detox[40168] i ws-client send message
+  data: {"type":"isReady","params":{},"messageId":-1000}
+18:44:39.392 detox[40168] i ws-client send message
+  data: {"type":"currentStatus","params":{},"messageId":2}
+18:44:39.393 detox[40167] i ws-server@62932 get
+  data: {"type":"currentStatus","params":{},"messageId":2}
+18:44:39.394 detox[40167] i ws-server@63088 send
+  data: {
+    "type": "currentStatus",
+    "params": {},
+    "messageId": 2
+  }
+18:44:39.948 detox[40167] i ws-server@63088 get
+  data: {"messageId":-1000,"type":"ready","params":{}}
+18:44:39.948 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": -1000,
+    "type": "ready",
+    "params": {}
+  }
+18:44:39.949 detox[40168] i ws-client get message
+  data: {"messageId":-1000,"type":"ready","params":{}}
+   
+18:44:39.950 detox[40168] B artifacts-manager onAppReady
+  args: ({"deviceId":"emulator-16272","bundleId":"com.panviravindra.comparez","pid":7556})
+18:44:39.951 detox[40168] E artifacts-manager onAppReady
+18:44:39.952 detox[40168] E device launchApp
+18:44:39.952 detox[40168] E lifecycle beforeEach
+18:44:39.953 detox[40168] B lifecycle test_fn
+18:44:39.955 detox[40168] i ws-client send message
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"assertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}}]},"messageId":3}
+18:44:39.956 detox[40167] i ws-server@62932 get
+  data: {"type":"invoke","params":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"assertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}}]},"messageId":3}
+18:44:39.957 detox[40167] i ws-server@63088 send
+  data: {
+    "type": "invoke",
+    "params": {
+      "target": {
+        "type": "Class",
+        "value": "com.wix.detox.espresso.DetoxAssertion"
+      },
+      "method": "assertMatcher",
+      "args": [
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "androidx.test.espresso.Espresso"
+            },
+            "method": "onView",
+            "args": [
+              {
+                "type": "Invocation",
+                "value": {
+                  "target": {
+                    "type": "Class",
+                    "value": "com.wix.detox.espresso.DetoxMatcher"
+                  },
+                  "method": "matcherForTestId",
+                  "args": [
+                    "homeSearchCta",
+                    {
+                      "type": "boolean",
+                      "value": false
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Invocation",
+          "value": {
+            "target": {
+              "type": "Class",
+              "value": "com.wix.detox.espresso.DetoxMatcher"
+            },
+            "method": "matcherForSufficientlyVisible",
+            "args": [
+              {
+                "type": "Integer",
+                "value": 75
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "messageId": 3
+  }
+18:44:39.957 detox[40168] B ws-client expect element to be visible
+  data: {
+    "target": {
+      "type": "Class",
+      "value": "com.wix.detox.espresso.DetoxAssertion"
+    },
+    "method": "assertMatcher",
+    "args": [
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "androidx.test.espresso.Espresso"
+          },
+          "method": "onView",
+          "args": [
+            {
+              "type": "Invocation",
+              "value": {
+                "target": {
+                  "type": "Class",
+                  "value": "com.wix.detox.espresso.DetoxMatcher"
+                },
+                "method": "matcherForTestId",
+                "args": [
+                  "homeSearchCta",
+                  {
+                    "type": "boolean",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "Invocation",
+        "value": {
+          "target": {
+            "type": "Class",
+            "value": "com.wix.detox.espresso.DetoxMatcher"
+          },
+          "method": "matcherForSufficientlyVisible",
+          "args": [
+            {
+              "type": "Integer",
+              "value": 75
+            }
+          ]
+        }
+      }
+    ]
+  }
+  stack: Object.toBeVisible (/e2e/navigation.test.js:12:51)
+  Generator.next (<anonymous>)
+  asyncGeneratorStep (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+  _next (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+  /node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+  new Promise (<anonymous>)
+  Object.<anonymous> (/node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+  Promise.then.completed (/node_modules/jest-circus/build/utils.js:298:28)
+  new Promise (<anonymous>)
+  callAsyncCircusFn (/node_modules/jest-circus/build/utils.js:231:10)
+  _callCircusTest (/node_modules/jest-circus/build/run.js:316:40)
+  processTicksAndRejections (node:internal/process/task_queues:105:5)
+  _runTest (/node_modules/jest-circus/build/run.js:252:3)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:126:9)
+  _runTestsForDescribeBlock (/node_modules/jest-circus/build/run.js:121:9)
+  run (/node_modules/jest-circus/build/run.js:71:3)
+  runAndTransformResultsToJestFormat (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+  jestAdapter (/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+  runTestInternal (/node_modules/jest-runner/build/runTest.js:367:16)
+  runTest (/node_modules/jest-runner/build/runTest.js:444:34)
+18:44:39.976 detox[40167] i ws-server@63088 get
+  data: {"messageId":2,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+18:44:39.977 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": 2,
+    "type": "currentStatusResult",
+    "params": {
+      "status": {
+        "app_status": "idle"
+      }
+    }
+  }
+18:44:39.977 detox[40168] i ws-client get message
+  data: {"messageId":2,"type":"currentStatusResult","params":{"status":{"app_status":"idle"}}}
+   
+18:44:39.977 detox[40168] i ws-client:APP_STATUS The app seems to be idle
+18:44:40.234 detox[40167] i ws-server@63088 get
+  data: {"messageId":3,"type":"testFailed","params":{"details":"'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n","viewHierarchy":null}}
+18:44:40.234 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": 3,
+    "type": "testFailed",
+    "params": {
+      "details": "'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n",
+      "viewHierarchy": null
+    }
+  }
+18:44:40.234 detox[40168] i ws-client get message
+  data: {"messageId":3,"type":"testFailed","params":{"details":"'(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.\nExpected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)\n     Got: was null\n\n","viewHierarchy":null}}
+   
+18:44:40.235 detox[40168] E ws-client expect element to be visible
+  error: Test Failed: '(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.
+  Expected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)
+       Got: was null
+  
+  
+18:44:40.235 detox[40168] B artifacts-manager onTestFnFailure
+  args: ({"error":{"name":"DetoxRuntimeError"}})
+18:44:40.235 detox[40168] E artifacts-manager onTestFnFailure
+18:44:40.235 detox[40168] E lifecycle test_fn
+  error: Test Failed: '(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)' doesn't match the selected view.
+  Expected: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)
+       Got: was null
+  
+  
+18:44:40.235 detox[40168] B artifacts-manager onTestDone
+  args: ({"title":"should navigate between Home, Search, and Profile","fullName":"CompareZ Navigation Flow should navigate between Home, Search, and Profile","status":"failed","invocations":1,"timedOut":false})
+18:44:40.236 detox[40168] i artifact:ARTIFACT_STOP stopping ADBLogcatRecording
+18:44:40.236 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "date +\"%m-%d %T.000\""
+18:44:40.343 detox[40168] i child-process:EXEC_SUCCESS 04-12 18:44:39.000
+
+18:44:40.345 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell logcat -T "04-12 18:44:24.000" --pid=7556 -f /sdcard/184259793_4.log
+18:44:40.345 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell "logcat -T \"04-12 18:44:24.000\" --pid=7556 -f /sdcard/184259793_4.log" terminated with SIGINT
+18:44:40.345 detox[40168] E artifacts-manager onTestDone
+18:44:40.345 detox[40168] E lifecycle should navigate between Home, Search, and Profile
+18:44:40.345 detox[40168] i lifecycle CompareZ Navigation Flow: should navigate between Home, Search, and Profile [FAIL]
+18:44:40.346 detox[40168] B artifacts-manager onRunDescribeFinish
+  args: ({"name":"CompareZ Navigation Flow"})
+18:44:40.346 detox[40168] E artifacts-manager onRunDescribeFinish
+18:44:40.346 detox[40168] E lifecycle CompareZ Navigation Flow
+18:44:40.346 detox[40168] B artifacts-manager onRunDescribeFinish
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+18:44:40.346 detox[40168] E artifacts-manager onRunDescribeFinish
+18:44:40.346 detox[40168] E lifecycle run the tests
+18:44:40.355 detox[40168] B lifecycle tear down environment
+18:44:40.355 detox[40168] B artifacts-manager onBeforeCleanup
+  args: ()
+18:44:40.355 detox[40168] i artifact:ARTIFACT_SAVE saving ADBLogcatRecording to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Navigation Flow should navigate between Home, Search, and Profile/device.log
+18:44:40.355 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 pull "/sdcard/184259793_4.log" "artifacts/android.emu.debug.2026-04-12 13-12-59Z/✗ CompareZ Navigation Flow should navigate between Home, Search, and Profile/device.log"
+18:44:40.385 detox[40168] i child-process:EXEC_SUCCESS /sdcard/184259793_4.log: 1 file pulled, 0 skipped. 25.4 MB/s (61440 bytes in 0.002s)
+
+18:44:40.385 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm  \"/sdcard/184259793_4.log\""
+18:44:40.497 detox[40168] i child-process:EXEC_SUCCESS 
+18:44:40.497 detox[40168] i artifact:ARTIFACT_SAVE saving ADBLogcatRecording to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/emulator-16272 2026-04-12 13-14-40Z.startup.log
+18:44:40.497 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 pull "/sdcard/184259793_3.log" "artifacts/android.emu.debug.2026-04-12 13-12-59Z/emulator-16272 2026-04-12 13-14-40Z.startup.log"
+18:44:40.533 detox[40168] i child-process:EXEC_SUCCESS /sdcard/184259793_3.log: 1 file pulled, 0 skipped. 6.3 MB/s (53248 bytes in 0.008s)
+
+18:44:40.533 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 shell "rm  \"/sdcard/184259793_3.log\""
+18:44:40.734 detox[40168] i child-process:EXEC_SUCCESS 
+18:44:40.734 detox[40168] i artifact:ARTIFACT_SAVE saving FileArtifact to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/detox_pid_40168.json.log { append: true }
+18:44:40.734 detox[40168] i artifact:ARTIFACT_SAVE saving FileArtifact to: artifacts/android.emu.debug.2026-04-12 13-12-59Z/detox_pid_40168.log { append: true }
+18:44:40.734 detox[40168] E artifacts-manager onBeforeCleanup
+18:44:40.735 detox[40167] i ws-server@62932 get
+  data: {"type":"cleanup","params":{"stopRunner":false},"messageId":-49642}
+18:44:40.735 detox[40167] i ws-server@63088 send
+  data: {
+    "type": "cleanup",
+    "params": {
+      "stopRunner": false
+    },
+    "messageId": -49642
+  }
+18:44:40.735 detox[40168] i ws-client send message
+  data: {"type":"cleanup","params":{"stopRunner":false},"messageId":-49642}
+18:44:40.760 detox[40167] i ws-server@63088 get
+  data: {"messageId":-49642,"type":"cleanupDone","params":{}}
+18:44:40.761 detox[40167] i ws-server@62932 send
+  data: {
+    "messageId": -49642,
+    "type": "cleanupDone",
+    "params": {}
+  }
+18:44:40.761 detox[40168] i ws-client get message
+  data: {"messageId":-49642,"type":"cleanupDone","params":{}}
+   
+18:44:40.762 detox[40167] i ws-server tester exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:44:40.762 detox[40167] i ws-server@63088 send
+  data: {
+    "type": "testerDisconnected",
+    "messageId": -1
+  }
+18:44:40.762 detox[40167] E ws-server@62932 connection :62696<->:62932
+18:44:40.763 detox[40168] i child-process:SPAWN_KILL sending SIGINT to: /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+18:44:40.763 detox[40168] i child-process:SPAWN_END /Users/chethannv/Library/Android/sdk/platform-tools/adb -s emulator-16272 shell am instrument -w -r -e detoxServer ws://localhost:62696 -e detoxSessionId cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner terminated with SIGINT
+18:44:40.764 detox[40167] i ipc received event of :  deallocateDevice {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:44:40.764 detox[40167] B device@1 free: emulator-16272
+  data: {}
+18:44:40.764 detox[40168] i child-process:EXEC_CMD "/Users/chethannv/Library/Android/sdk/platform-tools/adb" -s emulator-16272 reverse --remove tcp:62696
+18:44:40.764 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  deallocateDevice , {
+  deviceCookie: {
+    id: 'emulator-16272',
+    adbName: 'emulator-16272',
+    name: 'emulator-16272 (Pixel_3a_API_34_extension_level_7_arm64-v8a)'
+  }
+}
+18:44:40.765 detox[40167] E device@1 free: emulator-16272
+18:44:40.765 detox[40167] i ipc dispatching event to socket  :  deallocateDeviceDone {}
+18:44:40.765 detox[40168] i ipc ## received events ##
+18:44:40.765 detox[40168] i ipc detected event deallocateDeviceDone {}
+18:44:40.765 detox[40168] E lifecycle tear down environment
+18:44:40.765 detox[40168] E lifecycle e2e/navigation.test.js
+18:44:40.767 detox[40167] i ipc received event of :  reportTestResults {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.767 detox[40167] i ipc dispatching event to socket  :  reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.767 detox[40167] i ipc broadcasting event to all known sockets listening to  /tmp/detox.primary-40167  :   sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.767 detox[40168] i ipc dispatching event to  primary-40167 /tmp/detox.primary-40167  :  reportTestResults , {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      testExecError: undefined,
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: undefined,
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.768 detox[40168] i ipc ## received events ##
+18:44:40.768 detox[40168] i ipc detected event reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.768 detox[40168] i ipc detected event sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/search.test.js',
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/Users/chethannv/Desktop/comparez/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+18:44:40.769 detox[40168] i ipc connection closed primary-40167 /tmp/detox.primary-40167 0 tries remaining of 0
+18:44:40.770 detox[40167] i ipc socket disconnected secondary-40168
+18:44:40.770 detox[40168] i ipc secondary-40168 exceeded connection rety amount of  or stopRetrying flag set.
+18:44:40.787 detox[40168] i child-process:EXEC_SUCCESS 
+18:44:41.777 detox[40168] i user Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
+  origin: at node_modules/jest-cli/build/run.js:225:15
+18:44:43.782 detox[40167] i ws-server app exited session cb4fa8cb-fcce-0c55-e4a6-a0e79b4a0d12
+18:44:43.782 detox[40167] E ws-server@63088 connection :62696<->:63088
+18:44:49.957 detox[40168] i ws-client:APP_STATUS Failed to execute the current status query. Cannot send a message over the closed web socket. See the payload below:
+
+HINT: Please report this issue on our GitHub tracker:
+https://github.com/wix/Detox/issues
+
+CurrentStatus {
+  type: 'currentStatus',
+  params: {},
+  messageId: undefined
+}
+    at listOnTimeout (node:internal/timers:588:17)
+    at processTimers (node:internal/timers:523:7) {
+  name: 'DetoxRuntimeError'
+}
+18:44:49.975 detox[40167] E lifecycle Command failed with exit code = 1:
+jest --config e2e/jest.config.js
+18:44:49.976 detox[40167] B device cleanup
+  args: ()
+18:44:49.978 detox[40167] E device cleanup
+18:44:49.978 detox[40167] i ws-server Detox server has been closed gracefully
+18:44:49.980 detox[40167] E lifecycle node_modules/.bin/detox test --configuration android.emu.debug --loglevel trace --record-logs all

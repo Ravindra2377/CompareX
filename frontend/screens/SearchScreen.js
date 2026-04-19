@@ -4,6 +4,7 @@ import React, {
   useRef,
   useReducer,
   useCallback,
+  useContext,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -28,6 +29,7 @@ import * as Haptics from "expo-haptics";
 import PlatformScraperService from "../services/PlatformScraperService";
 import PlatformDOMScraperService from "../services/PlatformDOMScraperService";
 import api from "../config/api";
+import { AuthContext } from "../context/AuthContext";
 
 const SUGGESTIONS = [
   "Eggs",
@@ -42,7 +44,7 @@ const SUGGESTIONS = [
 
 const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Amazon", "Flipkart"];
 const ENABLE_BACKEND_FALLBACK = true;
-const ENABLE_BACKEND_COLLECTION = false;
+const ENABLE_BACKEND_COLLECTION = true;
 const DEFAULT_PLATFORM_TIMEOUT_MS = 15000;
 const OVERALL_SEARCH_TIMEOUT_MS = 25000;
 const PLATFORM_TIMEOUTS = {
@@ -58,6 +60,7 @@ const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial 
 // Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
 // Blocks images, fonts, analytics, and stylesheets to cut WebView load time by 1.5-3s.
 const BLOCKED_RESOURCE_EXTENSIONS = [
+  '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico',
   '.woff', '.woff2', '.ttf', '.eot',
   '.css',
   '.mp4', '.webm',
@@ -427,6 +430,7 @@ const SearchScreen = ({ navigation, route }) => {
   const [captchaPlatform, setCaptchaPlatform] = useState(null); // Platform currently showing CAPTCHA
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const pulseLoopRef = useRef(null);
+  const { user } = useContext(AuthContext);
 
   const [state, dispatch] = useReducer(reducer, {
     connectedPlatforms: [],
@@ -1497,10 +1501,16 @@ const SearchScreen = ({ navigation, route }) => {
 
   const collectResultsToBackend = async (query, platformResults) => {
     try {
-      await api.post("/search/collect", {
+      const payload = {
         query: query,
         platforms: platformResults,
-      });
+      };
+
+      if (user && user.id) {
+        payload.user_id = user.id;
+      }
+
+      await api.post("/search/collect", payload);
       console.log(`[Search] Sent results to backend for analytics`);
     } catch (err) {
       // Silently fail - backend collection is optional

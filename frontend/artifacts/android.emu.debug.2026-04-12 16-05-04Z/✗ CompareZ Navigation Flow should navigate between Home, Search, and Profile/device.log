@@ -1,0 +1,953 @@
+--------- beginning of main
+04-12 21:35:45.009 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.debuggingoverlay.DebuggingOverlayManager
+04-12 21:35:45.011 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.uimanager.LayoutShadowNode
+04-12 21:35:45.013 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.drawer.ReactDrawerLayoutManager
+04-12 21:35:45.015 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollViewManager
+04-12 21:35:45.016 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollContainerViewManager
+04-12 21:35:45.021 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ReactProgressBarViewManager
+04-12 21:35:45.021 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ProgressBarShadowNode
+04-12 21:35:45.022 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactScrollViewManager
+04-12 21:35:45.024 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchManager
+04-12 21:35:45.027 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchShadowNode
+04-12 21:35:45.028 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewManager
+04-12 21:35:45.028 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewShadowNode
+04-12 21:35:45.029 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.swiperefresh.SwipeRefreshLayoutManager
+04-12 21:35:45.029 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageViewManager
+04-12 21:35:45.029 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageShadowNode
+04-12 21:35:45.032 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.image.ReactImageManager
+04-12 21:35:45.033 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.modal.ReactModalHostManager
+04-12 21:35:45.034 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextManager
+04-12 21:35:45.039 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextShadowNode
+04-12 21:35:45.039 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputManager
+04-12 21:35:45.041 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputShadowNode
+04-12 21:35:45.042 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextViewManager
+04-12 21:35:45.043 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextShadowNode
+04-12 21:35:45.043 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.view.ReactViewManager
+04-12 21:35:45.044 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextViewManager
+04-12 21:35:45.047 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextShadowNode
+04-12 21:35:45.047 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.unimplementedview.ReactUnimplementedViewManager
+04-12 21:35:45.048 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.GroupViewManagerWrapper
+04-12 21:35:45.050 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.SimpleViewManagerWrapper
+04-12 21:35:45.055 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaProviderManager
+04-12 21:35:45.055 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewManager
+04-12 21:35:45.056 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewShadowNode
+04-12 21:35:45.057 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContainerViewManager
+04-12 21:35:45.063 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenViewManager
+04-12 21:35:45.068 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ModalScreenViewManager
+04-12 21:35:45.068 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackViewManager
+04-12 21:35:45.069 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderConfigViewManager
+04-12 21:35:45.075 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderSubviewManager
+04-12 21:35:45.076 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.SearchBarManager
+04-12 21:35:45.077 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenFooterManager
+04-12 21:35:45.077 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContentWrapperManager
+04-12 21:35:45.082 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabsHostViewManager
+04-12 21:35:45.083 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabScreenViewManager
+04-12 21:35:45.085 17301 17392 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.reactnativecommunity.webview.RNCWebViewManager
+04-12 21:35:45.094 17301 17392 D Detox.RNMarker: CREATE_MODULE_END (UIManager)
+04-12 21:35:45.101 17301 17392 D Detox.RNMarker: REACT_BRIDGE_LOADING_END (null)
+04-12 21:35:45.111 17301 17301 I DetoxRNLoading: Got new RN-context directly through listener
+04-12 21:35:45.112 17301 17347 I DetoxRNIdleRes: Setting up Espresso Idling Resources for React Native
+04-12 21:35:45.113 17301 17301 I Detox   : PATCHED FACTORY: Disabling all idling resources for RN 0.81 compatibility
+04-12 21:35:45.113 17301 17351 W vindra.comparez: Long monitor contention with owner Instr: androidx.test.runner.AndroidJUnitRunner (17347) at void com.wix.detox.DetoxMain.launchActivityOnCue(android.content.Context, com.wix.detox.ActivityLaunchHelper)(DetoxMain.kt:53) waiters=0 in void com.wix.detox.DetoxMain$setupActionHandlers$SynchronizedActionHandler.handle(java.lang.String, long) for 646ms
+04-12 21:35:45.113 17301 17301 W vindra.comparez: Accessing hidden method Landroid/os/MessageQueue;->next()Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:45.113 17301 17301 W vindra.comparez: Accessing hidden field Landroid/os/MessageQueue;->mMessages:Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:45.113 17301 17301 W vindra.comparez: Accessing hidden method Landroid/os/Message;->recycleUnchecked()V (unsupported, reflection, allowed)
+04-12 21:35:45.124 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativePerformanceCxx)
+04-12 21:35:45.126 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformConstants)
+04-12 21:35:45.126 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (PlatformConstants)
+04-12 21:35:45.126 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (PlatformConstants)
+04-12 21:35:45.128 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (PlatformConstants)
+04-12 21:35:45.131 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevSettings)
+04-12 21:35:45.131 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (DevSettings)
+04-12 21:35:45.131 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (DevSettings)
+04-12 21:35:45.131 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevSettings)
+04-12 21:35:45.132 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LogBox)
+04-12 21:35:45.132 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (LogBox)
+04-12 21:35:45.132 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (LogBox)
+04-12 21:35:45.132 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (LogBox)
+04-12 21:35:45.133 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SourceCode)
+04-12 21:35:45.133 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (SourceCode)
+04-12 21:35:45.133 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (SourceCode)
+04-12 21:35:45.133 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SourceCode)
+04-12 21:35:45.182 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Timing)
+04-12 21:35:45.191 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (Timing)
+04-12 21:35:45.192 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (Timing)
+04-12 21:35:45.192 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Timing)
+04-12 21:35:45.201 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsSettingsManager)
+04-12 21:35:45.207 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsSettingsManager)
+04-12 21:35:45.207 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsSettingsManager)
+04-12 21:35:45.207 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsSettingsManager)
+04-12 21:35:45.208 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:45.208 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:45.208 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:45.208 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:45.217 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeReactNativeFeatureFlagsCxx)
+04-12 21:35:45.221 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (AppState)
+04-12 21:35:45.227 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (AppState)
+04-12 21:35:45.227 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (AppState)
+04-12 21:35:45.228 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (AppState)
+04-12 21:35:45.236 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (BlobModule)
+04-12 21:35:45.243 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (BlobModule)
+04-12 21:35:45.243 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (BlobModule)
+04-12 21:35:45.244 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (BlobModule)
+04-12 21:35:45.244 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (WebSocketModule)
+04-12 21:35:45.244 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (WebSocketModule)
+04-12 21:35:45.244 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (WebSocketModule)
+04-12 21:35:45.245 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (WebSocketModule)
+04-12 21:35:45.253 17301 17392 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+04-12 21:35:45.257 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RedBox)
+04-12 21:35:45.263 17301 17392 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:45.263 17301 17392 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:45.263 17301 17392 W vindra.comparez: Entry not found
+04-12 21:35:45.264 17301 17392 D nativeloader: Configuring clns-9 for other apk /data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:45.272 17301 17392 D nativeloader: Configuring clns-10 for other apk /data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:45.274 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Networking)
+04-12 21:35:45.275 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (Networking)
+04-12 21:35:45.278 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (Networking)
+04-12 21:35:45.279 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Networking)
+04-12 21:35:45.280 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevLoadingView)
+04-12 21:35:45.280 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (DevLoadingView)
+04-12 21:35:45.280 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (DevLoadingView)
+04-12 21:35:45.281 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevLoadingView)
+04-12 21:35:45.282 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (HeadlessJsTaskSupport)
+04-12 21:35:45.283 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (HeadlessJsTaskSupport)
+04-12 21:35:45.283 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (HeadlessJsTaskSupport)
+04-12 21:35:45.283 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (HeadlessJsTaskSupport)
+04-12 21:35:45.287 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceInfo)
+04-12 21:35:45.288 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (DeviceInfo)
+04-12 21:35:45.288 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (DeviceInfo)
+04-12 21:35:45.289 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceInfo)
+04-12 21:35:45.290 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (UIManager)
+04-12 21:35:45.291 17301 17392 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+04-12 21:35:45.291 17301 17392 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+04-12 21:35:45.291 17301 17392 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+04-12 21:35:45.291 17301 17392 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:45.291 17301 17392 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:45.296 17301 17392 I cr_WVCFactoryProvider: Loaded version=113.0.5672.136 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+04-12 21:35:45.312 17301 17392 I cr_LibraryLoader: Successfully loaded native library
+04-12 21:35:45.313 17301 17392 I cr_CachingUmaRecorder: Flushed 8 samples from 8 histograms.
+04-12 21:35:45.314 17301 17404 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed_new"
+04-12 21:35:45.314 17301 17404 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed"
+04-12 21:35:45.314 17301 17404 I cr_VariationsUtils: Requesting new seed from IVariationsSeedServer
+04-12 21:35:45.360 17301 17407 D TrafficStats: tagSocket(135) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:45.381 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (UIManager)
+04-12 21:35:45.390 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SoundManager)
+04-12 21:35:45.390 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (SoundManager)
+04-12 21:35:45.390 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (SoundManager)
+04-12 21:35:45.390 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SoundManager)
+04-12 21:35:45.396 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ImageLoader)
+04-12 21:35:45.396 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (ImageLoader)
+04-12 21:35:45.396 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (ImageLoader)
+04-12 21:35:45.397 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ImageLoader)
+04-12 21:35:45.397 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (IntentAndroid)
+04-12 21:35:45.397 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (IntentAndroid)
+04-12 21:35:45.398 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (IntentAndroid)
+04-12 21:35:45.398 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (IntentAndroid)
+04-12 21:35:45.398 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LinkingManager)
+04-12 21:35:45.399 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceEventManager)
+04-12 21:35:45.403 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (DeviceEventManager)
+04-12 21:35:45.403 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (DeviceEventManager)
+04-12 21:35:45.403 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceEventManager)
+04-12 21:35:45.407 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeUnimoduleProxy)
+04-12 21:35:45.414 17301 17391 I ExpoModulesCore: ✅ JSI interop was installed
+04-12 21:35:45.415 17301 17391 I ExpoModulesCore: ✅ Constants were exported
+04-12 21:35:45.416 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeUnimoduleProxy)
+04-12 21:35:45.421 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:45.421 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:45.422 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:45.422 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:45.423 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:45.433 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:45.439 17301 17412 D TrafficStats: tagSocket(135) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:45.465 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeAnimatedModule)
+04-12 21:35:45.465 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (NativeAnimatedModule)
+04-12 21:35:45.466 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (NativeAnimatedModule)
+04-12 21:35:45.467 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeAnimatedModule)
+04-12 21:35:45.478 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCSafeAreaContext)
+04-12 21:35:45.478 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (RNCSafeAreaContext)
+04-12 21:35:45.478 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (RNCSafeAreaContext)
+04-12 21:35:45.478 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCSafeAreaContext)
+04-12 21:35:45.482 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNSModule)
+04-12 21:35:45.482 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (RNSModule)
+04-12 21:35:45.483 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (RNSModule)
+04-12 21:35:45.485 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNEdgeToEdge)
+04-12 21:35:45.494 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:45.494 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:45.494 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:45.494 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:45.572 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformLocalStorage)
+04-12 21:35:45.572 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNC_AsyncSQLiteDBStorage)
+04-12 21:35:45.572 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCAsyncStorage)
+04-12 21:35:45.572 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (RNCAsyncStorage)
+04-12 21:35:45.572 17301 17391 V AsyncStorageExpoMigration: No scoped database found
+04-12 21:35:45.573 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (RNCAsyncStorage)
+04-12 21:35:45.573 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCAsyncStorage)
+04-12 21:35:45.575 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCWebViewModule)
+04-12 21:35:45.575 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (RNCWebViewModule)
+04-12 21:35:45.575 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (RNCWebViewModule)
+04-12 21:35:45.575 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCWebViewModule)
+04-12 21:35:45.593 17301 17391 D Detox.RNMarker: RUN_JS_BUNDLE_END (/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server)
+04-12 21:35:45.595 17301 17391 I ReactNativeJS: Running "main" with {"rootTag":11}
+04-12 21:35:45.599 17301 17413 D TrafficStats: tagSocket(122) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:45.732 17301 17391 W ReactNativeJS: The app is running using the Legacy Architecture. The Legacy Architecture is deprecated and will be removed in a future version of React Native. Please consider migrating to the New Architecture. For more information, please see https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here
+04-12 21:35:45.761 17301 17301 W UiControllerImpl: Waiting for: DYNAMIC_TASKS_HAVE_IDLED for 100 iterations.
+04-12 21:35:45.772 17301 17392 D CompatibilityChangeReporter: Compat change id reported: 289878283; UID 10211; state: ENABLED
+04-12 21:35:45.786 17301 17301 D Detox.RNMarker: CONTENT_APPEARED (main)
+04-12 21:35:45.803 17301 17365 D EGL_emulation: app_time_stats: avg=562.76ms min=93.69ms max=1031.83ms count=2
+04-12 21:35:45.813 17301 17301 I Detox   : Wait is over: App is now idle!
+04-12 21:35:45.813 17301 17351 I DetoxWSClient: Sending out action 'ready' (ID #-1000)
+04-12 21:35:45.813 17301 17351 I DetoxDispatcher: Done with action 'isReady'
+04-12 21:35:45.827 17301 17414 D TrafficStats: tagSocket(141) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:45.843 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (FileReaderModule)
+04-12 21:35:45.844 17301 17391 D Detox.RNMarker: CREATE_MODULE_START (FileReaderModule)
+04-12 21:35:45.844 17301 17391 D Detox.RNMarker: CREATE_MODULE_END (FileReaderModule)
+04-12 21:35:45.845 17301 17391 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (FileReaderModule)
+04-12 21:35:45.881 17301 17320 I vin--------- beginning of main
+04-12 21:35:46.256 17455 17455 I vindra.comparez: Late-enabling -Xcheck:jni
+04-12 21:35:46.262 17455 17455 I vindra.comparez: Using CollectorTypeCC GC.
+04-12 21:35:46.284 17455 17455 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10211; state: ENABLED
+04-12 21:35:46.284 17455 17455 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10211; state: ENABLED
+--------- beginning of system
+04-12 21:35:46.287 17455 17455 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.panviravindra.comparez]: arm64-v8a, null instrumentation[com.panviravindra.comparez.test]: null, null
+04-12 21:35:46.287 17455 17455 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[])
+04-12 21:35:46.288 17455 17455 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247])
+04-12 21:35:46.288 17455 17455 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116])
+04-12 21:35:46.288 17455 17455 W ziparchive: Unable to open '/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.dm': No such file or directory
+04-12 21:35:46.288 17455 17455 W ziparchive: Unable to open '/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.dm': No such file or directory
+04-12 21:35:46.319 17455 17455 W ziparchive: Unable to open '/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.dm': No such file or directory
+04-12 21:35:46.319 17455 17455 W ziparchive: Unable to open '/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.dm': No such file or directory
+04-12 21:35:46.426 17455 17455 D nativeloader: Configuring clns-6 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/lib/arm64:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/lib/arm64:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!/lib/arm64-v8a:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.panviravindra.comparez
+04-12 21:35:46.431 17455 17455 V GraphicsEnvironment: Currently set values for:
+04-12 21:35:46.431 17455 17455 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+04-12 21:35:46.431 17455 17455 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+04-12 21:35:46.432 17455 17455 V GraphicsEnvironment: ANGLE GameManagerService for com.panviravindra.comparez: false
+04-12 21:35:46.432 17455 17455 V GraphicsEnvironment: com.panviravindra.comparez is not listed in per-application setting
+04-12 21:35:46.432 17455 17455 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+04-12 21:35:46.432 17455 17455 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 21:35:46.434 17455 17455 D nativeloader: Configuring clns-7 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/lib/arm64:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 21:35:46.434 17455 17455 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 21:35:46.436 17455 17455 D nativeloader: Configuring clns-8 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/lib/arm64:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 21:35:46.436 17455 17455 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk*294246005:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes2.dex*4055916645:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes3.dex*2949407285:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes4.dex*2472856604:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes5.dex*449036524:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes6.dex*2622014904:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes7.dex*530900409:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes8.dex*4143867305:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes9.dex*4104667095:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes10.dex*3785976675:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes11.dex*747467643:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes12.dex*128433845:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes13.dex*3653805668:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes14.dex*1229665198:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes15.dex*638951780:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes16.dex*2498210027:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes17.dex*732076495:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes18.dex*238609134:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes19.dex*1407230120:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk*93354197:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes2.dex*2402452363:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes3.dex*1876940571:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes4.dex*389630062:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes5.dex*1867390877:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes6.dex*4013537063:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes7.dex*3881050273:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes8.dex*4262563330:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravind
+04-12 21:35:46.436 17455 17455 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk*294246005:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes2.dex*4055916645:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes3.dex*2949407285:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes4.dex*2472856604:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes5.dex*449036524:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes6.dex*2622014904:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes7.dex*530900409:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes8.dex*4143867305:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes9.dex*4104667095:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes10.dex*3785976675:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes11.dex*747467643:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes12.dex*128433845:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes13.dex*3653805668:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes14.dex*1229665198:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes15.dex*638951780:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes16.dex*2498210027:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes17.dex*732076495:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes18.dex*238609134:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes19.dex*1407230120:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk*93354197:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes2.dex*2402452363:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes3.dex*1876940571:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes4.dex*389630062:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes5.dex*1867390877:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes6.dex*4013537063:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes7.dex*3881050273:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes8.dex*4262563330:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes9.dex*371028
+04-12 21:35:46.437 17455 17455 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk*294246005:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes2.dex*4055916645:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes3.dex*2949407285:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes4.dex*2472856604:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes5.dex*449036524:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes6.dex*2622014904:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes7.dex*530900409:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes8.dex*4143867305:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes9.dex*4104667095:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes10.dex*3785976675:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes11.dex*747467643:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes12.dex*128433845:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes13.dex*3653805668:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes14.dex*1229665198:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes15.dex*638951780:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes16.dex*2498210027:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes17.dex*732076495:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes18.dex*238609134:/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk!classes19.dex*1407230120:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk*93354197:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes2.dex*2402452363:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes3.dex*1876940571:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes4.dex*389630062:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes5.dex*1867390877:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes6.dex*4013537063:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes7.dex*3881050273:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!classes8.dex*4262563330:/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AY
+04-12 21:35:46.437 17455 17455 W ziparchive: Unable to open '/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.dm': No such file or directory
+04-12 21:35:46.437 17455 17455 W ziparchive: Unable to open '/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.dm': No such file or directory
+04-12 21:35:46.471 17455 17455 W ziparchive: Unable to open '/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.dm': No such file or directory
+04-12 21:35:46.471 17455 17455 W ziparchive: Unable to open '/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.dm': No such file or directory
+04-12 21:35:46.578 17455 17455 I AndroidJUnitRunner: newApplication com.panviravindra.comparez.MainApplication
+04-12 21:35:46.603 17455 17455 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=240]
+04-12 21:35:46.603 17455 17455 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+04-12 21:35:46.605 17455 17455 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+04-12 21:35:46.606 17455 17455 W SoLoader: Initializing SoLoader: 0
+04-12 21:35:46.607 17455 17455 W SoLoader: Recording new base apk path: /data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk
+04-12 21:35:46.607 17455 17455 W SoLoader: Previously recorded 0 base apk paths.
+04-12 21:35:46.607 17455 17455 I SoLoader: Preparing SO source: DirectorySoSource[root = /vendor/lib64 flags = 2]
+04-12 21:35:46.608 17455 17455 I SoLoader: Preparing SO source: DirectorySoSource[root = /system/lib64 flags = 2]
+04-12 21:35:46.608 17455 17455 I SoLoader: Preparing SO source: DirectApkSoSource[root = [/data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/base.apk!/lib/arm64-v8a]]
+04-12 21:35:46.611 17455 17474 D AndroidJUnitRunner: onStart is called.
+04-12 21:35:46.618 17455 17455 I SoLoader: Preparing SO source: ApplicationSoSource[DirectorySoSource[root = /data/app/~~cPSnx4m8BGeKIVp62nxzXQ==/com.panviravindra.comparez-AYbZGbjScrn2lLSGb7SQjQ==/lib/arm64 flags = 0]]
+04-12 21:35:46.618 17455 17455 I SoLoader: init finish: 4 SO sources prepared
+04-12 21:35:46.618 17455 17455 W SoLoader: SoLoader initialized: 8
+04-12 21:35:46.620 17455 17474 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+04-12 21:35:46.621 17455 17474 D TestRequestBuilder: Using class path scanning to discover tests
+04-12 21:35:46.621 17455 17474 I TestRequestBuilder: Scanning classpath to find tests in paths [/data/app/~~XEjrFov-6z90XZysrRUHAw==/com.panviravindra.comparez.test-Kh5GPauH-AwI-dJjsMcHIQ==/base.apk]
+04-12 21:35:46.621 17455 17474 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-12 21:35:46.968 17455 17474 I TestRunner: run started: 1 tests
+04-12 21:35:46.968 17455 17474 I TestRunner: started: runDetoxTests(com.panviravindra.comparez.DetoxTest)
+04-12 21:35:46.971 17455 17474 I Detox   : Detox server connection details: url=ws://localhost:51859, sessionId=2b32867b-8304-c7b0-435f-2cf4d6ab7bf8
+04-12 21:35:46.972 17455 17474 W FileTestStorage: Output properties is not supported.
+04-12 21:35:46.973 17455 17474 I Tracing : Tracer added: class androidx.test.platform.tracing.AndroidXTracer
+04-12 21:35:46.974 17455 17474 D EventInjectionStrategy: Creating injection strategy with input manager.
+04-12 21:35:46.974 17455 17474 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager; (unsupported, reflection, allowed)
+04-12 21:35:46.975 17455 17474 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->injectInputEvent(Landroid/view/InputEvent;I)Z (unsupported, reflection, allowed)
+04-12 21:35:46.975 17455 17474 W vindra.comparez: Accessing hidden field Landroid/hardware/input/InputManager;->INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH:I (unsupported, reflection, allowed)
+04-12 21:35:46.977 17455 17474 W vindra.comparez: Accessing hidden field Ljava/lang/reflect/Field;->accessFlags:I (unsupported, reflection, allowed)
+04-12 21:35:46.978 17455 17474 I Detox   : Connecting to server...
+04-12 21:35:46.978 17455 17474 I DetoxWSClient: At connectToServer
+04-12 21:35:46.991 17455 17491 D TrafficStats: tagSocket(85) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:46.995 17455 17491 D DetoxWSClient: At onOpen
+04-12 21:35:46.995 17455 17491 I DetoxWSClient: Sending out action 'login' (ID #0)
+04-12 21:35:46.995 17455 17491 I Detox   : Connected to server!
+04-12 21:35:46.996 17455 17491 D DetoxWSClient: Received action 'loginSuccess' (ID #0, params={"testerConnected":true,"appConnected":true})
+04-12 21:35:46.996 17455 17487 I DetoxDispatcher: Handling action 'loginSuccess' (ID #0)...
+04-12 21:35:46.996 17455 17487 I DetoxDispatcher: Done with action 'loginSuccess'
+04-12 21:35:46.996 17455 17474 I Detox   : Launching the tested activity!
+04-12 21:35:47.029 17455 17455 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+04-12 21:35:47.037 17455 17501 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+04-12 21:35:47.038 17455 17501 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+04-12 21:35:47.040 17455 17455 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: PRE_ON_CREATE
+04-12 21:35:47.040 17455 17491 D DetoxWSClient: Received action 'isReady' (ID #-1000, params={})
+04-12 21:35:47.044 17455 17487 I DetoxDispatcher: Handling action 'isReady' (ID #-1000)...
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing 12 pre-merged libs (including stub)
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x6cc442dce0
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x6cc4627fc8
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x6cc4636518
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x6cc469e6a8
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x6cc488ecb4
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x6cc48dc6bc
+04-12 21:35:47.080 17455 17455 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x6cc48ed044
+04-12 21:35:47.081 17455 17455 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x6cc4934764
+04-12 21:35:47.081 17455 17455 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x6cc4a4cf68
+04-12 21:35:47.081 17455 17455 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x6cc4a65fb8
+04-12 21:35:47.081 17455 17455 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x6cc4a75a3c
+04-12 21:35:47.081 17455 17455 D jni_lib_merge: About to register 11 actual methods.
+04-12 21:35:47.083 17455 17455 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_START (null)
+04-12 21:35:47.093 17455 17455 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_END (null)
+04-12 21:35:47.093 17455 17455 W SoLoader: SoLoader already initialized
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: Preparing 4 pre-merged libs (including stub)
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: Preparing to register libhermes_executor_so.  onload_func: 0x6cc5eb77e0
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: Preparing to register libhermesinstancejni_so.  onload_func: 0x6cc5eed26c
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: Preparing to register libjsijniprofiler_so.  onload_func: 0x6cc5eef2bc
+04-12 21:35:47.097 17455 17455 D jni_lib_merge: About to register 3 actual methods.
+04-12 21:35:47.098 17455 17455 W SoLoader: SoLoader already initialized
+04-12 21:35:47.099 17455 17501 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+04-12 21:35:47.124 17455 17455 W vindra.comparez: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+04-12 21:35:47.126 17455 17509 D TrafficStats: tagSocket(90) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.126 17455 17455 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: CREATED
+04-12 21:35:47.127 17455 17455 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: STARTED
+04-12 21:35:47.132 17455 17455 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: RESUMED
+04-12 21:35:47.133 17455 17455 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10211; state: DISABLED
+04-12 21:35:47.133 17455 17455 W OpenGLRenderer: Unknown dataspace 0
+04-12 21:35:47.138 17455 17455 D Detox.RNMarker: DOWNLOAD_START (null)
+04-12 21:35:47.145 17455 17498 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+04-12 21:35:47.145 17455 17498 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+04-12 21:35:47.155 17455 17498 I Gralloc4: mapper 4.x is not supported
+04-12 21:35:47.157 17455 17498 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 21:35:47.191 17455 17455 D CompatibilityChangeReporter: Compat change id reported: 210923482; UID 10211; state: ENABLED
+04-12 21:35:47.198 17455 17498 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 21:35:47.257 17455 17516 D TrafficStats: tagSocket(119) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.264 17455 17513 D TrafficStats: tagSocket(120) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.290 17455 17522 D TrafficStats: tagSocket(124) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.417 17455 17455 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@a8a7633
+04-12 21:35:47.419 17455 17509 D Detox.RNMarker: DOWNLOAD_END ({"url":"http:\/\/10.0.2.2:8081\/.expo\/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server","filesChangedCount":0})
+04-12 21:35:47.419 17455 17455 D Detox.RNMarker: REACT_BRIDGE_LOADING_START (null)
+04-12 21:35:47.419 17455 17523 D Detox.RNMarker: CREATE_REACT_CONTEXT_START (HermesExecutorDebug)
+04-12 21:35:47.420 17455 17523 D Detox.RNMarker: PROCESS_PACKAGES_START (null)
+04-12 21:35:47.421 17455 17523 D Detox.RNMarker: CREATE_MODULE_START (FrescoModule)
+04-12 21:35:47.422 17455 17523 D Detox.RNMarker: CREATE_MODULE_END (FrescoModule)
+04-12 21:35:47.459 17455 17523 I ExpoModulesCore: ✅ AppContext was initialized
+04-12 21:35:47.460 17455 17523 D Detox.RNMarker: PROCESS_PACKAGES_END (null)
+04-12 21:35:47.460 17455 17523 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_START (null)
+04-12 21:35:47.463 17455 17523 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_END (null)
+04-12 21:35:47.463 17455 17523 D Detox.RNMarker: PRE_RUN_JS_BUNDLE_START (null)
+04-12 21:35:47.463 17455 17528 D Detox.RNMarker: CREATE_REACT_CONTEXT_END (null)
+04-12 21:35:47.463 17455 17528 D Detox.RNMarker: RUN_JS_BUNDLE_START (/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server)
+04-12 21:35:47.468 17455 17455 W unknown:ReactNative: Packager connection already open, nooping.
+04-12 21:35:47.468 17455 17529 D Detox.RNMarker: CREATE_MODULE_START (UIManager)
+04-12 21:35:47.485 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.debuggingoverlay.DebuggingOverlayManager
+04-12 21:35:47.487 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.uimanager.LayoutShadowNode
+04-12 21:35:47.492 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.drawer.ReactDrawerLayoutManager
+04-12 21:35:47.493 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollViewManager
+04-12 21:35:47.496 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollContainerViewManager
+04-12 21:35:47.497 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ReactProgressBarViewManager
+04-12 21:35:47.501 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ProgressBarShadowNode
+04-12 21:35:47.501 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactScrollViewManager
+04-12 21:35:47.502 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchManager
+04-12 21:35:47.507 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchShadowNode
+04-12 21:35:47.508 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewManager
+04-12 21:35:47.508 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewShadowNode
+04-12 21:35:47.508 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.swiperefresh.SwipeRefreshLayoutManager
+04-12 21:35:47.509 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageViewManager
+04-12 21:35:47.509 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageShadowNode
+04-12 21:35:47.510 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.image.ReactImageManager
+04-12 21:35:47.511 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.modal.ReactModalHostManager
+04-12 21:35:47.511 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextManager
+04-12 21:35:47.515 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextShadowNode
+04-12 21:35:47.515 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputManager
+04-12 21:35:47.517 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputShadowNode
+04-12 21:35:47.518 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextViewManager
+04-12 21:35:47.520 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextShadowNode
+04-12 21:35:47.523 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.view.ReactViewManager
+04-12 21:35:47.524 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextViewManager
+04-12 21:35:47.524 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextShadowNode
+04-12 21:35:47.524 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.unimplementedview.ReactUnimplementedViewManager
+04-12 21:35:47.525 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.GroupViewManagerWrapper
+04-12 21:35:47.527 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.SimpleViewManagerWrapper
+04-12 21:35:47.532 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaProviderManager
+04-12 21:35:47.533 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewManager
+04-12 21:35:47.533 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewShadowNode
+04-12 21:35:47.534 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContainerViewManager
+04-12 21:35:47.534 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenViewManager
+04-12 21:35:47.538 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ModalScreenViewManager
+04-12 21:35:47.539 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackViewManager
+04-12 21:35:47.539 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderConfigViewManager
+04-12 21:35:47.543 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderSubviewManager
+04-12 21:35:47.544 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.SearchBarManager
+04-12 21:35:47.545 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenFooterManager
+04-12 21:35:47.545 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContentWrapperManager
+04-12 21:35:47.546 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabsHostViewManager
+04-12 21:35:47.546 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabScreenViewManager
+04-12 21:35:47.551 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.reactnativecommunity.webview.RNCWebViewManager
+04-12 21:35:47.554 17455 17529 D Detox.RNMarker: CREATE_MODULE_END (UIManager)
+04-12 21:35:47.561 17455 17529 D Detox.RNMarker: REACT_BRIDGE_LOADING_END (null)
+04-12 21:35:47.570 17455 17455 I DetoxRNLoading: Got new RN-context directly through listener
+04-12 21:35:47.570 17455 17474 I DetoxRNIdleRes: Setting up Espresso Idling Resources for React Native
+04-12 21:35:47.571 17455 17455 I Detox   : PATCHED FACTORY: Disabling all idling resources for RN 0.81 compatibility
+04-12 21:35:47.572 17455 17487 W vindra.comparez: Long monitor contention with owner Instr: androidx.test.runner.AndroidJUnitRunner (17474) at void com.wix.detox.DetoxMain.launchActivityOnCue(android.content.Context, com.wix.detox.ActivityLaunchHelper)(DetoxMain.kt:53) waiters=0 in void com.wix.detox.DetoxMain$setupActionHandlers$SynchronizedActionHandler.handle(java.lang.String, long) for 496ms
+04-12 21:35:47.584 17455 17455 W vindra.comparez: Accessing hidden method Landroid/os/MessageQueue;->next()Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:47.584 17455 17455 W vindra.comparez: Accessing hidden field Landroid/os/MessageQueue;->mMessages:Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:47.584 17455 17455 W vindra.comparez: Accessing hidden method Landroid/os/Message;->recycleUnchecked()V (unsupported, reflection, allowed)
+04-12 21:35:47.592 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativePerformanceCxx)
+04-12 21:35:47.594 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformConstants)
+04-12 21:35:47.594 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (PlatformConstants)
+04-12 21:35:47.595 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (PlatformConstants)
+04-12 21:35:47.597 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (PlatformConstants)
+04-12 21:35:47.601 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevSettings)
+04-12 21:35:47.601 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (DevSettings)
+04-12 21:35:47.601 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (DevSettings)
+04-12 21:35:47.603 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevSettings)
+04-12 21:35:47.604 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LogBox)
+04-12 21:35:47.604 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (LogBox)
+04-12 21:35:47.604 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (LogBox)
+04-12 21:35:47.604 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (LogBox)
+04-12 21:35:47.605 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SourceCode)
+04-12 21:35:47.605 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (SourceCode)
+04-12 21:35:47.605 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (SourceCode)
+04-12 21:35:47.606 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SourceCode)
+04-12 21:35:47.622 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Timing)
+04-12 21:35:47.622 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (Timing)
+04-12 21:35:47.623 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (Timing)
+04-12 21:35:47.623 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Timing)
+04-12 21:35:47.627 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsSettingsManager)
+04-12 21:35:47.627 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsSettingsManager)
+04-12 21:35:47.628 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsSettingsManager)
+04-12 21:35:47.628 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsSettingsManager)
+04-12 21:35:47.629 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:47.629 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:47.629 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:47.629 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:47.638 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeReactNativeFeatureFlagsCxx)
+04-12 21:35:47.670 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (AppState)
+04-12 21:35:47.679 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (AppState)
+04-12 21:35:47.680 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (AppState)
+04-12 21:35:47.680 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (AppState)
+04-12 21:35:47.685 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (BlobModule)
+04-12 21:35:47.689 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (BlobModule)
+04-12 21:35:47.690 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (BlobModule)
+04-12 21:35:47.690 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (BlobModule)
+04-12 21:35:47.691 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (WebSocketModule)
+04-12 21:35:47.694 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (WebSocketModule)
+04-12 21:35:47.695 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (WebSocketModule)
+04-12 21:35:47.695 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (WebSocketModule)
+04-12 21:35:47.703 17455 17529 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+04-12 21:35:47.706 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RedBox)
+04-12 21:35:47.717 17455 17529 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:47.717 17455 17529 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:47.717 17455 17529 W vindra.comparez: Entry not found
+04-12 21:35:47.717 17455 17529 D nativeloader: Configuring clns-9 for other apk /data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:47.721 17455 17529 D nativeloader: Configuring clns-10 for other apk /data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:47.743 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Networking)
+04-12 21:35:47.743 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (Networking)
+04-12 21:35:47.745 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (Networking)
+04-12 21:35:47.751 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Networking)
+04-12 21:35:47.751 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevLoadingView)
+04-12 21:35:47.751 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (DevLoadingView)
+04-12 21:35:47.752 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (DevLoadingView)
+04-12 21:35:47.752 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevLoadingView)
+04-12 21:35:47.754 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (HeadlessJsTaskSupport)
+04-12 21:35:47.759 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (HeadlessJsTaskSupport)
+04-12 21:35:47.759 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (HeadlessJsTaskSupport)
+04-12 21:35:47.759 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (HeadlessJsTaskSupport)
+04-12 21:35:47.761 17455 17529 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+04-12 21:35:47.761 17455 17529 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+04-12 21:35:47.761 17455 17529 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+04-12 21:35:47.761 17455 17529 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:47.761 17455 17529 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:47.767 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceInfo)
+04-12 21:35:47.768 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (DeviceInfo)
+04-12 21:35:47.768 17455 17529 I cr_WVCFactoryProvider: Loaded version=113.0.5672.136 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+04-12 21:35:47.771 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (DeviceInfo)
+04-12 21:35:47.771 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceInfo)
+04-12 21:35:47.779 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (UIManager)
+04-12 21:35:47.803 17455 17541 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed_new"
+04-12 21:35:47.807 17455 17541 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed"
+04-12 21:35:47.808 17455 17529 I cr_LibraryLoader: Successfully loaded native library
+04-12 21:35:47.815 17455 17529 I cr_CachingUmaRecorder: Flushed 8 samples from 8 histograms.
+04-12 21:35:47.823 17455 17544 D TrafficStats: tagSocket(137) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.848 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (UIManager)
+04-12 21:35:47.860 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SoundManager)
+04-12 21:35:47.860 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (SoundManager)
+04-12 21:35:47.860 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (SoundManager)
+04-12 21:35:47.860 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SoundManager)
+04-12 21:35:47.867 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ImageLoader)
+04-12 21:35:47.867 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (ImageLoader)
+04-12 21:35:47.867 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (ImageLoader)
+04-12 21:35:47.867 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ImageLoader)
+04-12 21:35:47.868 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (IntentAndroid)
+04-12 21:35:47.868 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (IntentAndroid)
+04-12 21:35:47.869 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (IntentAndroid)
+04-12 21:35:47.869 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (IntentAndroid)
+04-12 21:35:47.869 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LinkingManager)
+04-12 21:35:47.870 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceEventManager)
+04-12 21:35:47.870 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (DeviceEventManager)
+04-12 21:35:47.870 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (DeviceEventManager)
+04-12 21:35:47.870 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceEventManager)
+04-12 21:35:47.874 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeUnimoduleProxy)
+04-12 21:35:47.879 17455 17528 I ExpoModulesCore: ✅ JSI interop was installed
+04-12 21:35:47.880 17455 17528 I ExpoModulesCore: ✅ Constants were exported
+04-12 21:35:47.881 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeUnimoduleProxy)
+04-12 21:35:47.885 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:47.885 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:47.886 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:47.887 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:47.887 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:47.897 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:47.902 17455 17545 D TrafficStats: tagSocket(137) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:47.930 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeAnimatedModule)
+04-12 21:35:47.930 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (NativeAnimatedModule)
+04-12 21:35:47.930 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (NativeAnimatedModule)
+04-12 21:35:47.931 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeAnimatedModule)
+04-12 21:35:47.942 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCSafeAreaContext)
+04-12 21:35:47.942 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (RNCSafeAreaContext)
+04-12 21:35:47.942 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (RNCSafeAreaContext)
+04-12 21:35:47.942 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCSafeAreaContext)
+04-12 21:35:47.946 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNSModule)
+04-12 21:35:47.946 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (RNSModule)
+04-12 21:35:47.947 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (RNSModule)
+04-12 21:35:47.948 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNEdgeToEdge)
+04-12 21:35:47.957 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:47.957 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:47.957 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:47.957 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:48.034 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformLocalStorage)
+04-12 21:35:48.035 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNC_AsyncSQLiteDBStorage)
+04-12 21:35:48.035 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCAsyncStorage)
+04-12 21:35:48.035 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (RNCAsyncStorage)
+04-12 21:35:48.035 17455 17528 V AsyncStorageExpoMigration: No scoped database found
+04-12 21:35:48.035 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (RNCAsyncStorage)
+04-12 21:35:48.036 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCAsyncStorage)
+04-12 21:35:48.037 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCWebViewModule)
+04-12 21:35:48.037 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (RNCWebViewModule)
+04-12 21:35:48.038 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (RNCWebViewModule)
+04-12 21:35:48.038 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCWebViewModule)
+04-12 21:35:48.055 17455 17528 D Detox.RNMarker: RUN_JS_BUNDLE_END (/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server)
+04-12 21:35:48.058 17455 17528 I ReactNativeJS: Running "main" with {"rootTag":11}
+04-12 21:35:48.063 17455 17546 D TrafficStats: tagSocket(126) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:48.226 17455 17528 W ReactNativeJS: The app is running using the Legacy Architecture. The Legacy Architecture is deprecated and will be removed in a future version of React Native. Please consider migrating to the New Architecture. For more information, please see https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here
+04-12 21:35:48.264 17455 17529 D CompatibilityChangeReporter: Compat change id reported: 289878283; UID 10211; state: ENABLED
+04-12 21:35:48.268 17455 17455 D Detox.RNMarker: CONTENT_APPEARED (main)
+04-12 21:35:48.285 17455 17498 D EGL_emulation: app_time_stats: avg=553.37ms min=62.49ms max=1044.24ms count=2
+04-12 21:35:48.287 17455 17455 W UiControllerImpl: Waiting for: DYNAMIC_TASKS_HAVE_IDLED for 100 iterations.
+04-12 21:35:48.294 17455 17455 I Detox   : Wait is over: App is now idle!
+04-12 21:35:48.294 17455 17487 I DetoxWSClient: Sending out action 'ready' (ID #-1000)
+04-12 21:35:48.294 17455 17487 I DetoxDispatcher: Done with action 'isReady'
+04-12 21:35:48.297 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #1, params={"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"waitForAssertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["loginEmail",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}},{"type":"Double","value":3}]})
+04-12 21:35:48.298 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #1)...
+04-12 21:35:48.300 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [loginEmail, false]
+04-12 21:35:48.308 17455 17487 D Detox   : class androidx.test.espresso.Espresso, onView, [(view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)]
+04-12 21:35:48.311 17455 17487 D CompatibilityChangeReporter: Compat change id reported: 247079863; UID 10211; state: ENABLED
+04-12 21:35:48.311 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForSufficientlyVisible, [75]
+04-12 21:35:48.312 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxAssertion, waitForAssertMatcher, [androidx.test.espresso.ViewInteraction@9047f61, (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area), 3.0]
+04-12 21:35:48.324 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.325 17455 17547 D TrafficStats: tagSocket(141) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:48.343 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (FileReaderModule)
+04-12 21:35:48.343 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (FileReaderModule)
+04-12 21:35:48.343 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (FileReaderModule)
+04-12 21:35:48.343 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (FileReaderModule)
+04-12 21:35:48.353 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.381 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.409 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.419 17455 17462 I vindra.comparez: NativeAlloc concurrent copying GC freed 280827(21MB) AllocSpace objects, 7(140KB) LOS objects, 49% free, 10MB/20MB, paused 20us,7us total 140.622ms
+04-12 21:35:48.438 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.442 17455 17550 D TrafficStats: tagSocket(5) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:48.465 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.492 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (I18nManager)
+04-12 21:35:48.492 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (I18nManager)
+04-12 21:35:48.492 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (I18nManager)
+04-12 21:35:48.493 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (I18nManager)
+04-12 21:35:48.511 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (StatusBarManager)
+04-12 21:35:48.511 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (StatusBarManager)
+04-12 21:35:48.512 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (StatusBarManager)
+04-12 21:35:48.512 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (StatusBarManager)
+04-12 21:35:48.516 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNEdgeToEdge)
+04-12 21:35:48.528 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (AccessibilityInfo)
+04-12 21:35:48.528 17455 17528 D Detox.RNMarker: CREATE_MODULE_START (AccessibilityInfo)
+04-12 21:35:48.529 17455 17528 D Detox.RNMarker: CREATE_MODULE_END (AccessibilityInfo)
+04-12 21:35:48.529 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (AccessibilityInfo)
+04-12 21:35:48.530 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (AccessibilityManager)
+04-12 21:35:48.531 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (KeyboardObserver)
+04-12 21:35:48.579 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.583 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.583 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.583 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.583 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.583 17455 17529 W unknown:ReactNative: Attempt to set local data for view with unknown tag: -1
+04-12 21:35:48.592 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderConfigShadowNode
+04-12 21:35:48.595 17455 17529 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreensShadowNode
+04-12 21:35:48.608 17455 17526 D TrafficStats: tagSocket(140) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:48.638 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:48.638 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:48.705 17455 17455 D AutofillManager: notifyViewEnteredForFillDialog:1073741824
+04-12 21:35:48.706 17455 17455 D AutofillManager: notifyViewEnteredForFillDialog:1073741825
+04-12 21:35:48.706 17455 17455 D AutofillManager: Triggering pre-emptive request for fill dialog.
+04-12 21:35:48.714 17455 17455 D CompatibilityChangeReporter: Compat change id reported: 163400105; UID 10211; state: ENABLED
+04-12 21:35:48.715 17455 17455 I AssistStructure: Flattened final assist data: 3132 bytes, containing 1 windows, 18 views
+04-12 21:35:48.741 17455 17528 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNEdgeToEdge)
+04-12 21:35:48.788 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.791 17455 17487 I DetoxWSClient: Sending out action 'invokeResult' (ID #1)
+04-12 21:35:48.791 17455 17487 I DetoxDispatcher: Done with action 'invoke'
+04-12 21:35:48.794 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #2, params={"target":{"type":"Class","value":"com.wix.detox.espresso.EspressoDetox"},"method":"perform","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["loginEmail",{"type":"boolean","value":false}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxViewActions"},"method":"typeText","args":["test@example.com"]}}]})
+04-12 21:35:48.794 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #2)...
+04-12 21:35:48.794 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [loginEmail, false]
+04-12 21:35:48.795 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxViewActions, typeText, [test@example.com]
+04-12 21:35:48.795 17455 17487 W vindra.comparez: Accessing hidden method Landroid/view/ViewConfiguration;->getDoubleTapMinTime()I (unsupported, reflection, allowed)
+04-12 21:35:48.796 17455 17487 D Detox   : class com.wix.detox.espresso.EspressoDetox, perform, [(view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>), com.wix.detox.espresso.action.DetoxTypeTextAction@e826b83]
+04-12 21:35:48.797 17455 17455 I ViewInteraction: Performing 'Click to focus & type text (test@example.com)' action on view (view.getTag() is "loginEmail" and view has effective visibility <VISIBLE>)
+04-12 21:35:48.835 17455 17455 I ImeTracker: com.panviravindra.comparez:70927c17: onRequestShow at ORIGIN_CLIENT_SHOW_SOFT_INPUT reason SHOW_SOFT_INPUT
+04-12 21:35:48.835 17455 17455 D InputMethodManager: showSoftInput() view=com.facebook.react.views.textinput.ReactEditText{654e92d VFED..CL. .F.P..ID 116,28-772,126 #59 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+04-12 21:35:48.873 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:48.886 17455 17455 I ImeTracker: com.panviravindra.comparez:a15a2f54: onRequestShow at ORIGIN_CLIENT_SHOW_SOFT_INPUT reason SHOW_SOFT_INPUT
+04-12 21:35:48.887 17455 17455 D InputMethodManager: showSoftInput() view=com.facebook.react.views.textinput.ReactEditText{654e92d VFED..CL. .F.P.... 116,28-772,126 #59 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+04-12 21:35:48.892 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:48.892 17455 17455 I ImeTracker: com.panviravindra.comparez:a15a2f54: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+04-12 21:35:48.893 17455 17455 I ImeTracker: com.panviravindra.comparez:70927c17: onShown
+04-12 21:35:49.269 17455 17455 D UiControllerImpl: Injecting string: "test@example.com"
+04-12 21:35:49.306 17455 17498 D EGL_emulation: app_time_stats: avg=42.30ms min=0.56ms max=399.78ms count=23
+04-12 21:35:49.331 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.362 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.388 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.413 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.461 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.496 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.516 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.543 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.560 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.576 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.598 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.615 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.644 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.660 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.676 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.697 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:49.700 17455 17487 I DetoxWSClient: Sending out action 'invokeResult' (ID #2)
+04-12 21:35:49.700 17455 17487 I DetoxDispatcher: Done with action 'invoke'
+04-12 21:35:49.703 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #3, params={"target":{"type":"Class","value":"com.wix.detox.espresso.EspressoDetox"},"method":"perform","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["loginPassword",{"type":"boolean","value":false}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxViewActions"},"method":"typeText","args":["password123\n"]}}]})
+04-12 21:35:49.710 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #3)...
+04-12 21:35:49.711 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [loginPassword, false]
+04-12 21:35:49.713 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxViewActions, typeText, [password123
+04-12 21:35:49.713 17455 17487 D Detox   : ]
+04-12 21:35:49.713 17455 17487 D Detox   : class com.wix.detox.espresso.EspressoDetox, perform, [(view.getTag() is "loginPassword" and view has effective visibility <VISIBLE>), com.wix.detox.espresso.action.DetoxTypeTextAction@6f6856b]
+04-12 21:35:49.715 17455 17455 I ViewInteraction: Performing 'Click to focus & type text (password123
+04-12 21:35:49.715 17455 17455 I ViewInteraction: )' action on view (view.getTag() is "loginPassword" and view has effective visibility <VISIBLE>)
+04-12 21:35:49.759 17455 17455 I ImeTracker: com.panviravindra.comparez:1fa7a44e: onRequestShow at ORIGIN_CLIENT_SHOW_SOFT_INPUT reason SHOW_SOFT_INPUT
+04-12 21:35:49.759 17455 17455 D InputMethodManager: showSoftInput() view=com.facebook.react.views.textinput.ReactEditText{74310b0 VFED..CL. .F.P..ID 116,28-700,126 #61 aid=1073741825} flags=0 reason=SHOW_SOFT_INPUT
+04-12 21:35:49.762 17455 17455 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=ImeCallback=ImeOnBackInvokedCallback@12596647 Callback=android.window.IOnBackInvokedCallback$Stub$Proxy@28a1086
+04-12 21:35:49.780 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:49.780 17455 17455 I ImeTracker: com.panviravindra.comparez:b3cfee47: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+04-12 21:35:49.781 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:49.781 17455 17455 I ImeTracker: com.panviravindra.comparez:1fa7a44e: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+04-12 21:35:49.787 17455 17455 I ImeTracker: com.panviravindra.comparez:6f761c34: onRequestShow at ORIGIN_CLIENT_SHOW_SOFT_INPUT reason SHOW_SOFT_INPUT
+04-12 21:35:49.787 17455 17455 D InputMethodManager: showSoftInput() view=com.facebook.react.views.textinput.ReactEditText{74310b0 VFED..CL. .F.P.... 116,28-700,126 #61 aid=1073741825} flags=0 reason=SHOW_SOFT_INPUT
+04-12 21:35:49.789 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:49.789 17455 17455 I ImeTracker: com.panviravindra.comparez:6f761c34: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+04-12 21:35:50.154 17455 17455 D UiControllerImpl: Injecting string: "password123
+04-12 21:35:50.154 17455 17455 D UiControllerImpl: "
+04-12 21:35:50.180 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.214 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.234 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.258 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.277 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.297 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.311 17455 17498 D EGL_emulation: app_time_stats: avg=31.40ms min=8.29ms max=411.56ms count=32
+04-12 21:35:50.320 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.342 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.360 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.378 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.397 17455 17529 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+04-12 21:35:50.402 17455 17455 I ImeTracker: com.panviravindra.comparez:6fb57389: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+04-12 21:35:50.421 17455 17455 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=ImeCallback=ImeOnBackInvokedCallback@12596647 Callback=android.window.IOnBackInvokedCallback$Stub$Proxy@9cf3c5c
+04-12 21:35:50.443 17455 17455 D InsetsController: show(ime(), fromIme=true)
+04-12 21:35:50.443 17455 17455 I ImeTracker: com.panviravindra.comparez:113853a8: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+04-12 21:35:50.443 17455 17455 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=ImeCallback=ImeOnBackInvokedCallback@12596647 Callback=android.window.IOnBackInvokedCallback$Stub$Proxy@6e1d8e1
+04-12 21:35:50.459 17455 17455 I ImeTracker: com.panviravindra.comparez:7cf3f081: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT_BY_INSETS_API
+04-12 21:35:50.459 17455 17455 I ImeTracker: com.panviravindra.comparez:6fb57389: onHidden
+04-12 21:35:50.463 17455 17455 I ImeTracker: com.panviravindra.comparez:901aead4: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+04-12 21:35:50.463 17455 17487 I DetoxWSClient: Sending out action 'invokeResult' (ID #3)
+04-12 21:35:50.463 17455 17487 I DetoxDispatcher: Done with action 'invoke'
+04-12 21:35:50.465 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #4, params={"target":{"type":"Class","value":"com.wix.detox.espresso.EspressoDetox"},"method":"perform","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["loginBtn",{"type":"boolean","value":false}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxViewActions"},"method":"click","args":[]}}]})
+04-12 21:35:50.466 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #4)...
+04-12 21:35:50.466 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [loginBtn, false]
+04-12 21:35:50.466 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxViewActions, click, []
+04-12 21:35:50.467 17455 17487 D Detox   : class com.wix.detox.espresso.EspressoDetox, perform, [(view.getTag() is "loginBtn" and view has effective visibility <VISIBLE>), com.wix.detox.espresso.action.RNClickAction@bfc9260]
+04-12 21:35:50.470 17455 17455 I ViewInteraction: Performing 'com.wix.detox.espresso.action.detoxsingletap@563c319 click' action on view (view.getTag() is "loginBtn" and view has effective visibility <VISIBLE>)
+04-12 21:35:50.874 17455 17487 I DetoxWSClient: Sending out action 'invokeResult' (ID #4)
+04-12 21:35:50.875 17455 17487 I DetoxDispatcher: Done with action 'invoke'
+04-12 21:35:50.883 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #5, params={"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"waitForAssertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}},{"type":"Double","value":5}]})
+04-12 21:35:50.885 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #5)...
+04-12 21:35:50.886 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [homeSearchCta, false]
+04-12 21:35:50.887 17455 17487 D Detox   : class androidx.test.espresso.Espresso, onView, [(view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)]
+04-12 21:35:50.888 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForSufficientlyVisible, [75]
+04-12 21:35:50.888 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxAssertion, waitForAssertMatcher, [androidx.test.espresso.ViewInteraction@4f625bf, (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area), 5.0]
+04-12 21:35:50.940 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:50.982 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.053 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.094 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.130 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.164 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.199 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.235 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.276 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.312 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.349 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.384 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.403 17455 17498 D EGL_emulation: app_time_stats: avg=136.47ms min=16.37ms max=498.96ms count=8
+04-12 21:35:51.424 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.459 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.495 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.532 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.569 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.606 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.641 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.677 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.714 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.757 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.798 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.844 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.881 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.917 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.955 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:51.991 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.027 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.062 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.101 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.135 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.155 17455 17562 D ProfileInstaller: Installing profile for com.panviravindra.comparez
+04-12 21:35:52.170 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.205 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.240 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.285 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.321 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.355 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.390 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.403 17455 17498 D EGL_emulation: app_time_stats: avg=500.27ms min=500.09ms max=500.45ms count=2
+04-12 21:35:52.430 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.465 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.499 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.533 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.567 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.600 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.634 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.667 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.705 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.738 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.771 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.803 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.835 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.870 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.926 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.960 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:52.994 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.030 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.064 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.097 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.130 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.165 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.200 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.232 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.265 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.300 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.333 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.367 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.404 17455 17498 D EGL_emulation: app_time_stats: avg=500.47ms min=499.99ms max=500.95ms count=2
+04-12 21:35:53.417 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.451 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.483 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.516 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.548 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.580 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.617 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.649 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.680 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.713 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.746 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.778 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.811 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.844 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.877 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.938 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:53.973 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.005 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.038 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.071 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.105 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.139 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.174 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.214 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.246 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.281 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.313 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.348 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.379 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.421 17455 17498 D EGL_emulation: app_time_stats: avg=508.35ms min=498.84ms max=517.86ms count=2
+04-12 21:35:54.434 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.474 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.510 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.543 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.575 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.608 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.640 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.672 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.704 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.737 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.775 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.807 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.839 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.873 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.938 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:54.974 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.007 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.055 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.089 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.123 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.155 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.187 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.220 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.254 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.293 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.328 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.367 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.400 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.432 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.465 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.496 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.528 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.560 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.595 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.627 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.662 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.695 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.730 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.764 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.799 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.831 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.862 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.897 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.921 17455 17498 D EGL_emulation: app_time_stats: avg=499.85ms min=498.53ms max=500.94ms count=3
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: Test exception
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: java.lang.reflect.InvocationTargetException
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at java.lang.reflect.Method.invoke(Native Method)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at org.apache.commons.lang3.reflect.MethodUtils.invokeStaticMethod(MethodUtils.java:443)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at org.apache.commons.lang3.reflect.MethodUtils.invokeStaticMethod(MethodUtils.java:405)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.types.ClassTarget.execute(ClassTarget.java:23)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.types.Target.invoke(Target.java:59)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:35)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:26)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:20)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.InvokeActionHandler.handle(DetoxActionHandlers.kt:54)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor.executeAction$lambda$2$lambda$1(DetoxActionsDispatcher.kt:76)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor.$r8$lambda$GVbB7LHtBHxNHGbgYnHJ6YrwCqs(Unknown Source:0)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at android.os.Handler.handleCallback(Handler.java:958)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at android.os.Looper.loopOnce(Looper.java:205)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at android.os.Looper.loop(Looper.java:294)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor._init_$lambda$0(DetoxActionsDispatcher.kt:62)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor.$r8$lambda$xlgL0CQim6vNM0wWEqM8JIDgZUE(Unknown Source:0)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.ActionsExecutor$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at java.lang.Thread.run(Thread.java:1012)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: Caused by: com.wix.detox.common.DetoxErrors$DetoxRuntimeException: 5.0sec timeout expired without matching of given matcher: (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.espresso.DetoxAssertion.waitForAssertMatcher(DetoxAssertion.java:72)
+04-12 21:35:55.922 17455 17487 I DetoxActionHandlers: 	... 20 more
+04-12 21:35:55.923 17455 17487 I DetoxWSClient: Sending out action 'testFailed' (ID #5)
+04-12 21:35:55.923 17455 17487 I DetoxDispatcher: Done with action 'invoke'
+04-12 21:35:55.927 17455 17491 D DetoxWSClient: Received action 'invoke' (ID #6, params={"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxAssertion"},"method":"waitForAssertMatcher","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"androidx.test.espresso.Espresso"},"method":"onView","args":[{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForTestId","args":["homeSearchCta",{"type":"boolean","value":false}]}}]}},{"type":"Invocation","value":{"target":{"type":"Class","value":"com.wix.detox.espresso.DetoxMatcher"},"method":"matcherForSufficientlyVisible","args":[{"type":"Integer","value":75}]}},{"type":"Double","value":5}]})
+04-12 21:35:55.928 17455 17487 I DetoxDispatcher: Handling action 'invoke' (ID #6)...
+04-12 21:35:55.928 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForTestId, [homeSearchCta, false]
+04-12 21:35:55.928 17455 17487 D Detox   : class androidx.test.espresso.Espresso, onView, [(view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)]
+04-12 21:35:55.929 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxMatcher, matcherForSufficientlyVisible, [75]
+04-12 21:35:55.929 17455 17487 D Detox   : class com.wix.detox.espresso.DetoxAssertion, waitForAssertMatcher, [androidx.test.espresso.ViewInteraction@77bd74a, (view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area), 5.0]
+04-12 21:35:55.947 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:55.978 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.019 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.050 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.080 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.111 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.141 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.171 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.202 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.235 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.267 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.299 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.329 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.361 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.392 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.431 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.463 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.499 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.530 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.563 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.594 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.627 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.659 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.690 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.722 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.754 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.793 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.828 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.859 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.891 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.921 17455 17498 D EGL_emulation: app_time_stats: avg=499.96ms min=499.64ms max=500.28ms count=2
+04-12 21:35:56.931 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.963 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:56.993 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.026 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.058 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.090 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.122 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.154 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.186 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.217 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.247 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.278 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.380 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.485 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.582 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.657 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.778 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.879 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:57.931 17455 17498 D EGL_emulation: app_time_stats: avg=505.14ms min=504.52ms max=505.77ms count=2
+04-12 21:35:58.035 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.148 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.251 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.374 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.548 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.718 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.810 17455 17462 I vindra.comparez: Background concurrent copying GC freed 127513(6891KB) AllocSpace objects, 71(3300KB) LOS objects, 49% free, 11MB/23MB, paused 79us,43us total 500.479ms
+04-12 21:35:58.824 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.921 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:58.947 17455 17498 D EGL_emulation: app_time_stats: avg=507.56ms min=503.56ms max=511.56ms count=2
+04-12 21:35:59.049 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.164 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.250 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.369 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.472 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.576 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.696 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.813 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:35:59.916 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.049 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.117 17455 17498 D EGL_emulation: app_time_stats: avg=584.85ms min=547.69ms max=622.01ms count=2
+04-12 21:36:00.266 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.281 17455 17462 I vindra.comparez: Background young concurrent copying GC freed 188058(10041KB) AllocSpace objects, 91(4212KB) LOS objects, 52% free, 11MB/23MB, paused 55us,51us total 308.033ms
+04-12 21:36:00.370 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.464 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.553 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.649 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.752 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.758 17455 17455 E FrameTracker: force finish cuj, time out: J<IME_INSETS_ANIMATION::1@0@com.panviravindra.comparez>
+04-12 21:36:00.832 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.919 17455 17455 I ViewInteraction: Checking 'MatchesViewAssertion(Detox){viewMatcher=(view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() covers at least <75> percent of the view's area)}' assertion on view (view.getTag() is "homeSearchCta" and view has effective visibility <VISIBLE>)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: Test exception
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: java.lang.reflect.InvocationTargetException
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at java.lang.reflect.Method.invoke(Native Method)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at org.apache.commons.lang3.reflect.MethodUtils.invokeStaticMethod(MethodUtils.java:443)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at org.apache.commons.lang3.reflect.MethodUtils.invokeStaticMethod(MethodUtils.java:405)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.types.ClassTarget.execute(ClassTarget.java:23)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.types.Target.invoke(Target.java:59)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:35)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:26)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.invoke.MethodInvocation.invoke(MethodInvocation.java:20)
+04-12 21:36:00.949 17455 17487 I DetoxActionHandlers: 	at com.wix.detox.adapters.server.InvokeActionHandler.handle(DetoxActionHandlers.kt:54)
+04-12 21:36:00.949 17455 17487 I DetoxActionHand

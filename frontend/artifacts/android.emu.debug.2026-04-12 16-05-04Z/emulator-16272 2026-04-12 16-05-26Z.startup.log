@@ -1,0 +1,333 @@
+--------- beginning of main
+04-12 21:35:07.644 16620 16620 I vindra.comparez: Late-enabling -Xcheck:jni
+04-12 21:35:07.650 16620 16620 I vindra.comparez: Using CollectorTypeCC GC.
+04-12 21:35:07.672 16620 16620 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10209; state: ENABLED
+04-12 21:35:07.672 16620 16620 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10209; state: ENABLED
+--------- beginning of system
+04-12 21:35:07.675 16620 16620 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.panviravindra.comparez]: arm64-v8a, null instrumentation[com.panviravindra.comparez.test]: null, null
+04-12 21:35:07.676 16620 16620 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[])
+04-12 21:35:07.677 16620 16620 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247])
+04-12 21:35:07.678 16620 16620 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116])
+04-12 21:35:07.678 16620 16620 W ziparchive: Unable to open '/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.dm': No such file or directory
+04-12 21:35:07.678 16620 16620 W ziparchive: Unable to open '/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.dm': No such file or directory
+04-12 21:35:07.724 16620 16620 W ziparchive: Unable to open '/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.dm': No such file or directory
+04-12 21:35:07.725 16620 16620 W ziparchive: Unable to open '/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.dm': No such file or directory
+04-12 21:35:07.903 16620 16620 D nativeloader: Configuring clns-6 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/lib/arm64:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/lib/arm64:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!/lib/arm64-v8a:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.panviravindra.comparez
+04-12 21:35:07.910 16620 16620 V GraphicsEnvironment: Currently set values for:
+04-12 21:35:07.910 16620 16620 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+04-12 21:35:07.911 16620 16620 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+04-12 21:35:07.911 16620 16620 V GraphicsEnvironment: ANGLE GameManagerService for com.panviravindra.comparez: false
+04-12 21:35:07.911 16620 16620 V GraphicsEnvironment: com.panviravindra.comparez is not listed in per-application setting
+04-12 21:35:07.911 16620 16620 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+04-12 21:35:07.912 16620 16620 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 21:35:07.915 16620 16620 D nativeloader: Configuring clns-7 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/lib/arm64:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 21:35:07.915 16620 16620 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 21:35:07.917 16620 16620 D nativeloader: Configuring clns-8 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/lib/arm64:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 21:35:07.917 16620 16620 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk*294246005:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes2.dex*4055916645:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes3.dex*2949407285:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes4.dex*2472856604:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes5.dex*449036524:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes6.dex*2622014904:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes7.dex*530900409:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes8.dex*4143867305:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes9.dex*4104667095:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes10.dex*3785976675:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes11.dex*747467643:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes12.dex*128433845:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes13.dex*3653805668:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes14.dex*1229665198:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes15.dex*638951780:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes16.dex*2498210027:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes17.dex*732076495:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes18.dex*238609134:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes19.dex*1407230120:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk*93354197:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes2.dex*2402452363:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes3.dex*1876940571:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes4.dex*389630062:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes5.dex*1867390877:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes6.dex*4013537063:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes7.dex*3881050273:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes8.dex*4262563330:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravind
+04-12 21:35:07.918 16620 16620 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk*294246005:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes2.dex*4055916645:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes3.dex*2949407285:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes4.dex*2472856604:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes5.dex*449036524:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes6.dex*2622014904:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes7.dex*530900409:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes8.dex*4143867305:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes9.dex*4104667095:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes10.dex*3785976675:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes11.dex*747467643:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes12.dex*128433845:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes13.dex*3653805668:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes14.dex*1229665198:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes15.dex*638951780:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes16.dex*2498210027:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes17.dex*732076495:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes18.dex*238609134:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes19.dex*1407230120:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk*93354197:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes2.dex*2402452363:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes3.dex*1876940571:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes4.dex*389630062:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes5.dex*1867390877:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes6.dex*4013537063:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes7.dex*3881050273:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes8.dex*4262563330:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes9.dex*371028
+04-12 21:35:07.922 16620 16620 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk*294246005:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes2.dex*4055916645:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes3.dex*2949407285:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes4.dex*2472856604:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes5.dex*449036524:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes6.dex*2622014904:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes7.dex*530900409:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes8.dex*4143867305:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes9.dex*4104667095:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes10.dex*3785976675:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes11.dex*747467643:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes12.dex*128433845:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes13.dex*3653805668:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes14.dex*1229665198:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes15.dex*638951780:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes16.dex*2498210027:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes17.dex*732076495:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes18.dex*238609134:/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk!classes19.dex*1407230120:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk*93354197:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes2.dex*2402452363:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes3.dex*1876940571:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes4.dex*389630062:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes5.dex*1867390877:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes6.dex*4013537063:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes7.dex*3881050273:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!classes8.dex*4262563330:/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH
+04-12 21:35:07.922 16620 16620 W ziparchive: Unable to open '/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.dm': No such file or directory
+04-12 21:35:07.922 16620 16620 W ziparchive: Unable to open '/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.dm': No such file or directory
+04-12 21:35:08.033 16620 16620 W ziparchive: Unable to open '/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.dm': No such file or directory
+04-12 21:35:08.033 16620 16620 W ziparchive: Unable to open '/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.dm': No such file or directory
+04-12 21:35:08.226 16620 16620 I AndroidJUnitRunner: newApplication com.panviravindra.comparez.MainApplication
+04-12 21:35:08.267 16620 16620 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=240]
+04-12 21:35:08.267 16620 16620 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+04-12 21:35:08.272 16620 16620 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+04-12 21:35:08.273 16620 16620 W SoLoader: Initializing SoLoader: 0
+04-12 21:35:08.274 16620 16620 W SoLoader: Recording new base apk path: /data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk
+04-12 21:35:08.274 16620 16620 W SoLoader: Previously recorded 0 base apk paths.
+04-12 21:35:08.275 16620 16620 I SoLoader: Preparing SO source: DirectorySoSource[root = /vendor/lib64 flags = 2]
+04-12 21:35:08.275 16620 16620 I SoLoader: Preparing SO source: DirectorySoSource[root = /system/lib64 flags = 2]
+04-12 21:35:08.275 16620 16620 I SoLoader: Preparing SO source: DirectApkSoSource[root = [/data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/base.apk!/lib/arm64-v8a]]
+04-12 21:35:08.277 16620 16647 D AndroidJUnitRunner: onStart is called.
+04-12 21:35:08.297 16620 16620 I SoLoader: Preparing SO source: ApplicationSoSource[DirectorySoSource[root = /data/app/~~YJscyU2xmJr70qnycuqADg==/com.panviravindra.comparez-nH5PdbZi7Eypz672MpMwFQ==/lib/arm64 flags = 0]]
+04-12 21:35:08.298 16620 16620 I SoLoader: init finish: 4 SO sources prepared
+04-12 21:35:08.298 16620 16620 W SoLoader: SoLoader initialized: 8
+04-12 21:35:08.302 16620 16647 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+04-12 21:35:08.303 16620 16647 D TestRequestBuilder: Using class path scanning to discover tests
+04-12 21:35:08.303 16620 16647 I TestRequestBuilder: Scanning classpath to find tests in paths [/data/app/~~aIHdxQv8qvW_UJ42gED02Q==/com.panviravindra.comparez.test-WNibm5DmhiTuT9uItrMctw==/base.apk]
+04-12 21:35:08.303 16620 16647 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-12 21:35:08.613 16620 16647 I TestRunner: run started: 1 tests
+04-12 21:35:08.614 16620 16647 I TestRunner: started: runDetoxTests(com.panviravindra.comparez.DetoxTest)
+04-12 21:35:08.617 16620 16647 I Detox   : Detox server connection details: url=ws://localhost:51859, sessionId=2b32867b-8304-c7b0-435f-2cf4d6ab7bf8
+04-12 21:35:08.619 16620 16647 W FileTestStorage: Output properties is not supported.
+04-12 21:35:08.619 16620 16647 I Tracing : Tracer added: class androidx.test.platform.tracing.AndroidXTracer
+04-12 21:35:08.621 16620 16647 D EventInjectionStrategy: Creating injection strategy with input manager.
+04-12 21:35:08.621 16620 16647 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager; (unsupported, reflection, allowed)
+04-12 21:35:08.621 16620 16647 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->injectInputEvent(Landroid/view/InputEvent;I)Z (unsupported, reflection, allowed)
+04-12 21:35:08.621 16620 16647 W vindra.comparez: Accessing hidden field Landroid/hardware/input/InputManager;->INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH:I (unsupported, reflection, allowed)
+04-12 21:35:08.623 16620 16647 W vindra.comparez: Accessing hidden field Ljava/lang/reflect/Field;->accessFlags:I (unsupported, reflection, allowed)
+04-12 21:35:08.624 16620 16647 I Detox   : Connecting to server...
+04-12 21:35:08.624 16620 16647 I DetoxWSClient: At connectToServer
+04-12 21:35:08.644 16620 16655 D TrafficStats: tagSocket(85) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:08.648 16620 16655 D DetoxWSClient: At onOpen
+04-12 21:35:08.648 16620 16655 I DetoxWSClient: Sending out action 'login' (ID #0)
+04-12 21:35:08.648 16620 16655 I Detox   : Connected to server!
+04-12 21:35:08.650 16620 16655 D DetoxWSClient: Received action 'loginSuccess' (ID #0, params={"testerConnected":true,"appConnected":true})
+04-12 21:35:08.650 16620 16651 I DetoxDispatcher: Handling action 'loginSuccess' (ID #0)...
+04-12 21:35:08.650 16620 16651 I DetoxDispatcher: Done with action 'loginSuccess'
+04-12 21:35:08.650 16620 16647 I Detox   : Launching the tested activity!
+04-12 21:35:08.691 16620 16655 D DetoxWSClient: Received action 'isReady' (ID #-1000, params={})
+04-12 21:35:08.692 16620 16651 I DetoxDispatcher: Handling action 'isReady' (ID #-1000)...
+04-12 21:35:08.755 16620 16620 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+04-12 21:35:08.763 16620 16620 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@8f01470 in: PRE_ON_CREATE
+04-12 21:35:08.822 16620 16666 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing 12 pre-merged libs (including stub)
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x6cc340fce0
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x6cc3609fc8
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x6cc3618518
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x6cc36806a8
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x6cc3870cb4
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x6cc38be6bc
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x6cc38cf044
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x6cc3916764
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x6cc3a2ef68
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x6cc3a47fb8
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x6cc3a57a3c
+04-12 21:35:08.847 16620 16620 D jni_lib_merge: About to register 11 actual methods.
+04-12 21:35:08.850 16620 16666 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+04-12 21:35:08.853 16620 16666 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+04-12 21:35:08.866 16620 16620 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_START (null)
+04-12 21:35:08.873 16620 16620 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_END (null)
+04-12 21:35:08.874 16620 16620 W SoLoader: SoLoader already initialized
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: Preparing 4 pre-merged libs (including stub)
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: Preparing to register libhermes_executor_so.  onload_func: 0x6cd5eb07e0
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: Preparing to register libhermesinstancejni_so.  onload_func: 0x6cd5ee626c
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: Preparing to register libjsijniprofiler_so.  onload_func: 0x6cd5ee82bc
+04-12 21:35:08.887 16620 16620 D jni_lib_merge: About to register 3 actual methods.
+04-12 21:35:08.888 16620 16620 W SoLoader: SoLoader already initialized
+04-12 21:35:08.908 16620 16672 D TrafficStats: tagSocket(89) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:08.920 16620 16620 W vindra.comparez: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+04-12 21:35:08.925 16620 16673 D TrafficStats: tagSocket(94) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:08.932 16620 16620 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@8f01470 in: CREATED
+04-12 21:35:08.935 16620 16620 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@8f01470 in: STARTED
+04-12 21:35:08.939 16620 16620 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@8f01470 in: RESUMED
+04-12 21:35:08.943 16620 16675 D TrafficStats: tagSocket(97) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:08.951 16620 16620 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10209; state: DISABLED
+04-12 21:35:08.953 16620 16620 W OpenGLRenderer: Unknown dataspace 0
+04-12 21:35:08.957 16620 16620 D Detox.RNMarker: DOWNLOAD_START (null)
+04-12 21:35:08.970 16620 16620 W unknown:ReactNative: Packager connection already open, nooping.
+04-12 21:35:08.978 16620 16664 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+04-12 21:35:08.999 16620 16664 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+04-12 21:35:09.037 16620 16664 I Gralloc4: mapper 4.x is not supported
+04-12 21:35:09.057 16620 16664 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 21:35:09.081 16620 16620 D CompatibilityChangeReporter: Compat change id reported: 210923482; UID 10209; state: ENABLED
+04-12 21:35:09.108 16620 16664 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 21:35:09.403 16620 16620 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@9e2dee
+04-12 21:35:09.409 16620 16672 D Detox.RNMarker: DOWNLOAD_END ({"url":"http:\/\/10.0.2.2:8081\/.expo\/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server","filesChangedCount":0})
+04-12 21:35:09.409 16620 16620 D Detox.RNMarker: REACT_BRIDGE_LOADING_START (null)
+04-12 21:35:09.410 16620 16687 D Detox.RNMarker: CREATE_REACT_CONTEXT_START (HermesExecutorDebug)
+04-12 21:35:09.410 16620 16687 D Detox.RNMarker: PROCESS_PACKAGES_START (null)
+04-12 21:35:09.412 16620 16687 D Detox.RNMarker: CREATE_MODULE_START (FrescoModule)
+04-12 21:35:09.415 16620 16687 D Detox.RNMarker: CREATE_MODULE_END (FrescoModule)
+04-12 21:35:09.529 16620 16687 I ExpoModulesCore: ✅ AppContext was initialized
+04-12 21:35:09.536 16620 16687 D Detox.RNMarker: PROCESS_PACKAGES_END (null)
+04-12 21:35:09.544 16620 16687 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_START (null)
+04-12 21:35:09.560 16620 16687 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_END (null)
+04-12 21:35:09.561 16620 16687 D Detox.RNMarker: PRE_RUN_JS_BUNDLE_START (null)
+04-12 21:35:09.563 16620 16693 D Detox.RNMarker: CREATE_REACT_CONTEXT_END (null)
+04-12 21:35:09.563 16620 16693 D Detox.RNMarker: RUN_JS_BUNDLE_START (/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server)
+04-12 21:35:09.566 16620 16620 W unknown:ReactNative: Packager connection already open, nooping.
+04-12 21:35:09.566 16620 16694 D Detox.RNMarker: CREATE_MODULE_START (UIManager)
+04-12 21:35:09.586 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.debuggingoverlay.DebuggingOverlayManager
+04-12 21:35:09.593 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.uimanager.LayoutShadowNode
+04-12 21:35:09.594 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.drawer.ReactDrawerLayoutManager
+04-12 21:35:09.599 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollViewManager
+04-12 21:35:09.601 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollContainerViewManager
+04-12 21:35:09.602 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ReactProgressBarViewManager
+04-12 21:35:09.602 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ProgressBarShadowNode
+04-12 21:35:09.603 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactScrollViewManager
+04-12 21:35:09.608 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchManager
+04-12 21:35:09.608 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchShadowNode
+04-12 21:35:09.609 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewManager
+04-12 21:35:09.609 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewShadowNode
+04-12 21:35:09.609 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.swiperefresh.SwipeRefreshLayoutManager
+04-12 21:35:09.610 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageViewManager
+04-12 21:35:09.610 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.frescosupport.FrescoBasedReactTextInlineImageShadowNode
+04-12 21:35:09.611 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.image.ReactImageManager
+04-12 21:35:09.616 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.modal.ReactModalHostManager
+04-12 21:35:09.616 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextManager
+04-12 21:35:09.616 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactRawTextShadowNode
+04-12 21:35:09.617 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputManager
+04-12 21:35:09.618 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputShadowNode
+04-12 21:35:09.622 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextViewManager
+04-12 21:35:09.623 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextShadowNode
+04-12 21:35:09.624 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.view.ReactViewManager
+04-12 21:35:09.624 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextViewManager
+04-12 21:35:09.624 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactVirtualTextShadowNode
+04-12 21:35:09.628 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.unimplementedview.ReactUnimplementedViewManager
+04-12 21:35:09.628 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.GroupViewManagerWrapper
+04-12 21:35:09.630 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.SimpleViewManagerWrapper
+04-12 21:35:09.634 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaProviderManager
+04-12 21:35:09.635 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewManager
+04-12 21:35:09.635 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewShadowNode
+04-12 21:35:09.636 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContainerViewManager
+04-12 21:35:09.636 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenViewManager
+04-12 21:35:09.638 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ModalScreenViewManager
+04-12 21:35:09.639 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackViewManager
+04-12 21:35:09.643 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderConfigViewManager
+04-12 21:35:09.644 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderSubviewManager
+04-12 21:35:09.644 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.SearchBarManager
+04-12 21:35:09.645 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenFooterManager
+04-12 21:35:09.645 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContentWrapperManager
+04-12 21:35:09.646 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabsHostViewManager
+04-12 21:35:09.647 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.TabScreenViewManager
+04-12 21:35:09.651 16620 16694 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.reactnativecommunity.webview.RNCWebViewManager
+04-12 21:35:09.654 16620 16694 D Detox.RNMarker: CREATE_MODULE_END (UIManager)
+04-12 21:35:09.668 16620 16694 D Detox.RNMarker: REACT_BRIDGE_LOADING_END (null)
+04-12 21:35:09.683 16620 16620 I DetoxRNLoading: Got new RN-context directly through listener
+04-12 21:35:09.684 16620 16647 I DetoxRNIdleRes: Setting up Espresso Idling Resources for React Native
+04-12 21:35:09.685 16620 16620 I Detox   : PATCHED FACTORY: Disabling all idling resources for RN 0.81 compatibility
+04-12 21:35:09.685 16620 16651 W vindra.comparez: Long monitor contention with owner Instr: androidx.test.runner.AndroidJUnitRunner (16647) at void com.wix.detox.DetoxMain.launchActivityOnCue(android.content.Context, com.wix.detox.ActivityLaunchHelper)(DetoxMain.kt:53) waiters=0 in void com.wix.detox.DetoxMain$setupActionHandlers$SynchronizedActionHandler.handle(java.lang.String, long) for 976ms
+04-12 21:35:09.685 16620 16620 W vindra.comparez: Accessing hidden method Landroid/os/MessageQueue;->next()Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:09.685 16620 16620 W vindra.comparez: Accessing hidden field Landroid/os/MessageQueue;->mMessages:Landroid/os/Message; (unsupported, reflection, allowed)
+04-12 21:35:09.685 16620 16620 W vindra.comparez: Accessing hidden method Landroid/os/Message;->recycleUnchecked()V (unsupported, reflection, allowed)
+04-12 21:35:09.687 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativePerformanceCxx)
+04-12 21:35:09.691 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformConstants)
+04-12 21:35:09.691 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (PlatformConstants)
+04-12 21:35:09.691 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (PlatformConstants)
+04-12 21:35:09.693 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (PlatformConstants)
+04-12 21:35:09.696 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevSettings)
+04-12 21:35:09.696 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (DevSettings)
+04-12 21:35:09.696 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (DevSettings)
+04-12 21:35:09.696 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevSettings)
+04-12 21:35:09.697 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LogBox)
+04-12 21:35:09.697 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (LogBox)
+04-12 21:35:09.697 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (LogBox)
+04-12 21:35:09.697 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (LogBox)
+04-12 21:35:09.698 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SourceCode)
+04-12 21:35:09.698 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (SourceCode)
+04-12 21:35:09.698 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (SourceCode)
+04-12 21:35:09.698 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SourceCode)
+04-12 21:35:09.711 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Timing)
+04-12 21:35:09.711 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (Timing)
+04-12 21:35:09.712 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (Timing)
+04-12 21:35:09.712 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Timing)
+04-12 21:35:09.716 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsSettingsManager)
+04-12 21:35:09.716 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsSettingsManager)
+04-12 21:35:09.716 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsSettingsManager)
+04-12 21:35:09.716 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsSettingsManager)
+04-12 21:35:09.717 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:09.717 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:09.717 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:09.717 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ReactDevToolsRuntimeSettingsModule)
+04-12 21:35:09.720 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeReactNativeFeatureFlagsCxx)
+04-12 21:35:09.723 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (AppState)
+04-12 21:35:09.723 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (AppState)
+04-12 21:35:09.723 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (AppState)
+04-12 21:35:09.723 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (AppState)
+04-12 21:35:09.726 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (BlobModule)
+04-12 21:35:09.726 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (BlobModule)
+04-12 21:35:09.727 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (BlobModule)
+04-12 21:35:09.727 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (BlobModule)
+04-12 21:35:09.728 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (WebSocketModule)
+04-12 21:35:09.728 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (WebSocketModule)
+04-12 21:35:09.728 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (WebSocketModule)
+04-12 21:35:09.728 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (WebSocketModule)
+04-12 21:35:09.734 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RedBox)
+04-12 21:35:09.740 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (Networking)
+04-12 21:35:09.740 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (Networking)
+04-12 21:35:09.741 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (Networking)
+04-12 21:35:09.742 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (Networking)
+04-12 21:35:09.742 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DevLoadingView)
+04-12 21:35:09.742 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (DevLoadingView)
+04-12 21:35:09.742 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (DevLoadingView)
+04-12 21:35:09.742 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DevLoadingView)
+04-12 21:35:09.743 16620 16694 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+04-12 21:35:09.745 16620 16694 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:09.745 16620 16694 W ziparchive: Unable to open '/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.dm': No such file or directory
+04-12 21:35:09.745 16620 16694 W vindra.comparez: Entry not found
+04-12 21:35:09.747 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (HeadlessJsTaskSupport)
+04-12 21:35:09.747 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (HeadlessJsTaskSupport)
+04-12 21:35:09.747 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (HeadlessJsTaskSupport)
+04-12 21:35:09.747 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (HeadlessJsTaskSupport)
+04-12 21:35:09.748 16620 16694 D nativeloader: Configuring clns-9 for other apk /data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:09.753 16620 16694 D nativeloader: Configuring clns-10 for other apk /data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/lib/arm64:/data/app/~~Yw2cewKRy1ALIz8qfFlwsw==/com.google.android.webview-CDaciHExabTqd-t8TQiv4Q==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~rGDTFsEgVNAQR7v9a9DBnw==/com.google.android.trichromelibrary_567263634-3Q4C4Nt6E9KMMziAv9ANGg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+04-12 21:35:09.759 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceInfo)
+04-12 21:35:09.759 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (DeviceInfo)
+04-12 21:35:09.760 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (DeviceInfo)
+04-12 21:35:09.761 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceInfo)
+04-12 21:35:09.762 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (UIManager)
+04-12 21:35:09.779 16620 16694 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+04-12 21:35:09.779 16620 16694 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+04-12 21:35:09.779 16620 16694 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+04-12 21:35:09.779 16620 16694 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:09.779 16620 16694 W vindra.comparez: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+04-12 21:35:09.783 16620 16694 I cr_WVCFactoryProvider: Loaded version=113.0.5672.136 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+04-12 21:35:09.813 16620 16694 I cr_LibraryLoader: Successfully loaded native library
+04-12 21:35:09.813 16620 16705 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed_new"
+04-12 21:35:09.814 16620 16694 I cr_CachingUmaRecorder: Flushed 8 samples from 8 histograms.
+04-12 21:35:09.815 16620 16705 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.panviravindra.comparez/app_webview/variations_seed"
+04-12 21:35:09.816 16620 16705 I cr_VariationsUtils: Requesting new seed from IVariationsSeedServer
+04-12 21:35:09.851 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (UIManager)
+04-12 21:35:09.855 16620 16708 D TrafficStats: tagSocket(135) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:09.862 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (SoundManager)
+04-12 21:35:09.862 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (SoundManager)
+04-12 21:35:09.862 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (SoundManager)
+04-12 21:35:09.863 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (SoundManager)
+04-12 21:35:09.868 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ImageLoader)
+04-12 21:35:09.869 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (ImageLoader)
+04-12 21:35:09.869 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (ImageLoader)
+04-12 21:35:09.869 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (ImageLoader)
+04-12 21:35:09.870 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (IntentAndroid)
+04-12 21:35:09.870 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (IntentAndroid)
+04-12 21:35:09.870 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (IntentAndroid)
+04-12 21:35:09.870 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (IntentAndroid)
+04-12 21:35:09.870 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (LinkingManager)
+04-12 21:35:09.871 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (DeviceEventManager)
+04-12 21:35:09.872 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (DeviceEventManager)
+04-12 21:35:09.872 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (DeviceEventManager)
+04-12 21:35:09.872 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (DeviceEventManager)
+04-12 21:35:09.876 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeUnimoduleProxy)
+04-12 21:35:09.884 16620 16693 I ExpoModulesCore: ✅ JSI interop was installed
+04-12 21:35:09.886 16620 16693 I ExpoModulesCore: ✅ Constants were exported
+04-12 21:35:09.886 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeUnimoduleProxy)
+04-12 21:35:09.891 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:09.891 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:09.892 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoUpdates)
+04-12 21:35:09.892 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:09.893 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (ExpoGo)
+04-12 21:35:09.903 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (EXDevLauncher)
+04-12 21:35:09.907 16620 16713 D TrafficStats: tagSocket(135) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:09.936 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (NativeAnimatedModule)
+04-12 21:35:09.936 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (NativeAnimatedModule)
+04-12 21:35:09.937 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (NativeAnimatedModule)
+04-12 21:35:09.937 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (NativeAnimatedModule)
+04-12 21:35:09.947 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCSafeAreaContext)
+04-12 21:35:09.947 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (RNCSafeAreaContext)
+04-12 21:35:09.948 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (RNCSafeAreaContext)
+04-12 21:35:09.948 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCSafeAreaContext)
+04-12 21:35:09.953 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNSModule)
+04-12 21:35:09.953 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (RNSModule)
+04-12 21:35:09.955 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (RNSModule)
+04-12 21:35:09.956 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNEdgeToEdge)
+04-12 21:35:09.964 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:09.964 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:09.965 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsManager)
+04-12 21:35:09.965 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNVectorIconsModule)
+04-12 21:35:10.083 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (PlatformLocalStorage)
+04-12 21:35:10.090 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNC_AsyncSQLiteDBStorage)
+04-12 21:35:10.091 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCAsyncStorage)
+04-12 21:35:10.091 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (RNCAsyncStorage)
+04-12 21:35:10.094 16620 16693 V AsyncStorageExpoMigration: No scoped database found
+04-12 21:35:10.098 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (RNCAsyncStorage)
+04-12 21:35:10.106 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCAsyncStorage)
+04-12 21:35:10.132 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_START (RNCWebViewModule)
+04-12 21:35:10.132 16620 16693 D Detox.RNMarker: CREATE_MODULE_START (RNCWebViewModule)
+04-12 21:35:10.150 16620 16693 D Detox.RNMarker: CREATE_MODULE_END (RNCWebViewModule)
+04-12 21:35:10.159 16620 16693 D Detox.RNMarker: NATIVE_MODULE_SETUP_END (RNCWebViewModule)
+04-12 21:35:10.236 16620 16693 D Detox.RNMarker: RUN_JS_BUNDLE_END (/.virtual-metro-entry.bundle?platform=android&dev=true&lazy=true&minify=false&app=com.panviravindra.comparez&modulesOnly=false&runModule=true&excludeSource=true&sourcePaths=url-server)
+04-12 21:35:10.250 16620 16693 I ReactNativeJS: Running "main" with {"rootTag":11}
+04-12 21:35:10.267 16620 16715 D TrafficStats: tagSocket(122) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:10.447 16620 16693 W ReactNativeJS: The app is running using the Legacy Architecture. The Legacy Architecture is deprecated and will be removed in a future version of React Native. Please consider migrating to the New Architecture. For more information, please see https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here
+04-12 21:35:10.493 16620 16694 D CompatibilityChangeReporter: Compat change id reported: 289878283; UID 10209; state: ENABLED
+04-12 21:35:10.498 16620 16620 I Detox   : Wait is over: App is now idle!
+04-12 21:35:10.498 16620 16651 I DetoxWSClient: Sending out action 'ready' (ID #-1000)
+04-12 21:35:10.499 16620 16651 I DetoxDispatcher: Done with action 'isReady'
+04-12 21:35:10.502 16620 16620 D Detox.RNMarker: CONTENT_APPEARED (main)
+04-12 21:35:10.535 16620 16664 D EGL_emulation: app_time_stats: avg=733.45ms min=86.61ms max=1380.29ms count=2
+04-12 21:35:10.549 16620 16721 D TrafficStats: tagSocket(141) with statsTag=0xffffffff, statsUid=-1
+04-12 21:35:10.560 16620 16626 I vindra.comparez: Nat

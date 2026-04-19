@@ -1,0 +1,283 @@
+--------- beginning of main
+04-12 18:02:50.329  5390  5390 I vindra.comparez: Late-enabling -Xcheck:jni
+04-12 18:02:50.478  5390  5390 I vindra.comparez: Using CollectorTypeCC GC.
+04-12 18:02:50.972  5390  5390 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10195; state: ENABLED
+04-12 18:02:50.983  5390  5390 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10195; state: ENABLED
+--------- beginning of system
+04-12 18:02:51.354  5390  5390 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.panviravindra.comparez]: arm64-v8a, null instrumentation[com.panviravindra.comparez.test]: null, null
+04-12 18:02:51.443  5390  5390 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[])
+04-12 18:02:51.475  5390  5390 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247])
+04-12 18:02:51.552  5390  5390 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116])
+04-12 18:02:51.554  5390  5390 W ziparchive: Unable to open '/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.dm': No such file or directory
+04-12 18:02:51.559  5390  5390 W ziparchive: Unable to open '/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.dm': No such file or directory
+04-12 18:02:53.379  5390  5390 W ziparchive: Unable to open '/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.dm': No such file or directory
+04-12 18:02:53.380  5390  5390 W ziparchive: Unable to open '/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.dm': No such file or directory
+04-12 18:02:55.313  5390  5390 D nativeloader: Configuring clns-6 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/lib/arm64:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/lib/arm64:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!/lib/arm64-v8a:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.panviravindra.comparez
+04-12 18:02:55.409  5390  5390 V GraphicsEnvironment: Currently set values for:
+04-12 18:02:55.411  5390  5390 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+04-12 18:02:55.415  5390  5390 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+04-12 18:02:55.416  5390  5390 V GraphicsEnvironment: ANGLE GameManagerService for com.panviravindra.comparez: false
+04-12 18:02:55.418  5390  5390 V GraphicsEnvironment: com.panviravindra.comparez is not listed in per-application setting
+04-12 18:02:55.418  5390  5390 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+04-12 18:02:55.431  5390  5390 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 18:02:55.458  5390  5390 D nativeloader: Configuring clns-7 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/lib/arm64:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 18:02:55.463  5390  5390 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-12 18:02:55.479  5390  5390 D nativeloader: Configuring clns-8 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/lib/arm64:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/lib/arm64, permitted_path=/data:/mnt/expand
+04-12 18:02:55.490  5390  5390 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]} | PCL[]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk*294246005:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes2.dex*4055916645:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes3.dex*2949407285:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes4.dex*2472856604:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes5.dex*449036524:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes6.dex*2622014904:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes7.dex*530900409:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes8.dex*4143867305:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes9.dex*4104667095:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes10.dex*3785976675:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes11.dex*747467643:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes12.dex*128433845:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes13.dex*3653805668:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes14.dex*1229665198:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes15.dex*638951780:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes16.dex*2498210027:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes17.dex*732076495:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes18.dex*238609134:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes19.dex*1407230120:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk*93354197:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes2.dex*2402452363:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes3.dex*1876940571:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes4.dex*389630062:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes5.dex*1867390877:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes6.dex*4013537063:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes7.dex*3881050273:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes8.dex*4262563330:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravind
+04-12 18:02:55.499  5390  5390 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk*294246005:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes2.dex*4055916645:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes3.dex*2949407285:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes4.dex*2472856604:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes5.dex*449036524:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes6.dex*2622014904:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes7.dex*530900409:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes8.dex*4143867305:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes9.dex*4104667095:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes10.dex*3785976675:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes11.dex*747467643:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes12.dex*128433845:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes13.dex*3653805668:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes14.dex*1229665198:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes15.dex*638951780:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes16.dex*2498210027:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes17.dex*732076495:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes18.dex*238609134:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes19.dex*1407230120:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk*93354197:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes2.dex*2402452363:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes3.dex*1876940571:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes4.dex*389630062:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes5.dex*1867390877:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes6.dex*4013537063:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes7.dex*3881050273:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes8.dex*4262563330:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes9.dex*371028
+04-12 18:02:55.519  5390  5390 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]#PCL[/system/framework/android.test.runner.jar*4168958247]{PCL[/system/framework/android.test.base.jar*836642756]#PCL[/system/framework/android.test.mock.jar*3186112116]}};PCL[/system/framework/android.test.runner.jar*4168958247:/system/framework/android.test.mock.jar*3186112116:/system/framework/android.test.base.jar*836642756:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk*294246005:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes2.dex*4055916645:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes3.dex*2949407285:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes4.dex*2472856604:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes5.dex*449036524:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes6.dex*2622014904:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes7.dex*530900409:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes8.dex*4143867305:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes9.dex*4104667095:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes10.dex*3785976675:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes11.dex*747467643:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes12.dex*128433845:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes13.dex*3653805668:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes14.dex*1229665198:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes15.dex*638951780:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes16.dex*2498210027:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes17.dex*732076495:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes18.dex*238609134:/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk!classes19.dex*1407230120:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk*93354197:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes2.dex*2402452363:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes3.dex*1876940571:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes4.dex*389630062:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes5.dex*1867390877:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes6.dex*4013537063:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes7.dex*3881050273:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!classes8.dex*4262563330:/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJ
+04-12 18:02:55.521  5390  5390 W ziparchive: Unable to open '/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.dm': No such file or directory
+04-12 18:02:55.521  5390  5390 W ziparchive: Unable to open '/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.dm': No such file or directory
+04-12 18:02:55.969  5390  5390 W ziparchive: Unable to open '/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.dm': No such file or directory
+04-12 18:02:55.970  5390  5390 W ziparchive: Unable to open '/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.dm': No such file or directory
+04-12 18:02:57.930  5390  5390 I AndroidJUnitRunner: newApplication com.panviravindra.comparez.MainApplication
+04-12 18:02:58.307  5390  5390 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=240]
+04-12 18:02:58.310  5390  5390 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+04-12 18:02:58.352  5390  5390 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+04-12 18:02:58.363  5390  5430 D AndroidJUnitRunner: onStart is called.
+04-12 18:02:58.373  5390  5390 W SoLoader: Initializing SoLoader: 0
+04-12 18:02:58.379  5390  5390 W SoLoader: Recording new base apk path: /data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk
+04-12 18:02:58.379  5390  5390 W SoLoader: Previously recorded 0 base apk paths.
+04-12 18:02:58.383  5390  5390 I SoLoader: Preparing SO source: DirectorySoSource[root = /vendor/lib64 flags = 2]
+04-12 18:02:58.389  5390  5390 I SoLoader: Preparing SO source: DirectorySoSource[root = /system/lib64 flags = 2]
+04-12 18:02:58.392  5390  5390 I SoLoader: Preparing SO source: DirectApkSoSource[root = [/data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/base.apk!/lib/arm64-v8a]]
+04-12 18:02:58.554  5390  5390 I SoLoader: Preparing SO source: ApplicationSoSource[DirectorySoSource[root = /data/app/~~86PNOxNuYrX654mWObXNbw==/com.panviravindra.comparez-rJperMNNF7MharineTcCSQ==/lib/arm64 flags = 0]]
+04-12 18:02:58.556  5390  5390 I SoLoader: init finish: 4 SO sources prepared
+04-12 18:02:58.557  5390  5390 W SoLoader: SoLoader initialized: 8
+04-12 18:02:58.582  5390  5430 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+04-12 18:02:58.591  5390  5430 D TestRequestBuilder: Using class path scanning to discover tests
+04-12 18:02:58.592  5390  5430 I TestRequestBuilder: Scanning classpath to find tests in paths [/data/app/~~O_utX11Y5_utV7gmgaC-Ow==/com.panviravindra.comparez.test-73ebO9PgWWM9mPvR76HgBQ==/base.apk]
+04-12 18:02:58.595  5390  5430 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-12 18:03:02.269  5390  5400 I vindra.comparez: Background concurrent copying GC freed 101263(4868KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3742KB/7485KB, paused 18.912ms,38us total 836.123ms
+04-12 18:03:03.190  5390  5430 I TestRunner: run started: 1 tests
+04-12 18:03:03.193  5390  5430 I TestRunner: started: runDetoxTests(com.panviravindra.comparez.DetoxTest)
+04-12 18:03:03.211  5390  5430 I Detox   : Detox server connection details: url=ws://localhost:60520, sessionId=21c9f630-4081-87b6-ba71-642d1c01d132
+04-12 18:03:03.222  5390  5430 W FileTestStorage: Output properties is not supported.
+04-12 18:03:03.224  5390  5430 I Tracing : Tracer added: class androidx.test.platform.tracing.AndroidXTracer
+04-12 18:03:03.246  5390  5430 D EventInjectionStrategy: Creating injection strategy with input manager.
+04-12 18:03:03.247  5390  5430 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager; (unsupported, reflection, allowed)
+04-12 18:03:03.252  5390  5430 W vindra.comparez: Accessing hidden method Landroid/hardware/input/InputManager;->injectInputEvent(Landroid/view/InputEvent;I)Z (unsupported, reflection, allowed)
+04-12 18:03:03.253  5390  5430 W vindra.comparez: Accessing hidden field Landroid/hardware/input/InputManager;->INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH:I (unsupported, reflection, allowed)
+04-12 18:03:03.280  5390  5430 W vindra.comparez: Accessing hidden field Ljava/lang/reflect/Field;->accessFlags:I (unsupported, reflection, allowed)
+04-12 18:03:03.285  5390  5430 I Detox   : Connecting to server...
+04-12 18:03:03.285  5390  5430 I DetoxWSClient: At connectToServer
+04-12 18:03:03.399  5390  5400 I vindra.comparez: Background young concurrent copying GC freed 68709(3169KB) AllocSpace objects, 0(0B) LOS objects, 41% free, 4390KB/7485KB, paused 61us,23us total 128.830ms
+04-12 18:03:03.403  5390  5443 D TrafficStats: tagSocket(84) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:03.432  5390  5443 D DetoxWSClient: At onOpen
+04-12 18:03:03.432  5390  5443 I DetoxWSClient: Sending out action 'login' (ID #0)
+04-12 18:03:03.439  5390  5443 I Detox   : Connected to server!
+04-12 18:03:03.449  5390  5443 D DetoxWSClient: Received action 'loginSuccess' (ID #0, params={"testerConnected":true,"appConnected":true})
+04-12 18:03:03.451  5390  5439 I DetoxDispatcher: Handling action 'loginSuccess' (ID #0)...
+04-12 18:03:03.451  5390  5430 I Detox   : Launching the tested activity!
+04-12 18:03:03.453  5390  5439 I DetoxDispatcher: Done with action 'loginSuccess'
+04-12 18:03:03.488  5390  5443 D DetoxWSClient: Received action 'isReady' (ID #-1000, params={})
+04-12 18:03:03.493  5390  5439 I DetoxDispatcher: Handling action 'isReady' (ID #-1000)...
+04-12 18:03:04.236  5390  5453 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+04-12 18:03:04.296  5390  5453 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+04-12 18:03:04.420  5390  5453 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+04-12 18:03:04.502  5390  5390 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+04-12 18:03:04.553  5390  5390 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: PRE_ON_CREATE
+04-12 18:03:04.933  5390  5390 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 18:03:04.934  5390  5390 D jni_lib_merge: Preparing 12 pre-merged libs (including stub)
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x6cc2212ce0
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x6cc240cfc8
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x6cc241b518
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x6cc24836a8
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x6cc2673cb4
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x6cc26c16bc
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x6cc26d2044
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x6cc2719764
+04-12 18:03:04.935  5390  5390 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x6cc2831f68
+04-12 18:03:04.936  5390  5390 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x6cc284afb8
+04-12 18:03:04.936  5390  5390 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x6cc285aa3c
+04-12 18:03:04.936  5390  5390 D jni_lib_merge: About to register 11 actual methods.
+04-12 18:03:04.981  5390  5390 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_START (null)
+04-12 18:03:05.035  5390  5390 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_END (null)
+04-12 18:03:05.036  5390  5390 W SoLoader: SoLoader already initialized
+04-12 18:03:05.063  5390  5390 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-12 18:03:05.066  5390  5390 D jni_lib_merge: Preparing 4 pre-merged libs (including stub)
+04-12 18:03:05.068  5390  5390 D jni_lib_merge: Preparing to register libhermes_executor_so.  onload_func: 0x6cbc5327e0
+04-12 18:03:05.068  5390  5390 D jni_lib_merge: Preparing to register libhermesinstancejni_so.  onload_func: 0x6cbc56826c
+04-12 18:03:05.068  5390  5390 D jni_lib_merge: Preparing to register libjsijniprofiler_so.  onload_func: 0x6cbc56a2bc
+04-12 18:03:05.068  5390  5390 D jni_lib_merge: About to register 3 actual methods.
+04-12 18:03:05.073  5390  5390 W SoLoader: SoLoader already initialized
+04-12 18:03:05.250  5390  5465 D TrafficStats: tagSocket(91) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:05.261  5390  5465 W unknown:ReactNative: The packager does not seem to be running as we got an IOException requesting its status: Failed to connect to /10.0.2.2:8081
+04-12 18:03:05.387  5390  5390 W vindra.comparez: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+04-12 18:03:05.433  5390  5390 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: CREATED
+04-12 18:03:05.446  5390  5390 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: STARTED
+04-12 18:03:05.470  5390  5390 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@ae286b3 in: RESUMED
+04-12 18:03:05.526  5390  5390 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10195; state: DISABLED
+04-12 18:03:05.545  5390  5466 D TrafficStats: tagSocket(94) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:05.553  5390  5390 W OpenGLRenderer: Unknown dataspace 0
+04-12 18:03:05.558  5390  5466 W unknown:ReconnectingWebSocket: Couldn't connect to "ws://10.0.2.2:8081/message?device=sdk_gphone64_arm64%20-%2014%20-%20API%2034&app=com.panviravindra.comparez&clientid=BridgeDevSupportManager", will silently retry
+04-12 18:03:05.649  5390  5390 D Detox.RNMarker: REACT_BRIDGE_LOADING_START (null)
+04-12 18:03:05.661  5390  5390 W unknown:ReactNative: Packager connection already open, nooping.
+04-12 18:03:05.705  5390  5469 D Detox.RNMarker: CREATE_REACT_CONTEXT_START (HermesExecutorDebug)
+04-12 18:03:05.743  5390  5469 D Detox.RNMarker: PROCESS_PACKAGES_START (null)
+04-12 18:03:05.896  5390  5452 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+04-12 18:03:05.904  5390  5452 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+04-12 18:03:05.952  5390  5468 D ProfileInstaller: Installing profile for com.panviravindra.comparez
+04-12 18:03:05.987  5390  5452 I Gralloc4: mapper 4.x is not supported
+04-12 18:03:06.015  5390  5469 D Detox.RNMarker: CREATE_MODULE_START (FrescoModule)
+04-12 18:03:06.023  5390  5469 D Detox.RNMarker: CREATE_MODULE_END (FrescoModule)
+04-12 18:03:06.050  5390  5452 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 18:03:06.412  5390  5469 W vindra.comparez: Verification of void expo.modules.adapters.react.permissions.PermissionsService.askForPermissions(expo.modules.interfaces.permissions.PermissionsResponseListener, java.lang.String[]) took 129.778ms (963.18 bytecodes/s) (4216B approximate peak alloc)
+04-12 18:03:07.176  5390  5469 I vindra.comparez: Waiting for a blocking GC ClassLinker
+04-12 18:03:07.605  5390  5466 D TrafficStats: tagSocket(108) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:08.387  5390  5491 D TrafficStats: tagSocket(108) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:08.401  5390  5390 W vindra.comparez: Long monitor contention with owner AsyncTask #2 (5461) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:600) waiters=0 in android.os.Message android.os.MessageQueue.next() for 617ms
+04-12 18:03:08.403  5390  5466 W vindra.comparez: Long monitor contention with owner AsyncTask #2 (5461) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:600) waiters=1 in boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long) for 617ms
+04-12 18:03:08.685  5390  5400 I vindra.comparez: Background young concurrent copying GC freed 15579(1937KB) AllocSpace objects, 1(20KB) LOS objects, 27% free, 5429KB/7485KB, paused 173us,101us total 1.687s
+04-12 18:03:08.685  5390  5469 I vindra.comparez: WaitForGcToComplete blocked ClassLinker on Background for 1.509s
+04-12 18:03:08.685  5390  5469 W vindra.comparez: Verification of java.lang.Object expo.modules.kotlin.defaultmodules.CoreModule$definition$lambda$10$$inlined$Function$3.invoke(java.lang.Object[]) took 1.555s (28.94 bytecodes/s) (2232B approximate peak alloc)
+04-12 18:03:08.990  5390  5469 W vindra.comparez: Verification of expo.modules.kotlin.modules.ModuleDefinitionData expo.modules.fetch.ExpoFetchModule.definition() took 106.450ms (29572.40 bytecodes/s) (63496B approximate peak alloc)
+04-12 18:03:09.908  5390  5466 D TrafficStats: tagSocket(112) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:10.359  5390  5469 W vindra.comparez: Verification of expo.modules.kotlin.modules.ModuleDefinitionData expo.modules.filesystem.FileSystemModule.definition() took 510.098ms (20709.73 bytecodes/s) (200552B approximate peak alloc)
+04-12 18:03:10.506  5390  5491 D TrafficStats: tagSocket(112) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:10.747  5390  5469 I ExpoModulesCore: ✅ AppContext was initialized
+04-12 18:03:10.769  5390  5469 D Detox.RNMarker: PROCESS_PACKAGES_END (null)
+04-12 18:03:10.795  5390  5469 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_START (null)
+04-12 18:03:10.881  5390  5469 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_END (null)
+04-12 18:03:10.889  5390  5469 D Detox.RNMarker: PRE_RUN_JS_BUNDLE_START (null)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: Exception in native call
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: java.lang.RuntimeException: Unable to load script.
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: Make sure you're running Metro or that your bundle 'index.android.bundle' is packaged correctly for release.
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: The device must either be USB connected (with bundler set to "localhost:8081") or be on the same Wi-Fi network as your computer (with bundler set to your computer IP) to connect to Metro.
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: If you're using USB on a physical device, make sure you also run this command:
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative:   adb reverse tcp:8081 tcp:8081
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.jniLoadScriptFromAssets(Native Method)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.loadScriptFromAssets(CatalystInstanceImpl.java:245)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.bridge.JSBundleLoader$Companion$createAssetLoader$1.loadScript(JSBundleLoader.kt:33)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.runJSBundle(CatalystInstanceImpl.java:274)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.createReactContext(ReactInstanceManager.java:1525)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.lambda$runCreateReactContextOnNewThread$2(ReactInstanceManager.java:1222)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.$r8$lambda$PrBhihCbbAFk4ZReAALGanVLCyc(Unknown Source:0)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+04-12 18:03:10.927  5390  5469 E unknown:ReactNative: 	at java.lang.Thread.run(Thread.java:1012)
+04-12 18:03:10.943  5390  5499 D Detox.RNMarker: CREATE_REACT_CONTEXT_END (null)
+04-12 18:03:10.997  5390  5390 D CompatibilityChangeReporter: Compat change id reported: 171228096; UID 10195; state: ENABLED
+04-12 18:03:11.043  5390  5390 D CompatibilityChangeReporter: Compat change id reported: 210923482; UID 10195; state: ENABLED
+04-12 18:03:11.433  5390  5452 E OpenGLRenderer: Unable to match the desired swap behavior.
+04-12 18:03:12.311  5390  5406 I OpenGLRenderer: Davey! duration=1107ms; Flags=1, FrameTimelineVsyncId=6289, IntendedVsync=192978175833, Vsync=193011509165, InputEventId=0, HandleInputStart=193027941673, AnimationStart=193027952132, PerformTraversalsStart=193027959007, DrawStart=193858469715, FrameDeadline=192994842499, FrameInterval=193027843590, FrameStartTime=16666666, SyncQueued=193903017757, SyncStart=193907246924, IssueDrawCommandsStart=193907462632, SwapBuffers=194077716299, FrameCompleted=194090188590, DequeueBufferDuration=10292, QueueBufferDuration=1530125, GpuCompleted=194090081590, SwapBuffersCompleted=194090188590, DisplayPresentTime=0, CommandSubmissionCompleted=194077716299, 
+04-12 18:03:12.344  5390  5390 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+04-12 18:03:12.507  5390  5466 D TrafficStats: tagSocket(124) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:12.575  5390  5406 I OpenGLRenderer: Davey! duration=1291ms; Flags=0, FrameTimelineVsyncId=6305, IntendedVsync=193061509163, Vsync=194128175787, InputEventId=0, HandleInputStart=194143404757, AnimationStart=194143416174, PerformTraversalsStart=194158690715, DrawStart=194159428465, FrameDeadline=194111509121, FrameInterval=194137022507, FrameStartTime=16666666, SyncQueued=194177206257, SyncStart=194177894715, IssueDrawCommandsStart=194276366215, SwapBuffers=194326578799, FrameCompleted=194353324841, DequeueBufferDuration=11875, QueueBufferDuration=13765708, GpuCompleted=194353177049, SwapBuffersCompleted=194353324841, DisplayPresentTime=0, CommandSubmissionCompleted=194326578799, 
+04-12 18:03:12.606  5390  5491 D TrafficStats: tagSocket(127) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:12.719  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:13.452  5390  5443 D DetoxWSClient: Received action 'currentStatus' (ID #1, params={})
+04-12 18:03:13.454  5390  5440 I DetoxDispatcher: Handling action 'currentStatus' (ID #1)...
+04-12 18:03:14.622  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:14.629  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:14.728  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:16.636  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:16.641  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:16.750  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:18.643  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:18.649  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:18.766  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:20.655  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:20.663  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:20.783  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:22.668  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:22.675  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:22.803  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:24.675  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:24.682  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:24.820  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:26.689  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:26.709  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:26.838  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:28.695  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:28.702  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:28.853  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:30.708  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:30.715  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:30.873  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:32.717  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:32.725  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:32.887  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:34.726  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:34.733  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:34.904  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:36.736  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:36.743  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:36.917  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:38.745  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:38.752  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:38.934  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:40.761  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:40.773  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:40.951  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:42.775  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:42.782  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:42.978  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:44.776  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:44.784  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:44.993  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:46.788  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:46.796  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:47.010  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:48.793  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:48.801  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:49.029  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:50.810  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:50.817  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:51.045  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:52.816  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:52.822  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:53.060  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:54.828  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:54.835  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:55.077  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:56.829  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:56.834  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:57.097  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:58.843  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:03:58.849  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:03:59.116  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:00.850  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:00.858  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:01.131  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:02.859  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:02.868  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:03.148  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:04.862  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:04.869  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:05.158  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:06.875  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:06.883  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:07.173  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:08.880  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:08.887  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:09.191  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:10.892  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:10.900  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:11.209  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:12.901  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:12.906  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:13.225  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:14.916  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:14.922  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:15.241  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:16.923  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:16.931  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:17.261  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:18.938  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:18.944  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:19.280  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:20.946  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:20.954  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:21.300  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:22.959  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:22.966  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:23.320  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:24.969  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:24.976  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:25.338  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:26.982  5390  5491 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid=-1
+04-12 18:04:26.991  5390  5390 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception Failed to connect to /10.0.2.2:8081
+04-12 18:04:27.356  5390  5466 D TrafficStats: tagSocket(125) with statsTag=0xffffffff, statsUid
