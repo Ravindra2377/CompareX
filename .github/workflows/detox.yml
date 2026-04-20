@@ -73,23 +73,58 @@ jobs:
           disable-animations: true
           # Direct hardware flags for guaranteed RAM allocation
           emulator-options: -no-window -gpu swiftshader_indirect -no-audio -accel off -memory 4096 -cores 2
-          working-directory: frontend
+          # Give the emulator extra time to cold-boot on GitHub runners (ms)
+          emulator-boot-timeout: 600000
           script: |
-            # Kill memory-hungry background services
-            adb shell am force-stop com.google.android.gms
-            # Suppress system error dialogs that steal focus
-            adb shell settings put global show_error_dialogs 0
-            adb shell settings put global show_annoying_app_errors 0
-            # Wake, Unlock, and go to Home to ensure focus
-            adb shell input keyevent 82
-            adb shell wm dismiss-keyguard
-            adb shell input keyevent 3
-            # De-animate to save RAM
-            adb shell settings put global window_animation_scale 0.0
-            adb shell settings put global transition_animation_scale 0.0
-            adb shell settings put global animator_duration_scale 0.0
-            # Map ports and start Metro
-            adb reverse tcp:8081 tcp:8081 && cd .. && cd frontend && (npx expo start --no-dev --host localhost &) && npx wait-on http://localhost:8081 --timeout 600000 && npm run detox-build && sleep 15 && npm run detox-test
+            # Wait for emulator to be fully booted (poll sys.boot_completed)
+            echo "Waiting for emulator to finish booting (up to 10m)..."
+            BOOT_TIMEOUT=600
+            BOOT_END=$((SECONDS + BOOT_TIMEOUT))
+            EMULATOR_SERIAL=""
+            BOOTED=0
+            while [ $SECONDS -lt $BOOT_END ]; do
+              EMULATOR_SERIAL=$(adb devices | awk '/emulator-/{print $1; exit}') || true
+              if [ -n "$EMULATOR_SERIAL" ]; then
+                BOOTED_FLAG=$(adb -s $EMULATOR_SERIAL shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)
+                if [ "$BOOTED_FLAG" = "1" ]; then
+                  echo "Emulator $EMULATOR_SERIAL booted"
+                  BOOTED=1
+                  break
+                fi
+              fi
+              echo "Emulator not ready yet... sleeping 5s"
+              sleep 5
+            done
+            if [ $BOOTED -ne 1 ]; then
+              echo "Emulator failed to boot within ${BOOT_TIMEOUT}s"
+              adb devices || true
+              exit 1
+            fi
+
+            # Perform device setup once emulator is ready
+            echo "Performing device setup on $EMULATOR_SERIAL"
+            adb -s $EMULATOR_SERIAL shell am force-stop com.google.android.gms || true
+            adb -s $EMULATOR_SERIAL shell settings put global show_error_dialogs 0 || true
+            adb -s $EMULATOR_SERIAL shell settings put global show_annoying_app_errors 0 || true
+            adb -s $EMULATOR_SERIAL shell input keyevent 82 || true
+            adb -s $EMULATOR_SERIAL shell wm dismiss-keyguard || true
+            adb -s $EMULATOR_SERIAL shell input keyevent 3 || true
+            adb -s $EMULATOR_SERIAL shell settings put global window_animation_scale 0.0 || true
+            adb -s $EMULATOR_SERIAL shell settings put global transition_animation_scale 0.0 || true
+            adb -s $EMULATOR_SERIAL shell settings put global animator_duration_scale 0.0 || true
+
+            # Start Metro, build and run Detox
+            if [ -d "frontend" ]; then
+              cd frontend
+            fi
+            adb reverse tcp:8081 tcp:8081 || true
+            (npx expo start --no-dev --host localhost &) || true
+            # Wait for Metro to serve and for the packager to be reachable
+            npx wait-on http://localhost:8081 --timeout 600000
+            npm run detox-build
+            # Short sleep to let install settle before tests
+            sleep 15
+            npm run detox-test
 
       - name: Upload Detox artifacts
         if: always()

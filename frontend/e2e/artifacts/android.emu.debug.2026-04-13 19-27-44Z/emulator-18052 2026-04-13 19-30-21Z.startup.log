@@ -1,0 +1,257 @@
+--------- beginning of main
+04-14 00:58:09.124  7062  7062 I vindra.comparez: Late-enabling -Xcheck:jni
+04-14 00:58:09.216  7062  7062 I vindra.comparez: Using CollectorTypeCMC GC.
+04-14 00:58:09.222  7062  7062 W vindra.comparez: Unexpected CPU variant for x86: x86_64.
+04-14 00:58:09.222  7062  7062 W vindra.comparez: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+04-14 00:58:09.249  7062  7062 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+--------- beginning of system
+04-14 00:58:09.372  7062  7062 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.panviravindra.comparez]: x86_64, null instrumentation[com.panviravindra.comparez.test]: null, null
+04-14 00:58:09.397  7062  7062 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+04-14 00:58:09.411  7062  7062 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+04-14 00:58:09.415  7062  7062 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+04-14 00:58:10.024  7062  7062 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/lib/x86_64:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/lib/x86_64:/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk!/lib/x86_64:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.panviravindra.comparez
+04-14 00:58:10.036  7062  7062 I vindra.comparez: AssetManager2(0x78d8d6687f98) locale list changing from [] to [en-US]
+04-14 00:58:10.058  7062  7062 V GraphicsEnvironment: Currently set values for:
+04-14 00:58:10.058  7062  7062 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+04-14 00:58:10.058  7062  7062 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+04-14 00:58:10.058  7062  7062 V GraphicsEnvironment: com.panviravindra.comparez is not listed in per-application setting
+04-14 00:58:10.059  7062  7062 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+04-14 00:58:10.059  7062  7062 V GraphicsEnvironment: com.panviravindra.comparez is not listed in ANGLE allowlist or settings, returning default
+04-14 00:58:10.059  7062  7062 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+04-14 00:58:10.064  7062  7062 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-14 00:58:10.066  7062  7062 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/lib/x86_64:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/lib/x86_64, permitted_path=/data:/mnt/expand
+04-14 00:58:10.067  7062  7062 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-14 00:58:10.069  7062  7062 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/lib/x86_64:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/lib/x86_64, permitted_path=/data:/mnt/expand
+04-14 00:58:10.073  7062  7062 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk*411959157:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk*2906283556])
+04-14 00:58:10.075  7062  7062 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk*411959157:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk*2906283556])
+04-14 00:58:10.077  7062  7062 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk*411959157:/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk*2906283556])
+04-14 00:58:10.593  7062  7062 I vindra.comparez: AssetManager2(0x78d8d66824f8) locale list changing from [] to [en-US]
+04-14 00:58:10.607  7062  7062 I AndroidJUnitRunner: newApplication com.panviravindra.comparez.MainApplication
+04-14 00:58:10.748  7062  7062 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=240]
+04-14 00:58:10.750  7062  7062 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+04-14 00:58:10.827  7062  7062 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+04-14 00:58:10.828  7062  7095 D AndroidJUnitRunner: onStart is called.
+04-14 00:58:10.831  7062  7062 W SoLoader: Initializing SoLoader: 0
+04-14 00:58:10.832  7062  7062 W SoLoader: Recording new base apk path: /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk
+04-14 00:58:10.832  7062  7062 W SoLoader: Previously recorded 0 base apk paths.
+04-14 00:58:10.834  7062  7062 I SoLoader: Preparing SO source: DirectorySoSource[root = /vendor/lib64 flags = 2]
+04-14 00:58:10.835  7062  7062 I SoLoader: Preparing SO source: DirectorySoSource[root = /system/lib64 flags = 2]
+04-14 00:58:10.835  7062  7062 I SoLoader: Preparing SO source: DirectApkSoSource[root = [/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64]]
+04-14 00:58:10.857  7062  7062 I SoLoader: Preparing SO source: ApplicationSoSource[DirectorySoSource[root = /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/lib/x86_64 flags = 0]]
+04-14 00:58:10.858  7062  7062 I SoLoader: init finish: 4 SO sources prepared
+04-14 00:58:10.858  7062  7062 W SoLoader: SoLoader initialized: 8
+04-14 00:58:10.880  7062  7095 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+04-14 00:58:10.884  7062  7095 D TestRequestBuilder: Using class path scanning to discover tests
+04-14 00:58:10.884  7062  7095 I TestRequestBuilder: Scanning classpath to find tests in paths [/data/app/~~2BhiuxnSMhRtrc7_v8bifw==/com.panviravindra.comparez.test-TWX-Jh9Rd0_Xam3MshYgMw==/base.apk]
+04-14 00:58:10.885  7062  7095 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:58:11.417  7062  7095 I TestRunner: run started: 1 tests
+04-14 00:58:11.419  7062  7095 I TestRunner: started: runDetoxTests(com.panviravindra.comparez.DetoxTest)
+04-14 00:58:11.432  7062  7095 I Detox   : Detox server connection details: url=ws://localhost:46871, sessionId=db3a1ec7-d11b-f5e6-d931-57ca85534725
+04-14 00:58:11.445  7062  7095 I Tracing : Tracer added: class androidx.test.platform.tracing.AndroidXTracer
+04-14 00:58:11.479  7062  7095 I vindra.comparez: hiddenapi: Accessing hidden field Ljava/lang/reflect/Field;->accessFlags:I (runtime_flags=0, domain=core-platform, api=unsupported) from Lorg/joor/Reflect; (domain=app) using reflection: allowed
+04-14 00:58:11.482  7062  7095 I Detox   : Connecting to server...
+04-14 00:58:11.482  7062  7095 I DetoxWSClient: At connectToServer
+04-14 00:58:11.638  7062  7101 D DetoxWSClient: At onOpen
+04-14 00:58:11.639  7062  7101 I DetoxWSClient: Sending out action 'login' (ID #0)
+04-14 00:58:11.642  7062  7101 I Detox   : Connected to server!
+04-14 00:58:11.647  7062  7101 D DetoxWSClient: Received action 'loginSuccess' (ID #0, params={"testerConnected":true,"appConnected":true})
+04-14 00:58:11.648  7062  7097 I DetoxDispatcher: Handling action 'loginSuccess' (ID #0)...
+04-14 00:58:11.649  7062  7097 I DetoxDispatcher: Done with action 'loginSuccess'
+04-14 00:58:11.649  7062  7095 I Detox   : Launching the tested activity!
+04-14 00:58:11.691  7062  7101 D DetoxWSClient: Received action 'isReady' (ID #-1000, params={})
+04-14 00:58:11.692  7062  7097 I DetoxDispatcher: Handling action 'isReady' (ID #-1000)...
+04-14 00:58:12.063  7062  7109 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+04-14 00:58:12.147  7062  7062 I vindra.comparez: AssetManager2(0x78d8d6688f38) locale list changing from [] to [en-US]
+04-14 00:58:12.253  7062  7062 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+04-14 00:58:12.254  7062  7062 I vindra.comparez: AssetManager2(0x78d8d668c138) locale list changing from [] to [en-US]
+04-14 00:58:12.270  7062  7062 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+04-14 00:58:12.330  7062  7062 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@dce3ec2 in: PRE_ON_CREATE
+04-14 00:58:12.678  7062  7109 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+04-14 00:58:12.678  7062  7109 I EGL_emulation: Opening libGLESv2_emulation.so
+04-14 00:58:12.696  7062  7109 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+04-14 00:58:12.743  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libc++_shared.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.776  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libjsi.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.803  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libfbjni.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.824  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libreactnative.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.824  7062  7062 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-14 00:58:12.824  7062  7062 D jni_lib_merge: Preparing 12 pre-merged libs (including stub)
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x78d69a47c550
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x78d69a669c30
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x78d69a677780
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x78d69a6dc1f0
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x78d69a8c4400
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x78d69a90ecb0
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x78d69a91eab0
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x78d69a964920
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x78d69aa836a0
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x78d69aa9b920
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x78d69aaaa8b0
+04-14 00:58:12.825  7062  7062 D jni_lib_merge: About to register 11 actual methods.
+04-14 00:58:12.846  7062  7062 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_START (null)
+04-14 00:58:12.871  7062  7062 D Detox.RNMarker: BUILD_REACT_INSTANCE_MANAGER_END (null)
+04-14 00:58:12.872  7062  7062 W SoLoader: SoLoader already initialized
+04-14 00:58:12.895  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libhermes.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.929  7062  7062 D nativeloader: Load /data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk!/lib/x86_64/libhermestooling.so using class loader ns clns-9 (caller=/data/app/~~upDonMUoAJqwaBnVIJZ5Qg==/com.panviravindra.comparez-IxXcXLAf3jUyZTKwsYOgRA==/base.apk): ok
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: Entering merged library JNI_OnLoad.
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: Preparing 4 pre-merged libs (including stub)
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: Preparing to register libhermes_executor_so.  onload_func: 0x78d69e270ce0
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: Preparing to register libhermesinstancejni_so.  onload_func: 0x78d69e2a3700
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: Preparing to register libjsijniprofiler_so.  onload_func: 0x78d69e2a5470
+04-14 00:58:12.929  7062  7062 D jni_lib_merge: About to register 3 actual methods.
+04-14 00:58:12.931  7062  7062 W SoLoader: SoLoader already initialized
+04-14 00:58:13.031  7062  7116 W unknown:ReactNative: The packager does not seem to be running as we got an IOException requesting its status: unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:13.047  7062  7062 D CompatChangeReporter: Compat change id reported: 377864165; UID 10230; state: ENABLED
+04-14 00:58:13.070  7062  7062 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+04-14 00:58:13.076  7062  7117 W unknown:ReconnectingWebSocket: Couldn't connect to "ws://10.0.2.2:8081/message?device=sdk_gphone64_x86_64%20-%2016%20-%20API%2036&app=com.panviravindra.comparez&clientid=BridgeDevSupportManager", will silently retry
+04-14 00:58:13.121  7062  7062 I vindra.comparez: hiddenapi: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/appcompat/widget/ViewUtils; (domain=app) using reflection: allowed
+04-14 00:58:13.127  7062  7062 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@dce3ec2 in: CREATED
+04-14 00:58:13.130  7062  7062 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@dce3ec2 in: STARTED
+04-14 00:58:13.132  7062  7062 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+04-14 00:58:13.132  7062  7062 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+04-14 00:58:13.151  7062  7062 D LifecycleMonitor: Lifecycle status change: com.panviravindra.comparez.MainActivity@dce3ec2 in: RESUMED
+04-14 00:58:13.196  7062  7062 W HWUI    : Unknown dataspace 0
+04-14 00:58:13.231  7062  7062 D Detox.RNMarker: REACT_BRIDGE_LOADING_START (null)
+04-14 00:58:13.234  7062  7123 D Detox.RNMarker: CREATE_REACT_CONTEXT_START (HermesExecutorDebug)
+04-14 00:58:13.236  7062  7123 D Detox.RNMarker: PROCESS_PACKAGES_START (null)
+04-14 00:58:13.244  7062  7123 D Detox.RNMarker: CREATE_MODULE_START (FrescoModule)
+04-14 00:58:13.247  7062  7123 D Detox.RNMarker: CREATE_MODULE_END (FrescoModule)
+04-14 00:58:13.264  7062  7062 W unknown:ReactNative: Packager connection already open, nooping.
+04-14 00:58:13.962  7062  7123 I ExpoModulesCore: ✅ AppContext was initialized
+04-14 00:58:13.964  7062  7123 D Detox.RNMarker: PROCESS_PACKAGES_END (null)
+04-14 00:58:13.995  7062  7123 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_START (null)
+04-14 00:58:14.072  7062  7108 I HWUI    : Davey! duration=776ms; Flags=1, FrameTimelineVsyncId=17026, IntendedVsync=3594153653639, Vsync=3594186986971, InputEventId=0, HandleInputStart=3594193219132, AnimationStart=3594193221011, PerformTraversalsStart=3594193222137, DrawStart=3594604645393, FrameDeadline=3594170320305, FrameStartTime=3594193204536, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=3594609045496, SyncStart=3594609499746, IssueDrawCommandsStart=3594609679003, SwapBuffers=3594632407690, FrameCompleted=3594931058464, DequeueBufferDuration=7041, QueueBufferDuration=6069586, GpuCompleted=3594930957636, SwapBuffersCompleted=3594931058464, DisplayPresentTime=0, CommandSubmissionCompleted=3594632407690, 
+04-14 00:58:14.125  7062  7123 D Detox.RNMarker: CREATE_CATALYST_INSTANCE_END (null)
+04-14 00:58:14.127  7062  7123 D Detox.RNMarker: PRE_RUN_JS_BUNDLE_START (null)
+04-14 00:58:14.173  7062  7130 D Detox.RNMarker: CREATE_REACT_CONTEXT_END (null)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: Exception in native call
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: java.lang.RuntimeException: Unable to load script.
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: Make sure you're running Metro or that your bundle 'index.android.bundle' is packaged correctly for release.
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: The device must either be USB connected (with bundler set to "localhost:8081") or be on the same Wi-Fi network as your computer (with bundler set to your computer IP) to connect to Metro.
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: If you're using USB on a physical device, make sure you also run this command:
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative:   adb reverse tcp:8081 tcp:8081
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.jniLoadScriptFromAssets(Native Method)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.loadScriptFromAssets(CatalystInstanceImpl.java:245)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.bridge.JSBundleLoader$Companion$createAssetLoader$1.loadScript(JSBundleLoader.kt:33)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.bridge.CatalystInstanceImpl.runJSBundle(CatalystInstanceImpl.java:274)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.createReactContext(ReactInstanceManager.java:1525)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.lambda$runCreateReactContextOnNewThread$2(ReactInstanceManager.java:1222)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager.$r8$lambda$PrBhihCbbAFk4ZReAALGanVLCyc(Unknown Source:0)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at com.facebook.react.ReactInstanceManager$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+04-14 00:58:14.185  7062  7123 E unknown:ReactNative: 	at java.lang.Thread.run(Thread.java:1119)
+04-14 00:58:14.334  7062  7062 W HWUI    : Image decoding logging dropped!
+04-14 00:58:15.595  7062  7070 I vindra.comparez: Compiler allocated 5042KB to compile void android.view.ViewRootImpl.performTraversals()
+04-14 00:58:16.390  7062  7062 D InsetsController: hide(ime(), fromIme=false)
+04-14 00:58:16.390  7062  7062 I ImeTracker: com.panviravindra.comparez:63e37ae2: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+04-14 00:58:16.390  7062  7062 I Choreographer: Skipped 104 frames!  The application may be doing too much work on its main thread.
+04-14 00:58:16.450  7062  7136 D ProfileInstaller: Installing profile for com.panviravindra.comparez
+04-14 00:58:16.732  7062  7077 I HWUI    : Davey! duration=1873ms; Flags=1, FrameTimelineVsyncId=17189, IntendedVsync=3595453653587, Vsync=3595520320251, InputEventId=0, HandleInputStart=3595535494586, AnimationStart=3595535495742, PerformTraversalsStart=3595535496606, DrawStart=3596710068532, FrameDeadline=3595470320253, FrameStartTime=3595535486432, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=3596718416721, SyncStart=3596718728053, IssueDrawCommandsStart=3596718815288, SwapBuffers=3597145117787, FrameCompleted=3597327900880, DequeueBufferDuration=4075, QueueBufferDuration=192610, GpuCompleted=3597327900880, SwapBuffersCompleted=3597314034228, DisplayPresentTime=0, CommandSubmissionCompleted=3597145117787, 
+04-14 00:58:16.734  7062  7077 I HWUI    : Davey! duration=2053ms; Flags=0, FrameTimelineVsyncId=17212, IntendedVsync=3595586986915, Vsync=3597320320179, InputEventId=0, HandleInputStart=3597321429836, AnimationStart=3597321431239, PerformTraversalsStart=3597321757839, DrawStart=3597321842797, FrameDeadline=3597353653511, FrameStartTime=3597321200668, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=3597322710837, SyncStart=3597322761123, IssueDrawCommandsStart=3597323089093, SwapBuffers=3597410011291, FrameCompleted=3597640234626, DequeueBufferDuration=6709, QueueBufferDuration=16993039, GpuCompleted=3597640234626, SwapBuffersCompleted=3597613413161, DisplayPresentTime=0, CommandSubmissionCompleted=3597410011291, 
+04-14 00:58:16.742  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:16.784  7062  7062 D InsetsController: hide(ime(), fromIme=false)
+04-14 00:58:16.784  7062  7062 I ImeTracker: com.panviravindra.comparez:f9756270: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+04-14 00:58:18.430  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:20.504  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:21.650  7062  7101 D DetoxWSClient: Received action 'currentStatus' (ID #1, params={})
+04-14 00:58:21.650  7062  7098 I DetoxDispatcher: Handling action 'currentStatus' (ID #1)...
+04-14 00:58:22.488  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:24.490  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:26.491  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:28.531  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:30.516  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:32.525  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:34.536  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:36.541  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:38.537  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:40.548  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:42.568  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:44.549  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:46.552  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:48.560  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:50.577  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:52.589  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:54.585  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:56.581  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:58:58.583  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:00.584  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:02.598  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:04.595  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:06.597  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:08.637  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:10.625  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:12.619  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:14.621  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:16.623  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:18.623  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:20.629  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:22.632  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:24.637  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:26.651  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:28.642  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:30.666  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:32.648  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:34.651  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:36.652  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:38.655  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:40.672  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:42.667  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:44.670  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:46.665  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:48.667  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:50.719  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:52.695  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:54.700  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:56.701  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 00:59:58.704  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:00.705  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:02.707  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:04.708  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:06.710  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:08.732  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:10.726  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:12.719  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:14.723  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:16.726  7062  7062 I ReactNativeJNI: Error occurred, shutting down websocket connection: WebSocket exception unexpected end of stream on http://10.0.2.2:8081/...
+04-14 01:00:16.860  7062  7097 W vindra.comparez: Long monitor contention with owner Instr: androidx.test.runner.AndroidJUnitRunner (7095) at void com.wix.detox.DetoxMain.launchActivityOnCue(android.content.Context, com.wix.detox.ActivityLaunchHelper)(DetoxMain.kt:53) waiters=0 in void com.wix.detox.DetoxMain$setupActionHandlers$SynchronizedActionHandler.handle(java.lang.String, long) for 125.167s
+04-14 01:00:16.868  7062  7062 I vindra.comparez: hiddenapi: Accessing hidden field Landroid/app/Activity;->mResultCode:I (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/rule/ActivityTestRule; (domain=app) using reflection: allowed
+04-14 01:00:16.868  7062  7062 I vindra.comparez: hiddenapi: Accessing hidden field Landroid/app/Activity;->mResultData:Landroid/content/Intent; (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/rule/ActivityTestRule; (domain=app) using reflection: allowed
+04-14 01:00:16.877  7062  7062 I Detox   : Wait is over: App is now idle!
+04-14 01:00:16.877  7062  7095 E TestRunner: failed: runDetoxTests(com.panviravindra.comparez.DetoxTest)
+04-14 01:00:16.879  7062  7097 I DetoxWSClient: Sending out action 'ready' (ID #-1000)
+04-14 01:00:16.881  7062  7097 I DetoxDispatcher: Done with action 'isReady'
+04-14 01:00:16.881  7062  7095 E TestRunner: ----- begin exception -----
+04-14 01:00:16.881  7062  7095 E TestRunner: com.wix.detox.common.DetoxErrors$DetoxRuntimeException: Waited for the new RN-context for too long! (120 seconds)
+04-14 01:00:16.881  7062  7095 E TestRunner: If you think that's not long enough, consider applying a custom Detox runtime-config in DetoxTest.runTests().
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.reactnative.ReactNativeLoadingMonitor.awaitNewRNContext(ReactNativeLoadingMonitor.kt:54)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.reactnative.ReactNativeLoadingMonitor.getNewContext(ReactNativeLoadingMonitor.kt:26)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.reactnative.ReactNativeExtension.awaitNewReactNativeContext(ReactNativeExtension.kt:127)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.reactnative.ReactNativeExtension.waitForRNBootstrap(ReactNativeExtension.kt:37)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.DetoxMain.launchActivity(DetoxMain.kt:133)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.DetoxMain.launchActivityOnCue(DetoxMain.kt:55)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.DetoxMain.run(DetoxMain.kt:35)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.Detox.runTests(Detox.java:127)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.wix.detox.Detox.runTests(Detox.java:94)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at com.panviravindra.comparez.DetoxTest.runDetoxTests(DetoxTest.java:27)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+04-14 01:00:16.881  7062  7095 E TestRunner: 	at org.junit.runners.Sui

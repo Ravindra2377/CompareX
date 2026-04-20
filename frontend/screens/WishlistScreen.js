@@ -72,7 +72,7 @@ const WishlistScreen = ({ navigation }) => {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <View style={styles.emptyState}>
+          <View style={styles.emptyState} testID="wishlist-empty-state">
             <Ionicons name="heart-outline" size={48} color={COLORS.border} />
             <Text style={styles.emptyTitle}>No saved items</Text>
             <Text style={styles.emptySubtitle}>
@@ -83,6 +83,7 @@ const WishlistScreen = ({ navigation }) => {
               variant="secondary"
               style={styles.emptyCta}
               onPress={() => navigation.navigate("Search")}
+              testID="wishlist-start-searching"
             />
           </View>
         }

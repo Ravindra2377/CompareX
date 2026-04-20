@@ -1,0 +1,781 @@
+01:10:55.907 detox[3165511] [90mB[39m node_modules/.bin/detox test -c android.emu.debug --testPathPattern=e2e/navigation.test.js
+  data: {
+    "id": "5dfb0e5d-fb3c-488d-4a63-e18e42b91a9b",
+    "detoxConfig": {
+      "configurationName": "android.emu.debug",
+      "apps": {
+        "default": {
+          "type": "android.apk",
+          "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug",
+          "reversePorts": [
+            8082
+          ]
+        }
+      },
+      "artifacts": {
+        "rootDir": "e2e/artifacts/android.emu.debug.2026-04-14 19-40-55Z",
+        "plugins": {
+          "log": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "screenshot": {
+            "shouldTakeAutomaticSnapshots": true,
+            "keepOnlyFailedTestsArtifacts": true,
+            "enabled": true
+          },
+          "video": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": true
+          },
+          "instruments": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "uiHierarchy": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          }
+        }
+      },
+      "behavior": {
+        "init": {
+          "keepLockFile": false,
+          "reinstallApp": true,
+          "exposeGlobals": true
+        },
+        "cleanup": {
+          "shutdownDevice": false
+        },
+        "launchApp": "auto"
+      },
+      "cli": {
+        "configuration": "android.emu.debug",
+        "start": true
+      },
+      "commands": [
+        {
+          "appName": "default",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug"
+        }
+      ],
+      "device": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Medium_Phone_API_36.1"
+        },
+        "util": {
+          "launchArgs": {
+            "detoxPrintBusyIdleResources": "YES",
+            "detoxDeadlockDetection": "false",
+            "DETOX": "true"
+          }
+        }
+      },
+      "logger": {
+        "level": "info",
+        "overrideConsole": true,
+        "options": {
+          "showLoggerName": true,
+          "showPid": true,
+          "showLevel": false,
+          "showMetadata": false,
+          "basepath": "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src",
+          "prefixers": {},
+          "stringifiers": {}
+        }
+      },
+      "testRunner": {
+        "retries": 0,
+        "forwardEnv": false,
+        "detached": false,
+        "bail": false,
+        "noRetryArgs": [
+          "shard"
+        ],
+        "jest": {
+          "setupTimeout": 300000,
+          "teardownTimeout": 30000,
+          "retryAfterCircusRetries": false,
+          "reportWorkerAssign": true
+        },
+        "args": {
+          "$0": "jest",
+          "_": [],
+          "config": "e2e/jest.config.js",
+          "testPathPattern": "e2e/navigation.test.js",
+          "--": []
+        }
+      },
+      "session": {
+        "autoStart": true,
+        "debugSynchronization": 10000
+      }
+    },
+    "detoxIPCServer": "primary-3165511",
+    "testResults": [],
+    "testSessionIndex": 0,
+    "workersCount": 0
+  }
+01:10:56.455 detox[3165511] [90mi[39m Server path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + ipc.config.id /tmp/detox.primary-3165511
+01:10:56.459 detox[3165511] [90mi[39m starting server on  /tmp/detox.primary-3165511 
+01:10:56.460 detox[3165511] [90mi[39m starting TLS server false
+01:10:56.460 detox[3165511] [90mi[39m starting server as Unix || Windows Socket
+01:10:56.465 detox[3165511] [90mi[39m Detox server listening on localhost:38593...
+01:10:56.477 detox[3165511] [90mi[39m Serialized the session state at: /tmp/5dfb0e5d-fb3c-488d-4a63-e18e42b91a9b.detox.json
+01:10:56.484 detox[3165511] [90mB[39m jest --config e2e/jest.config.js --testPathPattern e2e/navigation.test.js
+01:11:34.693 detox[3166216] [90mi[39m Service path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + id 
+01:11:34.695 detox[3166216] [90mi[39m requested connection to  primary-3165511 /tmp/detox.primary-3165511
+01:11:34.695 detox[3166216] [90mi[39m Connecting client on Unix Socket : /tmp/detox.primary-3165511
+01:11:34.697 detox[3165511] [90mi[39m ## socket connection to server detected ##
+01:11:34.699 detox[3166216] [90mi[39m retrying reset
+01:11:34.702 detox[3166216] [90mi[39m dispatching event to  primary-3165511 /tmp/detox.primary-3165511  :  registerContext , { id: 'secondary-3166216' }
+01:11:34.705 detox[3165511] [90mi[39m received event of :  registerContext { id: 'secondary-3166216' }
+01:11:34.706 detox[3165511] [90mi[39m dispatching event to socket  :  registerContextDone {
+  testResults: [],
+  testSessionIndex: 0,
+  unsafe_earlyTeardown: undefined
+}
+01:11:34.707 detox[3166216] [90mi[39m ## received events ##
+01:11:34.707 detox[3166216] [90mi[39m detected event registerContextDone { testResults: [], testSessionIndex: 0 }
+01:11:37.174 detox[3166216] [90mB[39m e2e/navigation.test.js
+01:11:37.432 detox[3166216] [90mB[39m set up environment
+01:11:37.436 detox[3166216] [90mi[39m dispatching event to  primary-3165511 /tmp/detox.primary-3165511  :  registerWorker , { workerId: 'w1' }
+01:11:37.437 detox[3165511] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+01:11:37.437 detox[3165511] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+01:11:37.438 detox[3165511] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-3165511  :   sessionStateUpdate { workersCount: 1 }
+01:11:37.440 detox[3166216] [90mi[39m ## received events ##
+01:11:37.440 detox[3166216] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+01:11:37.442 detox[3166216] [90mi[39m detected event sessionStateUpdate { workersCount: 1 }
+01:12:00.766 detox[3165511] [90mB[39m connection :38593<->:55026
+01:12:00.773 detox[3166216] [90mi[39m opened web socket to: ws://localhost:38593
+01:12:00.785 detox[3166216] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"1ff0bc7e-00bc-4ea3-db95-a3c8465b2322","role":"tester"},"messageId":0}
+01:12:00.791 detox[3165511] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"1ff0bc7e-00bc-4ea3-db95-a3c8465b2322","role":"tester"},"messageId":0}
+01:12:00.791 detox[3165511] [90mi[39m created session 1ff0bc7e-00bc-4ea3-db95-a3c8465b2322
+01:12:00.792 detox[3165511] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+01:12:00.798 detox[3165511] [90mi[39m tester joined session 1ff0bc7e-00bc-4ea3-db95-a3c8465b2322
+01:12:00.803 detox[3166216] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+01:12:04.759 detox[3166216] [90mi[39m dispatching event to  primary-3165511 /tmp/detox.primary-3165511  :  allocateDevice , {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Medium_Phone_API_36.1' },
+    util: {
+      launchArgs: {
+        detoxPrintBusyIdleResources: 'YES',
+        detoxDeadlockDetection: 'false',
+        DETOX: 'true'
+      }
+    }
+  }
+}
+01:12:04.762 detox[3165511] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: {
+    type: 'android.emulator',
+    device: { avdName: 'Medium_Phone_API_36.1' },
+    util: {
+      launchArgs: {
+        detoxPrintBusyIdleResources: 'YES',
+        detoxDeadlockDetection: 'false',
+        DETOX: 'true'
+      }
+    }
+  }
+}
+01:12:05.957 detox[3165511] [90mB[39m init
+  args: ()
+01:12:06.451 detox[3165511] [90mE[39m init
+01:12:06.451 detox[3165511] [90mB[39m allocate
+  data: {
+    "type": "android.emulator",
+    "device": {
+      "avdName": "Medium_Phone_API_36.1"
+    },
+    "util": {
+      "launchArgs": {
+        "detoxPrintBusyIdleResources": "YES",
+        "detoxDeadlockDetection": "false",
+        "DETOX": "true"
+      }
+    }
+  }
+01:12:39.389 detox[3165511] [90mi[39m Detected emulator binary version { major: 36, minor: 4, patch: 10, toString: [Function: toString] }
+01:12:39.391 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  devices
+01:12:39.397 detox[3165511] [90mi[39m List of devices attached
+emulator-5554	device
+
+
+01:12:39.399 detox[3165511] [90mi[39m port: 5554, host: localhost
+01:12:40.137 detox[3165511] [90mi[39m Found a matching & free device emulator-5554
+01:12:40.142 detox[3165511] [90mi[39m settled on emulator-5554 (Medium_Phone_API_36.1)
+  data: {
+    "id": "emulator-5554",
+    "adbName": "emulator-5554",
+    "name": "emulator-5554 (Medium_Phone_API_36.1)"
+  }
+01:12:40.142 detox[3165511] [90mE[39m allocate
+01:12:40.142 detox[3165511] [90mB[39m post-allocate: emulator-5554
+  data: {
+    "id": "emulator-5554",
+    "adbName": "emulator-5554",
+    "name": "emulator-5554 (Medium_Phone_API_36.1)"
+  }
+01:12:40.142 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "getprop dev.bootcomplete"
+01:12:50.786 detox[3165511] [90mi[39m 1
+
+01:12:50.786 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "getprop ro.build.version.sdk"
+01:12:52.700 detox[3165511] [90mi[39m 36
+
+01:12:52.700 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "settings put global animator_duration_scale 0"
+01:12:57.361 detox[3165511] [90mi[39m 
+01:12:57.362 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "settings put global window_animation_scale 0"
+01:12:58.271 detox[3165511] [90mi[39m 
+01:12:58.271 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "settings put global transition_animation_scale 0"
+01:12:58.672 detox[3165511] [90mi[39m 
+01:12:58.672 detox[3165511] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "dumpsys power | grep \"^[ ]*m[UW].*=\""
+01:13:02.129 detox[3165511] [90mi[39m   mWakefulness=Awake
+  mWakefulnessChanging=false
+  mUseAutoSuspend=true
+  mWakeLockSummary=0x1
+  mWakeUpWhenPluggedOrUnpluggedConfig=false
+  mWakeUpWhenPluggedOrUnpluggedInTheaterModeConfig=false
+  mUserActivityTimeoutOverrideFromWindowManager=-1
+  mUserInactiveOverrideFromWindowManager=false
+  mUseNormalBrightnessForDoze=false
+  mUserId=0
+  mWakeLockSummary=0x1
+  mUserInteractionBackoffMillis=60000
+
+01:13:02.129 detox[3165511] [90mE[39m post-allocate: emulator-5554
+01:13:02.129 detox[3165511] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-5554',
+    adbName: 'emulator-5554',
+    name: 'emulator-5554 (Medium_Phone_API_36.1)'
+  }
+}
+01:13:02.130 detox[3166216] [90mi[39m ## received events ##
+01:13:02.130 detox[3166216] [90mi[39m detected event allocateDeviceDone {
+  deviceCookie: {
+    id: 'emulator-5554',
+    adbName: 'emulator-5554',
+    name: 'emulator-5554 (Medium_Phone_API_36.1)'
+  }
+}
+01:13:06.220 detox[3166216] [90mB[39m onBootDevice
+  args: ({"deviceId":"emulator-5554"})
+01:13:06.221 detox[3166216] [90mE[39m onBootDevice
+01:13:06.222 detox[3166216] [90mB[39m installUtilBinaries
+  args: ()
+01:13:06.222 detox[3166216] [90mE[39m installUtilBinaries
+01:13:06.224 detox[3166216] [90mB[39m selectApp
+  args: ("default")
+01:13:06.937 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump badging "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk"
+01:13:10.301 detox[3166216] [90mi[39m package: name='com.panviravindra.comparez' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+uses-permission: name='android.permission.SYSTEM_ALERT_WINDOW'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.USE_BIOMETRIC'
+uses-permission: name='android.permission.USE_FINGERPRINT'
+uses-permission: name='com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+application-label:'frontend'
+application-label-af:'frontend'
+application-label-am:'frontend'
+application-label-ar:'frontend'
+application-label-as:'frontend'
+application-label-az:'frontend'
+application-label-be:'frontend'
+application-label-bg:'frontend'
+application-label-bn:'frontend'
+application-label-bs:'frontend'
+application-label-ca:'frontend'
+application-label-cs:'frontend'
+application-label-da:'frontend'
+application-label-de:'frontend'
+application-label-el:'frontend'
+application-label-en-AU:'frontend'
+application-label-en-CA:'frontend'
+application-label-en-GB:'frontend'
+application-label-en-IN:'frontend'
+application-label-en-XC:'frontend'
+application-label-es:'frontend'
+application-label-es-419:'frontend'
+application-label-es-ES:'frontend'
+application-label-es-US:'frontend'
+application-label-et:'frontend'
+application-label-eu:'frontend'
+application-label-fa:'frontend'
+application-label-fi:'frontend'
+application-label-fr:'frontend'
+application-label-fr-CA:'frontend'
+application-label-gl:'frontend'
+application-label-gu:'frontend'
+application-label-hi:'frontend'
+application-label-hr:'frontend'
+application-label-hu:'frontend'
+application-label-hy:'frontend'
+application-label-in:'frontend'
+application-label-is:'frontend'
+application-label-it:'frontend'
+application-label-iw:'frontend'
+application-label-ja:'frontend'
+application-label-ka:'frontend'
+application-label-kk:'frontend'
+application-label-km:'frontend'
+application-label-kn:'frontend'
+application-label-ko:'frontend'
+application-label-ky:'frontend'
+application-label-lo:'frontend'
+application-label-lt:'frontend'
+application-label-lv:'frontend'
+application-label-mk:'frontend'
+application-label-ml:'frontend'
+application-label-mn:'frontend'
+application-label-mr:'frontend'
+application-label-ms:'frontend'
+application-label-my:'frontend'
+application-label-nb:'frontend'
+application-label-ne:'frontend'
+application-label-nl:'frontend'
+application-label-or:'frontend'
+application-label-pa:'frontend'
+application-label-pl:'frontend'
+application-label-pt:'frontend'
+application-label-pt-BR:'frontend'
+application-label-pt-PT:'frontend'
+application-label-ro:'frontend'
+application-label-ru:'frontend'
+application-label-si:'frontend'
+application-label-sk:'frontend'
+application-label-sl:'frontend'
+application-label-sq:'frontend'
+application-label-sr:'frontend'
+application-label-sr-Latn:'frontend'
+application-label-sv:'frontend'
+application-label-sw:'frontend'
+application-label-ta:'frontend'
+application-label-te:'frontend'
+application-label-th:'frontend'
+application-label-tl:'frontend'
+application-label-tr:'frontend'
+application-label-uk:'frontend'
+application-label-ur:'frontend'
+application-label-uz:'frontend'
+application-label-vi:'frontend'
+application-label-zh-CN:'frontend'
+application-label-zh-HK:'frontend'
+application-label-zh-TW:'frontend'
+application-label-zu:'frontend'
+application-icon-120:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-160:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-240:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-320:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-480:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-640:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-65534:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application: label='frontend' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
+application-debuggable
+launchable-activity: name='com.panviravindra.comparez.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.portrait'
+  uses-implied-feature: name='android.hardware.screen.portrait' reason='one or more activities have specified a portrait orientation'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'af' 'am' 'ar' 'as' 'az' 'be' 'bg' 'bn' 'bs' 'ca' 'cs' 'da' 'de' 'el' 'en-AU' 'en-CA' 'en-GB' 'en-IN' 'en-XC' 'es' 'es-419' 'es-ES' 'es-US' 'et' 'eu' 'fa' 'fi' 'fr' 'fr-CA' 'gl' 'gu' 'hi' 'hr' 'hu' 'hy' 'in' 'is' 'it' 'iw' 'ja' 'ka' 'kk' 'km' 'kn' 'ko' 'ky' 'lo' 'lt' 'lv' 'mk' 'ml' 'mn' 'mr' 'ms' 'my' 'nb' 'ne' 'nl' 'or' 'pa' 'pl' 'pt' 'pt-BR' 'pt-PT' 'ro' 'ru' 'si' 'sk' 'sl' 'sq' 'sr' 'sr-Latn' 'sv' 'sw' 'ta' 'te' 'th' 'tl' 'tr' 'uk' 'ur' 'uz' 'vi' 'zh-CN' 'zh-HK' 'zh-TW' 'zu'
+densities: '120' '160' '240' '320' '480' '640' '65534'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'
+
+01:13:10.302 detox[3166216] [90mE[39m selectApp
+01:13:10.303 detox[3166216] [90mB[39m uninstallApp
+  args: ()
+01:13:10.303 detox[3166216] [90mB[39m onBeforeUninstallApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:13:10.304 detox[3166216] [90mE[39m onBeforeUninstallApp
+01:13:10.304 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "pm list packages com.panviravindra.comparez"
+01:14:17.612 detox[3166216] [90mi[39m 
+01:14:17.612 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "pm list packages com.panviravindra.comparez.test"
+01:14:19.535 detox[3166216] [90mi[39m 
+01:14:19.536 detox[3166216] [90mE[39m uninstallApp
+01:14:19.536 detox[3166216] [90mB[39m selectApp
+  args: ("default")
+01:14:19.538 detox[3166216] [90mB[39m terminateApp
+  args: ()
+01:14:19.539 detox[3166216] [90mB[39m onBeforeTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:14:19.539 detox[3166216] [90mE[39m onBeforeTerminateApp
+01:14:19.540 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "am force-stop com.panviravindra.comparez"
+01:14:23.251 detox[3166216] [90mi[39m 
+01:14:23.252 detox[3166216] [90mB[39m onTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:14:23.252 detox[3166216] [90mE[39m onTerminateApp
+01:14:23.252 detox[3166216] [90mE[39m terminateApp
+01:14:23.252 detox[3166216] [90mE[39m selectApp
+01:14:23.259 detox[3166216] [90mB[39m installApp
+  args: ()
+01:14:23.260 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump xmlstrings "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" AndroidManifest.xml
+01:14:23.269 detox[3166216] [90mi[39m String pool of 100 unique UTF-16 non-sorted strings, 100 entries and 0 styles using 5648 bytes:
+String #0: theme
+String #1: label
+String #2: icon
+String #3: name
+String #4: permission
+String #5: protectionLevel
+String #6: enabled
+String #7: debuggable
+String #8: exported
+String #9: authorities
+String #10: grantUriPermissions
+String #11: launchMode
+String #12: screenOrientation
+String #13: configChanges
+String #14: value
+String #15: resource
+String #16: scheme
+String #17: minSdkVersion
+String #18: versionCode
+String #19: versionName
+String #20: windowSoftInputMode
+String #21: targetSdkVersion
+String #22: allowBackup
+String #23: supportsRtl
+String #24: extractNativeLibs
+String #25: usesCleartextTraffic
+String #26: directBootAware
+String #27: roundIcon
+String #28: compileSdkVersion
+String #29: compileSdkVersionCodename
+String #30: appComponentFactory
+String #31: enableOnBackInvokedCallback
+String #32: 1.0.0
+String #33: 16
+String #34: ALWAYS
+String #35: action
+String #36: activity
+String #37: android
+String #38: android.intent.action.MAIN
+String #39: android.intent.action.OPEN_DOCUMENT_TREE
+String #40: android.intent.action.VIEW
+String #41: android.intent.category.BROWSABLE
+String #42: android.intent.category.LAUNCHER
+String #43: android.permission.DUMP
+String #44: android.permission.INTERNET
+String #45: android.permission.READ_EXTERNAL_STORAGE
+String #46: android.permission.SYSTEM_ALERT_WINDOW
+String #47: android.permission.USE_BIOMETRIC
+String #48: android.permission.USE_FINGERPRINT
+String #49: android.permission.VIBRATE
+String #50: android.permission.WRITE_EXTERNAL_STORAGE
+String #51: android.support.FILE_PROVIDER_PATHS
+String #52: androidx.core.app.CoreComponentFactory
+String #53: androidx.emoji2.text.EmojiCompatInitializer
+String #54: androidx.lifecycle.ProcessLifecycleInitializer
+String #55: androidx.profileinstaller.ProfileInstallReceiver
+String #56: androidx.profileinstaller.ProfileInstallerInitializer
+String #57: androidx.profileinstaller.action.BENCHMARK_OPERATION
+String #58: androidx.profileinstaller.action.INSTALL_PROFILE
+String #59: androidx.profileinstaller.action.SAVE_PROFILE
+String #60: androidx.profileinstaller.action.SKIP_FILE
+String #61: androidx.startup
+String #62: androidx.startup.InitializationProvider
+String #63: application
+String #64: category
+String #65: com.facebook.react.devsupport.DevSettingsActivity
+String #66: com.facebook.soloader.enabled
+String #67: com.panviravindra.comparez
+String #68: com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+String #69: com.panviravindra.comparez.FileSystemFileProvider
+String #70: com.panviravindra.comparez.MainActivity
+String #71: com.panviravindra.comparez.MainApplication
+String #72: com.panviravindra.comparez.androidx-startup
+String #73: com.panviravindra.comparez.fileprovider
+String #74: com.reactnativecommunity.webview.RNCWebViewFileProvider
+String #75: data
+String #76: expo.modules.adapters.react.apploader.RNHeadlessAppLoader
+String #77: expo.modules.filesystem.FileSystemFileProvider
+String #78: expo.modules.updates.ENABLED
+String #79: expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH
+String #80: expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS
+String #81: http://schemas.android.com/apk/res/android
+String #82: https
+String #83: intent
+String #84: intent-filter
+String #85: manifest
+String #86: meta-data
+String #87: org.chromium.intent.action.IS_READY_TO_PAY
+String #88: org.chromium.intent.action.PAY
+String #89: org.chromium.intent.action.UPDATE_PAYMENT_DETAILS
+String #90: org.unimodules.core.AppLoader#react-native-headless
+String #91: package
+String #92: permission
+String #93: platformBuildVersionCode
+String #94: platformBuildVersionName
+String #95: provider
+String #96: queries
+String #97: receiver
+String #98: uses-permission
+String #99: uses-sdk
+
+01:14:23.270 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump xmlstrings "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" AndroidManifest.xml
+01:14:23.375 detox[3166216] [90mi[39m String pool of 43 unique UTF-16 non-sorted strings, 43 entries and 0 styles using 2180 bytes:
+String #0: theme
+String #1: label
+String #2: name
+String #3: debuggable
+String #4: exported
+String #5: priority
+String #6: targetPackage
+String #7: handleProfiling
+String #8: functionalTest
+String #9: minSdkVersion
+String #10: targetSdkVersion
+String #11: extractNativeLibs
+String #12: compileSdkVersion
+String #13: compileSdkVersionCodename
+String #14: 16
+String #15: Tests for com.panviravindra.comparez
+String #16: activity
+String #17: android
+String #18: android.intent.category.LAUNCHER
+String #19: android.permission.REORDER_TASKS
+String #20: android.test.runner
+String #21: androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity
+String #22: androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity
+String #23: androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity
+String #24: androidx.test.orchestrator
+String #25: androidx.test.runner.AndroidJUnitRunner
+String #26: androidx.test.services
+String #27: application
+String #28: category
+String #29: com.google.android.apps.common.testing.services
+String #30: com.panviravindra.comparez
+String #31: com.panviravindra.comparez.test
+String #32: http://schemas.android.com/apk/res/android
+String #33: instrumentation
+String #34: intent-filter
+String #35: manifest
+String #36: package
+String #37: platformBuildVersionCode
+String #38: platformBuildVersionName
+String #39: queries
+String #40: uses-library
+String #41: uses-permission
+String #42: uses-sdk
+
+01:14:23.377 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "rm -fr /data/local/tmp/detox"
+01:14:23.505 detox[3166216] [90mi[39m 
+01:14:23.505 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "mkdir -p /data/local/tmp/detox"
+01:14:23.878 detox[3166216] [90mi[39m 
+01:14:23.879 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 push "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" "/data/local/tmp/detox/Application.apk"
+01:16:14.904 detox[3166216] [90mi[39m /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk: 1 file pushed, 0 skipped. 1.2 MB/s (108329828 bytes in 83.797s)
+
+01:16:14.905 detox[3166216] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "getprop ro.build.version.sdk"
+01:16:16.149 detox[3166216] [90mi[39m 36
+
+01:16:16.159 detox[3166216] [90mi[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+01:17:16.160 detox[3166216] [90mi[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk terminated with SIGTERM
+01:17:16.261 detox[3166216] [90mi[39m 
+01:17:16.264 detox[3166216] [90mi[39m (Retry #1) /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+01:18:16.265 detox[3166216] [90mi[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk terminated with SIGTERM
+01:18:16.366 detox[3166216] [90mi[39m 
+01:18:16.368 detox[3166216] [90mi[39m (Retry #2) /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+01:19:16.370 detox[3166216] [90mi[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk terminated with SIGTERM
+01:19:16.471 detox[3166216] [90mi[39m 
+01:19:16.474 detox[3166216] [90mi[39m (Retry #3) /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk
+01:20:16.475 detox[3166216] [90mi[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell pm install -r -g -t /data/local/tmp/detox/Application.apk terminated with SIGTERM
+01:20:16.477 detox[3166216] [90mE[39m installApp
+  error: Error: Process was killed with SIGTERM
+      at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)
+      at ChildProcess.emit (node:events:524:28)
+      at ChildProcess.emit (node:domain:489:12)
+      at maybeClose (node:internal/child_process:1104:16)
+      at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)
+01:20:16.478 detox[3166216] [90mE[39m set up environment
+  error: Error: Process was killed with SIGTERM
+      at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)
+      at ChildProcess.emit (node:events:524:28)
+      at ChildProcess.emit (node:domain:489:12)
+      at maybeClose (node:internal/child_process:1104:16)
+      at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)
+01:20:16.478 detox[3166216] [90mB[39m tear down environment
+01:20:16.479 detox[3166216] [90mB[39m onBeforeCleanup
+  args: ()
+01:20:16.566 detox[3166216] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-04-14 19-40-55Z/detox_pid_3166216.json.log { append: true }
+01:20:16.566 detox[3166216] [90mi[39m saving FileArtifact to: e2e/artifacts/android.emu.debug.2026-04-14 19-40-55Z/detox_pid_3166216.log { append: true }
+01:20:16.567 detox[3166216] [90mE[39m onBeforeCleanup
+01:20:16.571 detox[3165511] [90mi[39m tester exited session 1ff0bc7e-00bc-4ea3-db95-a3c8465b2322
+01:20:16.571 detox[3165511] [90mE[39m connection :38593<->:55026
+01:20:16.571 detox[3166216] [90mi[39m dispatching event to  primary-3165511 /tmp/detox.primary-3165511  :  deallocateDevice , {
+  deviceCookie: {
+    id: 'emulator-5554',
+    adbName: 'emulator-5554',
+    name: 'emulator-5554 (Medium_Phone_API_36.1)'
+  }
+}
+01:20:16.572 detox[3165511] [90mi[39m received event of :  deallocateDevice {
+  deviceCookie: {
+    id: 'emulator-5554',
+    adbName: 'emulator-5554',
+    name: 'emulator-5554 (Medium_Phone_API_36.1)'
+  }
+}
+01:20:16.572 detox[3165511] [90mB[39m free: emulator-5554
+  data: {}
+01:20:17.310 detox[3165511] [90mE[39m free: emulator-5554
+01:20:17.310 detox[3165511] [90mi[39m dispatching event to socket  :  deallocateDeviceDone {}
+01:20:17.310 detox[3166216] [90mi[39m ## received events ##
+01:20:17.310 detox[3166216] [90mi[39m detected event deallocateDeviceDone {}
+01:20:17.311 detox[3166216] [90mE[39m tear down environment
+01:20:17.311 detox[3166216] [90mE[39m e2e/navigation.test.js
+01:20:17.601 detox[3166216] [90mi[39m dispatching event to  primary-3165511 /tmp/detox.primary-3165511  :  reportTestResults , {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: null,
+        signal: 'SIGTERM',
+        stdout: '',
+        stderr: '',
+        name: 'Error',
+        message: 'Process was killed with SIGTERM',
+        stack: 'Error: Process was killed with SIGTERM\n' +
+          '    at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at ChildProcess.emit (node:domain:489:12)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+01:20:17.605 detox[3165511] [90mi[39m received event of :  reportTestResults {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: null,
+        signal: 'SIGTERM',
+        stdout: '',
+        stderr: '',
+        name: 'Error',
+        message: 'Process was killed with SIGTERM',
+        stack: 'Error: Process was killed with SIGTERM\n' +
+          '    at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at ChildProcess.emit (node:domain:489:12)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+01:20:17.606 detox[3165511] [90mi[39m dispatching event to socket  :  reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: null,
+        signal: 'SIGTERM',
+        stdout: '',
+        stderr: '',
+        name: 'Error',
+        message: 'Process was killed with SIGTERM',
+        stack: 'Error: Process was killed with SIGTERM\n' +
+          '    at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at ChildProcess.emit (node:domain:489:12)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+01:20:17.608 detox[3166216] [90mi[39m ## received events ##
+01:20:17.609 detox[3165511] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-3165511  :   sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: null,
+        signal: 'SIGTERM',
+        stdout: '',
+        stderr: '',
+        name: 'Error',
+        message: 'Process was killed with SIGTERM',
+        stack: 'Error: Process was killed with SIGTERM\n' +
+          '    at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at ChildProcess.emit (node:domain:489:12)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+01:20:17.610 detox[3166216] [90mi[39m detected event reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: null,
+        signal: 'SIGTERM',
+        stdout: '',
+        stderr: '',
+        name: 'Error',
+        message: 'Process was killed with SIGTERM',
+        stack: 'Error: Process was killed with SIGTERM\n' +
+          '    at ChildProcess.done (/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/promisify-child-process/index.cjs:72:19)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at ChildProcess.emit (node:domain:489:12)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+01:20:17.619 detox[3166216] [90mi[39m connection closed primary-3165511 /tmp/detox.primary-3165511 0 tries remaining of 0
+01:20:17.619 detox[3166216] [90mi[39m secondary-3166216 exceeded connection rety amount of  or stopRetrying flag set.
+01:20:17.622 detox[3165511] [90mi[39m server socket error Error: read ECONNRESET
+    at Pipe.onStreamRead (node:internal/stream_base_commons:218:20) {
+  errno: -104,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+01:20:17.623 detox[3165511] [90mi[39m socket disconnected secondary-3166216
+01:20:17.654 detox[3165511] [90mE[39m Command failed with exit code = 1:
+jest --config e2e/jest.config.js --testPathPattern e2e/navigation.test.js
+01:20:17.663 detox[3165511] [90mB[39m cleanup
+  args: ()
+01:20:17.871 detox[3165511] [90mE[39m cleanup
+01:20:17.872 detox[3165511] [90mi[39m Detox server has been closed gracefully
+01:20:18.122 detox[3165511] [90mE[39m node_modules/.bin/detox test -c android.emu.debug --testPathPattern=e2e/navigation.test.js

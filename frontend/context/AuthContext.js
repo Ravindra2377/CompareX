@@ -128,6 +128,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       let token = await tokenStorage.getItem("userToken");
+      
+      // Detox E2E Bypass: If no token is found and we are in a test environment, 
+      // provide a mock token to skip the login screen.
+      if (!token && (global.DETOX || process.env.NODE_ENV === 'test')) {
+        console.log("[Auth] Detox detected, providing mock token");
+        token = "mock-detox-token-123";
+      }
+
       setUserToken(token);
     } catch (e) {
       console.log("isLoggedIn error:", e?.message || e);

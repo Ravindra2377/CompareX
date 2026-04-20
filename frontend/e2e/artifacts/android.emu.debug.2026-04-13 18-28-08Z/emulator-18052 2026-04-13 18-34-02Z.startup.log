@@ -1,0 +1,95 @@
+--------- beginning of main
+04-14 00:02:55.388  4655  4655 I vindra.comparez: Late-enabling -Xcheck:jni
+04-14 00:02:55.423  4655  4655 I vindra.comparez: Using CollectorTypeCMC GC.
+04-14 00:02:55.424  4655  4655 W vindra.comparez: Unexpected CPU variant for x86: x86_64.
+04-14 00:02:55.424  4655  4655 W vindra.comparez: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+04-14 00:02:56.120  4655  4655 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+--------- beginning of system
+04-14 00:02:58.691  4655  4655 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.panviravindra.comparez]: x86_64, null instrumentation[com.panviravindra.comparez.test]: null, null
+04-14 00:02:58.695  4655  4655 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+04-14 00:02:58.964  4655  4655 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+04-14 00:02:58.977  4655  4655 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+04-14 00:02:59.624  4655  4655 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/base.apk:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/lib/x86_64:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/lib/x86_64:/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/base.apk!/lib/x86_64:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.panviravindra.comparez
+04-14 00:02:59.630  4655  4655 I vindra.comparez: AssetManager2(0x78d8d667ecb8) locale list changing from [] to [en-US]
+04-14 00:02:59.763  4655  4655 V GraphicsEnvironment: Currently set values for:
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment: com.panviravindra.comparez is not listed in per-application setting
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment: com.panviravindra.comparez is not listed in ANGLE allowlist or settings, returning default
+04-14 00:02:59.764  4655  4655 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+04-14 00:02:59.769  4655  4655 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-14 00:02:59.771  4655  4655 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/lib/x86_64:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/lib/x86_64, permitted_path=/data:/mnt/expand
+04-14 00:02:59.772  4655  4655 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+04-14 00:02:59.775  4655  4655 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/lib/x86_64:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/lib/x86_64, permitted_path=/data:/mnt/expand
+04-14 00:02:59.777  4655  4655 W vindra.comparez: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/base.apk*2233388196:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/base.apk*2906283556])
+04-14 00:02:59.779  4655  4655 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/base.apk*2233388196:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/base.apk*2906283556])
+04-14 00:02:59.781  4655  4655 W vindra.comparez: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fNet-uDCewYSYrECc18lNw==/com.panviravindra.comparez.test-KHQAyR1u3yTdI9KknrYDgw==/base.apk*2233388196:/data/app/~~lRjmviLYl0ycZeoL3mVPxA==/com.panviravindra.comparez-ItoTHv5V8kZlbVRz6994Ag==/base.apk*2906283556])
+04-14 00:03:00.040  4655  4655 I vindra.comparez: AssetManager2(0x78d8d6683498) locale list changing from [] to [en-US]
+04-14 00:03:00.317  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:00.651  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:00.905  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.202  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.203  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.471  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.471  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.740  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.741  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.998  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:01.999  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.261  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.262  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.552  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.553  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.811  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:02.813  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.074  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.075  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.378  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.379  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.799  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:03.799  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.195  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.196  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.457  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.458  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.815  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:04.816  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:05.103  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:05.103  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:05.375  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:09.182  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:09.939  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:09.946  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:11.175  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:11.179  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:11.690  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:11.690  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:12.380  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:12.380  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:12.648  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:12.648  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:12.943  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:13.657  4655  4660 W vindra.comparez: Suspending all threads took: 8.795ms
+04-14 00:03:13.663  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:14.054  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:14.289  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:14.739  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:14.741  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:15.116  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:15.117  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:15.270  4655  4656 I vindra.comparez: Thread[2,tid=4656,WaitingInMainSignalCatcherLoop,Thread*=0x78d8a6674010,peer=0x2000e78,"Signal Catcher"]: reacting to signal 3
+04-14 00:03:15.270  4655  4656 I vindra.comparez: 
+04-14 00:03:18.233  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:18.234  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:18.707  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:18.708  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:19.189  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:19.193  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:19.355  4655  4660 W vindra.comparez: Suspending all threads took: 61.022ms
+04-14 00:03:19.641  4655  4656 I vindra.comparez: Wrote stack traces to tombstoned
+04-14 00:03:19.732  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:19.732  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:20.083  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-14 00:03:20.084  4655  4655 W vindra.comparez: Opening an oat file without a class loader. Are you using the deprecated DexFile APIs?
+04-

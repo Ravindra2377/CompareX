@@ -48,6 +48,7 @@ const CategoryPill = ({ cat, navigation }) => (
     activeOpacity={0.7}
     style={styles.categoryPill}
     onPress={() => navigation.navigate("Search", { query: cat.query })}
+    testID={`homeCategoryPill_${cat.query}`}
   >
     <View style={styles.categoryIconWrap}>
       <Ionicons name={cat.icon} size={20} color={COLORS.textPrimary} />
@@ -125,7 +126,7 @@ const HomeScreen = ({ navigation }) => {
 
             {/* Main headline */}
             <View style={styles.heroContent}>
-              <Text style={styles.heroTitle}>
+              <Text style={styles.heroTitle} testID="homeHeroTitle">
                 Save on{"\n"}Every Cart
               </Text>
               <Text style={styles.heroSubtitle}>

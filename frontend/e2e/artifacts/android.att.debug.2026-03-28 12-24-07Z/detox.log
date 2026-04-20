@@ -1,0 +1,688 @@
+17:54:07.861 detox[468348] [90mB[39m node_modules/.bin/detox test -c android.att.debug
+  data: {
+    "id": "9e01476f-fab6-feb8-7763-c376ade6617c",
+    "detoxConfig": {
+      "configurationName": "android.att.debug",
+      "apps": {
+        "default": {
+          "type": "android.apk",
+          "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug",
+          "reversePorts": [
+            8081
+          ]
+        }
+      },
+      "artifacts": {
+        "rootDir": "e2e/artifacts/android.att.debug.2026-03-28 12-24-07Z",
+        "plugins": {
+          "log": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "screenshot": {
+            "shouldTakeAutomaticSnapshots": true,
+            "keepOnlyFailedTestsArtifacts": true,
+            "enabled": true
+          },
+          "video": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": true
+          },
+          "instruments": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "uiHierarchy": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          }
+        }
+      },
+      "behavior": {
+        "init": {
+          "keepLockFile": false,
+          "reinstallApp": true,
+          "exposeGlobals": true
+        },
+        "cleanup": {
+          "shutdownDevice": false
+        },
+        "launchApp": "auto"
+      },
+      "cli": {
+        "configuration": "android.att.debug",
+        "start": true
+      },
+      "commands": [
+        {
+          "appName": "default",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug"
+        }
+      ],
+      "device": {
+        "type": "android.attached",
+        "device": {
+          "adbName": ".*"
+        }
+      },
+      "logger": {
+        "level": "info",
+        "overrideConsole": true,
+        "options": {
+          "showLoggerName": true,
+          "showPid": true,
+          "showLevel": false,
+          "showMetadata": false,
+          "basepath": "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src",
+          "prefixers": {},
+          "stringifiers": {}
+        }
+      },
+      "testRunner": {
+        "retries": 0,
+        "forwardEnv": false,
+        "detached": false,
+        "bail": false,
+        "noRetryArgs": [
+          "shard"
+        ],
+        "jest": {
+          "setupTimeout": 300000,
+          "teardownTimeout": 30000,
+          "retryAfterCircusRetries": false,
+          "reportWorkerAssign": true
+        },
+        "args": {
+          "$0": "jest",
+          "_": [],
+          "config": "e2e/jest.config.js",
+          "--": []
+        }
+      },
+      "session": {
+        "autoStart": true,
+        "debugSynchronization": 10000
+      }
+    },
+    "detoxIPCServer": "primary-468348",
+    "testResults": [],
+    "testSessionIndex": 0,
+    "workersCount": 0
+  }
+17:54:07.898 detox[468348] [90mi[39m Server path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + ipc.config.id /tmp/detox.primary-468348
+17:54:07.902 detox[468348] [90mi[39m starting server on  /tmp/detox.primary-468348 
+17:54:07.903 detox[468348] [90mi[39m starting TLS server false
+17:54:07.903 detox[468348] [90mi[39m starting server as Unix || Windows Socket
+17:54:07.910 detox[468348] [90mi[39m Detox server listening on localhost:44419...
+17:54:07.928 detox[468348] [90mi[39m Serialized the session state at: /tmp/9e01476f-fab6-feb8-7763-c376ade6617c.detox.json
+17:54:07.932 detox[468348] [90mB[39m jest --config e2e/jest.config.js
+17:54:09.358 detox[468613] [90mi[39m Service path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + id 
+17:54:09.359 detox[468613] [90mi[39m requested connection to  primary-468348 /tmp/detox.primary-468348
+17:54:09.360 detox[468613] [90mi[39m Connecting client on Unix Socket : /tmp/detox.primary-468348
+17:54:09.361 detox[468348] [90mi[39m ## socket connection to server detected ##
+17:54:09.362 detox[468613] [90mi[39m retrying reset
+17:54:09.364 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  registerContext , { id: 'secondary-468613' }
+17:54:09.367 detox[468348] [90mi[39m received event of :  registerContext { id: 'secondary-468613' }
+17:54:09.367 detox[468348] [90mi[39m dispatching event to socket  :  registerContextDone {
+  testResults: [],
+  testSessionIndex: 0,
+  unsafe_earlyTeardown: undefined
+}
+17:54:09.368 detox[468613] [90mi[39m ## received events ##
+17:54:09.368 detox[468613] [90mi[39m detected event registerContextDone { testResults: [], testSessionIndex: 0 }
+17:54:09.552 detox[468613] [90mB[39m e2e/search.test.js
+17:54:09.705 detox[468613] [90mB[39m set up environment
+17:54:09.708 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  registerWorker , { workerId: 'w1' }
+17:54:09.711 detox[468348] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+17:54:09.712 detox[468348] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+17:54:09.712 detox[468348] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-468348  :   sessionStateUpdate { workersCount: 1 }
+17:54:09.712 detox[468613] [90mi[39m ## received events ##
+17:54:09.712 detox[468613] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+17:54:10.218 detox[468613] [90mi[39m ## received events ##
+17:54:10.218 detox[468613] [90mi[39m detected event sessionStateUpdate { workersCount: 1 }
+17:54:10.229 detox[468348] [90mB[39m connection :44419<->:45136
+17:54:10.231 detox[468613] [90mi[39m opened web socket to: ws://localhost:44419
+17:54:10.233 detox[468613] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"cfc5a14e-de1a-a88b-0fd3-727febd14b6e","role":"tester"},"messageId":0}
+17:54:10.236 detox[468348] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"cfc5a14e-de1a-a88b-0fd3-727febd14b6e","role":"tester"},"messageId":0}
+17:54:10.236 detox[468348] [90mi[39m created session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:10.237 detox[468348] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+17:54:10.239 detox[468348] [90mi[39m tester joined session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:10.240 detox[468613] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+17:54:10.325 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  allocateDevice , {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+17:54:10.326 detox[468348] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+17:54:10.381 detox[468348] [90mB[39m init
+  args: ()
+17:54:10.387 detox[468348] [90mE[39m init
+17:54:10.387 detox[468348] [90mB[39m allocate
+  data: {
+    "type": "android.attached",
+    "device": {
+      "adbName": ".*"
+    }
+  }
+17:54:10.389 detox[468348] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  devices
+17:54:10.399 detox[468348] [90mi[39m List of devices attached
+
+
+17:54:10.400 detox[468348] [90mi[39m settled on null
+  data: {
+    "id": null,
+    "adbName": null
+  }
+17:54:10.401 detox[468348] [90mE[39m allocate
+17:54:10.401 detox[468348] [90mB[39m post-allocate: null
+  data: {
+    "id": null,
+    "adbName": null
+  }
+17:54:10.401 detox[468348] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+17:54:25.465 detox[468348] [90mi[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+adb: no devices/emulators found
+ (code=1), stdout and stderr:
+
+17:54:25.466 detox[468348] [90mi[39m 
+17:54:25.466 detox[468348] [90mi[39m adb: no devices/emulators found
+
+17:54:25.466 detox[468348] [90mE[39m post-allocate: null
+  error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+  adb: no devices/emulators found
+  
+17:54:25.466 detox[468348] [90mB[39m free: null
+  data: {
+    "shutdown": true
+  }
+17:54:25.467 detox[468348] [90mE[39m free: null
+17:54:25.469 detox[468348] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  error: {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+    stdout: '',
+    stderr: 'adb: no devices/emulators found\n',
+    name: 'Error',
+    message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n',
+    stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n' +
+      '\n' +
+      '    at genericNodeError (node:internal/errors:984:15)\n' +
+      '    at wrappedFn (node:internal/errors:538:14)\n' +
+      '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+      '    at ChildProcess.emit (node:events:524:28)\n' +
+      '    at maybeClose (node:internal/child_process:1104:16)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+  }
+}
+17:54:25.469 detox[468613] [90mi[39m ## received events ##
+17:54:25.470 detox[468613] [90mi[39m detected event allocateDeviceDone {
+  error: {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+    stdout: '',
+    stderr: 'adb: no devices/emulators found\n',
+    name: 'Error',
+    message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n',
+    stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n' +
+      '\n' +
+      '    at genericNodeError (node:internal/errors:984:15)\n' +
+      '    at wrappedFn (node:internal/errors:538:14)\n' +
+      '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+      '    at ChildProcess.emit (node:events:524:28)\n' +
+      '    at maybeClose (node:internal/child_process:1104:16)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+  }
+}
+17:54:25.471 detox[468613] [90mE[39m set up environment
+  error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+  adb: no devices/emulators found
+  
+17:54:25.472 detox[468613] [90mB[39m tear down environment
+17:54:25.472 detox[468613] [90mB[39m onBeforeCleanup
+  args: ()
+17:54:25.477 detox[468613] [90mi[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-03-28 12-24-07Z/detox_pid_468613.json.log { append: true }
+17:54:25.477 detox[468613] [90mi[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-03-28 12-24-07Z/detox_pid_468613.log { append: true }
+17:54:25.478 detox[468613] [90mE[39m onBeforeCleanup
+17:54:25.482 detox[468348] [90mi[39m tester exited session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:25.482 detox[468348] [90mE[39m connection :44419<->:45136
+17:54:25.482 detox[468613] [90mE[39m tear down environment
+17:54:25.482 detox[468613] [90mE[39m e2e/search.test.js
+17:54:25.512 detox[468613] [90mB[39m e2e/navigation.test.js
+17:54:25.516 detox[468613] [90mB[39m set up environment
+17:54:25.517 detox[468348] [90mi[39m received event of :  registerWorker { workerId: 'w1' }
+17:54:25.517 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  registerWorker , { workerId: 'w1' }
+17:54:25.518 detox[468348] [90mi[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+17:54:25.518 detox[468613] [90mi[39m ## received events ##
+17:54:25.518 detox[468613] [90mi[39m detected event registerWorkerDone { workersCount: 1 }
+17:54:25.521 detox[468348] [90mB[39m connection :44419<->:59844
+17:54:25.522 detox[468613] [90mi[39m opened web socket to: ws://localhost:44419
+17:54:25.523 detox[468613] [90mi[39m send message
+  data: {"type":"login","params":{"sessionId":"cfc5a14e-de1a-a88b-0fd3-727febd14b6e","role":"tester"},"messageId":0}
+17:54:25.524 detox[468348] [90mi[39m get
+  data: {"type":"login","params":{"sessionId":"cfc5a14e-de1a-a88b-0fd3-727febd14b6e","role":"tester"},"messageId":0}
+17:54:25.524 detox[468348] [90mi[39m created session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:25.524 detox[468348] [90mi[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+17:54:25.524 detox[468348] [90mi[39m tester joined session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:25.525 detox[468613] [90mi[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+17:54:25.525 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  allocateDevice , {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+17:54:25.526 detox[468348] [90mi[39m received event of :  allocateDevice {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+17:54:25.526 detox[468348] [90mB[39m allocate
+  data: {
+    "type": "android.attached",
+    "device": {
+      "adbName": ".*"
+    }
+  }
+17:54:25.526 detox[468348] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  devices
+17:54:25.535 detox[468348] [90mi[39m List of devices attached
+
+
+17:54:25.535 detox[468348] [90mi[39m settled on null
+  data: {
+    "id": null,
+    "adbName": null
+  }
+17:54:25.535 detox[468348] [90mE[39m allocate
+17:54:25.535 detox[468348] [90mB[39m post-allocate: null
+  data: {
+    "id": null,
+    "adbName": null
+  }
+17:54:25.536 detox[468348] [90mi[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+17:54:40.589 detox[468348] [90mi[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+adb: no devices/emulators found
+ (code=1), stdout and stderr:
+
+17:54:40.590 detox[468348] [90mi[39m 
+17:54:40.590 detox[468348] [90mi[39m adb: no devices/emulators found
+
+17:54:40.590 detox[468348] [90mE[39m post-allocate: null
+  error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+  adb: no devices/emulators found
+  
+17:54:40.590 detox[468348] [90mB[39m free: null
+  data: {
+    "shutdown": true
+  }
+17:54:40.591 detox[468348] [90mE[39m free: null
+17:54:40.591 detox[468348] [90mi[39m dispatching event to socket  :  allocateDeviceDone {
+  error: {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+    stdout: '',
+    stderr: 'adb: no devices/emulators found\n',
+    name: 'Error',
+    message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n',
+    stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n' +
+      '\n' +
+      '    at genericNodeError (node:internal/errors:984:15)\n' +
+      '    at wrappedFn (node:internal/errors:538:14)\n' +
+      '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+      '    at ChildProcess.emit (node:events:524:28)\n' +
+      '    at maybeClose (node:internal/child_process:1104:16)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+  }
+}
+17:54:40.592 detox[468613] [90mi[39m ## received events ##
+17:54:40.593 detox[468613] [90mi[39m detected event allocateDeviceDone {
+  error: {
+    code: 1,
+    killed: false,
+    signal: null,
+    cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+    stdout: '',
+    stderr: 'adb: no devices/emulators found\n',
+    name: 'Error',
+    message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n',
+    stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+      'adb: no devices/emulators found\n' +
+      '\n' +
+      '    at genericNodeError (node:internal/errors:984:15)\n' +
+      '    at wrappedFn (node:internal/errors:538:14)\n' +
+      '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+      '    at ChildProcess.emit (node:events:524:28)\n' +
+      '    at maybeClose (node:internal/child_process:1104:16)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+  }
+}
+17:54:40.594 detox[468613] [90mE[39m set up environment
+  error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"
+  adb: no devices/emulators found
+  
+17:54:40.594 detox[468613] [90mB[39m tear down environment
+17:54:40.594 detox[468613] [90mB[39m onBeforeCleanup
+  args: ()
+17:54:40.597 detox[468613] [90mi[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-03-28 12-24-07Z/detox_pid_468613.json.log { append: true }
+17:54:40.597 detox[468613] [90mi[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-03-28 12-24-07Z/detox_pid_468613.log { append: true }
+17:54:40.597 detox[468613] [90mE[39m onBeforeCleanup
+17:54:40.599 detox[468348] [90mi[39m tester exited session cfc5a14e-de1a-a88b-0fd3-727febd14b6e
+17:54:40.599 detox[468348] [90mE[39m connection :44419<->:59844
+17:54:40.600 detox[468613] [90mE[39m tear down environment
+17:54:40.600 detox[468613] [90mE[39m e2e/navigation.test.js
+17:54:40.611 detox[468613] [90mi[39m dispatching event to  primary-468348 /tmp/detox.primary-468348  :  reportTestResults , {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+17:54:40.613 detox[468348] [90mi[39m received event of :  reportTestResults {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+17:54:40.614 detox[468348] [90mi[39m dispatching event to socket  :  reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+17:54:40.615 detox[468348] [90mi[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-468348  :   sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+17:54:40.615 detox[468613] [90mi[39m ## received events ##
+17:54:40.616 detox[468613] [90mi[39m detected event reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/search.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    },
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: {
+        code: 1,
+        killed: false,
+        signal: null,
+        cmd: '"/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"',
+        stdout: '',
+        stderr: 'adb: no devices/emulators found\n',
+        name: 'Error',
+        message: 'Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n',
+        stack: 'Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  shell "getprop ro.build.version.sdk"\n' +
+          'adb: no devices/emulators found\n' +
+          '\n' +
+          '    at genericNodeError (node:internal/errors:984:15)\n' +
+          '    at wrappedFn (node:internal/errors:538:14)\n' +
+          '    at ChildProcess.exithandler (node:child_process:422:12)\n' +
+          '    at ChildProcess.emit (node:events:524:28)\n' +
+          '    at maybeClose (node:internal/child_process:1104:16)\n' +
+          '    at ChildProcess._handle.onexit (node:internal/child_process:304:5)'
+      },
+      isPermanentFailure: false
+    }
+  ]
+}
+17:54:40.619 detox[468613] [90mi[39m connection closed primary-468348 /tmp/detox.primary-468348 0 tries remaining of 0
+17:54:40.620 detox[468613] [90mi[39m secondary-468613 exceeded connection rety amount of  or stopRetrying flag set.
+17:54:40.621 detox[468348] [90mi[39m server socket error Error: read ECONNRESET
+    at Pipe.onStreamRead (node:internal/stream_base_commons:218:20) {
+  errno: -104,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+17:54:40.623 detox[468348] [90mi[39m socket disconnected secondary-468613
+17:54:40.710 detox[468348] [90mE[39m Command failed with exit code = 1:
+jest --config e2e/jest.config.js
+17:54:40.711 detox[468348] [90mB[39m cleanup
+  args: ()
+17:54:40.712 detox[468348] [90mE[39m cleanup
+17:54:40.713 detox[468348] [90mi[39m Detox server has been closed gracefully
+17:54:40.715 detox[468348] [90mE[39m node_modules/.bin/detox test -c android.att.debug

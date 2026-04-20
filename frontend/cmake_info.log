@@ -1,0 +1,1112 @@
+Initialized native services in: /home/kpanviravindra/.gradle/native
+Initialized jansi services in: /home/kpanviravindra/.gradle/native
+The client will now receive all logging from the daemon (pid: 143119). The daemon log file: /home/kpanviravindra/.gradle/daemon/8.14.3/daemon-143119.out.log
+Starting 12th build in daemon [uptime: 1 hrs 0 mins 47.472 secs, performance: 98%, GC rate: 0.00/s, heap usage: 0% of 2 GiB, non-heap usage: 37% of 512 MiB]
+Using 4 worker leases.
+Now considering [/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/expo-module-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })
+Successfully started process 'command 'node''
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('expo-modules-autolinking/package.json', { paths: [require.resolve('expo/package.json')] })
+Successfully started process 'command 'node''
+Now considering [/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/expo-module-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin] as hierarchies to watch
+Resolved plugin [id: 'org.gradle.toolchains.foojay-resolver-convention', version: '0.5.0']
+Now considering [/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/expo-module-gradle-plugin] as hierarchies to watch
+
+> Configure project :gradle-plugin
+Evaluating project ':gradle-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20', apply: false]
+
+> Configure project :gradle-plugin:react-native-gradle-plugin
+Evaluating project ':gradle-plugin:react-native-gradle-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin/react-native-gradle-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20']
+Resolved plugin [id: 'java-gradle-plugin']
+Build 1aadfa05-0891-4bfc-a10d-ec21d02c5c17 is started
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+
+> Configure project :gradle-plugin:settings-plugin
+Evaluating project ':gradle-plugin:settings-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin/settings-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20']
+Resolved plugin [id: 'java-gradle-plugin']
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+
+> Configure project :gradle-plugin:shared
+Evaluating project ':gradle-plugin:shared' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin/shared/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20']
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+
+> Configure project :gradle-plugin:shared-testutil
+Evaluating project ':gradle-plugin:shared-testutil' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin/shared-testutil/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20']
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+Resolved plugin [id: 'com.facebook.react.settings']
+
+> Configure project :expo-gradle-plugin
+Evaluating project ':expo-gradle-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20', apply: false]
+Resolved plugin [id: 'java-gradle-plugin']
+
+> Configure project :expo-gradle-plugin:expo-autolinking-plugin
+Evaluating project ':expo-gradle-plugin:expo-autolinking-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm']
+Resolved plugin [id: 'java-gradle-plugin']
+Build 9aa0d207-5618-49e5-94c5-b07b5378f207 is started
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+
+> Configure project :expo-gradle-plugin:expo-autolinking-plugin-shared
+Evaluating project ':expo-gradle-plugin:expo-autolinking-plugin-shared' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-plugin-shared/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.serialization', version: '1.9.24']
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+
+> Configure project :expo-gradle-plugin:expo-autolinking-settings-plugin
+Evaluating project ':expo-gradle-plugin:expo-autolinking-settings-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin/expo-autolinking-settings-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm']
+Resolved plugin [id: 'java-gradle-plugin']
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+Resolved plugin [id: 'expo-autolinking-settings']
+Path for java installation '/usr/lib/jvm/openjdk-17' (Common Linux Locations) auto-detected does not contain a java executable
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker,5,main]) started.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 2,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 2,5,main]) started.
+:gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin (Thread[Execution worker,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors (Thread[Execution worker Thread 2,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors (Thread[Execution worker Thread 2,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin (Thread[Execution worker,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :gradle-plugin:settings-plugin:pluginDescriptors (Thread[included builds Thread 2,5,main]) started.
+
+> Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+:gradle-plugin:settings-plugin:pluginDescriptors (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:shared:compileKotlin (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':gradle-plugin:settings-plugin:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:settings-plugin:pluginDescriptors' as it is up-to-date.
+Resolve mutations for :gradle-plugin:settings-plugin:processResources (Thread[included builds Thread 2,5,main]) started.
+:gradle-plugin:settings-plugin:processResources (Thread[included builds Thread 2,5,main]) started.
+:gradle-plugin:shared:compileKotlin (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:processResources (Thread[Execution worker Thread 2,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:processResources (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:processResources UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-settings-plugin:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:processResources' as it is up-to-date.
+
+> Task :gradle-plugin:settings-plugin:processResources UP-TO-DATE
+Caching disabled for task ':gradle-plugin:settings-plugin:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:settings-plugin:processResources' as it is up-to-date.
+
+> Task :gradle-plugin:shared:compileKotlin UP-TO-DATE
+Caching disabled for task ':gradle-plugin:shared:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':gradle-plugin:shared:compileKotlin' as it is up-to-date.
+Resolve mutations for :gradle-plugin:shared:compileJava (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:shared:compileJava (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:shared:compileJava NO-SOURCE
+Skipping task ':gradle-plugin:shared:compileJava' as it has no source files and no previous output files.
+Resolve mutations for :gradle-plugin:shared:processResources (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:shared:processResources (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava (Thread[Execution worker,5,main]) started.
+
+> Task :gradle-plugin:shared:processResources NO-SOURCE
+Skipping task ':gradle-plugin:shared:processResources' as it has no source files and no previous output files.
+Resolve mutations for :gradle-plugin:shared:classes (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:shared:classes (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:shared:classes UP-TO-DATE
+Skipping task ':gradle-plugin:shared:classes' as it has no actions.
+Resolve mutations for :gradle-plugin:shared:jar (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:shared:jar (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava NO-SOURCE
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava' as it has no source files and no previous output files.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:processResources (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:processResources (Thread[Execution worker,5,main]) started.
+
+> Task :gradle-plugin:shared:jar UP-TO-DATE
+Caching disabled for task ':gradle-plugin:shared:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:shared:jar' as it is up-to-date.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:processResources NO-SOURCE
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:processResources' as it has no source files and no previous output files.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:classes (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:classes (Thread[Execution worker,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:classes UP-TO-DATE
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:classes' as it has no actions.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin-shared:jar (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin-shared:jar (Thread[Execution worker,5,main]) started.
+work action resolve shared.jar (project :gradle-plugin:shared) (Thread[Execution worker Thread 3,5,main]) started.
+Resolve mutations for :gradle-plugin:settings-plugin:compileKotlin (Thread[Execution worker Thread 3,5,main]) started.
+:gradle-plugin:settings-plugin:compileKotlin (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:jar UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin-shared:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin-shared:jar' as it is up-to-date.
+work action resolve expo-autolinking-plugin-shared-1.0.jar (project :expo-gradle-plugin:expo-autolinking-plugin-shared) (Thread[Execution worker,5,main]) started.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin (Thread[Execution worker,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:compileKotlin UP-TO-DATE
+Caching disabled for task ':gradle-plugin:settings-plugin:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':gradle-plugin:settings-plugin:compileKotlin' as it is up-to-date.
+Resolve mutations for :gradle-plugin:settings-plugin:compileJava (Thread[Execution worker Thread 2,5,main]) started.
+:gradle-plugin:settings-plugin:compileJava (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+Skipping task ':gradle-plugin:settings-plugin:compileJava' as it has no source files and no previous output files.
+Resolve mutations for :gradle-plugin:settings-plugin:classes (Thread[Execution worker Thread 2,5,main]) started.
+:gradle-plugin:settings-plugin:classes (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:classes UP-TO-DATE
+Skipping task ':gradle-plugin:settings-plugin:classes' as it has no actions.
+Resolve mutations for :gradle-plugin:settings-plugin:jar (Thread[Execution worker Thread 2,5,main]) started.
+:gradle-plugin:settings-plugin:jar (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :gradle-plugin:settings-plugin:jar UP-TO-DATE
+Caching disabled for task ':gradle-plugin:settings-plugin:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:settings-plugin:jar' as it is up-to-date.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava (Thread[Execution worker,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava NO-SOURCE
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava' as it has no source files and no previous output files.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:classes (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:classes (Thread[Execution worker,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:classes UP-TO-DATE
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:classes' as it has no actions.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-settings-plugin:jar (Thread[Execution worker,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-settings-plugin:jar (Thread[Execution worker,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:jar UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-settings-plugin:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-settings-plugin:jar' as it is up-to-date.
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('expo-modules-autolinking/package.json', { paths: [require.resolve('expo/package.json')] })
+Successfully started process 'command 'node''
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --no-warnings --eval require('expo/bin/autolinking') expo-modules-autolinking resolve --platform android --json
+Successfully started process 'command 'node''
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('react-native/package.json')
+Successfully started process 'command 'node''
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })
+Successfully started process 'command 'node''
+Settings evaluated using settings file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/settings.gradle'.
+Now considering [/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/expo-module-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-autolinking/android/expo-gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native/gradle-plugin, /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android] as hierarchies to watch
+Projects loaded. Root project using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/build.gradle'.
+Included projects: [root project 'frontend', project ':app', project ':expo', project ':expo-constants', project ':expo-modules-core', project ':react-native-async-storage_async-storage', project ':react-native-safe-area-context', project ':react-native-screens', project ':react-native-webview']
+Registering project ':expo-gradle-plugin' in composite build. Will substitute for module ':expo-gradle-plugin'.
+Registering project ':expo-gradle-plugin:expo-autolinking-plugin' in composite build. Will substitute for module 'expo.modules:expo-autolinking-plugin'.
+Registering project ':expo-gradle-plugin:expo-autolinking-plugin-shared' in composite build. Will substitute for module 'expo.modules:expo-autolinking-plugin-shared'.
+Registering project ':expo-gradle-plugin:expo-autolinking-settings-plugin' in composite build. Will substitute for module 'expo.modules:expo-autolinking-settings-plugin'.
+
+> Configure project :expo-module-gradle-plugin
+Evaluating project ':expo-module-gradle-plugin' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/expo-module-gradle-plugin/build.gradle.kts'.
+Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '2.1.20']
+Resolved plugin [id: 'java-gradle-plugin']
+Build 0d46a4eb-8e5f-4958-8b5c-51a0200c23fb is started
+Using Kotlin Gradle Plugin gradle85 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+Registering project ':expo-module-gradle-plugin' in composite build. Will substitute for module 'expo.modules:expo-module-gradle-plugin'.
+Registering project ':gradle-plugin' in composite build. Will substitute for module ':gradle-plugin-root'.
+Registering project ':gradle-plugin:react-native-gradle-plugin' in composite build. Will substitute for module 'com.facebook.react:react-native-gradle-plugin'.
+Registering project ':gradle-plugin:settings-plugin' in composite build. Will substitute for module 'com.facebook.react:settings-plugin'.
+Registering project ':gradle-plugin:shared' in composite build. Will substitute for module 'com.facebook.react:shared'.
+Registering project ':gradle-plugin:shared-testutil' in composite build. Will substitute for module 'com.facebook.react:shared-testutil'.
+work action resolve expo-autolinking-plugin-shared-1.0.jar (project :expo-gradle-plugin:expo-autolinking-plugin-shared) (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+
+> Task :expo-module-gradle-plugin:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':expo-module-gradle-plugin:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-module-gradle-plugin:pluginDescriptors' as it is up-to-date.
+
+> Task :expo-module-gradle-plugin:processResources UP-TO-DATE
+Caching disabled for task ':expo-module-gradle-plugin:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-module-gradle-plugin:processResources' as it is up-to-date.
+
+> Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+:expo-gradle-plugin:expo-autolinking-plugin:compileKotlin (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:compileKotlin UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:compileKotlin' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:compileJava (Thread[Execution worker Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:compileJava (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:react-native-gradle-plugin:compileKotlin UP-TO-DATE
+Caching disabled for task ':gradle-plugin:react-native-gradle-plugin:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':gradle-plugin:react-native-gradle-plugin:compileKotlin' as it is up-to-date.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:compileJava NO-SOURCE
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:compileJava' as it has no source files and no previous output files.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors (Thread[Execution worker Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:processResources (Thread[Execution worker Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:processResources (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+Skipping task ':gradle-plugin:react-native-gradle-plugin:compileJava' as it has no source files and no previous output files.
+
+> Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':gradle-plugin:react-native-gradle-plugin:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:react-native-gradle-plugin:pluginDescriptors' as it is up-to-date.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:processResources UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:processResources' as it is up-to-date.
+
+> Task :gradle-plugin:react-native-gradle-plugin:processResources UP-TO-DATE
+Caching disabled for task ':gradle-plugin:react-native-gradle-plugin:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:react-native-gradle-plugin:processResources' as it is up-to-date.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:classes (Thread[Execution worker Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:classes (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:classes UP-TO-DATE
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:classes' as it has no actions.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:jar (Thread[Execution worker Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:jar (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :gradle-plugin:react-native-gradle-plugin:classes UP-TO-DATE
+Skipping task ':gradle-plugin:react-native-gradle-plugin:classes' as it has no actions.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:jar (Thread[Execution worker,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:jar (Thread[Execution worker,5,main]) started.
+
+> Task :gradle-plugin:react-native-gradle-plugin:jar UP-TO-DATE
+Caching disabled for task ':gradle-plugin:react-native-gradle-plugin:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':gradle-plugin:react-native-gradle-plugin:jar' as it is up-to-date.
+
+> Task :expo-gradle-plugin:expo-autolinking-plugin:jar UP-TO-DATE
+Caching disabled for task ':expo-gradle-plugin:expo-autolinking-plugin:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-gradle-plugin:expo-autolinking-plugin:jar' as it is up-to-date.
+
+> Task :expo-module-gradle-plugin:compileKotlin UP-TO-DATE
+Caching disabled for task ':expo-module-gradle-plugin:compileKotlin' because:
+  Build cache is disabled
+Skipping task ':expo-module-gradle-plugin:compileKotlin' as it is up-to-date.
+
+> Task :expo-module-gradle-plugin:compileJava NO-SOURCE
+Skipping task ':expo-module-gradle-plugin:compileJava' as it has no source files and no previous output files.
+
+> Task :expo-module-gradle-plugin:classes UP-TO-DATE
+Skipping task ':expo-module-gradle-plugin:classes' as it has no actions.
+Resolve mutations for :expo-module-gradle-plugin:jar (Thread[Execution worker Thread 3,5,main]) started.
+:expo-module-gradle-plugin:jar (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-module-gradle-plugin:jar UP-TO-DATE
+Caching disabled for task ':expo-module-gradle-plugin:jar' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':expo-module-gradle-plugin:jar' as it is up-to-date.
+
+> Configure project :
+Evaluating root project 'frontend' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/build.gradle'.
+Found project 'project :expo-gradle-plugin:expo-autolinking-plugin' as substitute for module 'expo.modules:expo-autolinking-plugin'.
+Found project 'project :expo-module-gradle-plugin' as substitute for module 'expo.modules:expo-module-gradle-plugin'.
+Found project 'project :gradle-plugin:react-native-gradle-plugin' as substitute for module 'com.facebook.react:react-native-gradle-plugin'.
+Found project 'project :gradle-plugin:react-native-gradle-plugin' as substitute for module 'com.facebook.react:react-native-gradle-plugin'.
+Found project 'project :expo-gradle-plugin:expo-autolinking-plugin-shared' as substitute for module 'expo.modules:expo-autolinking-plugin-shared'.
+Found project 'project :gradle-plugin:react-native-gradle-plugin' as substitute for module 'com.facebook.react:react-native-gradle-plugin'.
+Found project 'project :expo-gradle-plugin:expo-autolinking-plugin-shared' as substitute for module 'expo.modules:expo-autolinking-plugin-shared'.
+Ignoring listeners of task graph ready event, as this build (:expo-gradle-plugin) has already executed work.
+Ignoring listeners of task graph ready event, as this build (:gradle-plugin) has already executed work.
+Resolve mutations for :expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 3,5,main]) started.
+:expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors (Thread[included builds Thread 3,5,main]) started.
+Resolve mutations for :expo-gradle-plugin:expo-autolinking-plugin:compileKotlin (Thread[included builds,5,main]) started.
+Resolve mutations for :expo-module-gradle-plugin:pluginDescriptors (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:pluginDescriptors (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :expo-module-gradle-plugin:processResources (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:processResources (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:compileKotlin (Thread[included builds Thread 3,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:compileKotlin (Thread[included builds Thread 3,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:compileJava (Thread[included builds Thread 3,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:compileJava (Thread[included builds Thread 3,5,main]) started.
+other build task :gradle-plugin:react-native-gradle-plugin:compileKotlin (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:pluginDescriptors (Thread[included builds Thread 3,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:pluginDescriptors (Thread[included builds Thread 3,5,main]) started.
+other build task :gradle-plugin:react-native-gradle-plugin:compileJava (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:processResources (Thread[included builds Thread 3,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:processResources (Thread[included builds Thread 3,5,main]) started.
+Resolve mutations for :gradle-plugin:react-native-gradle-plugin:classes (Thread[included builds Thread 3,5,main]) started.
+:gradle-plugin:react-native-gradle-plugin:classes (Thread[included builds Thread 3,5,main]) started.
+work action resolve main (project :gradle-plugin:react-native-gradle-plugin) (Thread[included builds Thread 2,5,main]) started.
+work action resolve main (project :gradle-plugin:react-native-gradle-plugin) (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :expo-module-gradle-plugin:compileKotlin (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:compileKotlin (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :expo-module-gradle-plugin:compileJava (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:compileJava (Thread[included builds Thread 2,5,main]) started.
+Resolve mutations for :expo-module-gradle-plugin:classes (Thread[included builds Thread 2,5,main]) started.
+:expo-module-gradle-plugin:classes (Thread[included builds Thread 2,5,main]) started.
+
+> Configure project :app
+Evaluating project ':app' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build.gradle'.
+Using default execution profile
+Build 8e3b3128-e844-4b41-b2df-14b2bc49413e is started
+Using Kotlin Gradle Plugin gradle85 variant
+
+> Configure project :expo-constants
+Evaluating project ':expo-constants' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo/node_modules/expo-constants/android/build.gradle'.
+Resolved plugin [id: 'com.android.library']
+Resolved plugin [id: 'expo-module-gradle-plugin']
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo/node_modules/expo-constants/android Command: node -e console.log(require('path').dirname(require.resolve('expo-constants/package.json')));
+Successfully started process 'command 'node''
+
+> Configure project :expo
+Evaluating project ':expo' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo/android/build.gradle'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+
+Using expo modules
+  - [32mexpo-constants[0m (18.0.13)
+
+> Configure project :expo-modules-core
+Evaluating project ':expo-modules-core' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/build.gradle'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+Starting process 'command 'node''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android Command: node --print require.resolve('react-native/package.json')
+Successfully started process 'command 'node''
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+
+> Configure project :expo
+  - [32mexpo-modules-core[0m (3.0.29)
+  - [33m[📦][0m [32mexpo-asset[0m (12.0.12)
+  - [33m[📦][0m [32mexpo-blur[0m (15.0.8)
+  - [33m[📦][0m [32mexpo-file-system[0m (19.0.21)
+  - [33m[📦][0m [32mexpo-font[0m (14.0.11)
+  - [33m[📦][0m [32mexpo-haptics[0m (15.0.8)
+  - [33m[📦][0m [32mexpo-keep-awake[0m (15.0.8)
+  - [33m[📦][0m [32mexpo-linear-gradient[0m (15.0.8)
+  - [33m[📦][0m [32mexpo-secure-store[0m (15.0.8)
+
+
+> Configure project :react-native-async-storage_async-storage
+Evaluating project ':react-native-async-storage_async-storage' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/@react-native-async-storage/async-storage/android/build.gradle'.
+Using default execution profile
+[AsyncStorage] Config used: {kotlinVersion=1.9.24, kspVersion=1.9.24-1.0.20, roomVersion=2.6.1, minSdkVersion=24, targetSdkVersion=36, compileSdkVersion=36, useNextStorage=false, databaseSizeMB=6, isNewArchitectureEnabled=false, useDedicatedExecutor=false}
+
+> Configure project :react-native-safe-area-context
+Evaluating project ':react-native-safe-area-context' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/react-native-safe-area-context/android/build.gradle'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+
+> Configure project :react-native-screens
+Evaluating project ':react-native-screens' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/react-native-screens/android/build.gradle'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+C/C++: android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is /home/kpanviravindra/Android/Sdk/ndk/27.1.12297006
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: Checking whether deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK
+C/C++: ndk.dir delete check : android.ndkVersion from module build.gradle is [27.1.12297006]
+C/C++: ndk.dir delete check : android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir delete check : ndk.dir in local.properties is not set
+C/C++: ndk.dir delete check : Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: ndk.dir delete check : sdkFolder is /home/kpanviravindra/Android/Sdk
+C/C++: ndk.dir delete check : Deleting ndk.dir and setting android.ndkVersion to [27.1.12297006] would result in the same NDK.
+WARNING: [CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+[CXX5106] NDK was located by using ndk.dir property. This method is deprecated and will be removed in a future release. Please delete ndk.dir from local.properties and set android.ndkVersion to [27.1.12297006] in all native modules in the project. https://developer.android.com/r/studio-ui/ndk-dir
+WARNING: [CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+[CXX5101] NDK folder '/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006' specified does not contain 'platforms'.
+
+> Configure project :react-native-webview
+Evaluating project ':react-native-webview' using build file '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/react-native-webview/android/build.gradle'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+All projects evaluated.
+Task path ':expo-modules-core:configureCMakeDebug[x86_64]' matched project ':expo-modules-core'
+Task name matched 'configureCMakeDebug[x86_64]'
+Selected primary task 'configureCMakeDebug[x86_64]' from project :expo-modules-core
+Tasks to be executed: [task ':expo-modules-core:preBuild', task ':expo-modules-core:preDebugBuild', task ':expo-modules-core:configureCMakeDebug[x86_64]']
+Tasks that were excluded: []
+Resolve mutations for :expo-modules-core:preBuild (Thread[included builds Thread 2,5,main]) started.
+:expo-modules-core:preBuild (Thread[included builds Thread 2,5,main]) started.
+
+> Task :expo-modules-core:preBuild UP-TO-DATE
+Skipping task ':expo-modules-core:preBuild' as it has no actions.
+Resolve mutations for :expo-modules-core:preDebugBuild (Thread[Execution worker,5,main]) started.
+:expo-modules-core:preDebugBuild (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :expo-modules-core:preDebugBuild UP-TO-DATE
+Skipping task ':expo-modules-core:preDebugBuild' as it has no actions.
+Resolve mutations for :expo-modules-core:configureCMakeDebug[x86_64] (Thread[Execution worker,5,main]) started.
+:expo-modules-core:configureCMakeDebug[x86_64] (Thread[Execution worker Thread 3,5,main]) started.
+
+> Task :expo-modules-core:configureCMakeDebug[x86_64] FAILED
+Caching disabled for task ':expo-modules-core:configureCMakeDebug[x86_64]' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Task ':expo-modules-core:configureCMakeDebug[x86_64]' is not up-to-date because:
+  Task.upToDateWhen is false.
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : Start JSON generation. Platform version: 22 min SDK version: x86_64
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : rebuilding JSON /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/.cxx/Debug/1i5r3253/x86_64/android_gradle_build.json due to:
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : - no fingerprint file, will remove stale configuration folder
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : /usr/lib/jvm/java-17-openjdk-amd64/bin/java \
+  --class-path \
+  /home/kpanviravindra/.gradle/caches/modules-2/files-2.1/com.google.prefab/cli/2.1.0/aa32fec809c44fa531f01dcfb739b5b3304d3050/cli-2.1.0-all.jar \
+  com.google.prefab.cli.AppKt \
+  --build-system \
+  cmake \
+  --platform \
+  android \
+  --abi \
+  x86_64 \
+  --os-version \
+  22 \
+  --stl \
+  c++_shared \
+  --ndk-version \
+  27 \
+  --output \
+  /tmp/agp-prefab-staging16881276090031824717/staged-cli-output \
+  /home/kpanviravindra/.gradle/caches/8.14.3/transforms/7cda3bc1407b6e2df536e67ab0c53d04/transformed/react-android-0.81.5-debug/prefab \
+  /home/kpanviravindra/.gradle/caches/8.14.3/transforms/116cf15e7a86c5958bfe2f785e1ebc04/transformed/fbjni-0.7.0/prefab
+
+Starting process 'command '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/1i5r3253/logs/x86_64/prefab_command''. Working directory: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android Command: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/1i5r3253/logs/x86_64/prefab_command 
+Successfully started process 'command '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/1i5r3253/logs/x86_64/prefab_command''
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : Received process result: 0
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //ReactAndroid/hermestooling. Rejected the following libraries:
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : android.arm64-v8a: User is targeting x86_64 but library is for arm64-v8a
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : android.armeabi-v7a: User is targeting x86_64 but library is for armeabi-v7a
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : android.x86: User is targeting x86_64 but library is for x86
+C/C++: /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : Writing build model to /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/cxx/Debug/1i5r3253/logs/x86_64/build_model.json
+Build 9aa0d207-5618-49e5-94c5-b07b5378f207 is closed
+Build 0d46a4eb-8e5f-4958-8b5c-51a0200c23fb is closed
+Build 1aadfa05-0891-4bfc-a10d-ec21d02c5c17 is closed
+Build 8e3b3128-e844-4b41-b2df-14b2bc49413e is closed
+
+[Incubating] Problems report is available at: file:///home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':expo-modules-core:configureCMakeDebug[x86_64]'.
+> [CXX1214] /home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/expo-modules-core/android/CMakeLists.txt debug|x86_64 : User has minSdkVersion 22 but library was built for 24 [//ReactAndroid/hermestooling]
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 21s
+25 actionable tasks: 1 executed, 24 up-to-date

@@ -1,0 +1,1777 @@
+01:50:27.625 detox[3235655] [90mB[39m [33mlifecycle[39m node_modules/.bin/detox test -c android.att.debug --testPathPattern=e2e/navigation.test.js -l verbose
+  data: {
+    "id": "d9c60c80-eb87-9a83-41d1-38e86732d45b",
+    "detoxConfig": {
+      "configurationName": "android.att.debug",
+      "apps": {
+        "default": {
+          "type": "android.apk",
+          "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug",
+          "reversePorts": [
+            8082
+          ]
+        }
+      },
+      "artifacts": {
+        "rootDir": "e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z",
+        "plugins": {
+          "log": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "screenshot": {
+            "shouldTakeAutomaticSnapshots": true,
+            "keepOnlyFailedTestsArtifacts": true,
+            "enabled": true
+          },
+          "video": {
+            "enabled": true,
+            "keepOnlyFailedTestsArtifacts": true
+          },
+          "instruments": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          },
+          "uiHierarchy": {
+            "enabled": false,
+            "keepOnlyFailedTestsArtifacts": false
+          }
+        }
+      },
+      "behavior": {
+        "init": {
+          "keepLockFile": false,
+          "reinstallApp": true,
+          "exposeGlobals": true
+        },
+        "cleanup": {
+          "shutdownDevice": false
+        },
+        "launchApp": "auto"
+      },
+      "cli": {
+        "configuration": "android.att.debug",
+        "loglevel": "verbose",
+        "start": true
+      },
+      "commands": [
+        {
+          "appName": "default",
+          "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug"
+        }
+      ],
+      "device": {
+        "type": "android.attached",
+        "device": {
+          "adbName": ".*"
+        }
+      },
+      "logger": {
+        "level": "debug",
+        "overrideConsole": true,
+        "options": {
+          "showLoggerName": true,
+          "showPid": true,
+          "showLevel": false,
+          "showMetadata": false,
+          "basepath": "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/node_modules/detox/src",
+          "prefixers": {},
+          "stringifiers": {}
+        }
+      },
+      "testRunner": {
+        "retries": 0,
+        "forwardEnv": false,
+        "detached": false,
+        "bail": false,
+        "noRetryArgs": [
+          "shard"
+        ],
+        "jest": {
+          "setupTimeout": 300000,
+          "teardownTimeout": 30000,
+          "retryAfterCircusRetries": false,
+          "reportWorkerAssign": true
+        },
+        "args": {
+          "$0": "jest",
+          "_": [],
+          "config": "e2e/jest.config.js",
+          "testPathPattern": "e2e/navigation.test.js",
+          "--": []
+        }
+      },
+      "session": {
+        "autoStart": true,
+        "debugSynchronization": 10000
+      }
+    },
+    "detoxIPCServer": "primary-3235655",
+    "testResults": [],
+    "testSessionIndex": 0,
+    "workersCount": 0
+  }
+01:50:27.646 detox[3235655] [90mi[39m [33mipc[39m Server path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + ipc.config.id /tmp/detox.primary-3235655
+01:50:27.655 detox[3235655] [90mi[39m [33mipc[39m starting server on  /tmp/detox.primary-3235655 
+01:50:27.656 detox[3235655] [90mi[39m [33mipc[39m starting TLS server false
+01:50:27.656 detox[3235655] [90mi[39m [33mipc[39m starting server as Unix || Windows Socket
+01:50:27.666 detox[3235655] [90mi[39m [33mws-server[39m Detox server listening on localhost:41739...
+01:50:27.708 detox[3235655] [90mi[39m [33mlifecycle[39m Serialized the session state at: /tmp/d9c60c80-eb87-9a83-41d1-38e86732d45b.detox.json
+01:50:27.716 detox[3235655] [90mB[39m [33mlifecycle[39m jest --config e2e/jest.config.js --testPathPattern e2e/navigation.test.js
+01:50:29.485 detox[3235885] [90mi[39m [33mipc[39m Service path not specified, so defaulting to ipc.config.socketRoot + ipc.config.appspace + id 
+01:50:29.488 detox[3235885] [90mi[39m [33mipc[39m requested connection to  primary-3235655 /tmp/detox.primary-3235655
+01:50:29.488 detox[3235885] [90mi[39m [33mipc[39m Connecting client on Unix Socket : /tmp/detox.primary-3235655
+01:50:29.491 detox[3235655] [90mi[39m [33mipc[39m ## socket connection to server detected ##
+01:50:29.491 detox[3235885] [90mi[39m [33mipc[39m retrying reset
+01:50:29.495 detox[3235885] [90mi[39m [33mipc[39m dispatching event to  primary-3235655 /tmp/detox.primary-3235655  :  registerContext , { id: 'secondary-3235885' }
+01:50:29.502 detox[3235655] [90mi[39m [33mipc[39m received event of :  registerContext { id: 'secondary-3235885' }
+01:50:29.503 detox[3235655] [90mi[39m [33mipc[39m dispatching event to socket  :  registerContextDone {
+  testResults: [],
+  testSessionIndex: 0,
+  unsafe_earlyTeardown: undefined
+}
+01:50:29.504 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:50:29.506 detox[3235885] [90mi[39m [33mipc[39m detected event registerContextDone { testResults: [], testSessionIndex: 0 }
+01:50:29.779 detox[3235885] [90mB[39m [33mlifecycle[39m e2e/navigation.test.js
+01:50:29.826 detox[3235885] [90mB[39m [33mlifecycle[39m set up environment
+01:50:29.831 detox[3235885] [90mi[39m [33mipc[39m dispatching event to  primary-3235655 /tmp/detox.primary-3235655  :  registerWorker , { workerId: 'w1' }
+01:50:29.834 detox[3235655] [90mi[39m [33mipc[39m received event of :  registerWorker { workerId: 'w1' }
+01:50:29.834 detox[3235655] [90mi[39m [33mipc[39m dispatching event to socket  :  registerWorkerDone { workersCount: 1 }
+01:50:29.835 detox[3235655] [90mi[39m [33mipc[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-3235655  :   sessionStateUpdate { workersCount: 1 }
+01:50:29.835 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:50:29.835 detox[3235885] [90mi[39m [33mipc[39m detected event registerWorkerDone { workersCount: 1 }
+01:50:30.589 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:50:30.589 detox[3235885] [90mi[39m [33mipc[39m detected event sessionStateUpdate { workersCount: 1 }
+01:50:30.601 detox[3235655] [90mB[39m [33mws-server[39m connection :41739<->:44942
+01:50:30.603 detox[3235885] [90mi[39m [33mws-client[39m opened web socket to: ws://localhost:41739
+01:50:30.606 detox[3235885] [90mi[39m [33mws-client[39m send message
+  data: {"type":"login","params":{"sessionId":"d85dd752-fb6c-308b-b570-51cb9b1bd213","role":"tester"},"messageId":0}
+01:50:30.608 detox[3235655] [90mi[39m [33mws-server[39m get
+  data: {"type":"login","params":{"sessionId":"d85dd752-fb6c-308b-b570-51cb9b1bd213","role":"tester"},"messageId":0}
+01:50:30.610 detox[3235655] [90mi[39m [33mws-server[39m created session d85dd752-fb6c-308b-b570-51cb9b1bd213
+01:50:30.611 detox[3235655] [90mi[39m [33mws-server[39m send
+  data: {
+    "type": "loginSuccess",
+    "params": {
+      "testerConnected": true,
+      "appConnected": false
+    },
+    "messageId": 0
+  }
+01:50:30.612 detox[3235655] [90mi[39m [33mws-server[39m tester joined session d85dd752-fb6c-308b-b570-51cb9b1bd213
+01:50:30.613 detox[3235885] [90mi[39m [33mws-client[39m get message
+  data: {"type":"loginSuccess","params":{"testerConnected":true,"appConnected":false},"messageId":0}
+   
+01:50:30.739 detox[3235885] [90mi[39m [33mipc[39m dispatching event to  primary-3235655 /tmp/detox.primary-3235655  :  allocateDevice , {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+01:50:30.740 detox[3235655] [90mi[39m [33mipc[39m received event of :  allocateDevice {
+  deviceConfig: { type: 'android.attached', device: { adbName: '.*' } }
+}
+01:50:30.793 detox[3235655] [90mB[39m [33mdevice[39m init
+  args: ()
+01:50:30.804 detox[3235655] [90mE[39m [33mdevice[39m init
+01:50:30.804 detox[3235655] [90mB[39m [33mdevice[39m allocate
+  data: {
+    "type": "android.attached",
+    "device": {
+      "adbName": ".*"
+    }
+  }
+01:50:30.806 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb"  devices
+01:50:30.820 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m List of devices attached
+emulator-5554	device
+
+
+01:50:30.823 detox[3235655] [90mi[39m [33mdevice[39m[90m:DEVICE_LOOKUP[39m Found a matching & free device emulator-5554
+01:50:30.823 detox[3235655] [90mi[39m [33mdevice[39m settled on emulator-5554
+  data: {
+    "id": "emulator-5554",
+    "adbName": "emulator-5554"
+  }
+01:50:30.824 detox[3235655] [90mE[39m [33mdevice[39m allocate
+01:50:30.824 detox[3235655] [90mB[39m [33mdevice[39m post-allocate: emulator-5554
+  data: {
+    "id": "emulator-5554",
+    "adbName": "emulator-5554"
+  }
+01:50:30.825 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "getprop ro.build.version.sdk"
+01:50:30.915 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 36
+
+01:50:30.915 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "dumpsys power | grep \"^[ ]*m[UW].*=\""
+01:50:31.179 detox[3235655] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m   mWakefulness=Awake
+  mWakefulnessChanging=false
+  mUseAutoSuspend=true
+  mWakeLockSummary=0x0
+  mWakeUpWhenPluggedOrUnpluggedConfig=false
+  mWakeUpWhenPluggedOrUnpluggedInTheaterModeConfig=false
+  mUserActivityTimeoutOverrideFromWindowManager=-1
+  mUserInactiveOverrideFromWindowManager=false
+  mUseNormalBrightnessForDoze=false
+  mUserId=0
+  mWakeLockSummary=0x0
+  mUserInteractionBackoffMillis=60000
+
+01:50:31.180 detox[3235655] [90mE[39m [33mdevice[39m post-allocate: emulator-5554
+01:50:31.180 detox[3235655] [90mi[39m [33mipc[39m dispatching event to socket  :  allocateDeviceDone { deviceCookie: { id: 'emulator-5554', adbName: 'emulator-5554' } }
+01:50:31.181 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:50:31.181 detox[3235885] [90mi[39m [33mipc[39m detected event allocateDeviceDone { deviceCookie: { id: 'emulator-5554', adbName: 'emulator-5554' } }
+01:50:31.275 detox[3235885] [90mB[39m [33martifacts-manager[39m onBootDevice
+  args: ({"deviceId":"emulator-5554"})
+01:50:31.275 detox[3235885] [90mE[39m [33martifacts-manager[39m onBootDevice
+01:50:31.276 detox[3235885] [90mB[39m [33mdevice[39m installUtilBinaries
+  args: ()
+01:50:31.276 detox[3235885] [90mE[39m [33mdevice[39m installUtilBinaries
+01:50:31.278 detox[3235885] [90mB[39m [33mdevice[39m selectApp
+  args: ("default")
+01:50:31.285 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump badging "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk"
+01:50:31.325 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m package: name='com.panviravindra.comparez' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+uses-permission: name='android.permission.SYSTEM_ALERT_WINDOW'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.VIBRATE'
+uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
+uses-permission: name='android.permission.USE_BIOMETRIC'
+uses-permission: name='android.permission.USE_FINGERPRINT'
+uses-permission: name='com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+application-label:'frontend'
+application-label-af:'frontend'
+application-label-am:'frontend'
+application-label-ar:'frontend'
+application-label-as:'frontend'
+application-label-az:'frontend'
+application-label-be:'frontend'
+application-label-bg:'frontend'
+application-label-bn:'frontend'
+application-label-bs:'frontend'
+application-label-ca:'frontend'
+application-label-cs:'frontend'
+application-label-da:'frontend'
+application-label-de:'frontend'
+application-label-el:'frontend'
+application-label-en-AU:'frontend'
+application-label-en-CA:'frontend'
+application-label-en-GB:'frontend'
+application-label-en-IN:'frontend'
+application-label-en-XC:'frontend'
+application-label-es:'frontend'
+application-label-es-419:'frontend'
+application-label-es-ES:'frontend'
+application-label-es-US:'frontend'
+application-label-et:'frontend'
+application-label-eu:'frontend'
+application-label-fa:'frontend'
+application-label-fi:'frontend'
+application-label-fr:'frontend'
+application-label-fr-CA:'frontend'
+application-label-gl:'frontend'
+application-label-gu:'frontend'
+application-label-hi:'frontend'
+application-label-hr:'frontend'
+application-label-hu:'frontend'
+application-label-hy:'frontend'
+application-label-in:'frontend'
+application-label-is:'frontend'
+application-label-it:'frontend'
+application-label-iw:'frontend'
+application-label-ja:'frontend'
+application-label-ka:'frontend'
+application-label-kk:'frontend'
+application-label-km:'frontend'
+application-label-kn:'frontend'
+application-label-ko:'frontend'
+application-label-ky:'frontend'
+application-label-lo:'frontend'
+application-label-lt:'frontend'
+application-label-lv:'frontend'
+application-label-mk:'frontend'
+application-label-ml:'frontend'
+application-label-mn:'frontend'
+application-label-mr:'frontend'
+application-label-ms:'frontend'
+application-label-my:'frontend'
+application-label-nb:'frontend'
+application-label-ne:'frontend'
+application-label-nl:'frontend'
+application-label-or:'frontend'
+application-label-pa:'frontend'
+application-label-pl:'frontend'
+application-label-pt:'frontend'
+application-label-pt-BR:'frontend'
+application-label-pt-PT:'frontend'
+application-label-ro:'frontend'
+application-label-ru:'frontend'
+application-label-si:'frontend'
+application-label-sk:'frontend'
+application-label-sl:'frontend'
+application-label-sq:'frontend'
+application-label-sr:'frontend'
+application-label-sr-Latn:'frontend'
+application-label-sv:'frontend'
+application-label-sw:'frontend'
+application-label-ta:'frontend'
+application-label-te:'frontend'
+application-label-th:'frontend'
+application-label-tl:'frontend'
+application-label-tr:'frontend'
+application-label-uk:'frontend'
+application-label-ur:'frontend'
+application-label-uz:'frontend'
+application-label-vi:'frontend'
+application-label-zh-CN:'frontend'
+application-label-zh-HK:'frontend'
+application-label-zh-TW:'frontend'
+application-label-zu:'frontend'
+application-icon-120:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-160:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-240:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-320:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-480:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-640:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application-icon-65534:'res/mipmap-anydpi-v26/ic_launcher.xml'
+application: label='frontend' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
+application-debuggable
+launchable-activity: name='com.panviravindra.comparez.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.screen.portrait'
+  uses-implied-feature: name='android.hardware.screen.portrait' reason='one or more activities have specified a portrait orientation'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'af' 'am' 'ar' 'as' 'az' 'be' 'bg' 'bn' 'bs' 'ca' 'cs' 'da' 'de' 'el' 'en-AU' 'en-CA' 'en-GB' 'en-IN' 'en-XC' 'es' 'es-419' 'es-ES' 'es-US' 'et' 'eu' 'fa' 'fi' 'fr' 'fr-CA' 'gl' 'gu' 'hi' 'hr' 'hu' 'hy' 'in' 'is' 'it' 'iw' 'ja' 'ka' 'kk' 'km' 'kn' 'ko' 'ky' 'lo' 'lt' 'lv' 'mk' 'ml' 'mn' 'mr' 'ms' 'my' 'nb' 'ne' 'nl' 'or' 'pa' 'pl' 'pt' 'pt-BR' 'pt-PT' 'ro' 'ru' 'si' 'sk' 'sl' 'sq' 'sr' 'sr-Latn' 'sv' 'sw' 'ta' 'te' 'th' 'tl' 'tr' 'uk' 'ur' 'uz' 'vi' 'zh-CN' 'zh-HK' 'zh-TW' 'zu'
+densities: '120' '160' '240' '320' '480' '640' '65534'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'
+
+01:50:31.326 detox[3235885] [90mE[39m [33mdevice[39m selectApp
+01:50:31.326 detox[3235885] [90mB[39m [33mdevice[39m uninstallApp
+  args: ()
+01:50:31.326 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeUninstallApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:50:31.326 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeUninstallApp
+01:50:31.327 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "pm list packages com.panviravindra.comparez"
+01:50:31.430 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m package:com.panviravindra.comparez
+
+01:50:31.431 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 uninstall com.panviravindra.comparez
+01:50:32.017 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m Success
+
+01:50:32.017 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "pm list packages com.panviravindra.comparez.test"
+01:50:32.133 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:50:32.134 detox[3235885] [90mE[39m [33mdevice[39m uninstallApp
+01:50:32.135 detox[3235885] [90mB[39m [33mdevice[39m selectApp
+  args: ("default")
+01:50:32.136 detox[3235885] [90mB[39m [33mdevice[39m terminateApp
+  args: ()
+01:50:32.137 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:50:32.138 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeTerminateApp
+01:50:32.138 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "am force-stop com.panviravindra.comparez"
+01:50:32.455 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:50:32.455 detox[3235885] [90mB[39m [33martifacts-manager[39m onTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:50:32.455 detox[3235885] [90mE[39m [33martifacts-manager[39m onTerminateApp
+01:50:32.455 detox[3235885] [90mE[39m [33mdevice[39m terminateApp
+01:50:32.456 detox[3235885] [90mE[39m [33mdevice[39m selectApp
+01:50:32.461 detox[3235885] [90mB[39m [33mdevice[39m installApp
+  args: ()
+01:50:32.462 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump xmlstrings "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk" AndroidManifest.xml
+01:50:32.481 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m String pool of 100 unique UTF-16 non-sorted strings, 100 entries and 0 styles using 5648 bytes:
+String #0: theme
+String #1: label
+String #2: icon
+String #3: name
+String #4: permission
+String #5: protectionLevel
+String #6: enabled
+String #7: debuggable
+String #8: exported
+String #9: authorities
+String #10: grantUriPermissions
+String #11: launchMode
+String #12: screenOrientation
+String #13: configChanges
+String #14: value
+String #15: resource
+String #16: scheme
+String #17: minSdkVersion
+String #18: versionCode
+String #19: versionName
+String #20: windowSoftInputMode
+String #21: targetSdkVersion
+String #22: allowBackup
+String #23: supportsRtl
+String #24: extractNativeLibs
+String #25: usesCleartextTraffic
+String #26: directBootAware
+String #27: roundIcon
+String #28: compileSdkVersion
+String #29: compileSdkVersionCodename
+String #30: appComponentFactory
+String #31: enableOnBackInvokedCallback
+String #32: 1.0.0
+String #33: 16
+String #34: ALWAYS
+String #35: action
+String #36: activity
+String #37: android
+String #38: android.intent.action.MAIN
+String #39: android.intent.action.OPEN_DOCUMENT_TREE
+String #40: android.intent.action.VIEW
+String #41: android.intent.category.BROWSABLE
+String #42: android.intent.category.LAUNCHER
+String #43: android.permission.DUMP
+String #44: android.permission.INTERNET
+String #45: android.permission.READ_EXTERNAL_STORAGE
+String #46: android.permission.SYSTEM_ALERT_WINDOW
+String #47: android.permission.USE_BIOMETRIC
+String #48: android.permission.USE_FINGERPRINT
+String #49: android.permission.VIBRATE
+String #50: android.permission.WRITE_EXTERNAL_STORAGE
+String #51: android.support.FILE_PROVIDER_PATHS
+String #52: androidx.core.app.CoreComponentFactory
+String #53: androidx.emoji2.text.EmojiCompatInitializer
+String #54: androidx.lifecycle.ProcessLifecycleInitializer
+String #55: androidx.profileinstaller.ProfileInstallReceiver
+String #56: androidx.profileinstaller.ProfileInstallerInitializer
+String #57: androidx.profileinstaller.action.BENCHMARK_OPERATION
+String #58: androidx.profileinstaller.action.INSTALL_PROFILE
+String #59: androidx.profileinstaller.action.SAVE_PROFILE
+String #60: androidx.profileinstaller.action.SKIP_FILE
+String #61: androidx.startup
+String #62: androidx.startup.InitializationProvider
+String #63: application
+String #64: category
+String #65: com.facebook.react.devsupport.DevSettingsActivity
+String #66: com.facebook.soloader.enabled
+String #67: com.panviravindra.comparez
+String #68: com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+String #69: com.panviravindra.comparez.FileSystemFileProvider
+String #70: com.panviravindra.comparez.MainActivity
+String #71: com.panviravindra.comparez.MainApplication
+String #72: com.panviravindra.comparez.androidx-startup
+String #73: com.panviravindra.comparez.fileprovider
+String #74: com.reactnativecommunity.webview.RNCWebViewFileProvider
+String #75: data
+String #76: expo.modules.adapters.react.apploader.RNHeadlessAppLoader
+String #77: expo.modules.filesystem.FileSystemFileProvider
+String #78: expo.modules.updates.ENABLED
+String #79: expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH
+String #80: expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS
+String #81: http://schemas.android.com/apk/res/android
+String #82: https
+String #83: intent
+String #84: intent-filter
+String #85: manifest
+String #86: meta-data
+String #87: org.chromium.intent.action.IS_READY_TO_PAY
+String #88: org.chromium.intent.action.PAY
+String #89: org.chromium.intent.action.UPDATE_PAYMENT_DETAILS
+String #90: org.unimodules.core.AppLoader#react-native-headless
+String #91: package
+String #92: permission
+String #93: platformBuildVersionCode
+String #94: platformBuildVersionName
+String #95: provider
+String #96: queries
+String #97: receiver
+String #98: uses-permission
+String #99: uses-sdk
+
+01:50:32.484 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/build-tools/36.1.0/aapt" dump xmlstrings "/home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" AndroidManifest.xml
+01:50:32.531 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m String pool of 43 unique UTF-16 non-sorted strings, 43 entries and 0 styles using 2180 bytes:
+String #0: theme
+String #1: label
+String #2: name
+String #3: debuggable
+String #4: exported
+String #5: priority
+String #6: targetPackage
+String #7: handleProfiling
+String #8: functionalTest
+String #9: minSdkVersion
+String #10: targetSdkVersion
+String #11: extractNativeLibs
+String #12: compileSdkVersion
+String #13: compileSdkVersionCodename
+String #14: 16
+String #15: Tests for com.panviravindra.comparez
+String #16: activity
+String #17: android
+String #18: android.intent.category.LAUNCHER
+String #19: android.permission.REORDER_TASKS
+String #20: android.test.runner
+String #21: androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity
+String #22: androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity
+String #23: androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity
+String #24: androidx.test.orchestrator
+String #25: androidx.test.runner.AndroidJUnitRunner
+String #26: androidx.test.services
+String #27: application
+String #28: category
+String #29: com.google.android.apps.common.testing.services
+String #30: com.panviravindra.comparez
+String #31: com.panviravindra.comparez.test
+String #32: http://schemas.android.com/apk/res/android
+String #33: instrumentation
+String #34: intent-filter
+String #35: manifest
+String #36: package
+String #37: platformBuildVersionCode
+String #38: platformBuildVersionName
+String #39: queries
+String #40: uses-library
+String #41: uses-permission
+String #42: uses-sdk
+
+01:50:32.531 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "getprop ro.build.version.sdk"
+01:50:32.607 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 36
+
+01:50:32.623 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_CMD[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 install -r -g -t /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk
+01:51:09.112 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_STDOUT[39m Performing Streamed Install
+Success
+
+01:51:09.114 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_END[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 install -r -g -t /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/debug/app-debug.apk exited with code #0
+01:51:09.118 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_CMD[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 install -r -g -t /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+01:51:25.810 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_STDOUT[39m Performing Streamed Install
+Success
+
+01:51:25.812 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_END[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 install -r -g -t /home/kpanviravindra/Desktop/jiva/CompareX/frontend/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk exited with code #0
+01:51:25.816 detox[3235885] [90mB[39m [33mdevice[39m reverseTcpPort
+  args: (8082)
+01:51:25.816 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 reverse tcp:8082 tcp:8082
+01:51:25.840 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:51:25.841 detox[3235885] [90mE[39m [33mdevice[39m reverseTcpPort
+01:51:25.842 detox[3235885] [90mE[39m [33mdevice[39m installApp
+01:51:25.842 detox[3235885] [90mB[39m [33mdevice[39m selectApp
+  args: ("default")
+01:51:25.843 detox[3235885] [90mB[39m [33mdevice[39m terminateApp
+  args: ()
+01:51:25.845 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:51:25.845 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeTerminateApp
+01:51:25.846 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "am force-stop com.panviravindra.comparez"
+01:51:27.467 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:51:27.467 detox[3235885] [90mB[39m [33martifacts-manager[39m onTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:51:27.468 detox[3235885] [90mE[39m [33martifacts-manager[39m onTerminateApp
+01:51:27.468 detox[3235885] [90mE[39m [33mdevice[39m terminateApp
+01:51:27.468 detox[3235885] [90mE[39m [33mdevice[39m selectApp
+01:51:27.468 detox[3235885] [90mE[39m [33mlifecycle[39m set up environment
+01:51:35.836 detox[3235885] [90mi[39m [33mlifecycle[39m navigation.test.js is assigned to AttachedDevice:emulator-5554
+01:51:35.837 detox[3235885] [90mB[39m [33mlifecycle[39m run the tests
+01:51:35.838 detox[3235885] [90mB[39m [33martifacts-manager[39m onRunDescribeStart
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+01:51:35.839 detox[3235885] [90mE[39m [33martifacts-manager[39m onRunDescribeStart
+01:51:35.840 detox[3235885] [90mB[39m [33mlifecycle[39m CompareZ Navigation Flow
+01:51:35.840 detox[3235885] [90mB[39m [33martifacts-manager[39m onRunDescribeStart
+  args: ({"name":"CompareZ Navigation Flow"})
+01:51:35.840 detox[3235885] [90mE[39m [33martifacts-manager[39m onRunDescribeStart
+01:51:35.841 detox[3235885] [90mB[39m [33mlifecycle[39m beforeAll
+01:51:35.887 detox[3235885] [90mB[39m [33mdevice[39m launchApp
+  args: ({"newInstance":true})
+01:51:35.890 detox[3235885] [90mB[39m [33mdevice[39m terminateApp
+  args: ("com.panviravindra.comparez")
+01:51:35.890 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:51:35.891 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeTerminateApp
+01:51:35.892 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "am force-stop com.panviravindra.comparez"
+01:52:14.431 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:52:14.431 detox[3235885] [90mB[39m [33martifacts-manager[39m onTerminateApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez"})
+01:52:14.431 detox[3235885] [90mE[39m [33martifacts-manager[39m onTerminateApp
+01:52:14.431 detox[3235885] [90mE[39m [33mdevice[39m terminateApp
+01:52:14.432 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeLaunchApp
+  args: ({"deviceId":"emulator-5554","bundleId":"com.panviravindra.comparez","launchArgs":{"detoxServer":"ws://localhost:41739","detoxSessionId":"d85dd752-fb6c-308b-b570-51cb9b1bd213"}})
+01:52:14.433 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "date +\"%m-%d %T.000\""
+01:52:14.804 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 04-15 01:52:14.000
+
+01:52:14.804 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeLaunchApp
+01:52:14.805 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 reverse tcp:41739 tcp:41739
+01:52:14.820 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 41739
+
+01:52:14.821 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "pm list instrumentation"
+01:52:15.062 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m instrumentation:com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner (target=com.panviravindra.comparez)
+instrumentation:io.appium.uiautomator2.server.test/androidx.test.runner.AndroidJUnitRunner (target=io.appium.uiautomator2.server)
+
+01:52:15.071 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_CMD[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell am instrument -w -r -e detoxServer ws://localhost:41739 -e detoxSessionId d85dd752-fb6c-308b-b570-51cb9b1bd213 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner
+01:52:15.575 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:18.234 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:18.235 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:18.235 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:18.736 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:20.070 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:20.073 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:20.080 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:20.584 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:22.008 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:22.008 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:22.009 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:22.511 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:23.940 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:23.941 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:23.941 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:24.442 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:25.582 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:25.582 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:25.583 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:26.083 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:27.242 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:27.244 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:27.245 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:27.747 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:29.123 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:29.124 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:29.124 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:29.625 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:31.743 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:31.744 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:31.744 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:32.246 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:34.778 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:34.780 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:34.780 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:35.284 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:42.225 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:42.226 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:42.227 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:43.228 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:44.724 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:44.725 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:44.726 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:45.228 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:46.839 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:46.840 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:46.840 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:47.341 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:48.642 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:48.643 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:48.643 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:49.144 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:50.305 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:50.305 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:50.305 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:50.807 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:52.248 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:52.252 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:52.254 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:53.757 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:55.104 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:55.104 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:55.105 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:55.606 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:56.841 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:56.842 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:56.842 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:57.343 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:52:58.578 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:52:58.578 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:58.578 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:52:59.078 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:00.854 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:00.855 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:00.855 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:01.356 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:02.571 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:02.572 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:02.572 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:04.573 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:06.041 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:06.042 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:06.042 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:06.543 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:07.713 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:07.714 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:07.716 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:08.218 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:09.906 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:09.909 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:09.910 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:10.412 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:14.240 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:14.240 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:14.240 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:14.741 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:24.457 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_STDOUT[39m INSTRUMENTATION_RESULT: longMsg=Process ProcessRecord{97d6ad8 12537:com.panviravindra.comparez/u0a221} failed to attach
+INSTRUMENTATION_RESULT: shortMsg=failed to attach
+INSTRUMENTATION_CODE: 0
+
+01:53:24.496 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:24.496 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:24.496 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:24.805 detox[3235885] [90mi[39m [33mchild-process[39m[90m:SPAWN_END[39m /home/kpanviravindra/Android/Sdk/platform-tools/adb -s emulator-5554 shell am instrument -w -r -e detoxServer ws://localhost:41739 -e detoxSessionId d85dd752-fb6c-308b-b570-51cb9b1bd213 -e debug false com.panviravindra.comparez.test/androidx.test.runner.AndroidJUnitRunner exited with code #0
+01:53:24.805 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 reverse --remove tcp:41739
+01:53:24.831 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:53:26.998 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:28.152 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:28.153 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:28.154 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:28.656 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:29.815 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:29.816 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:29.816 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:30.317 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:31.555 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:31.556 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:31.556 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:32.057 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:33.291 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:33.291 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:33.292 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:33.792 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:34.999 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:35.001 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:35.001 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:38.004 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:39.136 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:39.136 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:39.137 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:39.638 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:40.777 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:40.777 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:40.777 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:41.278 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:42.444 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:42.444 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:42.444 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:42.947 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:44.195 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:44.196 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:44.196 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:44.697 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:45.918 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:45.918 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:45.919 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:49.420 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:50.577 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:50.578 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:50.578 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:51.078 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:52.212 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:52.213 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:52.213 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:52.714 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:54.035 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:54.036 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:54.037 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:54.538 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:55.798 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:55.799 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:55.799 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:56.300 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:53:57.472 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:53:57.473 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:53:57.473 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:01.474 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:02.635 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:02.636 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:02.636 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:03.137 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:04.288 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:04.289 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:04.289 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:04.790 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:05.971 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:05.973 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:05.974 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:06.475 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:07.628 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:07.628 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:07.629 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:08.130 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:09.339 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:09.340 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:09.342 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:13.843 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:15.004 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:15.004 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:15.005 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:15.506 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:16.733 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:16.734 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:16.736 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:17.237 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:18.472 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:18.473 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:18.473 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:18.974 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:20.214 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:20.217 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:20.218 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:20.720 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+01:54:21.903 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m ""/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""" failed with error = Error: Command failed: "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps | grep \"com\.panviravindra\.comparez$\""
+ (code=1), stdout and stderr:
+
+01:54:21.903 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:21.904 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_FAIL[39m 
+01:54:21.906 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "ps"
+01:54:22.011 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m USER           PID  PPID        VSZ    RSS WCHAN            ADDR S NAME                       
+root             1     0   11051840   4612 0                   0 S init
+root             2     0          0      0 0                   0 S [kthreadd]
+root             3     2          0      0 0                   0 S [pool_workqueue_release]
+root             4     2          0      0 0                   0 I [kworker/R-rcu_g]
+root             5     2          0      0 0                   0 I [kworker/R-slub_]
+root             6     2          0      0 0                   0 I [kworker/R-netns]
+root            10     2          0      0 0                   0 I [kworker/u4:0-events_unbound]
+root            12     2          0      0 0                   0 I [kworker/R-mm_pe]
+root            13     2          0      0 0                   0 I [rcu_tasks_kthread]
+root            14     2          0      0 0                   0 I [rcu_tasks_trace_kthread]
+root            15     2          0      0 0                   0 S [ksoftirqd/0]
+root            16     2          0      0 0                   0 I [rcu_preempt]
+root            17     2          0      0 0                   0 S [rcub/0]
+root            18     2          0      0 0                   0 S [rcu_exp_gp_kthread_worker]
+root            19     2          0      0 0                   0 S [rcu_exp_par_gp_kthread_worker]
+root            20     2          0      0 0                   0 S [migration/0]
+root            21     2          0      0 0                   0 S [idle_inject/0]
+root            22     2          0      0 0                   0 S [cpuhp/0]
+root            23     2          0      0 0                   0 S [cpuhp/1]
+root            24     2          0      0 0                   0 S [idle_inject/1]
+root            25     2          0      0 0                   0 S [migration/1]
+root            26     2          0      0 0                   0 S [ksoftirqd/1]
+root            29     2          0      0 0                   0 I [kworker/R-inet_]
+root            30     2          0      0 0                   0 S [kauditd]
+root            31     2          0      0 0                   0 S [khungtaskd]
+root            32     2          0      0 0                   0 S [oom_reaper]
+root            33     2          0      0 0                   0 I [kworker/R-write]
+root            34     2          0      0 0                   0 S [kcompactd0]
+root            35     2          0      0 0                   0 S [khugepaged]
+root            36     2          0      0 0                   0 I [kworker/R-crypt]
+root            37     2          0      0 0                   0 I [kworker/R-kbloc]
+root            38     2          0      0 0                   0 I [kworker/1:1-virtio_vsock]
+root            39     2          0      0 0                   0 I [kworker/R-edac-]
+root            40     2          0      0 0                   0 I [kworker/R-devfr]
+root            41     2          0      0 0                   0 S [watchdogd]
+root            43     2          0      0 0                   0 S [kswapd0]
+root            45     2          0      0 0                   0 S [erofs_worker/0]
+root            46     2          0      0 0                   0 S [erofs_worker/1]
+root            48     2          0      0 0                   0 I [kworker/R-kthro]
+root            49     2          0      0 0                   0 S [dmabuf-deferred-free-worker]
+root            50     2          0      0 0                   0 I [kworker/R-nvme-]
+root            51     2          0      0 0                   0 I [kworker/R-nvme-]
+root            52     2          0      0 0                   0 I [kworker/R-nvme-]
+root            53     2          0      0 0                   0 I [kworker/R-uas]
+root            54     2          0      0 0                   0 I [kworker/R-dm_bu]
+root            55     2          0      0 0                   0 I [kworker/R-mld]
+root            56     2          0      0 0                   0 I [kworker/R-ipv6_]
+root            57     2          0      0 0                   0 I [kworker/R-kstrp]
+root            59     2          0      0 0                   0 S [khvcd]
+root            60     2          0      0 0                   0 S [hwrng]
+root            65     2          0      0 0                   0 S [jbd2/vdd1-8]
+root            66     2          0      0 0                   0 I [kworker/R-ext4-]
+root            67     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            68     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            69     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            70     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            71     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            72     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            73     2          0      0 0                   0 I [kworker/R-kveri]
+root            74     2          0      0 0                   0 I [kworker/R-ext4-]
+root           100     2          0      0 0                   0 I [kworker/R-ext4-]
+root           101     2          0      0 0                   0 I [kworker/R-ext4-]
+root           102     2          0      0 0                   0 I [kworker/R-ext4-]
+root           105     1   10771656   2664 0                   0 S init
+root           106     1   10923336   3568 0                   0 S ueventd
+root           160     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           162     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           163     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           164     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           165     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           166     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           167     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           168     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           169     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           170     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           171     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           173     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           175     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           177     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           178     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           179     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           181     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           182     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           184     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           185     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           190     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           192     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           193     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           196     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           198     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           201     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           202     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           204     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           207     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           214     2          0      0 0                   0 I [kworker/R-ext4-]
+root           215     2          0      0 0                   0 I [kworker/R-ext4-]
+root           216     2          0      0 0                   0 I [kworker/R-ext4-]
+root           217     2          0      0 0                   0 I [kworker/R-ext4-]
+root           218     2          0      0 0                   0 I [kworker/R-ext4-]
+prng_seeder    223     1   10936656   3560 0                   0 S prng_seeder
+root           227     2          0      0 0                   0 I [kworker/R-cfg80]
+root           228     2          0      0 0                   0 S [sugov:0]
+root           229     2          0      0 0                   0 S [sugov:1]
+logd           230     1   10788680   5656 0                   0 S logd
+lmkd           231     1   10810912   4220 0                   0 S lmkd
+system         232     1   10884960   3552 0                   0 S servicemanager
+system         233     1   10882772   3056 0                   0 S hwservicemanager
+root           235     2          0      0 0                   0 S [irq/18-goldfish_pipe_dprctd]
+root           236     2          0      0 0                   0 S [psimon]
+root           240     1   10815236   2932 0                   0 S qemu-props
+root           246     1   10874212   4976 0                   0 S vold
+root           250     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           256     2          0      0 0                   0 I [kworker/R-usbip]
+system         258     1   10771408   3952 0                   0 S android.system.suspend-service
+keystore       259     1   10941832   9132 0                   0 S keystore2
+nobody         260     1   10925068   4948 0                   0 S android.hardware.security.keymint-service
+system         261     1   10905116   3572 0                   0 S android.hardware.gatekeeper-service.nonsecure
+root           275     2          0      0 0                   0 I [kworker/R-blk_c]
+root           283     2          0      0 0                   0 S [jbd2/dm-55-8]
+root           284     2          0      0 0                   0 I [kworker/R-ext4-]
+tombstoned     290     1   10795928   2944 0                   0 S tombstoned
+root           347     2          0      0 0                   0 I [kworker/R-ext4-]
+root           348     2          0      0 0                   0 I [kworker/R-ext4-]
+root           349     2          0      0 0                   0 I [kworker/R-ext4-]
+root           350     2          0      0 0                   0 I [kworker/R-ext4-]
+root           351     2          0      0 0                   0 I [kworker/R-ext4-]
+root           352     2          0      0 0                   0 I [kworker/R-ext4-]
+root           353     2          0      0 0                   0 I [kworker/R-ext4-]
+root           354     2          0      0 0                   0 I [kworker/R-ext4-]
+root           355     2          0      0 0                   0 I [kworker/R-ext4-]
+root           356     2          0      0 0                   0 I [kworker/R-ext4-]
+root           357     2          0      0 0                   0 I [kworker/R-ext4-]
+root           358     2          0      0 0                   0 I [kworker/R-ext4-]
+root           359     2          0      0 0                   0 I [kworker/R-kveri]
+root           360     2          0      0 0                   0 I [kworker/R-ext4-]
+root           361     2          0      0 0                   0 I [kworker/R-kveri]
+root           362     2          0      0 0                   0 I [kworker/R-kveri]
+root           363     2          0      0 0                   0 I [kworker/R-ext4-]
+root           364     2          0      0 0                   0 I [kworker/0:2H-kverityd]
+root           365     2          0      0 0                   0 I [kworker/R-ext4-]
+root           366     2          0      0 0                   0 I [kworker/R-kveri]
+root           367     2          0      0 0                   0 I [kworker/R-kveri]
+root           368     2          0      0 0                   0 I [kworker/R-ext4-]
+root           371     2          0      0 0                   0 I [kworker/R-ext4-]
+root           372     2          0      0 0                   0 I [kworker/R-ext4-]
+root           373     2          0      0 0                   0 I [kworker/R-kveri]
+root           374     2          0      0 0                   0 I [kworker/R-ext4-]
+root           375     2          0      0 0                   0 I [kworker/R-kveri]
+root           376     2          0      0 0                   0 I [kworker/R-ext4-]
+root           377     2          0      0 0                   0 I [kworker/R-kveri]
+root           378     2          0      0 0                   0 I [kworker/R-ext4-]
+root           379     2          0      0 0                   0 I [kworker/R-ext4-]
+root           380     2          0      0 0                   0 I [kworker/R-kveri]
+root           381     2          0      0 0                   0 I [kworker/R-kveri]
+root           382     2          0      0 0                   0 I [kworker/R-ext4-]
+root           383     2          0      0 0                   0 I [kworker/R-kveri]
+root           384     2          0      0 0                   0 I [kworker/R-kveri]
+root           387     2          0      0 0                   0 I [kworker/R-ext4-]
+root           388     2          0      0 0                   0 I [kworker/R-ext4-]
+root           389     2          0      0 0                   0 I [kworker/R-ext4-]
+root           390     2          0      0 0                   0 I [kworker/R-ext4-]
+root           391     2          0      0 0                   0 I [kworker/R-kveri]
+root           392     2          0      0 0                   0 I [kworker/R-kveri]
+root           393     2          0      0 0                   0 I [kworker/R-kveri]
+root           394     2          0      0 0                   0 I [kworker/R-ext4-]
+root           395     2          0      0 0                   0 I [kworker/R-kveri]
+root           396     2          0      0 0                   0 I [kworker/R-ext4-]
+root           397     2          0      0 0                   0 I [kworker/R-kveri]
+root           398     2          0      0 0                   0 I [kworker/R-ext4-]
+root           399     2          0      0 0                   0 I [kworker/R-ext4-]
+root           400     2          0      0 0                   0 I [kworker/R-ext4-]
+root           402     2          0      0 0                   0 I [kworker/R-ext4-]
+root           403     2          0      0 0                   0 I [kworker/R-ext4-]
+root           404     2          0      0 0                   0 I [kworker/R-ext4-]
+root           405     2          0      0 0                   0 I [kworker/R-ext4-]
+root           406     2          0      0 0                   0 I [kworker/R-kveri]
+root           407     2          0      0 0                   0 I [kworker/R-ext4-]
+root           408     2          0      0 0                   0 I [kworker/R-kveri]
+root           409     2          0      0 0                   0 I [kworker/R-kveri]
+root           410     2          0      0 0                   0 I [kworker/R-ext4-]
+root           411     2          0      0 0                   0 I [kworker/R-ext4-]
+root           412     2          0      0 0                   0 I [kworker/R-ext4-]
+root           413     2          0      0 0                   0 I [kworker/R-kveri]
+root           414     2          0      0 0                   0 I [kworker/R-kveri]
+root           415     2          0      0 0                   0 I [kworker/R-ext4-]
+root           416     2          0      0 0                   0 I [kworker/R-kveri]
+root           417     2          0      0 0                   0 I [kworker/R-ext4-]
+root           418     2          0      0 0                   0 I [kworker/R-kveri]
+root           419     2          0      0 0                   0 I [kworker/R-ext4-]
+root           420     2          0      0 0                   0 I [kworker/R-kveri]
+root           421     2          0      0 0                   0 I [kworker/R-kveri]
+root           422     2          0      0 0                   0 I [kworker/R-kveri]
+root           423     2          0      0 0                   0 I [kworker/R-ext4-]
+root           424     2          0      0 0                   0 I [kworker/R-kveri]
+root           425     2          0      0 0                   0 I [kworker/R-ext4-]
+root           426     2          0      0 0                   0 I [kworker/R-ext4-]
+root           427     2          0      0 0                   0 I [kworker/R-ext4-]
+root           428     2          0      0 0                   0 I [kworker/R-kveri]
+root           429     2          0      0 0                   0 I [kworker/R-ext4-]
+root           430     2          0      0 0                   0 I [kworker/R-ext4-]
+statsd         463     1   10829708   4468 0                   0 S statsd
+system         471     1   10758960   3328 0                   0 S android.hidl.allocator@1.0-service
+system         476     1   10774596   4032 0                   0 S android.hardware.camera.provider.ranchu
+system         482     1   11159180   4172 0                   0 S android.hardware.camera.provider@2.7-service-google
+system         483     1   10869724   4548 0                   0 S android.hardware.graphics.allocator-service.ranchu
+system         484     1   10795020   4164 0                   0 S android.hardware.health-service.example
+media          485     1   10994056   4176 0                   0 S android.hardware.media.c2@1.0-service-goldfish
+radio          486     1   10802844   4188 0                   0 S android.hardware.radio-service.ranchu
+system         495     1   10842960   4084 0                   0 S android.hardware.sensors-service.multihal
+system         496     1   10880688   3888 0                   0 S android.hardware.usb-service.example
+wifi           497     1   10832684   4440 0                   0 S android.hardware.wifi-service
+bluetooth      498     1   10812408   3828 0                   0 S android.hardware.bluetooth-service.default
+system         499     1   10973388   4984 0                   0 S android.hardware.graphics.composer3-service.ranchu
+nobody         500     1   10834660   3764 0                   0 S android.hardware.identity-service.example
+nobody         501     1   10843616   3552 0                   0 S android.hardware.lights-service.example
+hsm            502     1   10900660   3696 0                   0 S android.hardware.authsecret-service.example
+media          505     1   10843044   3520 0                   0 S android.hardware.cas-service.example
+context_hub    506     1   10773040   3568 0                   0 S android.hardware.contexthub-service.example
+system         511     1   10978172   3768 0                   0 S android.hardware.neuralnetworks-service-sample-all
+system         515     1   10785404   3880 0                   0 S android.hardware.neuralnetworks-service-sample-limited
+system         517     1   10949444   3488 0                   0 S android.hardware.neuralnetworks-shim-service-sample
+nobody         522     1   10907716   3692 0                   0 S android.hardware.power-service.example
+system         525     1   10760528   3820 0                   0 S android.hardware.power.stats-service.example
+system         526     1   10782012   3692 0                   0 S android.hardware.rebootescrow-service.default
+nobody         529     1   10812756   3456 0                   0 S android.hardware.thermal-service.example
+thread_network 530     1   10814824   3556 0                   0 S android.hardware.threadnetwork-service
+nobody         531     1   10852872   3644 0                   0 S android.hardware.vibrator-service.example
+media          532     1   10918832   3456 0                   0 S android.hardware.drm-service.widevine
+credstore      534     1   10866896   4212 0                   0 S credstore
+gpu_service    535     1   10926208   3932 0                   0 S gpuservice
+system         537     1   10979100  13604 0                   0 S surfaceflinger
+shell          546     1   10876540   7152 0                   0 S adbd
+uwb            547     1   10801668   3672 0                   0 S android.hardware.uwb-service
+mdnsr          563     1   10834648   2944 0                   0 S mdnsd
+drm            581     1   10826032   3924 0                   0 S drmserver
+nobody         584     1   10849188   2816 0                   0 S traced_probes
+nobody         587     1   10808884   3180 0                   0 S traced
+logd           588     1   10795528   3680 0                   0 S logcat
+bluetooth      589     1   10858296   3044 0                   0 S bt_vhci_forwarder
+incidentd      592     1   10840936   3716 0                   0 S incidentd
+root           593     1   10867684   5128 0                   0 S installd
+mediaex        594     1   11196472   5420 0                   0 S media.extractor
+media          595     1   10875960   4020 0                   0 S media.metrics
+root           597     1   10852496   4152 0                   0 S storaged
+mediacodec     599     1   11713888   6168 0                   0 S media.swcodec
+system         600     1   10815832   4228 0                   0 S gatekeeperd
+root          2425     2          0      0 0                   0 I [kworker/u5:1-blk_crypto_wq]
+root          5688     2          0      0 0                   0 I [kworker/0:1-events]
+root          6232     2          0      0 0                   0 I [kworker/1:5-virtio_vsock]
+root          6233     1   14892440  78932 0                   0 S zygote64
+cameraserver  6235     1   11238564   5936 0                   0 S cameraserver
+media         6236     1   11156696   7284 0                   0 S mediaserver
+root          6237     1   10987832   6084 0                   0 S netd
+wifi          6238     1   10858672   4668 0                   0 S wificond
+root          6254  6237   10756808   3228 0                   0 S iptables-restore
+root          6255  6237   10787528   3100 0                   0 S ip6tables-restore
+root          6298     2          0      0 0                   0 I [kworker/1:21H-kverityd]
+root          6299     2          0      0 0                   0 I [kworker/1:22H-kverityd]
+system        6368  6233   18720684 344392 0                   0 S system_server
+system        6591     1   10885048   3604 0                   0 S android.hardware.biometrics.fingerprint-service.ranchu
+thread_network 6615    1   10762756   4088 0                   0 S ot-daemon
+wifi          6632     1   10831352   4568 0                   0 S wpa_supplicant
+u0_a185       6644  6233   16324456 157784 0                   0 S com.android.systemui
+webview_zygote 6700 6233   33945724  55404 0                   0 S webview_zygote
+gps           6708     1   10843236   3864 0                   0 S android.hardware.gnss-service.ranchu
+network_stack 6738  6233   16113456  85068 0                   0 S com.android.networkstack.process
+secure_element 6766 6233   16073336  67492 0                   0 S com.android.se
+u0_a182       6789  6233   16156520 118640 0                   0 S com.google.android.apps.nexuslauncher
+u0_a197       6804  6233   16105804  97408 0                   0 S com.google.android.ext.services
+system        7255  6233   16072116  66748 0                   0 S com.android.emulator.multidisplay
+system        7291  6233   16075392  68028 0                   0 S com.android.localtransport
+u0_a105       7312  6233   16083396  77096 0                   0 S android.process.media
+u0_a217       7433  6233   16083516  68636 0                   0 S io.appium.settings
+system        7437  6233   16088520  72588 0                   0 S com.android.keychain
+u0_a214       7586  6233   16131704  93964 0                   0 S com.google.android.providers.media.module
+u0_a142       7653  6233   16096996  75744 0                   0 S com.google.android.as.oss
+u0_a141       7694  6233   16443280 216096 0                   0 S com.google.android.apps.wellbeing
+u0_a96        7777  6233   16086184  76748 0                   0 S android.process.acore
+u0_a186       7846  6233   16097844  70408 0                   0 S com.google.android.apps.wallpaper
+audioserver   7998     1   10919560   6732 0                   0 S audioserver
+root          8002     2          0      0 0                   0 I [kworker/0:2-events]
+audioserver   8003     1   10970260   3860 0                   0 S android.hardware.audio.service
+bluetooth     8161  6233   16259392  82596 0                   0 S com.google.android.bluetooth
+u0_a143       8261  6233   16072948  66256 0                   0 S com.google.android.onetimeinitializer
+u0_a154       8303  6233   17071588  67468 0                   0 S com.android.camera2
+u0_a110       8472  6233   16084436  66836 0                   0 S com.android.devicediagnostics
+system        8537  6233   16074412  67096 0                   0 S com.android.dynsystem
+radio         8558  6233   16138460  94364 0                   0 S com.android.phone
+u0_a144       8571  6233   16499104 189996 0                   0 S com.google.android.gms.persistent
+u0_a131       8591  6233   16079120  68880 0                   0 S com.android.imsserviceentitlement
+system        8610  6233   16074412  67828 0                   0 S com.android.dynsystem:dynsystem
+u0_a159       8704  6233   17474056 120696 0                   0 S com.google.android.apps.photos
+u0_a109       8738  6233   16077564  68752 0                   0 S com.android.managedprovisioning
+u0_a98        8797  6233   16411228  71500 0                   0 S com.android.providers.calendar
+shell         8821  6233   16074032  67556 0                   0 S com.android.shell
+u0_a144       8835  6233   16399328 127128 0                   0 S com.google.android.gms.unstable
+u0_a202       8916  6233   16092812  74404 0                   0 S com.google.android.rkpdapp
+u0_a140       8947  6233   16078268  70416 0                   0 S com.google.android.configupdater
+u0_a201       8975  6233   16130056  66232 0                   0 S com.google.android.federatedcompute
+u0_a153       9107  6233   16360324 100788 0                   0 S com.google.android.inputmethod.latin
+u0_a200       9228  6233   16074432  66324 0                   0 S com.google.android.ondevicepersonalization.services
+u0_a104       9249  6233   16078428  69840 0                   0 S com.google.android.packageinstaller
+u0_a132       9281  6233   16414648  70444 0                   0 S com.google.android.projection.gearhead:car
+u0_a145       9402  6233   16697376 186676 0                   0 S com.google.android.as
+root          9824     2          0      0 0                   0 I [kworker/u4:3-events_unbound]
+root          9920     2          0      0 0                   0 I [kworker/u4:4-events_unbound]
+system       10012  6233   16158208  74500 0                   0 S com.android.settings
+root         10134     2          0      0 0                   0 I [kworker/0:1H-kblockd]
+u0_a203      10170  6233   16425108  71072 0                   0 S com.google.android.cellbroadcastreceiver
+u0_a130      10216  6233   16413068  65696 0                   0 S com.android.traceur
+u0_a144      10283  6233   16619212  91196 0                   0 S com.google.android.gms.ui
+u0_a95       10403  6233   16073236  69460 0                   0 S com.android.externalstorage
+root         10573     2          0      0 0                   0 I [kworker/u5:2-fscrypt_read_queue]
+u0_a216      10598  6233   16400456  86380 0                   0 S host.exp.exponent
+u0_a213      10681  6233   16414308  66992 0                   0 S com.google.android.photopicker
+u0_a147      10735  6233   17305440 126264 0                   0 S com.google.android.googlequicksearchbox:interactor
+u0_a147      10758  6233   34292536 157804 0                   0 S com.google.android.googlequicksearchbox:googleapp
+u0_i9000     10994  6700  280707464 102608 0                   0 S com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+u0_a139      11006  6233   16087188  74516 0                   0 S com.google.android.partnersetup
+u0_a135      11086  6233   16138828 118108 0                   0 S com.google.android.dialer
+u0_a165      11168  6233   16077432  71136 0                   0 S com.google.android.webview:webview_service
+u0_a144      11337  6233   16500940 160112 0                   0 S com.google.android.gms
+u0_a160      11490  6233   16132492  73540 0                   0 S com.android.chrome
+u0_a134      11626  6233   16146680  92528 0                   0 S com.google.android.apps.restore
+u0_a212      11675  6233   16113800  84328 0                   0 S com.google.android.permissioncontroller
+u0_a197      11691  6233   16080256  73284 0                   0 S com.google.android.ext.services:modelDownloaderServiceProcess
+u0_a146      11824  6233   16510120 115852 0                   0 S com.google.android.apps.messaging
+root         12005     2          0      0 0                   0 R [kworker/1:0+virtio_vsock]
+root         12007     2          0      0 0                   0 I [kworker/1:2-virtio_vsock]
+root         12014     2          0      0 0                   0 I [kworker/1:0H-kverityd]
+root         12015     2          0      0 0                   0 I [kworker/1:1H-kverityd]
+root         12016     2          0      0 0                   0 I [kworker/1:2H-kverityd]
+root         12017     2          0      0 0                   0 I [kworker/1:3H-kverityd]
+root         12018     2          0      0 0                   0 I [kworker/1:4H-kverityd]
+root         12019     2          0      0 0                   0 I [kworker/1:5H-kverityd]
+root         12020     2          0      0 0                   0 I [kworker/1:6H-kverityd]
+root         12021     2          0      0 0                   0 I [kworker/1:7H-kblockd]
+root         12022     2          0      0 0                   0 I [kworker/1:8H-kverityd]
+root         12023     2          0      0 0                   0 I [kworker/1:9H-kverityd]
+root         12024     2          0      0 0                   0 I [kworker/1:10H-kverityd]
+root         12025     2          0      0 0                   0 I [kworker/1:11H-kverityd]
+root         12026     2          0      0 0                   0 I [kworker/1:12H-kverityd]
+root         12027     2          0      0 0                   0 I [kworker/1:13H-kverityd]
+root         12028     2          0      0 0                   0 I [kworker/1:14H-kverityd]
+root         12029     2          0      0 0                   0 I [kworker/1:15H-kverityd]
+artd         12048     1   10839932   7924 0                   0 S artd
+root         12055     2          0      0 0                   0 I [kworker/u5:0-blk_crypto_wq]
+root         12067     2          0      0 0                   0 I [kworker/u4:1-events_unbound]
+shell        12077   546   10786064   4880 unix_stream_read_generic 0 S abb
+u0_a103      12086  6233   16426508  82336 0                   0 S com.google.android.documentsui
+root         12161     2          0      0 0                   0 I [kworker/0:0-virtio_vsock]
+root         12173     2          0      0 0                   0 I [kworker/u4:2-events_unbound]
+root         12180     2          0      0 0                   0 I [kworker/u4:5-events_unbound]
+root         12186     2          0      0 0                   0 I [kworker/u5:3-blk_crypto_wq]
+root         12296     2          0      0 0                   0 I [kworker/0:3-events]
+shell        12754   546   10816536   4764 0                   0 R ps
+
+01:54:22.012 detox[3235885] [90mi[39m [33mdevice[39m USER           PID  PPID        VSZ    RSS WCHAN            ADDR S NAME                       
+root             1     0   11051840   4612 0                   0 S init
+root             2     0          0      0 0                   0 S [kthreadd]
+root             3     2          0      0 0                   0 S [pool_workqueue_release]
+root             4     2          0      0 0                   0 I [kworker/R-rcu_g]
+root             5     2          0      0 0                   0 I [kworker/R-slub_]
+root             6     2          0      0 0                   0 I [kworker/R-netns]
+root            10     2          0      0 0                   0 I [kworker/u4:0-events_unbound]
+root            12     2          0      0 0                   0 I [kworker/R-mm_pe]
+root            13     2          0      0 0                   0 I [rcu_tasks_kthread]
+root            14     2          0      0 0                   0 I [rcu_tasks_trace_kthread]
+root            15     2          0      0 0                   0 S [ksoftirqd/0]
+root            16     2          0      0 0                   0 I [rcu_preempt]
+root            17     2          0      0 0                   0 S [rcub/0]
+root            18     2          0      0 0                   0 S [rcu_exp_gp_kthread_worker]
+root            19     2          0      0 0                   0 S [rcu_exp_par_gp_kthread_worker]
+root            20     2          0      0 0                   0 S [migration/0]
+root            21     2          0      0 0                   0 S [idle_inject/0]
+root            22     2          0      0 0                   0 S [cpuhp/0]
+root            23     2          0      0 0                   0 S [cpuhp/1]
+root            24     2          0      0 0                   0 S [idle_inject/1]
+root            25     2          0      0 0                   0 S [migration/1]
+root            26     2          0      0 0                   0 S [ksoftirqd/1]
+root            29     2          0      0 0                   0 I [kworker/R-inet_]
+root            30     2          0      0 0                   0 S [kauditd]
+root            31     2          0      0 0                   0 S [khungtaskd]
+root            32     2          0      0 0                   0 S [oom_reaper]
+root            33     2          0      0 0                   0 I [kworker/R-write]
+root            34     2          0      0 0                   0 S [kcompactd0]
+root            35     2          0      0 0                   0 S [khugepaged]
+root            36     2          0      0 0                   0 I [kworker/R-crypt]
+root            37     2          0      0 0                   0 I [kworker/R-kbloc]
+root            38     2          0      0 0                   0 I [kworker/1:1-virtio_vsock]
+root            39     2          0      0 0                   0 I [kworker/R-edac-]
+root            40     2          0      0 0                   0 I [kworker/R-devfr]
+root            41     2          0      0 0                   0 S [watchdogd]
+root            43     2          0      0 0                   0 S [kswapd0]
+root            45     2          0      0 0                   0 S [erofs_worker/0]
+root            46     2          0      0 0                   0 S [erofs_worker/1]
+root            48     2          0      0 0                   0 I [kworker/R-kthro]
+root            49     2          0      0 0                   0 S [dmabuf-deferred-free-worker]
+root            50     2          0      0 0                   0 I [kworker/R-nvme-]
+root            51     2          0      0 0                   0 I [kworker/R-nvme-]
+root            52     2          0      0 0                   0 I [kworker/R-nvme-]
+root            53     2          0      0 0                   0 I [kworker/R-uas]
+root            54     2          0      0 0                   0 I [kworker/R-dm_bu]
+root            55     2          0      0 0                   0 I [kworker/R-mld]
+root            56     2          0      0 0                   0 I [kworker/R-ipv6_]
+root            57     2          0      0 0                   0 I [kworker/R-kstrp]
+root            59     2          0      0 0                   0 S [khvcd]
+root            60     2          0      0 0                   0 S [hwrng]
+root            65     2          0      0 0                   0 S [jbd2/vdd1-8]
+root            66     2          0      0 0                   0 I [kworker/R-ext4-]
+root            67     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            68     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            69     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            70     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            71     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            72     2          0      0 0                   0 I [kworker/R-kdmfl]
+root            73     2          0      0 0                   0 I [kworker/R-kveri]
+root            74     2          0      0 0                   0 I [kworker/R-ext4-]
+root           100     2          0      0 0                   0 I [kworker/R-ext4-]
+root           101     2          0      0 0                   0 I [kworker/R-ext4-]
+root           102     2          0      0 0                   0 I [kworker/R-ext4-]
+root           105     1   10771656   2664 0                   0 S init
+root           106     1   10923336   3568 0                   0 S ueventd
+root           160     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           162     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           163     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           164     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           165     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           166     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           167     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           168     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           169     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           170     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           171     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           173     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           175     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           177     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           178     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           179     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           181     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           182     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           184     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           185     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           190     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           192     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           193     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           196     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           198     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           201     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           202     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           204     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           207     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           214     2          0      0 0                   0 I [kworker/R-ext4-]
+root           215     2          0      0 0                   0 I [kworker/R-ext4-]
+root           216     2          0      0 0                   0 I [kworker/R-ext4-]
+root           217     2          0      0 0                   0 I [kworker/R-ext4-]
+root           218     2          0      0 0                   0 I [kworker/R-ext4-]
+prng_seeder    223     1   10936656   3560 0                   0 S prng_seeder
+root           227     2          0      0 0                   0 I [kworker/R-cfg80]
+root           228     2          0      0 0                   0 S [sugov:0]
+root           229     2          0      0 0                   0 S [sugov:1]
+logd           230     1   10788680   5656 0                   0 S logd
+lmkd           231     1   10810912   4220 0                   0 S lmkd
+system         232     1   10884960   3552 0                   0 S servicemanager
+system         233     1   10882772   3056 0                   0 S hwservicemanager
+root           235     2          0      0 0                   0 S [irq/18-goldfish_pipe_dprctd]
+root           236     2          0      0 0                   0 S [psimon]
+root           240     1   10815236   2932 0                   0 S qemu-props
+root           246     1   10874212   4976 0                   0 S vold
+root           250     2          0      0 0                   0 I [kworker/R-kdmfl]
+root           256     2          0      0 0                   0 I [kworker/R-usbip]
+system         258     1   10771408   3952 0                   0 S android.system.suspend-service
+keystore       259     1   10941832   9132 0                   0 S keystore2
+nobody         260     1   10925068   4948 0                   0 S android.hardware.security.keymint-service
+system         261     1   10905116   3572 0                   0 S android.hardware.gatekeeper-service.nonsecure
+root           275     2          0      0 0                   0 I [kworker/R-blk_c]
+root           283     2          0      0 0                   0 S [jbd2/dm-55-8]
+root           284     2          0      0 0                   0 I [kworker/R-ext4-]
+tombstoned     290     1   10795928   2944 0                   0 S tombstoned
+root           347     2          0      0 0                   0 I [kworker/R-ext4-]
+root           348     2          0      0 0                   0 I [kworker/R-ext4-]
+root           349     2          0      0 0                   0 I [kworker/R-ext4-]
+root           350     2          0      0 0                   0 I [kworker/R-ext4-]
+root           351     2          0      0 0                   0 I [kworker/R-ext4-]
+root           352     2          0      0 0                   0 I [kworker/R-ext4-]
+root           353     2          0      0 0                   0 I [kworker/R-ext4-]
+root           354     2          0      0 0                   0 I [kworker/R-ext4-]
+root           355     2          0      0 0                   0 I [kworker/R-ext4-]
+root           356     2          0      0 0                   0 I [kworker/R-ext4-]
+root           357     2          0      0 0                   0 I [kworker/R-ext4-]
+root           358     2          0      0 0                   0 I [kworker/R-ext4-]
+root           359     2          0      0 0                   0 I [kworker/R-kveri]
+root           360     2          0      0 0                   0 I [kworker/R-ext4-]
+root           361     2          0      0 0                   0 I [kworker/R-kveri]
+root           362     2          0      0 0                   0 I [kworker/R-kveri]
+root           363     2          0      0 0                   0 I [kworker/R-ext4-]
+root           364     2          0      0 0                   0 I [kworker/0:2H-kverityd]
+root           365     2          0      0 0                   0 I [kworker/R-ext4-]
+root           366     2          0      0 0                   0 I [kworker/R-kveri]
+root           367     2          0      0 0                   0 I [kworker/R-kveri]
+root           368     2          0      0 0                   0 I [kworker/R-ext4-]
+root           371     2          0      0 0                   0 I [kworker/R-ext4-]
+root           372     2          0      0 0                   0 I [kworker/R-ext4-]
+root           373     2          0      0 0                   0 I [kworker/R-kveri]
+root           374     2          0      0 0                   0 I [kworker/R-ext4-]
+root           375     2          0      0 0                   0 I [kworker/R-kveri]
+root           376     2          0      0 0                   0 I [kworker/R-ext4-]
+root           377     2          0      0 0                   0 I [kworker/R-kveri]
+root           378     2          0      0 0                   0 I [kworker/R-ext4-]
+root           379     2          0      0 0                   0 I [kworker/R-ext4-]
+root           380     2          0      0 0                   0 I [kworker/R-kveri]
+root           381     2          0      0 0                   0 I [kworker/R-kveri]
+root           382     2          0      0 0                   0 I [kworker/R-ext4-]
+root           383     2          0      0 0                   0 I [kworker/R-kveri]
+root           384     2          0      0 0                   0 I [kworker/R-kveri]
+root           387     2          0      0 0                   0 I [kworker/R-ext4-]
+root           388     2          0      0 0                   0 I [kworker/R-ext4-]
+root           389     2          0      0 0                   0 I [kworker/R-ext4-]
+root           390     2          0      0 0                   0 I [kworker/R-ext4-]
+root           391     2          0      0 0                   0 I [kworker/R-kveri]
+root           392     2          0      0 0                   0 I [kworker/R-kveri]
+root           393     2          0      0 0                   0 I [kworker/R-kveri]
+root           394     2          0      0 0                   0 I [kworker/R-ext4-]
+root           395     2          0      0 0                   0 I [kworker/R-kveri]
+root           396     2          0      0 0                   0 I [kworker/R-ext4-]
+root           397     2          0      0 0                   0 I [kworker/R-kveri]
+root           398     2          0      0 0                   0 I [kworker/R-ext4-]
+root           399     2          0      0 0                   0 I [kworker/R-ext4-]
+root           400     2          0      0 0                   0 I [kworker/R-ext4-]
+root           402     2          0      0 0                   0 I [kworker/R-ext4-]
+root           403     2          0      0 0                   0 I [kworker/R-ext4-]
+root           404     2          0      0 0                   0 I [kworker/R-ext4-]
+root           405     2          0      0 0                   0 I [kworker/R-ext4-]
+root           406     2          0      0 0                   0 I [kworker/R-kveri]
+root           407     2          0      0 0                   0 I [kworker/R-ext4-]
+root           408     2          0      0 0                   0 I [kworker/R-kveri]
+root           409     2          0      0 0                   0 I [kworker/R-kveri]
+root           410     2          0      0 0                   0 I [kworker/R-ext4-]
+root           411     2          0      0 0                   0 I [kworker/R-ext4-]
+root           412     2          0      0 0                   0 I [kworker/R-ext4-]
+root           413     2          0      0 0                   0 I [kworker/R-kveri]
+root           414     2          0      0 0                   0 I [kworker/R-kveri]
+root           415     2          0      0 0                   0 I [kworker/R-ext4-]
+root           416     2          0      0 0                   0 I [kworker/R-kveri]
+root           417     2          0      0 0                   0 I [kworker/R-ext4-]
+root           418     2          0      0 0                   0 I [kworker/R-kveri]
+root           419     2          0      0 0                   0 I [kworker/R-ext4-]
+root           420     2          0      0 0                   0 I [kworker/R-kveri]
+root           421     2          0      0 0                   0 I [kworker/R-kveri]
+root           422     2          0      0 0                   0 I [kworker/R-kveri]
+root           423     2          0      0 0                   0 I [kworker/R-ext4-]
+root           424     2          0      0 0                   0 I [kworker/R-kveri]
+root           425     2          0      0 0                   0 I [kworker/R-ext4-]
+root           426     2          0      0 0                   0 I [kworker/R-ext4-]
+root           427     2          0      0 0                   0 I [kworker/R-ext4-]
+root           428     2          0      0 0                   0 I [kworker/R-kveri]
+root           429     2          0      0 0                   0 I [kworker/R-ext4-]
+root           430     2          0      0 0                   0 I [kworker/R-ext4-]
+statsd         463     1   10829708   4468 0                   0 S statsd
+system         471     1   10758960   3328 0                   0 S android.hidl.allocator@1.0-service
+system         476     1   10774596   4032 0                   0 S android.hardware.camera.provider.ranchu
+system         482     1   11159180   4172 0                   0 S android.hardware.camera.provider@2.7-service-google
+system         483     1   10869724   4548 0                   0 S android.hardware.graphics.allocator-service.ranchu
+system         484     1   10795020   4164 0                   0 S android.hardware.health-service.example
+media          485     1   10994056   4176 0                   0 S android.hardware.media.c2@1.0-service-goldfish
+radio          486     1   10802844   4188 0                   0 S android.hardware.radio-service.ranchu
+system         495     1   10842960   4084 0                   0 S android.hardware.sensors-service.multihal
+system         496     1   10880688   3888 0                   0 S android.hardware.usb-service.example
+wifi           497     1   10832684   4440 0                   0 S android.hardware.wifi-service
+bluetooth      498     1   10812408   3828 0                   0 S android.hardware.bluetooth-service.default
+system         499     1   10973388   4984 0                   0 S android.hardware.graphics.composer3-service.ranchu
+nobody         500     1   10834660   3764 0                   0 S android.hardware.identity-service.example
+nobody         501     1   10843616   3552 0                   0 S android.hardware.lights-service.example
+hsm            502     1   10900660   3696 0                   0 S android.hardware.authsecret-service.example
+media          505     1   10843044   3520 0                   0 S android.hardware.cas-service.example
+context_hub    506     1   10773040   3568 0                   0 S android.hardware.contexthub-service.example
+system         511     1   10978172   3768 0                   0 S android.hardware.neuralnetworks-service-sample-all
+system         515     1   10785404   3880 0                   0 S android.hardware.neuralnetworks-service-sample-limited
+system         517     1   10949444   3488 0                   0 S android.hardware.neuralnetworks-shim-service-sample
+nobody         522     1   10907716   3692 0                   0 S android.hardware.power-service.example
+system         525     1   10760528   3820 0                   0 S android.hardware.power.stats-service.example
+system         526     1   10782012   3692 0                   0 S android.hardware.rebootescrow-service.default
+nobody         529     1   10812756   3456 0                   0 S android.hardware.thermal-service.example
+thread_network 530     1   10814824   3556 0                   0 S android.hardware.threadnetwork-service
+nobody         531     1   10852872   3644 0                   0 S android.hardware.vibrator-service.example
+media          532     1   10918832   3456 0                   0 S android.hardware.drm-service.widevine
+credstore      534     1   10866896   4212 0                   0 S credstore
+gpu_service    535     1   10926208   3932 0                   0 S gpuservice
+system         537     1   10979100  13604 0                   0 S surfaceflinger
+shell          546     1   10876540   7152 0                   0 S adbd
+uwb            547     1   10801668   3672 0                   0 S android.hardware.uwb-service
+mdnsr          563     1   10834648   2944 0                   0 S mdnsd
+drm            581     1   10826032   3924 0                   0 S drmserver
+nobody         584     1   10849188   2816 0                   0 S traced_probes
+nobody         587     1   10808884   3180 0                   0 S traced
+logd           588     1   10795528   3680 0                   0 S logcat
+bluetooth      589     1   10858296   3044 0                   0 S bt_vhci_forwarder
+incidentd      592     1   10840936   3716 0                   0 S incidentd
+root           593     1   10867684   5128 0                   0 S installd
+mediaex        594     1   11196472   5420 0                   0 S media.extractor
+media          595     1   10875960   4020 0                   0 S media.metrics
+root           597     1   10852496   4152 0                   0 S storaged
+mediacodec     599     1   11713888   6168 0                   0 S media.swcodec
+system         600     1   10815832   4228 0                   0 S gatekeeperd
+root          2425     2          0      0 0                   0 I [kworker/u5:1-blk_crypto_wq]
+root          5688     2          0      0 0                   0 I [kworker/0:1-events]
+root          6232     2          0      0 0                   0 I [kworker/1:5-virtio_vsock]
+root          6233     1   14892440  78932 0                   0 S zygote64
+cameraserver  6235     1   11238564   5936 0                   0 S cameraserver
+media         6236     1   11156696   7284 0                   0 S mediaserver
+root          6237     1   10987832   6084 0                   0 S netd
+wifi          6238     1   10858672   4668 0                   0 S wificond
+root          6254  6237   10756808   3228 0                   0 S iptables-restore
+root          6255  6237   10787528   3100 0                   0 S ip6tables-restore
+root          6298     2          0      0 0                   0 I [kworker/1:21H-kverityd]
+root          6299     2          0      0 0                   0 I [kworker/1:22H-kverityd]
+system        6368  6233   18720684 344392 0                   0 S system_server
+system        6591     1   10885048   3604 0                   0 S android.hardware.biometrics.fingerprint-service.ranchu
+thread_network 6615    1   10762756   4088 0                   0 S ot-daemon
+wifi          6632     1   10831352   4568 0                   0 S wpa_supplicant
+u0_a185       6644  6233   16324456 157784 0                   0 S com.android.systemui
+webview_zygote 6700 6233   33945724  55404 0                   0 S webview_zygote
+gps           6708     1   10843236   3864 0                   0 S android.hardware.gnss-service.ranchu
+network_stack 6738  6233   16113456  85068 0                   0 S com.android.networkstack.process
+secure_element 6766 6233   16073336  67492 0                   0 S com.android.se
+u0_a182       6789  6233   16156520 118640 0                   0 S com.google.android.apps.nexuslauncher
+u0_a197       6804  6233   16105804  97408 0                   0 S com.google.android.ext.services
+system        7255  6233   16072116  66748 0                   0 S com.android.emulator.multidisplay
+system        7291  6233   16075392  68028 0                   0 S com.android.localtransport
+u0_a105       7312  6233   16083396  77096 0                   0 S android.process.media
+u0_a217       7433  6233   16083516  68636 0                   0 S io.appium.settings
+system        7437  6233   16088520  72588 0                   0 S com.android.keychain
+u0_a214       7586  6233   16131704  93964 0                   0 S com.google.android.providers.media.module
+u0_a142       7653  6233   16096996  75744 0                   0 S com.google.android.as.oss
+u0_a141       7694  6233   16443280 216096 0                   0 S com.google.android.apps.wellbeing
+u0_a96        7777  6233   16086184  76748 0                   0 S android.process.acore
+u0_a186       7846  6233   16097844  70408 0                   0 S com.google.android.apps.wallpaper
+audioserver   7998     1   10919560   6732 0                   0 S audioserver
+root          8002     2          0      0 0                   0 I [kworker/0:2-events]
+audioserver   8003     1   10970260   3860 0                   0 S android.hardware.audio.service
+bluetooth     8161  6233   16259392  82596 0                   0 S com.google.android.bluetooth
+u0_a143       8261  6233   16072948  66256 0                   0 S com.google.android.onetimeinitializer
+u0_a154       8303  6233   17071588  67468 0                   0 S com.android.camera2
+u0_a110       8472  6233   16084436  66836 0                   0 S com.android.devicediagnostics
+system        8537  6233   16074412  67096 0                   0 S com.android.dynsystem
+radio         8558  6233   16138460  94364 0                   0 S com.android.phone
+u0_a144       8571  6233   16499104 189996 0                   0 S com.google.android.gms.persistent
+u0_a131       8591  6233   16079120  68880 0                   0 S com.android.imsserviceentitlement
+system        8610  6233   16074412  67828 0                   0 S com.android.dynsystem:dynsystem
+u0_a159       8704  6233   17474056 120696 0                   0 S com.google.android.apps.photos
+u0_a109       8738  6233   16077564  68752 0                   0 S com.android.managedprovisioning
+u0_a98        8797  6233   16411228  71500 0                   0 S com.android.providers.calendar
+shell         8821  6233   16074032  67556 0                   0 S com.android.shell
+u0_a144       8835  6233   16399328 127128 0                   0 S com.google.android.gms.unstable
+u0_a202       8916  6233   16092812  74404 0                   0 S com.google.android.rkpdapp
+u0_a140       8947  6233   16078268  70416 0                   0 S com.google.android.configupdater
+u0_a201       8975  6233   16130056  66232 0                   0 S com.google.android.federatedcompute
+u0_a153       9107  6233   16360324 100788 0                   0 S com.google.android.inputmethod.latin
+u0_a200       9228  6233   16074432  66324 0                   0 S com.google.android.ondevicepersonalization.services
+u0_a104       9249  6233   16078428  69840 0                   0 S com.google.android.packageinstaller
+u0_a132       9281  6233   16414648  70444 0                   0 S com.google.android.projection.gearhead:car
+u0_a145       9402  6233   16697376 186676 0                   0 S com.google.android.as
+root          9824     2          0      0 0                   0 I [kworker/u4:3-events_unbound]
+root          9920     2          0      0 0                   0 I [kworker/u4:4-events_unbound]
+system       10012  6233   16158208  74500 0                   0 S com.android.settings
+root         10134     2          0      0 0                   0 I [kworker/0:1H-kblockd]
+u0_a203      10170  6233   16425108  71072 0                   0 S com.google.android.cellbroadcastreceiver
+u0_a130      10216  6233   16413068  65696 0                   0 S com.android.traceur
+u0_a144      10283  6233   16619212  91196 0                   0 S com.google.android.gms.ui
+u0_a95       10403  6233   16073236  69460 0                   0 S com.android.externalstorage
+root         10573     2          0      0 0                   0 I [kworker/u5:2-fscrypt_read_queue]
+u0_a216      10598  6233   16400456  86380 0                   0 S host.exp.exponent
+u0_a213      10681  6233   16414308  66992 0                   0 S com.google.android.photopicker
+u0_a147      10735  6233   17305440 126264 0                   0 S com.google.android.googlequicksearchbox:interactor
+u0_a147      10758  6233   34292536 157804 0                   0 S com.google.android.googlequicksearchbox:googleapp
+u0_i9000     10994  6700  280707464 102608 0                   0 S com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+u0_a139      11006  6233   16087188  74516 0                   0 S com.google.android.partnersetup
+u0_a135      11086  6233   16138828 118108 0                   0 S com.google.android.dialer
+u0_a165      11168  6233   16077432  71136 0                   0 S com.google.android.webview:webview_service
+u0_a144      11337  6233   16500940 160112 0                   0 S com.google.android.gms
+u0_a160      11490  6233   16132492  73540 0                   0 S com.android.chrome
+u0_a134      11626  6233   16146680  92528 0                   0 S com.google.android.apps.restore
+u0_a212      11675  6233   16113800  84328 0                   0 S com.google.android.permissioncontroller
+u0_a197      11691  6233   16080256  73284 0                   0 S com.google.android.ext.services:modelDownloaderServiceProcess
+u0_a146      11824  6233   16510120 115852 0                   0 S com.google.android.apps.messaging
+root         12005     2          0      0 0                   0 R [kworker/1:0+virtio_vsock]
+root         12007     2          0      0 0                   0 I [kworker/1:2-virtio_vsock]
+root         12014     2          0      0 0                   0 I [kworker/1:0H-kverityd]
+root         12015     2          0      0 0                   0 I [kworker/1:1H-kverityd]
+root         12016     2          0      0 0                   0 I [kworker/1:2H-kverityd]
+root         12017     2          0      0 0                   0 I [kworker/1:3H-kverityd]
+root         12018     2          0      0 0                   0 I [kworker/1:4H-kverityd]
+root         12019     2          0      0 0                   0 I [kworker/1:5H-kverityd]
+root         12020     2          0      0 0                   0 I [kworker/1:6H-kverityd]
+root         12021     2          0      0 0                   0 I [kworker/1:7H-kblockd]
+root         12022     2          0      0 0                   0 I [kworker/1:8H-kverityd]
+root         12023     2          0      0 0                   0 I [kworker/1:9H-kverityd]
+root         12024     2          0      0 0                   0 I [kworker/1:10H-kverityd]
+root         12025     2          0      0 0                   0 I [kworker/1:11H-kverityd]
+root         12026     2          0      0 0                   0 I [kworker/1:12H-kverityd]
+root         12027     2          0      0 0                   0 I [kworker/1:13H-kverityd]
+root         12028     2          0      0 0                   0 I [kworker/1:14H-kverityd]
+root         12029     2          0      0 0                   0 I [kworker/1:15H-kverityd]
+artd         12048     1   10839932   7924 0                   0 S artd
+root         12055     2          0      0 0                   0 I [kworker/u5:0-blk_crypto_wq]
+root         12067     2          0      0 0                   0 I [kworker/u4:1-events_unbound]
+shell        12077   546   10786064   4880 unix_stream_read_generic 0 S abb
+u0_a103      12086  6233   16426508  82336 0                   0 S com.google.android.documentsui
+root         12161     2          0      0 0                   0 I [kworker/0:0-virtio_vsock]
+root         12173     2          0      0 0                   0 I [kworker/u4:2-events_unbound]
+root         12180     2          0      0 0                   0 I [kworker/u4:5-events_unbound]
+root         12186     2          0      0 0                   0 I [kworker/u5:3-blk_crypto_wq]
+root         12296     2          0      0 0                   0 I [kworker/0:3-events]
+shell        12754   546   10816536   4764 0                   0 R ps
+01:54:22.020 detox[3235885] [90mE[39m [33mdevice[39m launchApp
+  error: PID still not available
+01:54:22.022 detox[3235885] [90mB[39m [33martifacts-manager[39m onHookFailure
+  args: ({"error":{"name":"DetoxRuntimeError"},"hook":"beforeAll"})
+01:54:22.025 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_START[39m starting ADBScreencapRecording
+01:54:22.025 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "screencap /sdcard/15030719_0.png"
+01:54:23.513 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:54:23.513 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_STOP[39m stopping ADBScreencapRecording
+01:54:23.514 detox[3235885] [90mE[39m [33martifacts-manager[39m onHookFailure
+01:54:23.514 detox[3235885] [90mE[39m [33mlifecycle[39m beforeAll
+  error: PID still not available
+01:54:23.517 detox[3235885] [90mB[39m [33mlifecycle[39m should start on Home tab with hero content
+01:54:23.518 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should start on Home tab with hero content
+01:54:23.525 detox[3235885] [90mE[39m [33mlifecycle[39m should start on Home tab with hero content
+01:54:23.525 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should start on Home tab with hero content [FAIL]
+01:54:23.528 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate to Search tab via bottom nav
+01:54:23.528 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Search tab via bottom nav
+01:54:23.532 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate to Search tab via bottom nav
+01:54:23.532 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Search tab via bottom nav [FAIL]
+01:54:23.538 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate to Wishlist tab via bottom nav
+01:54:23.538 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Wishlist tab via bottom nav
+01:54:23.543 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate to Wishlist tab via bottom nav
+01:54:23.543 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Wishlist tab via bottom nav [FAIL]
+01:54:23.546 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate to Profile tab via bottom nav
+01:54:23.547 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Profile tab via bottom nav
+01:54:23.551 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate to Profile tab via bottom nav
+01:54:23.551 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate to Profile tab via bottom nav [FAIL]
+01:54:23.555 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate back to Home tab via bottom nav
+01:54:23.556 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate back to Home tab via bottom nav
+01:54:23.561 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate back to Home tab via bottom nav
+01:54:23.562 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate back to Home tab via bottom nav [FAIL]
+01:54:23.566 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate Home → Search via "Start Comparing" CTA
+01:54:23.566 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate Home → Search via "Start Comparing" CTA
+01:54:23.568 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate Home → Search via "Start Comparing" CTA
+01:54:23.569 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate Home → Search via "Start Comparing" CTA [FAIL]
+01:54:23.570 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate via category pill from Home to Search
+01:54:23.570 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate via category pill from Home to Search
+01:54:23.572 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate via category pill from Home to Search
+01:54:23.572 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate via category pill from Home to Search [FAIL]
+01:54:23.575 detox[3235885] [90mB[39m [33mlifecycle[39m should navigate from Wishlist empty state CTA to Search
+01:54:23.575 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate from Wishlist empty state CTA to Search
+01:54:23.579 detox[3235885] [90mE[39m [33mlifecycle[39m should navigate from Wishlist empty state CTA to Search
+01:54:23.579 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should navigate from Wishlist empty state CTA to Search [FAIL]
+01:54:23.582 detox[3235885] [90mB[39m [33mlifecycle[39m should cycle through all tabs without crashing
+01:54:23.582 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should cycle through all tabs without crashing
+01:54:23.585 detox[3235885] [90mE[39m [33mlifecycle[39m should cycle through all tabs without crashing
+01:54:23.585 detox[3235885] [90mi[39m [33mlifecycle[39m CompareZ Navigation Flow: should cycle through all tabs without crashing [FAIL]
+01:54:23.586 detox[3235885] [90mB[39m [33martifacts-manager[39m onRunDescribeFinish
+  args: ({"name":"CompareZ Navigation Flow"})
+01:54:23.587 detox[3235885] [90mE[39m [33martifacts-manager[39m onRunDescribeFinish
+01:54:23.588 detox[3235885] [90mE[39m [33mlifecycle[39m CompareZ Navigation Flow
+01:54:23.590 detox[3235885] [90mB[39m [33martifacts-manager[39m onRunDescribeFinish
+  args: ({"name":"ROOT_DESCRIBE_BLOCK"})
+01:54:23.590 detox[3235885] [90mE[39m [33martifacts-manager[39m onRunDescribeFinish
+01:54:23.591 detox[3235885] [90mE[39m [33mlifecycle[39m run the tests
+01:54:23.709 detox[3235885] [90mB[39m [33mlifecycle[39m tear down environment
+01:54:23.711 detox[3235885] [90mB[39m [33martifacts-manager[39m onBeforeCleanup
+  args: ()
+01:54:23.712 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_START[39m starting ADBScreencapRecording
+01:54:23.712 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "screencap /sdcard/15030719_1.png"
+01:54:23.753 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_SAVE[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/detox_pid_3235885.json.log { append: true }
+01:54:23.753 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_SAVE[39m saving FileArtifact to: e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/detox_pid_3235885.log { append: true }
+01:54:24.654 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:54:24.655 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_STOP[39m stopping ADBScreencapRecording
+01:54:24.661 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_SAVE[39m saving ADBScreencapRecording to: e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/beforeAllFailure.png
+01:54:24.663 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 pull "/sdcard/15030719_0.png" "e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/beforeAllFailure.png"
+01:54:24.710 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m /sdcard/15030719_0.png: 1 file pulled, 0 skipped. 8.6 MB/s (91914 bytes in 0.010s)
+
+01:54:24.710 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "rm  \"/sdcard/15030719_0.png\""
+01:54:25.119 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:54:25.119 detox[3235885] [90mi[39m [33martifact[39m[90m:ARTIFACT_SAVE[39m saving ADBScreencapRecording to: e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/appNotReady.png
+01:54:25.119 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 pull "/sdcard/15030719_1.png" "e2e/artifacts/android.att.debug.2026-04-14 20-20-27Z/appNotReady.png"
+01:54:25.220 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m /sdcard/15030719_1.png: 1 file pulled, 0 skipped. 1.8 MB/s (91914 bytes in 0.050s)
+
+01:54:25.220 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_CMD[39m "/home/kpanviravindra/Android/Sdk/platform-tools/adb" -s emulator-5554 shell "rm  \"/sdcard/15030719_1.png\""
+01:54:25.458 detox[3235885] [90mi[39m [33mchild-process[39m[90m:EXEC_SUCCESS[39m 
+01:54:25.458 detox[3235885] [90mE[39m [33martifacts-manager[39m onBeforeCleanup
+01:54:25.480 detox[3235655] [90mi[39m [33mws-server[39m tester exited session d85dd752-fb6c-308b-b570-51cb9b1bd213
+01:54:25.480 detox[3235655] [90mE[39m [33mws-server[39m connection :41739<->:44942
+01:54:25.485 detox[3235885] [90mi[39m [33mipc[39m dispatching event to  primary-3235655 /tmp/detox.primary-3235655  :  deallocateDevice , { deviceCookie: { id: 'emulator-5554', adbName: 'emulator-5554' } }
+01:54:25.487 detox[3235655] [90mi[39m [33mipc[39m received event of :  deallocateDevice { deviceCookie: { id: 'emulator-5554', adbName: 'emulator-5554' } }
+01:54:25.488 detox[3235655] [90mB[39m [33mdevice[39m free: emulator-5554
+  data: {}
+01:54:25.743 detox[3235655] [90mE[39m [33mdevice[39m free: emulator-5554
+01:54:25.743 detox[3235655] [90mi[39m [33mipc[39m dispatching event to socket  :  deallocateDeviceDone {}
+01:54:25.747 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:54:25.747 detox[3235885] [90mi[39m [33mipc[39m detected event deallocateDeviceDone {}
+01:54:25.750 detox[3235885] [90mE[39m [33mlifecycle[39m tear down environment
+01:54:25.750 detox[3235885] [90mE[39m [33mlifecycle[39m e2e/navigation.test.js
+01:54:25.868 detox[3235885] [90mi[39m [33mipc[39m dispatching event to  primary-3235655 /tmp/detox.primary-3235655  :  reportTestResults , {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      testExecError: undefined,
+      isPermanentFailure: false
+    }
+  ]
+}
+01:54:25.872 detox[3235655] [90mi[39m [33mipc[39m received event of :  reportTestResults {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+01:54:25.873 detox[3235655] [90mi[39m [33mipc[39m dispatching event to socket  :  reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+01:54:25.873 detox[3235885] [90mi[39m [33mipc[39m ## received events ##
+01:54:25.873 detox[3235885] [90mi[39m [33mipc[39m detected event reportTestResultsDone {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+01:54:25.874 detox[3235655] [90mi[39m [33mipc[39m broadcasting event to all known sockets listening to  /tmp/detox.primary-3235655  :   sessionStateUpdate {
+  testResults: [
+    {
+      success: false,
+      testFilePath: '/home/kpanviravindra/Desktop/jiva/CompareX/frontend/e2e/navigation.test.js',
+      isPermanentFailure: false
+    }
+  ]
+}
+01:54:26.116 detox[3235885] [90mi[39m [33mipc[39m connection closed primary-3235655 /tmp/detox.primary-3235655 0 tries remaining of 0
+01:54:26.116 detox[3235885] [90mi[39m [33mipc[39m secondary-3235885 exceeded connection rety amount of  or stopRetrying flag set.
+01:54:26.120 detox[3235655] [90mi[39m [33mipc[39m server socket error Error: read ECONNRESET
+    at Pipe.onStreamRead (node:internal/stream_base_commons:218:20) {
+  errno: -104,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+01:54:26.121 detox[3235655] [90mi[39m [33mipc[39m socket disconnected secondary-3235885
+01:54:26.151 detox[3235655] [90mE[39m [33mlifecycle[39m Command failed with exit code = 1:
+jest --config e2e/jest.config.js --testPathPattern e2e/navigation.test.js
+01:54:26.152 detox[3235655] [90mB[39m [33mdevice[39m cleanup
+  args: ()
+01:54:26.153 detox[3235655] [90mE[39m [33mdevice[39m cleanup
+01:54:26.157 detox[3235655] [90mi[39m [33mws-server[39m Detox server has been closed gracefully
+01:54:26.159 detox[3235655] [90mE[39m [33mlifecycle[39m node_modules/.bin/detox test -c android.att.debug --testPathPattern=e2e/navigation.test.js -l verbose

@@ -47,6 +47,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setEmail}
             placeholder="Email address"
             keyboardType="email-address"
+            testID="login-email"
           />
 
           <TextField
@@ -55,6 +56,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setPassword}
             placeholder="Password"
             secureTextEntry={!showPassword}
+            testID="login-password"
             rightAccessory={
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 <Ionicons
@@ -71,6 +73,7 @@ const LoginScreen = ({ navigation }) => {
             onPress={() => login(email, password)}
             icon="arrow-forward"
             style={styles.signInBtn}
+            testID="login-button"
           />
 
           <View style={styles.registerRow}>

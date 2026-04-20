@@ -57,6 +57,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={setEmail}
             placeholder="Email address"
             keyboardType="email-address"
+            testID="register-email"
           />
 
           <TextField
@@ -65,6 +66,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={setPassword}
             placeholder="Password"
             secureTextEntry={!showPassword}
+            testID="register-password"
             rightAccessory={
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 <Ionicons
@@ -82,6 +84,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={setConfirmPassword}
             placeholder="Confirm password"
             secureTextEntry={!showPassword}
+            testID="register-confirm"
           />
 
           <AppButton
@@ -89,11 +92,12 @@ const RegisterScreen = ({ navigation }) => {
             onPress={handleRegister}
             icon="person-add-outline"
             style={styles.createBtn}
+            testID="register-button"
           />
 
           <View style={styles.signInRow}>
             <Text style={styles.signInPrompt}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.goBack()} testID="register-signin-link">
               <Text style={styles.signInLink}>Sign In</Text>
             </TouchableOpacity>
           </View>
