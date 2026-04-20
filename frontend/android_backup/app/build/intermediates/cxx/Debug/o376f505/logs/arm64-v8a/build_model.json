@@ -1,0 +1,213 @@
+{
+  "info": {
+    "name": "arm64-v8a",
+    "bitness": 64,
+    "isDefault": true,
+    "isDeprecated": false,
+    "architecture": "arm64",
+    "triple": "aarch64-linux-android",
+    "llvmTriple": "aarch64-none-linux-android"
+  },
+  "cxxBuildFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx/Debug/o376f505/arm64-v8a",
+  "soFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cxx/Debug/o376f505/obj/arm64-v8a",
+  "soRepublishFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cmake/debug/obj/arm64-v8a",
+  "abiPlatformVersion": 22,
+  "cmake": {
+    "effectiveConfiguration": {
+      "inheritEnvironments": [],
+      "variables": []
+    }
+  },
+  "variant": {
+    "buildSystemArgumentList": [
+      "-DANDROID_PLATFORM\u003dandroid-24",
+      "-DPROJECT_BUILD_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build",
+      "-DPROJECT_ROOT_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android",
+      "-DREACT_ANDROID_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid",
+      "-DANDROID_STL\u003dc++_shared",
+      "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES\u003dON"
+    ],
+    "cFlagsList": [],
+    "cppFlagsList": [],
+    "variantName": "debug",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "armeabi-v7a",
+      "arm64-v8a",
+      "x86",
+      "x86_64"
+    ],
+    "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
+    "module": {
+      "cxxFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx",
+      "intermediatesBaseFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates",
+      "intermediatesFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cxx",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app",
+      "moduleBuildFile": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build.gradle",
+      "makeFile": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "ndkFolder": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006",
+      "ndkFolderBeforeSymLinking": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006",
+      "ndkVersion": "27.1.12297006",
+      "ndkSupportedAbiList": [
+        "armeabi",
+        "armeabi-v7a",
+        "arm64-v8a",
+        "x86",
+        "x86_64",
+        "mips",
+        "mips64"
+      ],
+      "ndkDefaultAbiList": [
+        "armeabi",
+        "armeabi-v7a",
+        "arm64-v8a",
+        "x86",
+        "x86_64",
+        "mips",
+        "mips64"
+      ],
+      "ndkDefaultStl": "LIBCXX_STATIC",
+      "ndkMetaAbiList": [
+        {
+          "name": "armeabi",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "arm",
+          "triple": "arm-linux-androideabi",
+          "llvmTriple": "unknown-llvm-triple"
+        },
+        {
+          "name": "armeabi-v7a",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "arm",
+          "triple": "arm-linux-androideabi",
+          "llvmTriple": "armv7-none-linux-androideabi"
+        },
+        {
+          "name": "arm64-v8a",
+          "bitness": 64,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "arm64",
+          "triple": "aarch64-linux-android",
+          "llvmTriple": "aarch64-none-linux-android"
+        },
+        {
+          "name": "x86",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "x86",
+          "triple": "i686-linux-android",
+          "llvmTriple": "i686-none-linux-android"
+        },
+        {
+          "name": "x86_64",
+          "bitness": 64,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "x86_64",
+          "triple": "x86_64-linux-android",
+          "llvmTriple": "x86_64-none-linux-android"
+        },
+        {
+          "name": "mips",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "mips",
+          "triple": "mipsel-linux-android",
+          "llvmTriple": "unknown-llvm-triple"
+        },
+        {
+          "name": "mips64",
+          "bitness": 64,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "mips64",
+          "triple": "mips64el-linux-android",
+          "llvmTriple": "unknown-llvm-triple"
+        }
+      ],
+      "cmakeToolchainFile": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/build/cmake/android.toolchain.cmake",
+      "cmake": {
+        "cmakeExe": "/home/kpanviravindra/Android/Sdk/cmake/3.22.1/bin/cmake"
+      },
+      "stlSharedObjectMap": {
+        "LIBCXX_SHARED": {
+          "armeabi": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
+          "armeabi-v7a": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
+          "arm64-v8a": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+          "x86": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
+          "x86_64": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so",
+          "mips": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/mipsel-linux-android/libc++_shared.so",
+          "mips64": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/mips64el-linux-android/libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "SYSTEM": {}
+      },
+      "project": {
+        "rootBuildGradleFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android",
+        "sdkFolder": "/home/kpanviravindra/Android/Sdk",
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isPrefabEnabled": true
+      },
+      "outputOptions": [],
+      "ninjaExe": "/home/kpanviravindra/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "hasBuildTimeInformation": true
+    },
+    "prefabClassPaths": [
+      "/home/kpanviravindra/.gradle/caches/modules-2/files-2.1/com.google.prefab/cli/2.1.0/aa32fec809c44fa531f01dcfb739b5b3304d3050/cli-2.1.0-all.jar"
+    ],
+    "prefabPackages": [
+      "/home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2680b08f1e2cb52f3dff51eef1dacfb/transformed/react-android-0.81.5-debug/prefab",
+      "/home/kpanviravindra/.gradle/caches/8.14.3/transforms/9f8bf174426a62033c5396f3e1842ab7/transformed/hermes-android-0.81.5-debug/prefab",
+      "/home/kpanviravindra/.gradle/caches/8.14.3/transforms/c4ed38aee617328a15ca67287b31027e/transformed/fbjni-0.7.0/prefab"
+    ],
+    "prefabPackageConfigurations": [],
+    "stlType": "c++_shared",
+    "optimizationTag": "Debug"
+  },
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "prefabFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx/Debug/o376f505/prefab/arm64-v8a",
+  "isActiveAbi": true,
+  "fullConfigurationHash": "o376f50503p4w1z336l462f1a1x524b4211523t37301j5kh5u5t235e5t5w",
+  "fullConfigurationHashKey": "# Values used to calculate the hash in this folder name.\n# Should not depend on the absolute path of the project itself.\n#   - AGP: 8.11.0.\n#   - $NDK is the path to NDK 27.1.12297006.\n#   - $PROJECT is the path to the parent folder of the root Gradle build file.\n#   - $ABI is the ABI to be built with. The specific value doesn\u0027t contribute to the value of the hash.\n#   - $HASH is the hash value computed from this text.\n#   - $CMAKE is the path to CMake 3.22.1.\n#   - $NINJA is the path to Ninja.\n-H/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d22\n-DANDROID_ABI\u003d$ABI\n-DCMAKE_ANDROID_ARCH_ABI\u003d$ABI\n-DANDROID_NDK\u003d$NDK\n-DCMAKE_ANDROID_NDK\u003d$NDK\n-DCMAKE_TOOLCHAIN_FILE\u003d$NDK/build/cmake/android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003d$NINJA\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d$PROJECT/app/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d$PROJECT/app/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_BUILD_TYPE\u003dDebug\n-DCMAKE_FIND_ROOT_PATH\u003d$PROJECT/app/.cxx/Debug/$HASH/prefab/$ABI/prefab\n-B$PROJECT/app/.cxx/Debug/$HASH/$ABI\n-GNinja\n-DANDROID_PLATFORM\u003dandroid-24\n-DPROJECT_BUILD_DIR\u003d$PROJECT/app/build\n-DPROJECT_ROOT_DIR\u003d$PROJECT\n-DREACT_ANDROID_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid\n-DANDROID_STL\u003dc++_shared\n-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES\u003dON",
+  "configurationArguments": [
+    "-H/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup",
+    "-DCMAKE_SYSTEM_NAME\u003dAndroid",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON",
+    "-DCMAKE_SYSTEM_VERSION\u003d22",
+    "-DANDROID_ABI\u003darm64-v8a",
+    "-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a",
+    "-DANDROID_NDK\u003d/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006",
+    "-DCMAKE_ANDROID_NDK\u003d/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006",
+    "-DCMAKE_TOOLCHAIN_FILE\u003d/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/build/cmake/android.toolchain.cmake",
+    "-DCMAKE_MAKE_PROGRAM\u003d/home/kpanviravindra/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cxx/Debug/o376f505/obj/arm64-v8a",
+    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cxx/Debug/o376f505/obj/arm64-v8a",
+    "-DCMAKE_BUILD_TYPE\u003dDebug",
+    "-DCMAKE_FIND_ROOT_PATH\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx/Debug/o376f505/prefab/arm64-v8a/prefab",
+    "-B/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx/Debug/o376f505/arm64-v8a",
+    "-GNinja",
+    "-DANDROID_PLATFORM\u003dandroid-24",
+    "-DPROJECT_BUILD_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build",
+    "-DPROJECT_ROOT_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android",
+    "-DREACT_ANDROID_DIR\u003d/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid",
+    "-DANDROID_STL\u003dc++_shared",
+    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES\u003dON"
+  ],
+  "stlLibraryFile": "/home/kpanviravindra/Android/Sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+  "intermediatesParentFolder": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/build/intermediates/cxx/Debug/o376f505"
+}

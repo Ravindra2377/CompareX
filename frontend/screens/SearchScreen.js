@@ -1501,9 +1501,15 @@ const SearchScreen = ({ navigation, route }) => {
 
   const collectResultsToBackend = async (query, platformResults) => {
     try {
+      // Flatten the results to match backend expectation: map[string][]ProductListing
+      const flattenedPlatforms = {};
+      Object.keys(platformResults).forEach(platform => {
+        flattenedPlatforms[platform] = platformResults[platform]?.products || [];
+      });
+
       const payload = {
         query: query,
-        platforms: platformResults,
+        platforms: flattenedPlatforms,
       };
 
       if (user && user.id) {

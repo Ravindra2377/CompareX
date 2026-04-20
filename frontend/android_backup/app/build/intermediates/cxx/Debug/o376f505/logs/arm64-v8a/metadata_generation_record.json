@@ -1,0 +1,80 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 22 min SDK version: arm64-v8a",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/.cxx/Debug/o376f505/arm64-v8a/android_gradle_build.json due to:",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "- no fingerprint file, will remove stale configuration folder",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "/usr/lib/jvm/java-17-openjdk-amd64/bin/java \\\n  --class-path \\\n  /home/kpanviravindra/.gradle/caches/modules-2/files-2.1/com.google.prefab/cli/2.1.0/aa32fec809c44fa531f01dcfb739b5b3304d3050/cli-2.1.0-all.jar \\\n  com.google.prefab.cli.AppKt \\\n  --build-system \\\n  cmake \\\n  --platform \\\n  android \\\n  --abi \\\n  arm64-v8a \\\n  --os-version \\\n  22 \\\n  --stl \\\n  c++_shared \\\n  --ndk-version \\\n  27 \\\n  --output \\\n  /tmp/agp-prefab-staging15446842065985043678/staged-cli-output \\\n  /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2680b08f1e2cb52f3dff51eef1dacfb/transformed/react-android-0.81.5-debug/prefab \\\n  /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9f8bf174426a62033c5396f3e1842ab7/transformed/hermes-android-0.81.5-debug/prefab \\\n  /home/kpanviravindra/.gradle/caches/8.14.3/transforms/c4ed38aee617328a15ca67287b31027e/transformed/fbjni-0.7.0/prefab\n",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "Received process result: 0",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 1,
+    "message_": "com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //ReactAndroid/hermestooling. Rejected the following libraries:",
+    "file_": "/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  }
+]

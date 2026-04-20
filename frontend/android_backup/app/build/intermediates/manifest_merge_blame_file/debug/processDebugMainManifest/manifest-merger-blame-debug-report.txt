@@ -1,0 +1,280 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.panviravindra.comparez"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="36" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:4:3-75
+11-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:4:20-73
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:2:3-64
+12-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:2:20-62
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:3:3-77
+13-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:3:20-75
+14    <uses-permission android:name="android.permission.VIBRATE" />
+14-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:5:3-63
+14-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:5:20-61
+15    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+15-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:6:3-78
+15-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:6:20-76
+16
+17    <queries>
+17-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:7:3-13:13
+18        <intent>
+18-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:8:5-12:14
+19            <action android:name="android.intent.action.VIEW" />
+19-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:9:7-58
+19-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:9:15-56
+20
+21            <category android:name="android.intent.category.BROWSABLE" />
+21-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:10:7-67
+21-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:10:17-65
+22
+23            <data android:scheme="https" />
+23-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:11:7-37
+23-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:11:13-35
+24        </intent>
+25        <intent>
+25-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:9-10:18
+26            <action android:name="org.chromium.intent.action.PAY" />
+26-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:13-69
+26-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:21-66
+27        </intent>
+28        <intent>
+28-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:11:9-13:18
+29            <action android:name="org.chromium.intent.action.IS_READY_TO_PAY" />
+29-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:13-81
+29-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:21-78
+30        </intent>
+31        <intent>
+31-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:9-16:18
+32            <action android:name="org.chromium.intent.action.UPDATE_PAYMENT_DETAILS" />
+32-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:13-88
+32-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:21-85
+33        </intent> <!-- Query open documents -->
+34        <intent>
+34-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:15:9-17:18
+35            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+35-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:16:13-79
+35-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:16:21-76
+36        </intent>
+37    </queries>
+38
+39    <uses-permission android:name="android.permission.USE_BIOMETRIC" /> <!-- suppress DeprecatedClassUsageInspection -->
+39-->[androidx.biometric:biometric:1.1.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/572ad856f0d22cd85c222e2240610781/transformed/biometric-1.1.0/AndroidManifest.xml:24:5-72
+39-->[androidx.biometric:biometric:1.1.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/572ad856f0d22cd85c222e2240610781/transformed/biometric-1.1.0/AndroidManifest.xml:24:22-69
+40    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+40-->[androidx.biometric:biometric:1.1.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/572ad856f0d22cd85c222e2240610781/transformed/biometric-1.1.0/AndroidManifest.xml:27:5-74
+40-->[androidx.biometric:biometric:1.1.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/572ad856f0d22cd85c222e2240610781/transformed/biometric-1.1.0/AndroidManifest.xml:27:22-71
+41
+42    <permission
+42-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+43        android:name="com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+43-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+44        android:protectionLevel="signature" />
+44-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+45
+46    <uses-permission android:name="com.panviravindra.comparez.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+46-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+46-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+47
+48    <application
+48-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:3-24:17
+49        android:name="com.panviravindra.comparez.MainApplication"
+49-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:16-47
+50        android:allowBackup="true"
+50-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:162-188
+51        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+51-->[androidx.core:core:1.13.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/936579c3029b54563f9582c4efedaea8/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+52        android:debuggable="true"
+53        android:enableOnBackInvokedCallback="false"
+53-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:248-291
+54        android:extractNativeLibs="false"
+55        android:icon="@mipmap/ic_launcher"
+55-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:81-115
+56        android:label="@string/app_name"
+56-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:48-80
+57        android:roundIcon="@mipmap/ic_launcher_round"
+57-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:116-161
+58        android:supportsRtl="true"
+58-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:221-247
+59        android:theme="@style/AppTheme"
+59-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:14:189-220
+60        android:usesCleartextTraffic="true" >
+60-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/debug/AndroidManifest.xml:6:18-53
+61        <meta-data
+61-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:15:5-83
+62            android:name="expo.modules.updates.ENABLED"
+62-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:15:16-59
+63            android:value="false" />
+63-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:15:60-81
+64        <meta-data
+64-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:16:5-105
+65            android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH"
+65-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:16:16-80
+66            android:value="ALWAYS" />
+66-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:16:81-103
+67        <meta-data
+67-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:17:5-99
+68            android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS"
+68-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:17:16-79
+69            android:value="0" />
+69-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:17:80-97
+70
+71        <activity
+71-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:5-23:16
+72            android:name="com.panviravindra.comparez.MainActivity"
+72-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:15-43
+73            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|uiMode"
+73-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:44-134
+74            android:exported="true"
+74-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:256-279
+75            android:launchMode="singleTask"
+75-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:135-166
+76            android:screenOrientation="portrait"
+76-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:280-316
+77            android:theme="@style/Theme.App.SplashScreen"
+77-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:210-255
+78            android:windowSoftInputMode="adjustResize" >
+78-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:18:167-209
+79            <intent-filter>
+79-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:19:7-22:23
+80                <action android:name="android.intent.action.MAIN" />
+80-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:20:9-60
+80-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:20:17-58
+81
+82                <category android:name="android.intent.category.LAUNCHER" />
+82-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:21:9-68
+82-->/home/kpanviravindra/Desktop/compareZ/CompareX/frontend/android/app/src/main/AndroidManifest.xml:21:19-66
+83            </intent-filter>
+84        </activity>
+85
+86        <provider
+86-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:9-28:20
+87            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
+87-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:13-83
+88            android:authorities="com.panviravindra.comparez.fileprovider"
+88-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:22:13-64
+89            android:exported="false"
+89-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:23:13-37
+90            android:grantUriPermissions="true" >
+90-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:13-47
+91            <meta-data
+91-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:25:13-27:63
+92                android:name="android.support.FILE_PROVIDER_PATHS"
+92-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:26:17-67
+93                android:resource="@xml/file_provider_paths" />
+93-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:27:17-60
+94        </provider>
+95
+96        <meta-data
+96-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:9-11:89
+97            android:name="org.unimodules.core.AppLoader#react-native-headless"
+97-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:10:13-79
+98            android:value="expo.modules.adapters.react.apploader.RNHeadlessAppLoader" />
+98-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:11:13-86
+99        <meta-data
+99-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-15:45
+100            android:name="com.facebook.soloader.enabled"
+100-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:13-57
+101            android:value="true" />
+101-->[:expo-modules-core] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/expo-modules-core/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:13-33
+102
+103        <activity
+103-->[com.facebook.react:react-android:0.81.5] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2680b08f1e2cb52f3dff51eef1dacfb/transformed/react-android-0.81.5-debug/AndroidManifest.xml:19:9-21:40
+104            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+104-->[com.facebook.react:react-android:0.81.5] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2680b08f1e2cb52f3dff51eef1dacfb/transformed/react-android-0.81.5-debug/AndroidManifest.xml:20:13-77
+105            android:exported="false" />
+105-->[com.facebook.react:react-android:0.81.5] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2680b08f1e2cb52f3dff51eef1dacfb/transformed/react-android-0.81.5-debug/AndroidManifest.xml:21:13-37
+106
+107        <provider
+107-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:21:9-30:20
+108            android:name="expo.modules.filesystem.FileSystemFileProvider"
+108-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:22:13-74
+109            android:authorities="com.panviravindra.comparez.FileSystemFileProvider"
+109-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:23:13-74
+110            android:exported="false"
+110-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:24:13-37
+111            android:grantUriPermissions="true" >
+111-->[host.exp.exponent:expo.modules.filesystem:19.0.21] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/b2ffaca17051b24333e3ff63b4ad5952/transformed/expo.modules.filesystem-19.0.21/AndroidManifest.xml:25:13-47
+112            <meta-data
+112-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:25:13-27:63
+113                android:name="android.support.FILE_PROVIDER_PATHS"
+113-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:26:17-67
+114                android:resource="@xml/file_system_provider_paths" />
+114-->[:react-native-webview] /home/kpanviravindra/Desktop/compareZ/CompareX/frontend/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:27:17-60
+115        </provider>
+116        <provider
+116-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+117            android:name="androidx.startup.InitializationProvider"
+117-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+118            android:authorities="com.panviravindra.comparez.androidx-startup"
+118-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+119            android:exported="false" >
+119-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+120            <meta-data
+120-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+121                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+121-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+122                android:value="androidx.startup" />
+122-->[androidx.emoji2:emoji2:1.3.0] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/9a13a9af12edc25df0feaaeec8391539/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+123            <meta-data
+123-->[androidx.lifecycle:lifecycle-process:2.8.7] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/844c6bf5f56015233b9e2f1c30292fa3/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:29:13-31:52
+124                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+124-->[androidx.lifecycle:lifecycle-process:2.8.7] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/844c6bf5f56015233b9e2f1c30292fa3/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:30:17-78
+125                android:value="androidx.startup" />
+125-->[androidx.lifecycle:lifecycle-process:2.8.7] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/844c6bf5f56015233b9e2f1c30292fa3/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:31:17-49
+126            <meta-data
+126-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:29:13-31:52
+127                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+127-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:30:17-85
+128                android:value="androidx.startup" />
+128-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:31:17-49
+129        </provider>
+130
+131        <receiver
+131-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:34:9-52:20
+132            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+132-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:35:13-76
+133            android:directBootAware="false"
+133-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:36:13-44
+134            android:enabled="true"
+134-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:37:13-35
+135            android:exported="true"
+135-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:38:13-36
+136            android:permission="android.permission.DUMP" >
+136-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:39:13-57
+137            <intent-filter>
+137-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:40:13-42:29
+138                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+138-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:41:17-91
+138-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:41:25-88
+139            </intent-filter>
+140            <intent-filter>
+140-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:43:13-45:29
+141                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+141-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:44:17-85
+141-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:44:25-82
+142            </intent-filter>
+143            <intent-filter>
+143-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:46:13-48:29
+144                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+144-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:47:17-88
+144-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:47:25-85
+145            </intent-filter>
+146            <intent-filter>
+146-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:49:13-51:29
+147                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+147-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:50:17-95
+147-->[androidx.profileinstaller:profileinstaller:1.4.1] /home/kpanviravindra/.gradle/caches/8.14.3/transforms/aed0ab060bbf9a48415a0604b0f2f112/transformed/profileinstaller-1.4.1/AndroidManifest.xml:50:25-92
+148            </intent-filter>
+149        </receiver>
+150    </application>
+151
+152</manifest>

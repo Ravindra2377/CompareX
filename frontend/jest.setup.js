@@ -99,6 +99,27 @@ jest.mock("react-native-webview", () => ({ WebView: "WebView" }));
 
 jest.mock("expo-haptics", () => ({
   impactAsync: jest.fn(),
+  notificationAsync: jest.fn(),
+  ImpactFeedbackStyle: {
+    Light: "light",
+    Medium: "medium",
+    Heavy: "heavy",
+  },
+  NotificationFeedbackType: {
+    Success: "success",
+    Warning: "warning",
+    Error: "error",
+  },
+}));
+
+jest.mock("expo-blur", () => ({
+  BlurView: "BlurView",
+}));
+
+jest.mock("react-native-safe-area-context", () => ({
+  SafeAreaProvider: ({ children }) => children,
+  SafeAreaView: "SafeAreaView",
+  useSafeAreaInsets: () => ({ top: 0, right: 0, bottom: 0, left: 0 }),
 }));
 
 // Global fetch mock

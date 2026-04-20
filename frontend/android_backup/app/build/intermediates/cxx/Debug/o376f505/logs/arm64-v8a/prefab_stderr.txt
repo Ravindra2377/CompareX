@@ -1,0 +1,20 @@
+com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //ReactAndroid/hermestooling. Rejected the following libraries:
+android.arm64-v8a: User has minSdkVersion 22 but library was built for 24
+android.armeabi-v7a: User is targeting arm64-v8a but library is for armeabi-v7a
+android.x86: User is targeting arm64-v8a but library is for x86
+android.x86_64: User is targeting arm64-v8a but library is for x86_64
+com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //ReactAndroid/jsi. Rejected the following libraries:
+android.arm64-v8a: User has minSdkVersion 22 but library was built for 24
+android.armeabi-v7a: User is targeting arm64-v8a but library is for armeabi-v7a
+android.x86: User is targeting arm64-v8a but library is for x86
+android.x86_64: User is targeting arm64-v8a but library is for x86_64
+com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //ReactAndroid/reactnative. Rejected the following libraries:
+android.arm64-v8a: User has minSdkVersion 22 but library was built for 24
+android.armeabi-v7a: User is targeting arm64-v8a but library is for armeabi-v7a
+android.x86: User is targeting arm64-v8a but library is for x86
+android.x86_64: User is targeting arm64-v8a but library is for x86_64
+com.google.prefab.api.NoMatchingLibraryException: No compatible library found for //hermes-engine/libhermes. Rejected the following libraries:
+android.arm64-v8a: User has minSdkVersion 22 but library was built for 24
+android.armeabi-v7a: User is targeting arm64-v8a but library is for armeabi-v7a
+android.x86: User is targeting arm64-v8a but library is for x86
+android.x86_64: User is targeting arm64-v8a but library is for x86_64
