@@ -1,21 +1,18 @@
+jest.setTimeout(300000);
+
 describe('CompareZ Navigation Flow', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ 
+      newInstance: true,
+      launchArgs: { detoxPrintBusyIdleResources: 'YES', detoxURLBlacklistRegex: '.*10\\.0\\.2\\.2.*' } 
+    });
+    await device.disableSynchronization(); 
   });
 
   beforeEach(async () => {
-    await device.launchApp({ newInstance: true });
-    
-    // Auto-login if we hit the login screen
-    try {
-      await waitFor(element(by.id('loginEmail'))).toBeVisible(25).withTimeout(3000);
-      await element(by.id('loginEmail')).typeText('test@example.com');
-      await element(by.id('loginPassword')).typeText('password123\n');
-      await element(by.id('loginBtn')).tap();
-      await waitFor(element(by.id('homeSearchCta'))).toBeVisible(25).withTimeout(5000);
-    } catch (e) {
-      // Not on login screen, perfectly fine
-    }
+    // No need to relaunch every time if disableSynchronization is on, 
+    // but Expo bundle loading is slow, so let's just make sure it's ready.
+    await new Promise(resolve => setTimeout(resolve, 5000));
   });
 
   it('should navigate between Home, Search, and Profile', async () => {

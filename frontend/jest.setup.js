@@ -1,50 +1,48 @@
 import "@testing-library/jest-native/extend-expect";
 
 // Mock React Native modules
-jest.mock("react-native", () => ({
-  View: "View",
-  Text: "Text",
-  TextInput: "TextInput",
-  ScrollView: "ScrollView",
-  FlatList: "FlatList",
-  TouchableOpacity: "TouchableOpacity",
-  TouchableWithoutFeedback: "TouchableWithoutFeedback",
-  Image: "Image",
-  Modal: "Modal",
-  Button: "Button",
-  StatusBar: "StatusBar",
-  ActivityIndicator: "ActivityIndicator",
-  StyleSheet: { 
-    create: (obj) => obj,
-    flatten: (obj) => obj 
-  },
-  Platform: { 
-    OS: "ios",
-    select: (dict) => dict.ios || dict.default
-  },
-  Alert: { alert: jest.fn() },
-  Animated: {
-    Value: class {
-      constructor(v) { this.value = v; }
-      setValue(v) { this.value = v; }
-      interpolate() { return this; }
+jest.mock("react-native", () => {
+  const React = require("react");
+  const RealRN = jest.requireActual("react-native");
+
+  const MockComponent = (name) => {
+    return (props) => React.createElement(name, props, props.children);
+  };
+
+  return {
+    ...RealRN,
+    View: MockComponent("View"),
+    Text: MockComponent("Text"),
+    TextInput: MockComponent("TextInput"),
+    ScrollView: MockComponent("ScrollView"),
+    FlatList: MockComponent("FlatList"),
+    TouchableOpacity: MockComponent("TouchableOpacity"),
+    TouchableWithoutFeedback: MockComponent("TouchableWithoutFeedback"),
+    Image: MockComponent("Image"),
+    Modal: MockComponent("Modal"),
+    Button: MockComponent("Button"),
+    StatusBar: MockComponent("StatusBar"),
+    ActivityIndicator: MockComponent("ActivityIndicator"),
+    StyleSheet: { 
+      create: (obj) => obj,
+      flatten: (obj) => obj 
     },
-    timing: () => ({ start: (cb) => cb && cb() }),
-    spring: () => ({ start: (cb) => cb && cb() }),
-    sequence: () => ({ start: (cb) => cb && cb() }),
-    loop: () => ({ start: (cb) => cb && cb() }),
-    View: "View",
-  },
-  Dimensions: {
-    get: () => ({ width: 375, height: 812 }),
-  },
-  AsyncStorage: {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  },
-}));
+    Platform: { 
+      OS: "ios",
+      select: (dict) => dict.ios || dict.default
+    },
+    Alert: { alert: jest.fn() },
+    Dimensions: {
+      get: () => ({ width: 375, height: 812 }),
+    },
+    AsyncStorage: {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+      clear: jest.fn(),
+    },
+  };
+});
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
