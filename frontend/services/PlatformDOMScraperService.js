@@ -1652,11 +1652,12 @@ class PlatformDOMScraperService {
               }
             })();
           `,
-        },
+      },
 
-        Amazon: {
-          searchUrl: (query) => `https://www.amazon.in/s?k=${encodeURIComponent(query)}`,
-          parseScript: (tokens) => `
+      Amazon: {
+        searchUrl: (query) =>
+          `https://www.amazon.in/s?k=${encodeURIComponent(query)}`,
+        parseScript: (tokens) => `
             (function() {
               const log = (msg) => {
                 try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Amazon-DOM] ' + msg})); } catch(e) {}
@@ -1674,150 +1675,80 @@ class PlatformDOMScraperService {
 
               const extractProducts = () => {
                 const products = [];
-                const cards = document.querySelectorAll('div.s-result-item, div[data-component-type="s-search-result"], div[data-asin]');
+                // Broaden selectors for different Amazon mobile layouts
+                const cards = document.querySelectorAll('div.s-result-item, div[data-component-type="s-search-result"], div[data-asin], .s-item-container, [class*="s-result-item"]');
+                log('extractProducts: Processing ' + cards.length + ' potential cards');
                 
                 cards.forEach((card, i) => {
                   try {
+                    // Skip hidden or tiny cards
+                    if (card.offsetHeight < 50 && card.offsetWidth < 50) return;
+                    
                     // Quick skip for non-product structural elements
                     if (card.classList && (card.classList.contains('s-widget-container') || card.classList.contains('AdHolder'))) {
                          if (!card.querySelector('h2')) return;
                     }
 
-                    // Amazon mobile WebView: DOM structures vary wildly between cards.
-                    // Brand and title are often split across multiple disparate elements.
-                    // Gather all potential text fragments and concatenate them.
-                    var nameFragments = [];
-                    var textNodes = card.querySelectorAll('h2, span.a-size-mini, span.a-size-base-plus, span.a-text-normal, span.a-size-medium, .s-title-instructions-style span');
-                    
-                    for (var j = 0; j < textNodes.length; j++) {
-                        var txt = textNodes[j].textContent.trim();
-                        // Filter out empty, very short, prices, and UI garbage
-                        if (txt && txt.length > 2 && !txt.includes('₹') && txt !== 'More like this' && txt !== 'Results') {
-                            // Deduplicate (handles nested elements like h2 > span where both have the same text)
-                            var isDuplicate = false;
-                            for (var k = 0; k < nameFragments.length; k++) {
-                                // If the fragment is already fully contained in an existing fragment, or exactly matches
-                                if (nameFragments[k] === txt || nameFragments[k].indexOf(txt) !== -1 || txt.indexOf(nameFragments[k]) !== -1) {
-                                    // Keep the longer and more descriptive one
-                                    if (txt.length > nameFragments[k].length) {
-                                        nameFragments[k] = txt;
-                                    }
-                                    isDuplicate = true;
-                                    break;
-                                }
-                            }
-                            if (!isDuplicate) {
-                                nameFragments.push(txt);
-                            }
-                        }
-                    }
-                    
-                    var name = nameFragments.join(' ').trim();
-                    
-                    if (i < 5) {
-                        log('Card ' + i + ': Fragments=' + JSON.stringify(nameFragments) + ', FINAL="' + (name || '').substring(0, 80) + '"');
-                    }
-                    
-                    if (!name || name.length < 5) {
-                        return;
-                    }
-                    
-                    const priceWrapper = card.querySelector('.a-price');
-                    const priceEl = priceWrapper ? priceWrapper.querySelector('.a-price-whole') : card.querySelector('.a-price-whole');
-                    let price = 0;
-                    
-                    if (i < 3) {
-                        log('Card ' + i + ': name="' + name.substring(0, 50) + '", hasPriceWrapper=' + !!priceWrapper + ', hasPriceEl=' + !!priceEl + ', priceElText="' + (priceEl ? priceEl.textContent : 'N/A') + '"');
-                    }
-                    
-                    if (!priceEl) {
-                        log('Card ' + i + ': No .a-price-whole found, trying text content for price.');
-                        const rupeeMatch = card.textContent.match(/₹[ ]*([0-9,]+([.][0-9]+)?)/);
-                        if (rupeeMatch) {
-                            price = parseFloat(rupeeMatch[1].replace(/,/g, ''));
-                            log('Card ' + i + ': Price from text content: ' + price);
-                        } else {
-                            log('Card ' + i + ': No price found. text=' + card.textContent.substring(0, 150));
-                            return;
-                        }
+                    // Amazon mobile/Fresh: DOM structures vary.
+                    var name = '';
+                    const titleEl = card.querySelector('h2, .s-line-clamp-2, .s-line-clamp-3, .a-size-base-plus.a-color-base.a-text-normal, [class*="title"], [class*="name"]');
+                    if (titleEl && titleEl.textContent.trim().length > 3) {
+                        name = titleEl.textContent.trim();
                     } else {
-                        const priceMatch = (priceEl.textContent || '').replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/);
-                        price = priceMatch ? parseFloat(priceMatch[0]) : 0;
-                        log('Card ' + i + ': Price from .a-price-whole: ' + price);
+                        // Fallback: Gather all potential text fragments
+                        var nameFragments = [];
+                        var textNodes = card.querySelectorAll('h2, span.a-size-mini, span.a-size-base-plus, span.a-text-normal, span.a-size-medium, .s-title-instructions-style span');
+                        for (var j = 0; j < textNodes.length; j++) {
+                            var txt = textNodes[j].textContent.trim();
+                            if (txt && txt.length > 2 && !txt.includes('₹') && !/^\d+\.?\d*$/.test(txt)) {
+                                if (nameFragments.indexOf(txt) === -1) nameFragments.push(txt);
+                            }
+                        }
+                        name = nameFragments.join(' ').trim();
                     }
+                    
+                    if (!name || name.length < 3) return;
+                    
+                    // Price Extraction
+                    let price = 0;
+                    const priceWhole = card.querySelector('.a-price-whole');
+                    if (priceWhole) {
+                        const priceMatch = priceWhole.textContent.replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/);
+                        price = priceMatch ? parseFloat(priceMatch[0]) : 0;
+                    } 
                     
                     if (price <= 0) {
-                        log('Card ' + i + ': Price is zero or negative: ' + price);
+                        const cardText = card.textContent || '';
+                        const rupeeMatch = cardText.match(/₹\s*([0-9,]+([.][0-9]+)?)/);
+                        if (rupeeMatch) {
+                            price = parseFloat(rupeeMatch[1].replace(/,/g, ''));
+                        }
+                    }
+
+                    if (price <= 0) {
+                        if (i < 3) log('Card ' + i + ': No price found for "' + name.substring(0, 30) + '..." (likely unavailable)');
                         return;
                     }
                     
-                    const mrpEl = card.querySelector('.a-text-price .a-offscreen');
-                    const mrpMatch = mrpEl ? (mrpEl.textContent || '').replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/) : null;
+                    const mrpEl = card.querySelector('.a-text-price .a-offscreen, .a-ot-price .a-offscreen, .a-price.a-text-price span');
+                    const mrpMatch = mrpEl ? mrpEl.textContent.replace(/,/g, '').match(/[0-9]+([.][0-9]+)?/) : null;
                     const mrp = mrpMatch ? parseFloat(mrpMatch[0]) : price;
                     
                     let image = '';
-                    const allImgs = card.querySelectorAll('.s-image, img');
-                    
-                    if (i === 0 && allImgs.length > 0) {
-                      const firstImg = allImgs[0];
-                      const attrs = Array.from(firstImg.attributes).map(a => a.name + '="' + a.value + '"').join(', ');
-                      log('DEBUG IMG ATTRS: ' + attrs);
+                    const imgEl = card.querySelector('.s-image, img');
+                    if (imgEl) {
+                      image = imgEl.src || imgEl.getAttribute('data-src') || imgEl.getAttribute('srcset')?.split(' ')[0] || '';
                     }
 
-                    for (let img of allImgs) {
-                      // Try data-a-dynamic-image (JSON of resolutions)
-                      const dynamicImage = img.getAttribute('data-a-dynamic-image');
-                      if (dynamicImage) {
-                        try {
-                          const urls = Object.keys(JSON.parse(dynamicImage));
-                          if (urls.length > 0) image = urls[urls.length - 1]; // Pick last (usually highest res)
-                        } catch(e) {}
-                      }
-                      
-                      // Fallback to srcset / src
-                      if (!image) {
-                        const attrs = [img.getAttribute('srcset'), img.getAttribute('data-srcset'), img.getAttribute('src'), img.getAttribute('data-src')];
-                        for (let a of attrs) {
-                          if (!a) continue;
-                          const parts = a.split(',');
-                          for (let p of parts) {
-                             const url = p.trim().split(' ')[0];
-                             if (url && !url.startsWith('data:') && !url.includes('grey-pixel') && !url.includes('.svg') && !url.includes('sprite')) {
-                               image = url;
-                               break;
-                             }
-                          }
-                          if (image) break;
-                        }
-                      }
-                      if (image) break;
-                    }
-
-                    if (i < 2) log('Card ' + i + ' final image: ' + (image || 'EMPTY'));
-                    if (image) {
-                      image = String(image).trim().replace(/^['\"]|['\"]$/g, '');
-                      if (image.startsWith('//')) image = 'https:' + image;
-                      if (image.startsWith('/')) image = 'https://www.amazon.in' + image;
-                      if (image.includes(' ')) image = image.split(' ')[0];
-                      if (image.includes('&amp;')) image = image.replace(/&amp;/g, '&');
-                    }
-
-                    // Try multiple selectors for product links on Amazon mobile
                     const urlEl = card.querySelector('h2 a') 
                                || card.querySelector('a[href*="/dp/"]') 
                                || card.querySelector('a[href*="/gp/"]')
-                               || card.querySelector('a.a-link-normal[href*="/"]');
-                    // Extract raw path to build an intent
-                    let rawHref = urlEl ? urlEl.getAttribute('href') : '';
-                    // Handle both absolute and relative URLs
-                    let finalUrl = '';
-                    if (rawHref) {
-                        finalUrl = rawHref.startsWith('http') ? rawHref : 'https://www.amazon.in' + rawHref;
-                    }
-                    let deepLink = finalUrl;
+                               || card.querySelector('a.a-link-normal');
                     
-                    if (rawHref) {
-                        // Create an Android intent that strongly requests the Amazon app
+                    let rawHref = urlEl ? urlEl.getAttribute('href') : '';
+                    let finalUrl = rawHref ? (rawHref.startsWith('http') ? rawHref : 'https://www.amazon.in' + rawHref) : '';
+                    let deepLink = finalUrl;
+                    if (rawHref && !rawHref.startsWith('http')) {
                         deepLink = 'intent://www.amazon.in' + rawHref + '#Intent;scheme=https;package=in.amazon.mShop.android.shopping;end';
                     }
 
@@ -1834,23 +1765,21 @@ class PlatformDOMScraperService {
                       weight: '',
                       platform: 'Amazon'
                     });
-                    
-                    if (products.length <= 3) {
-                       log('Extracted valid Amazon product: ' + name + ', image: ' + (image || 'EMPTY'));
-                    }
-                  } catch(e) {}
+                  } catch(e) {
+                    log('Error on card ' + i + ': ' + e.message);
+                  }
                 });
                 return products;
               };
 
               try {
                 let attempt = 0;
-                const maxAttempts = 16;
-                const pollInterval = 500;
+                const maxAttempts = 20;
+                const pollInterval = 600;
                 
                 const poll = () => {
                   attempt++;
-                  const cards = document.querySelectorAll('div.s-result-item, div[data-component-type="s-search-result"], div[data-asin]');
+                  const cards = document.querySelectorAll('div.s-result-item, div[data-component-type="s-search-result"], div[data-asin], .s-item-container');
                   const isCaptcha = document.title.toLowerCase().includes('robot') || !!document.querySelector('form[action*="validateCaptcha"]');
                   
                   if (isCaptcha) {
@@ -1861,7 +1790,7 @@ class PlatformDOMScraperService {
 
                   log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 's: DOM cards=' + cards.length + ', title=' + document.title.substring(0,30));
                   
-                  if (cards.length > 0) {
+                  if (cards.length > 5) {
                     const products = extractProducts();
                     log('Extracted ' + products.length + ' valid products from ' + cards.length + ' DOM cards');
                     if (products.length > 0) {
@@ -1871,26 +1800,28 @@ class PlatformDOMScraperService {
                   }
                   
                   if (attempt >= maxAttempts) {
-                    log('Timeout: no Amazon search results found after ' + (maxAttempts * pollInterval / 1000) + 's');
-                    sendResults([], false, 'No Amazon search results after timeout');
+                    log('Timeout: found ' + cards.length + ' cards, but 0 valid products after ' + (maxAttempts * pollInterval / 1000) + 's');
+                    const lastTry = extractProducts();
+                    sendResults(lastTry, lastTry.length > 0, lastTry.length === 0 ? 'No Amazon search results after timeout' : null);
                     return;
                   }
                   
                   setTimeout(poll, pollInterval);
                 };
                 
-                setTimeout(poll, 1500);
+                setTimeout(poll, 1200);
               } catch(e) {
-                log('Error: ' + e.message);
+                log('FATAL Error: ' + e.message);
                 sendResults([], false, e.message);
               }
             })();
           `,
-        },
+      },
 
-        Flipkart: {
-          searchUrl: (query) => `https://www.flipkart.com/search?q=${encodeURIComponent(query)}`,
-          parseScript: (tokens) => `
+      Flipkart: {
+        searchUrl: (query) =>
+          `https://www.flipkart.com/search?q=${encodeURIComponent(query)}`,
+        parseScript: (tokens) => `
             (function() {
               const log = (msg) => {
                 try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Flipkart-DOM] ' + msg})); } catch(e) {}
@@ -2101,8 +2032,7 @@ class PlatformDOMScraperService {
               }
             })();
           `,
-        },
-
+      },
     };
   }
 

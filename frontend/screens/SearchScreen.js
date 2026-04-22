@@ -55,30 +55,50 @@ const PLATFORM_TIMEOUTS = {
   Flipkart: 15000,
 };
 const SEARCH_DEBOUNCE_MS = 400;
-const PARTIAL_AGGREGATION_DELAY_MS = 30;    // ⬇ was 60ms — surface partial results faster
+const PARTIAL_AGGREGATION_DELAY_MS = 30; // ⬇ was 60ms — surface partial results faster
 
 // Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
 // Blocks images, fonts, analytics, and stylesheets to cut WebView load time by 1.5-3s.
 const BLOCKED_RESOURCE_EXTENSIONS = [
-  '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico',
-  '.woff', '.woff2', '.ttf', '.eot',
-  '.css',
-  '.mp4', '.webm',
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".svg",
+  ".ico",
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".eot",
+  ".mp4",
+  ".webm",
 ];
 const BLOCKED_TRACKER_DOMAINS = [
-  'google-analytics.com', 'googletagmanager.com', 'facebook.net',
-  'doubleclick.net', 'hotjar.com', 'segment.com', 'mixpanel.com',
-  'amplitude.com', 'sentry.io', 'newrelic.com', 'datadog-browser-agent',
-  'clevertap.com', 'moengage.com', 'webengage.com', 'appsflyer.com',
+  "google-analytics.com",
+  "googletagmanager.com",
+  "facebook.net",
+  "doubleclick.net",
+  "hotjar.com",
+  "segment.com",
+  "mixpanel.com",
+  "amplitude.com",
+  "sentry.io",
+  "newrelic.com",
+  "datadog-browser-agent",
+  "clevertap.com",
+  "moengage.com",
+  "webengage.com",
+  "appsflyer.com",
 ];
 
 const shouldBlockWebViewRequest = (request) => {
   try {
-    const url = (request.url || '').toLowerCase();
-    if (!url.startsWith('http')) return false; // allow blob://, about:blank etc.
+    const url = (request.url || "").toLowerCase();
+    if (!url.startsWith("http")) return false; // allow blob://, about:blank etc.
     // Block by file extension
     for (const ext of BLOCKED_RESOURCE_EXTENSIONS) {
-      const urlWithoutQuery = url.split('?')[0];
+      const urlWithoutQuery = url.split("?")[0];
       if (urlWithoutQuery.endsWith(ext)) return true;
     }
     // Block tracker domains
@@ -170,17 +190,32 @@ const getProductMatchKey = (name) => {
 
   // Strip punctuation and unnecessary words
   const stopWords = new Set([
-    "fresh", "new", "original", "pack", "pouch", "bottle", "net",
-    "quantity", "medium", "large", "small", "pc", "pcs", "the", "a", "an", "of"
+    "fresh",
+    "new",
+    "original",
+    "pack",
+    "pouch",
+    "bottle",
+    "net",
+    "quantity",
+    "medium",
+    "large",
+    "small",
+    "pc",
+    "pcs",
+    "the",
+    "a",
+    "an",
+    "of",
   ]);
 
   let baseWords = clean
     .replace(/\([^)]*\)/g, " ")
     .replace(/[^a-z0-9.\s]/g, " ")
     .split(/\s+/)
-    .map(t => t.trim())
+    .map((t) => t.trim())
     .filter(Boolean)
-    .filter(t => !stopWords.has(t));
+    .filter((t) => !stopWords.has(t));
 
   let normalized = baseWords.join(" ");
 
@@ -197,19 +232,27 @@ const getProductMatchKey = (name) => {
 
   // If quantity was extracted, remove it from the main string
   if (qty) {
-    normalized = normalized.replace(new RegExp(qtyMatch[0], "g"), "").replace(/\s+/g, " ").trim();
+    normalized = normalized
+      .replace(new RegExp(qtyMatch[0], "g"), "")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   // Remove completely isolated numbers (often model numbers or garbage without units if a qty exists)
-  normalized = normalized.split(/\s+/).filter(t => !/^\d+(\.\d+)?$/.test(t)).join(" ");
+  normalized = normalized
+    .split(/\s+/)
+    .filter((t) => !/^\d+(\.\d+)?$/.test(t))
+    .join(" ");
 
   let finalWords = normalized.split(/\s+/).slice(0, 4);
-  
+
   // Plural deduplication for matching words
-  finalWords = finalWords.map(t => (t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t));
+  finalWords = finalWords.map((t) =>
+    t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t,
+  );
 
   const key = (finalWords.join(" ") + (qty ? " " + qty : "")).trim();
-  
+
   if (!key) return clean.slice(0, 30);
   return key;
 };
@@ -266,16 +309,18 @@ const extractNumericPrice = (raw) => {
     return 0;
   }
 
-  const currencyMatch = text.match(/(?:₹|rs\.?|inr)\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i);
+  const currencyMatch = text.match(
+    /(?:₹|rs\.?|inr)\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
+  );
   if (currencyMatch?.[1]) {
-    const parsed = parseFloat(currencyMatch[1].replace(/,/g, ''));
+    const parsed = parseFloat(currencyMatch[1].replace(/,/g, ""));
     if (!Number.isFinite(parsed) || parsed <= 0) return 0;
     return Math.round(parsed * 100) / 100;
   }
 
   const genericMatch = text.match(/([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/);
   if (!genericMatch?.[1]) return 0;
-  const parsed = parseFloat(genericMatch[1].replace(/,/g, ''));
+  const parsed = parseFloat(genericMatch[1].replace(/,/g, ""));
   if (!Number.isFinite(parsed) || parsed <= 0) return 0;
   return Math.round(parsed * 100) / 100;
 };
@@ -292,11 +337,13 @@ const extractLabeledPriceHints = (rawText) => {
   const priceMatch = compact.match(
     /\bprice\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
   );
-  const mrpMatch = compact.match(/\bmrp\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i);
+  const mrpMatch = compact.match(
+    /\bmrp\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
+  );
 
   return {
-    price: priceMatch?.[1] ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0,
-    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1].replace(/,/g, '')) : 0,
+    price: priceMatch?.[1] ? parseFloat(priceMatch[1].replace(/,/g, "")) : 0,
+    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1].replace(/,/g, "")) : 0,
   };
 };
 
@@ -503,7 +550,8 @@ const SearchScreen = ({ navigation, route }) => {
       clearTimeout(platformTimeoutsRef.current[platform]);
     }
 
-    const timeoutMs = PLATFORM_TIMEOUTS[platform] || DEFAULT_PLATFORM_TIMEOUT_MS;
+    const timeoutMs =
+      PLATFORM_TIMEOUTS[platform] || DEFAULT_PLATFORM_TIMEOUT_MS;
 
     platformTimeoutsRef.current[platform] = setTimeout(() => {
       if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
@@ -584,7 +632,10 @@ const SearchScreen = ({ navigation, route }) => {
       if (platform === "Amazon") {
         return (
           current.includes("amazon.in") &&
-          (current.includes("/s?") || current.includes("/s/") || current.includes("k=") || current.includes("captcha"))
+          (current.includes("/s?") ||
+            current.includes("/s/") ||
+            current.includes("k=") ||
+            current.includes("captcha"))
         );
       }
 
@@ -604,24 +655,22 @@ const SearchScreen = ({ navigation, route }) => {
     const currentUrl = (currentWebViewUrlsRef.current[platform] || "").split(
       "#",
     )[0];
-    const sessionForKey = searchSessionIdRef.current;
-    const reasonKey = "";
-    const injectKey = `${sessionForKey}:${currentUrl || "no-url"}${reasonKey}`;
 
     // Don't inject on about:blank or invalid URLs — no cookie access
-    if (!currentUrl || currentUrl === "about:blank" || !currentUrl.startsWith("http")) {
+    if (
+      !currentUrl ||
+      currentUrl === "about:blank" ||
+      !currentUrl.startsWith("http")
+    ) {
       console.log(`[Search] Skipping injection on invalid URL: ${currentUrl}`);
       return;
     }
 
-    // Prevent duplicate injection for the same platform+URL in this session.
-    if (injectedPlatformsRef.current[platform] === injectKey) {
-      return;
-    }
-    injectedPlatformsRef.current[platform] = injectKey;
-
     const platformToken = connectedPlatformTokensRef.current[platform] || null;
-    let parseScript = PlatformDOMScraperService.getParseScript(platform, platformToken);
+    let parseScript = PlatformDOMScraperService.getParseScript(
+      platform,
+      platformToken,
+    );
     const apiScript = null;
 
     if (!parseScript && !apiScript) {
@@ -630,11 +679,23 @@ const SearchScreen = ({ navigation, route }) => {
     }
 
     const sessionId = searchSessionIdRef.current;
-    const sessionPreamble = `window.__CompareZ_SESSION_ID__ = ${JSON.stringify(
-      sessionId,
-    )}; true;`;
 
-    console.log(`[Search] EXECUTING injectDomParser for ${platform} (${reason}) - script length: ${parseScript ? parseScript.length : 0}`);
+    // JS-side deduplication: if the script was already injected and running on THIS page for THIS session, skip.
+    // If the page navigates, the JS context is wiped, and this flag resets naturally.
+    const sessionPreamble = `
+      if (window.__CompareZ_SESSION_ID__ === ${JSON.stringify(sessionId)} && window.__CompareZ_URL__ === window.location.href) {
+        var _snd = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+        if (_snd) _snd(JSON.stringify({type: 'LOG', message: '[Inject] Already running for session ' + ${JSON.stringify(sessionId)} + ' on ' + window.location.href + ', skipping.'}));
+        throw new Error('ALREADY_INJECTED');
+      }
+      window.__CompareZ_SESSION_ID__ = ${JSON.stringify(sessionId)};
+      window.__CompareZ_URL__ = window.location.href;
+      true;
+    `;
+
+    console.log(
+      `[Search] EXECUTING injectDomParser for ${platform} (${reason}) - script length: ${parseScript ? parseScript.length : 0}`,
+    );
 
     try {
       console.log(
@@ -743,7 +804,13 @@ const SearchScreen = ({ navigation, route }) => {
 
   const getConnectedPlatformsSnapshot = useCallback(async () => {
     try {
-      const supportedPlatforms = ["Blinkit", "BigBasket", "Zepto", "Amazon", "Flipkart"];
+      const supportedPlatforms = [
+        "Blinkit",
+        "BigBasket",
+        "Zepto",
+        "Amazon",
+        "Flipkart",
+      ];
       const parsed = storedTokensRef.current || {};
 
       const tokenMap = {};
@@ -964,15 +1031,20 @@ const SearchScreen = ({ navigation, route }) => {
           data.products = data.products.map((product) =>
             normalizeIncomingProduct(product, platform),
           );
-          
-          if (platform === 'Amazon' && data.products.length > 0) {
+
+          if (platform === "Amazon" && data.products.length > 0) {
             const sample = data.products[0];
-            console.log(`[Debug-Amazon] Incoming product after normalize: name="${(sample.product_name || '').substring(0, 40)}", image_url="${(sample.image_url || 'EMPTY').substring(0, 80)}", platform=${sample.platform}`);
+            console.log(
+              `[Debug-Amazon] Incoming product after normalize: name="${(sample.product_name || "").substring(0, 40)}", image_url="${(sample.image_url || "EMPTY").substring(0, 80)}", platform=${sample.platform}`,
+            );
           }
         }
 
         // Reject late messages from older searches when sessionId is provided
-        if (data.sessionId && Number(data.sessionId) !== Number(searchSessionIdRef.current)) {
+        if (
+          data.sessionId &&
+          Number(data.sessionId) !== Number(searchSessionIdRef.current)
+        ) {
           console.log(
             `[Search] Ignoring ${platform} results for old session ${data.sessionId} (current: ${searchSessionIdRef.current})`,
           );
@@ -1183,15 +1255,17 @@ const SearchScreen = ({ navigation, route }) => {
 
       const response = await api.get("/compare", {
         headers: { "X-User-Tokens": JSON.stringify(tokensForHeader) },
-        params: { 
-          q: fallbackQuery, 
-          lat: 12.9716, 
+        params: {
+          q: fallbackQuery,
+          lat: 12.9716,
           lng: 77.5946,
-          sessionId: sessionId 
+          sessionId: sessionId,
         },
       });
 
-      console.log(`[Search] Backend fallback response status: ${response.status}`);
+      console.log(
+        `[Search] Backend fallback response status: ${response.status}`,
+      );
 
       const platformMatches = (listingPlatform, expectedPlatform) => {
         const lp = String(listingPlatform || "")
@@ -1503,8 +1577,9 @@ const SearchScreen = ({ navigation, route }) => {
     try {
       // Flatten the results to match backend expectation: map[string][]ProductListing
       const flattenedPlatforms = {};
-      Object.keys(platformResults).forEach(platform => {
-        flattenedPlatforms[platform] = platformResults[platform]?.products || [];
+      Object.keys(platformResults).forEach((platform) => {
+        flattenedPlatforms[platform] =
+          platformResults[platform]?.products || [];
       });
 
       const payload = {
@@ -1785,7 +1860,11 @@ const SearchScreen = ({ navigation, route }) => {
           key={platform}
           ref={(ref) => (webViewRefs.current[platform] = ref)}
           source={{ uri: searchUrls[platform] || getPlatformUrl(platform) }}
-          style={captchaPlatform === platform ? styles.visibleWebView : styles.hiddenWebView}
+          style={
+            captchaPlatform === platform
+              ? styles.visibleWebView
+              : styles.hiddenWebView
+          }
           javaScriptEnabled={true}
           domStorageEnabled={true}
           cacheEnabled={true}
@@ -1817,20 +1896,32 @@ const SearchScreen = ({ navigation, route }) => {
             const searchUrl = searchUrls[platform];
             if (canInjectForPlatform(platform, nativeEvent.url, searchUrl)) {
               // Small delay to let the cookie jar settle
-              setTimeout(() => injectDomParser(platform, 'onLoadStart-early'), 300);
+              setTimeout(
+                () => injectDomParser(platform, "onLoadStart-early"),
+                300,
+              );
             }
           }}
           onLoadEnd={(syntheticEvent) => {
             const { nativeEvent } = syntheticEvent;
-            const currentUrl = nativeEvent.url || currentWebViewUrlsRef.current[platform];
+            const currentUrl =
+              nativeEvent.url || currentWebViewUrlsRef.current[platform];
             console.log(`[Search] ${platform} onLoadEnd: ${currentUrl}`);
             const searchUrl = searchUrls[platform];
             if (canInjectForPlatform(platform, currentUrl, searchUrl)) {
-              injectDomParser(platform, 'onLoadEnd');
+              injectDomParser(platform, "onLoadEnd");
             }
           }}
           onNavigationStateChange={(navState) => {
             currentWebViewUrlsRef.current[platform] = navState.url;
+            // For SPAs on iOS, onLoadEnd might not fire for internal navigations.
+            // Trigger injection here too if loading is complete.
+            if (!navState.loading) {
+              const searchUrl = searchUrls[platform];
+              if (canInjectForPlatform(platform, navState.url, searchUrl)) {
+                injectDomParser(platform, "onNavigationStateChange");
+              }
+            }
           }}
           userAgent={
             platform === "Amazon"
@@ -1841,8 +1932,15 @@ const SearchScreen = ({ navigation, route }) => {
           sharedCookiesEnabled={true}
           thirdPartyCookiesEnabled={true}
           geolocationEnabled={true}
-          onError={(e) => console.log(`[Search] ${platform} WebView error:`, e.nativeEvent)}
-          onHttpError={(e) => console.log(`[Search] ${platform} HTTP ${e.nativeEvent.statusCode}:`, e.nativeEvent.url)}
+          onError={(e) =>
+            console.log(`[Search] ${platform} WebView error:`, e.nativeEvent)
+          }
+          onHttpError={(e) =>
+            console.log(
+              `[Search] ${platform} HTTP ${e.nativeEvent.statusCode}:`,
+              e.nativeEvent.url,
+            )
+          }
         />
       ))}
     </View>
@@ -1892,7 +1990,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 400,
     marginTop: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   captchaOverlay: {
     padding: SPACING.lg,
