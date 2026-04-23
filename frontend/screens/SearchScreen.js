@@ -1444,6 +1444,47 @@ const SearchScreen = ({ navigation, route }) => {
       `[Search] Filtered ${relevantProducts}/${totalProducts} products matching "${stableQuery}"`,
     );
 
+    // DEBUG SUMMARY
+    const platformStats = {};
+    Object.keys(resultsToAggregate).forEach((plat) => {
+      const items = resultsToAggregate[plat]?.products || [];
+      const relevant = items.filter((p) => isRelevant(p.product_name));
+      const withPhotos = relevant.filter(
+        (p) =>
+          p.image_url &&
+          !p.image_url.includes("placeholder") &&
+          !p.image_url.includes("blank"),
+      ).length;
+      platformStats[plat] = {
+        total: items.length,
+        relevant: relevant.length,
+        withPhotos,
+      };
+    });
+
+    console.log(
+      "╔═════════════════ SEARCH DEBUG SUMMARY ════════════════╗",
+    );
+    console.log(
+      `║ Query: "${stableQuery.padEnd(41)}" ║`,
+    );
+    Object.entries(platformStats).forEach(([plat, stats]) => {
+      const status =
+        stats.relevant > 0
+          ? stats.withPhotos === stats.relevant
+            ? "✅ Photos OK"
+            : stats.withPhotos > 0
+              ? "⚠️ Some Missing"
+              : "❌ NO PHOTOS"
+          : "⚪ No Results";
+      console.log(
+        `║ ${plat.padEnd(10)}: ${String(stats.relevant).padStart(3)} items | ${status.padEnd(15)} ║`,
+      );
+    });
+    console.log(
+      "╚════════════════════════════════════════════════════════╝",
+    );
+
     // Convert to array format
     const aggregated = Object.values(productMap).map((group, idx) => {
       // Deduplicate listings by platform (keep the first one for each platform)
