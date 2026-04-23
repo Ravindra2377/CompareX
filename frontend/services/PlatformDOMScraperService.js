@@ -1916,19 +1916,27 @@ class PlatformDOMScraperService {
         parseScript: (tokens) => `
             (function() {
               const log = (msg) => {
-                try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: '[Flipkart-DOM] ' + msg})); } catch(e) {}
+                try { 
+                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (send) send(JSON.stringify({type: 'LOG', message: '[Flipkart-DOM] ' + msg})); 
+                } catch(e) {}
               };
 
               const sendResults = (products, success, error) => {
                 log('Sending ' + (products ? products.length : 0) + ' results (success=' + success + ')');
-                window.ReactNativeWebView.postMessage(JSON.stringify({
-                  type: 'SEARCH_RESULTS',
-                  platform: 'Flipkart',
-                  sessionId: window.__CompareZ_SESSION_ID__ || null,
-                  success: success,
-                  products: products,
-                  error: error || null
-                }));
+                try {
+                  const send = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
+                  if (send) {
+                    send(JSON.stringify({
+                      type: 'SEARCH_RESULTS',
+                      platform: 'Flipkart',
+                      sessionId: window.__CompareZ_SESSION_ID__ || null,
+                      success: success,
+                      products: products,
+                      error: error || null
+                    }));
+                  }
+                } catch (e) { log('Error sending results: ' + e.message); }
               };
 
               const extractProducts = () => {
@@ -2048,9 +2056,9 @@ class PlatformDOMScraperService {
                     // C: Last resort regex - ONLY if still 0
                     if (price <= 0) {
                       // Split by ₹ to avoid smashing numbers
-                      const parts = cardText.split(/[₹\u20b9]/);
+                      const parts = cardText.split(/[₹\\u20b9]/);
                       const vals = parts.map(p => {
-                        const m = p.match(/^([0-9,]+(?:\.[0-9]+)?)/);
+                        const m = p.match(/^([0-9,]+(?:\\.[0-9]+)?)/);
                         return m ? parseVal(m[1]) : 0;
                       }).filter(v => v > 0);
 
@@ -2095,42 +2103,222 @@ class PlatformDOMScraperService {
                   }
                 });
                 
+                
+                // Grocery fallback: Flipkart grocery pages use div[data-id] cards without /p/ links
+                if (products.length === 0) {
+                  log('Trying grocery card fallback...');
+                  const groceryCards = document.querySelectorAll('div[data-id], ._1AtVbE, .CXW8mj, ._4ddWXP');
+                  log('Grocery cards found: ' + groceryCards.length);
+                  groceryCards.forEach(card => {
+                    try {
+                      const parseVal = (s) => parseFloat(String(s || '').replace(/[^0-9.]/g, '')) || 0;
+                      const nameEl = card.querySelector('a[title], .KzDlHZ, ._4rR01T, .IRpwTa, [class*="title" i]');
+                      const name = nameEl ? (nameEl.getAttribute('title') || nameEl.textContent).trim() : '';
+                      if (!name || name.length < 5) return;
+
+                      const cardText = card.textContent || '';
+                      if (!/[₹\u20b9]/.test(cardText)) return;
+
+                      // Split on ₹ to get price candidates
+                      const parts = cardText.split(/[₹\u20b9]/);
+                      const vals = parts.map(p => {
+                        const m = p.match(/^([0-9,]+(?:\.[0-9]+)?)/);
+                        return m ? parseVal(m[1]) : 0;
+                      }).filter(v => v > 0 && v < 100000);
+
+                      if (!vals.length) return;
+                      const price = vals[0];
+                      const mrp = vals.length > 1 ? Math.max(...vals) : price;
+
+                      const imgEl = card.querySelector('img');
+                      const image = imgEl ? (imgEl.getAttribute('data-src') || imgEl.src || '') : '';
+                      const linkEl = card.querySelector('a[href*="pid="], a[href*="/p/"], a[href*="/dl/"]');
+                      const url = linkEl ? linkEl.href : '';
+
+                      products.push({
+                        product_name: name,
+                        raw_product_name: name,
+                        brand: '',
+                        price,
+                        mrp,
+                        image_url: image,
+                        product_url: url,
+                        in_stock: !cardText.toLowerCase().includes('out of stock'),
+                        weight: '',
+                        platform: 'Flipkart'
+                      });
+                    } catch(e) {}
+                  });
+                  log('Grocery fallback extracted: ' + products.length + ' products');
+                }
+
                 return products;
               };
 
+              // Helper: parse products from Flipkart's internal API JSON
+              const parseApiData = (raw) => {
+                const products = [];
+                try {
+                  const text = typeof raw === 'string' ? raw : JSON.stringify(raw);
+                  // Flipkart API embeds product data in deeply nested structures.
+                  // We scan for objects that have productId + title/name + price fields.
+                  const pidRegex = /"productId"\\s*:\\s*"([^"]+)"/g;
+                  const seen = new Set();
+                  let match;
+                  while ((match = pidRegex.exec(text)) !== null) {
+                    const pid = match[1];
+                    if (seen.has(pid)) continue;
+                    seen.add(pid);
+
+                    // Extract a window around this productId to find associated fields
+                    const start = Math.max(0, match.index - 800);
+                    const end = Math.min(text.length, match.index + 2000);
+                    const chunk = text.substring(start, end);
+
+                    const titleMatch = chunk.match(/"title"\\s*:\\s*"([^"]{5,200})"/);
+                    if (!titleMatch) continue;
+                    const name = titleMatch[1].replace(/\\\\u[\\dA-Fa-f]{4}/g, '').replace(/\\\\"/g, '"');
+
+                    // Price: look for finalPrice, value, or price fields
+                    const priceMatch = chunk.match(/"(?:finalPrice|decimalValue|value|sellingPrice)"\\s*:\\s*(\\d+(?:\\.\\d+)?)/);
+                    const price = priceMatch ? parseFloat(priceMatch[1]) : 0;
+                    if (price <= 0) continue;
+
+                    const mrpMatch = chunk.match(/"(?:mrp|maximumRetailPrice)"\\s*:\\s*(\\d+(?:\\.\\d+)?)/);
+                    const mrp = mrpMatch ? parseFloat(mrpMatch[1]) : price;
+
+                    const imgMatch = chunk.match(/"url"\\s*:\\s*"(https?:\\/\\/[^"]*?(?:\\.jpg|\\.png|\\.webp)[^"]*)"/i);
+                    const image = imgMatch ? imgMatch[1].replace(/\\\\u002F/g, '/') : '';
+
+                    products.push({
+                      product_name: name,
+                      raw_product_name: name,
+                      brand: '',
+                      price: price,
+                      mrp: mrp > price ? mrp : price,
+                      image_url: image,
+                      product_url: 'https://www.flipkart.com/product/p?pid=' + pid,
+                      in_stock: true,
+                      weight: '',
+                      platform: 'Flipkart'
+                    });
+                  }
+                } catch(e) {
+                  log('parseApiData error: ' + e.message);
+                }
+                return products;
+              };
+
+              // Helper: directly fetch Flipkart's search API from within WebView context
+              const tryApiFetch = (query) => {
+                return new Promise((resolve) => {
+                  const apiUrl = 'https://2.rome.api.flipkart.com/api/4/page/fetch';
+                  const payload = {
+                    pageUri: '/search?q=' + encodeURIComponent(query) + '&otracker=search&otracker1=search',
+                    pageContext: { fetchSeoData: true },
+                    requestContext: { type: 'BROWSE_PAGE' }
+                  };
+                  log('Trying direct API fetch: ' + apiUrl);
+                  fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Accept-Language': 'en-US,en;q=0.9',
+                      'Content-Type': 'application/json',
+                      'X-Referer': window.location.href,
+                      'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(payload),
+                    credentials: 'include'
+                  })
+                  .then(function(r) {
+                    log('API status: ' + r.status);
+                    return r.text();
+                  })
+                  .then(function(text) {
+                    log('API response length: ' + text.length);
+                    resolve(text);
+                  })
+                  .catch(function(e) {
+                    log('API fetch failed: ' + e.message);
+                    resolve(null);
+                  });
+                });
+              };
+
               try {
+                // Read securely passed query first, fall back to URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = window.__CX_SEARCH_QUERY__ || urlParams.get('q') || '';
+                log('Search query: ' + searchQuery);
+
                 let attempt = 0;
-                const maxAttempts = 30; // Increased to 15s
+                const maxAttempts = 16; // 8s max for DOM, then fall back to API
                 const pollInterval = 500;
+                let apiTriggered = false;
                 
                 const poll = () => {
-                  attempt++;
-                  // Broaden link selector to include both mobile and desktop patterns
-                  const links = document.querySelectorAll('a[href*="/p/"], a[href*="pid="], a[href*="/dl/"], a[href*="/itm/"], a._1fQY7K, a._2KpZ6l, a.k7wcnx');
-                  const bodyTxt = document.body.textContent || '';
-                  const rupeePresent = bodyTxt.includes('₹') || bodyTxt.includes('\u20b9') || bodyTxt.includes('Rs.');
-                  log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 's: links=' + links.length + ', hasRupee=' + rupeePresent + ', title=' + document.title.substring(0,25));
-                  
-                  if (links.length > 0 && rupeePresent) {
-                    const products = extractProducts();
-                    log('Parsed ' + products.length + ' products');
-                    if (products.length > 0) {
-                      sendResults(products, true, null);
+                  try {
+                    attempt++;
+                    
+                    // NUCLEAR OPTION: Trigger direct API fetch immediately on first attempt
+                    if (attempt === 1 && searchQuery && !apiTriggered) {
+                      apiTriggered = true;
+                      log('Triggering Nuclear Option: Direct Rome API fetch...');
+                      tryApiFetch(searchQuery).then(function(apiText) {
+                        if (apiText && apiText.length > 500) {
+                          const apiProducts = parseApiData(apiText);
+                          if (apiProducts && apiProducts.length > 0) {
+                            log('Nuclear Option successful: ' + apiProducts.length + ' products found');
+                            sendResults(apiProducts, true, null);
+                            return;
+                          }
+                        }
+                        log('Nuclear Option returned no products, falling back to DOM/Polling...');
+                      }).catch(function(e) {
+                        log('Nuclear Option error: ' + e.message);
+                      });
+                    }
+
+                    // Visual feedback/scroll to keep hydration alive
+                    window.scrollTo(0, Math.min(attempt * 500, 3000));
+                    
+                    const links = document.querySelectorAll(
+                      'a[href*="/p/"], a[href*="pid="], a[href*="/dl/"], a[href*="/itm/"]'
+                    );
+                    const bodyTxt = document.body ? document.body.textContent : '';
+                    const rupeePresent = /[₹\\u20b9]|\\bRs\\.|\\bMRP\\b/i.test(bodyTxt);
+
+                    log('Poll @' + (attempt * pollInterval / 1000).toFixed(1) + 
+                        's: links=' + links.length + ', hasRupee=' + rupeePresent + 
+                        ', readyState=' + document.readyState);
+
+                    // If DOM is ready, try extraction
+                    if (links.length > 5 && rupeePresent) {
+                      const products = extractProducts();
+                      if (products.length > 0) {
+                        log('DOM parsing succeeded with ' + products.length + ' products');
+                        sendResults(products, true, null);
+                        return;
+                      }
+                    }
+
+                    if (attempt >= maxAttempts) {
+                      log('Timeout reached. Final DOM check...');
+                      const finalChance = extractProducts();
+                      sendResults(finalChance, finalChance.length > 0, 
+                        finalChance.length === 0 ? 'Flipkart extraction failed after API and DOM attempts' : null);
                       return;
                     }
+
+                    setTimeout(poll, pollInterval);
+                  } catch (err) {
+                    log('Poll error: ' + err.message);
+                    setTimeout(poll, pollInterval);
                   }
-                  
-                  if (attempt >= maxAttempts) {
-                    log('Timeout: no Flipkart search results found after ' + (maxAttempts * pollInterval / 1000) + 's');
-                    const lastChance = extractProducts();
-                    sendResults(lastChance, lastChance.length > 0, lastChance.length === 0 ? 'No Flipkart results after timeout' : null);
-                    return;
-                  }
-                  
-                  setTimeout(poll, pollInterval);
                 };
                 
-                setTimeout(poll, 1500);
+                setTimeout(poll, 200);
               } catch(e) {
                 log('Error: ' + e.message);
                 sendResults([], false, e.message);

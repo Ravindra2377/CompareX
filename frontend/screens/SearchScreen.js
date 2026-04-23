@@ -49,10 +49,10 @@ const DEFAULT_PLATFORM_TIMEOUT_MS = 15000;
 const OVERALL_SEARCH_TIMEOUT_MS = 25000;
 const PLATFORM_TIMEOUTS = {
   Blinkit: 12000,
-  Zepto: 12000,
-  BigBasket: 12000,
+  Zepto: 18000,
+  BigBasket: 18000,
   Amazon: 15000,
-  Flipkart: 15000,
+  Flipkart: 22000,
 };
 const SEARCH_DEBOUNCE_MS = 400;
 const PARTIAL_AGGREGATION_DELAY_MS = 30; // ⬇ was 60ms — surface partial results faster
@@ -690,6 +690,13 @@ const SearchScreen = ({ navigation, route }) => {
       }
       window.__CompareZ_SESSION_ID__ = ${JSON.stringify(sessionId)};
       window.__CompareZ_URL__ = window.location.href;
+      
+      // VISUAL DEBUG: Add a massive red border to prove the JS executed
+      try {
+        if (document.body) document.body.style.border = "10px solid red";
+        else document.documentElement.style.border = "10px solid red";
+      } catch (e) {}
+      
       true;
     `;
 
@@ -721,9 +728,16 @@ const SearchScreen = ({ navigation, route }) => {
         true;
       `;
 
-      webViewRefs.current[platform]?.injectJavaScript(
-        sessionPreamble + probe + (apiScript || "") + (parseScript || ""),
-      );
+      const finalScript = sessionPreamble + probe + (apiScript || "") + (parseScript || "");
+      webViewRefs.current[platform]?.injectJavaScript(finalScript);
+      
+      // Fallback: If CSP blocks injectJavaScript (evaluateJavaScript), send via postMessage
+      webViewRefs.current[platform]?.postMessage(JSON.stringify({
+        type: 'EXECUTE_PARSER',
+        query: currentSearchQueryRef.current,
+        sessionId: sessionId,
+        script: finalScript
+      }));
     } catch (err) {
       console.error(`[Search] Failed to inject parser for ${platform}:`, err);
     }
@@ -1586,7 +1600,7 @@ const SearchScreen = ({ navigation, route }) => {
       "search-aggregate-end",
     );
     console.log(
-      `[Perf] Search update: aggregation=${aggregateDuration.toFixed(2)}ms, total=${totalDuration.toFixed(2)}ms, complete=${isComplete}`,
+      `[Perf] Search update: aggregation=${(aggregateDuration || 0).toFixed(2)}ms, total=${(totalDuration || 0).toFixed(2)}ms, complete=${isComplete}`,
     );
 
     if (aggregated.length > 0) {
@@ -1913,6 +1927,13 @@ const SearchScreen = ({ navigation, route }) => {
           onMessage={(event) => handleWebViewMessage(platform, event)}
           // ── Optimization 1: Block images, fonts, and trackers ──────────
           onShouldStartLoadWithRequest={(request) => {
+            // CRITICAL: Block non-http deep links (e.g. flipkart://, intent://) 
+            // otherwise Flipkart will redirect out of the WebView and hang the scraper forever
+            if (request.url && !request.url.toLowerCase().startsWith('http')) {
+              if (request.url !== 'about:blank' && !request.url.startsWith('blob:')) {
+                return false; 
+              }
+            }
             if (shouldBlockWebViewRequest(request)) {
               return false; // silently drop — saves 1.5–3s per search
             }
@@ -1921,11 +1942,58 @@ const SearchScreen = ({ navigation, route }) => {
           // ── Optimization 2: Inject early — fires as soon as JS context is ready
           // before images/CSS have even been requested by the browser
           injectedJavaScriptBeforeContentLoaded={`
-            // Patch fetch to auto-forward JSON API responses to RN bridge
             (function() {
-              var _origFetch = window.fetch;
+              window.__CX_SEARCH_QUERY__ = ${JSON.stringify(query)};
+
+              // Trap ReactNativeWebView injection to survive anti-bot deletion
+              let _rnwv = window.ReactNativeWebView;
+              Object.defineProperty(window, 'ReactNativeWebView', {
+                get: function() { return _rnwv; },
+                set: function(val) {
+                  _rnwv = val;
+                  if (val && val.postMessage) {
+                    window.__rnMsg = val.postMessage.bind(val);
+                  }
+                },
+                configurable: true,
+                enumerable: true
+              });
+              
+              if (_rnwv && _rnwv.postMessage) {
+                window.__rnMsg = _rnwv.postMessage.bind(_rnwv);
+              }
+
+              // Embed the actual parser directly to bypass CSP eval() blocks!
+              window.__CX_EXECUTE_PARSER = function() {
+                try {
+                  ${PlatformDOMScraperService.getParseScript ? PlatformDOMScraperService.getParseScript(platform, null) : ''}
+                } catch(e) {}
+              };
+
+              // Listen for messages from React Native
+              document.addEventListener('message', function(e) {
+                try {
+                  const data = JSON.parse(e.data);
+                  if (data.type === 'EXECUTE_PARSER') {
+                    window.__CX_SEARCH_QUERY__ = data.query;
+                    window.__CX_SESSION_ID__ = data.sessionId;
+                    window.__CX_EXECUTE_PARSER();
+                  }
+                } catch(err) {}
+              });
+              window.addEventListener('message', function(e) {
+                try {
+                  const data = JSON.parse(e.data);
+                  if (data.type === 'EXECUTE_PARSER') {
+                    window.__CX_SEARCH_QUERY__ = data.query;
+                    window.__CX_SESSION_ID__ = data.sessionId;
+                    window.__CX_EXECUTE_PARSER();
+                  }
+                } catch(err) {}
+              });
+
               window.__CX_INTERCEPT_PLATFORM__ = ${JSON.stringify(platform)};
-              window.__CX_SEARCH_ACTIVE__ = false; // set true by injection
+              window.__CX_SEARCH_ACTIVE__ = false;
             })();
             true;
           `}
@@ -1994,7 +2062,7 @@ function getPlatformUrl(platform) {
     Zepto: "https://www.zepto.com/",
     BigBasket: "https://www.bigbasket.com/",
     Amazon: "https://www.amazon.in/",
-    Flipkart: "https://www.flipkart.com/",
+    Flipkart: "https://www.flipkart.com/search?q=",
   };
   return urls[platform] || "about:blank";
 }
