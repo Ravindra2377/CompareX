@@ -209,6 +209,10 @@ func startSearchWorker(s *scraper.Service) {
 				}
 			}
 			log.Printf("✅ SQL Search Request completed: saved %d results", totalListings)
+			
+			// Update history with result count so SQL queries can find it
+			database.DB.Model(&history).Update("result_count", totalListings)
+
 			database.DB.Model(&req).Updates(map[string]interface{}{
 				"status": "completed",
 			})
