@@ -184,10 +184,10 @@ func startSearchWorker(s *scraper.Service) {
 			
 			// Add to results
 			for _, l := range sampleListings {
-				results.Products = append(results.Products, models.Product{
-					ID:       l.ProductName,
-					Name:     l.ProductName,
-					Listings: []models.PlatformListing{l},
+				results.Products = append(results.Products, models.ComparedProduct{
+					Name:      l.ProductName,
+					BestPrice: l.Price,
+					Listings:  []models.PlatformListing{l},
 				})
 			}
 		}
