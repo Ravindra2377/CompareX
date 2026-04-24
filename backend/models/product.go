@@ -15,7 +15,9 @@ type Product struct {
 
 // PlatformListing represents a product listing on a specific platform
 type PlatformListing struct {
-	Platform       string    `json:"platform"`
+	ID              uint      `gorm:"primaryKey" json:"id"`
+	SearchHistoryID uint      `gorm:"index" json:"search_history_id"`
+	Platform        string    `json:"platform"`
 	ProductName    string    `json:"product_name"`
 	Brand          string    `json:"brand,omitempty"`
 	ImageURL       string    `json:"image_url,omitempty"`
@@ -26,8 +28,9 @@ type PlatformListing struct {
 	DeliveryTime   string    `json:"delivery_time,omitempty"` // e.g. "10 mins", "2 hours"
 	DeliveryCharge float64   `json:"delivery_charge"`
 	Rating         float64   `json:"rating,omitempty"`
-	Offers         []string  `json:"offers,omitempty"`    // e.g. ["10% cashback", "Use code SAVE20"]
-	DeepLink       string    `json:"deep_link,omitempty"` // URL or app deep link
+	Offers         []string  `gorm:"type:text" json:"offers,omitempty"` // Store as comma-separated or similar in DB
+	DeepLink       string    `json:"deep_link,omitempty"`               // URL or app deep link
+	ProductURL     string    `json:"product_url,omitempty"`             // Alias for DeepLink from frontend
 	ScrapedAt      time.Time `json:"scraped_at"`
 	Quantity       string    `json:"quantity,omitempty"`
 }

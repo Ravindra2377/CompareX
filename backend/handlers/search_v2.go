@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"comparez/database"
+	"comparez/models"
 	"log"
 	"net/http"
 	"time"
@@ -13,36 +15,17 @@ type SearchResult struct {
 	Query       string                      `json:"query"`
 	Timestamp   time.Time                   `json:"timestamp"`
 	ResultCount int                         `json:"result_count"`
-	Platforms   map[string][]ProductListing `json:"platforms"`
-}
-
-// ProductListing represents a product from a platform
-type ProductListing struct {
-	ProductName string  `json:"product_name"`
-	Brand       string  `json:"brand"`
-	Price       float64 `json:"price"`
-	MRP         float64 `json:"mrp"`
-	ImageURL    string  `json:"image_url"`
-	ProductURL  string  `json:"product_url"`
-	InStock     bool    `json:"in_stock"`
-	Weight      string  `json:"weight"`
-	Platform    string  `json:"platform"`
+	Platforms   map[string][]models.PlatformListing `json:"platforms"`
 }
 
 // CollectSearchResults receives search results from frontend for analytics/caching
 // POST /search/collect
-//
-//	Body: {
-//	  "query": "eggs",
-//	  "platforms": {
-//	    "Blinkit": [{product}, {product}],
-//	    "Zepto": [...]
-//	  }
-//	}
 func CollectSearchResults(c echo.Context) error {
+	log.Printf("📥 Received search collection request from frontend")
 	var req struct {
-		Query     string                      `json:"query"`
-		Platforms map[string][]ProductListing `json:"platforms"`
+		Query     string                               `json:"query"`
+		UserID    uint                                 `json:"user_id"`
+		Platforms map[string][]models.PlatformListing `json:"platforms"`
 	}
 
 	if err := c.Bind(&req); err != nil {
@@ -72,11 +55,57 @@ func CollectSearchResults(c echo.Context) error {
 		log.Printf("   - %s: %d products", platform, len(products))
 	}
 
-	// TODO: Store in database for:
-	// - Search history
-	// - Price tracking
-	// - Analytics
-	// - ML training data
+	// Store in database for testing and history
+	if database.DB != nil {
+		history := models.SearchHistory{
+			Query:       req.Query,
+			UserID:      req.UserID,
+			ResultCount: totalResults,
+			CreatedAt:   time.Now(),
+		}
+
+		// Determine best price and platform
+		var bestPrice float64
+		var bestPlatform string
+		var platforms []string
+
+		allListings := []models.PlatformListing{}
+		for platform, listings := range req.Platforms {
+			platforms = append(platforms, platform)
+			for _, l := range listings {
+				l.Platform = platform // Ensure platform is set
+				l.ScrapedAt = time.Now()
+				if l.DeepLink == "" && l.ProductURL != "" {
+					l.DeepLink = l.ProductURL
+				}
+				allListings = append(allListings, l)
+
+				if l.Price > 0 && (bestPrice == 0 || l.Price < bestPrice) {
+					bestPrice = l.Price
+					bestPlatform = platform
+				}
+			}
+		}
+
+		history.BestPrice = bestPrice
+		history.BestPlatform = bestPlatform
+		// history.PlatformsUsed = strings.Join(platforms, ", ") // Simple CSV for now
+
+		if err := database.DB.Create(&history).Error; err != nil {
+			log.Printf("❌ Failed to save search history: %v", err)
+		} else {
+			// Save individual listings
+			for i := range allListings {
+				allListings[i].SearchHistoryID = history.ID
+			}
+			if len(allListings) > 0 {
+				if err := database.DB.Create(&allListings).Error; err != nil {
+					log.Printf("❌ Failed to save product listings: %v", err)
+				}
+			}
+			log.Printf("✅ Saved search history (ID: %d) with %d listings", history.ID, len(allListings))
+		}
+	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"status":        "collected",

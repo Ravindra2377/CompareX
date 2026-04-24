@@ -6,14 +6,21 @@ import (
 	"comparez/models"
 	"comparez/scraper"
 	"comparez/search"
+	"log"
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Printf("⚠️  No .env file found: %v", err)
+	}
+
 	// Initialize Database
 	database.Connect()
 	if database.DB != nil {
@@ -21,6 +28,7 @@ func main() {
 			&models.User{},
 			&models.SearchHistory{},
 			&models.WishlistItem{},
+			&models.PlatformListing{},
 		)
 	}
 

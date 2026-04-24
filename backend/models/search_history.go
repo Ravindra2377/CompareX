@@ -16,6 +16,7 @@ type SearchHistory struct {
 	Query         string         `gorm:"not null;size:255" json:"query"`
 	ResultCount   int            `json:"result_count"`           // Total products found
 	BestPrice     float64        `json:"best_price,omitempty"`   // Lowest price across platforms
-	BestPlatform  string         `json:"best_platform,omitempty"` // Platform with lowest price
-	PlatformsUsed string         `gorm:"size:512" json:"platforms_used,omitempty"` // JSON array of platform names
+	BestPlatform  string            `json:"best_platform,omitempty"` // Platform with lowest price
+	PlatformsUsed string            `gorm:"size:512" json:"platforms_used,omitempty"` // JSON array of platform names
+	Listings      []PlatformListing `gorm:"foreignKey:SearchHistoryID" json:"listings,omitempty"`
 }

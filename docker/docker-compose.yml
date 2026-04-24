@@ -32,7 +32,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=postgres://user:password@postgres:5432/pricepilot?sslmode=disable
+      - DATABASE_URL=postgresql://neondb_owner:npg_iGYytwj2SXW0@ep-small-haze-amsgptkz-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - REDIS_ADDR=redis:6379
       - MEILI_HOST=http://meilisearch:7700
       - MEILI_MASTER_KEY=masterKey
