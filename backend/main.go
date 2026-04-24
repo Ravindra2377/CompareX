@@ -6,6 +6,7 @@ import (
 	"comparez/models"
 	"comparez/scraper"
 	"comparez/search"
+	"context"
 	"log"
 	"net/http"
 	"os"
@@ -29,6 +30,7 @@ func main() {
 			&models.SearchHistory{},
 			&models.WishlistItem{},
 			&models.PlatformListing{},
+			&models.SearchRequest{},
 		)
 	}
 
@@ -123,5 +125,59 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	// Start Background Worker for SQL-triggered searches
+	go startSearchWorker(scraperService)
+
+	// Start Echo server
 	e.Logger.Fatal(e.Start(":" + port))
+}
+
+func startSearchWorker(s *scraper.Service) {
+	log.Println("👷 SQL Search Worker started (Polling for new requests...)")
+	for {
+		time.Sleep(2 * time.Second)
+
+		if database.DB == nil {
+			continue
+		}
+
+		var req models.SearchRequest
+		if err := database.DB.Where("status = ?", "pending").First(&req).Error; err != nil {
+			continue // No pending requests
+		}
+
+		// Update status to processing
+		database.DB.Model(&req).Update("status", "processing")
+		log.Printf("🔨 Processing SQL Search Request: '%s' (ID: %d)", req.Query, req.ID)
+
+		// Trigger scrape (Note: uses server-side scrapers)
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		results, err := s.Compare(ctx, req.Query, 12.9716, 77.5946, nil) // Default to Bangalore
+		cancel()
+
+		if err != nil {
+			log.Printf("❌ SQL Search Request failed: %v", err)
+			database.DB.Model(&req).Update("status", "failed")
+			continue
+		}
+
+		// Save results to SearchHistory for SQL testing
+		history := models.SearchHistory{
+			Query:       req.Query,
+			ResultCount: len(results.Results),
+			CreatedAt:   time.Now(),
+		}
+
+		if err := database.DB.Create(&history).Error; err == nil {
+			for _, listing := range results.Results {
+				listing.SearchHistoryID = history.ID
+				listing.ScrapedAt = time.Now()
+				database.DB.Create(&listing)
+			}
+			log.Printf("✅ SQL Search Request completed: saved %d results", len(results.Results))
+			database.DB.Model(&req).Update("status", "completed")
+		} else {
+			database.DB.Model(&req).Update("status", "failed")
+		}
+	}
 }
