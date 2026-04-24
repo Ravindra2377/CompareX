@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -163,19 +164,24 @@ func startSearchWorker(s *scraper.Service) {
 
 		// Save results to SearchHistory for SQL testing
 		history := models.SearchHistory{
-			Query:       req.Query,
-			ResultCount: len(results.Results),
-			CreatedAt:   time.Now(),
+			Query:     req.Query,
+			CreatedAt: time.Now(),
 		}
 
+		totalListings := 0
 		if err := database.DB.Create(&history).Error; err == nil {
-			for _, listing := range results.Results {
-				listing.SearchHistoryID = history.ID
-				listing.ScrapedAt = time.Now()
-				database.DB.Create(&listing)
+			for _, product := range results.Products {
+				for _, listing := range product.Listings {
+					listing.SearchHistoryID = history.ID
+					listing.ScrapedAt = time.Now()
+					database.DB.Create(&listing)
+					totalListings++
+				}
 			}
-			log.Printf("✅ SQL Search Request completed: saved %d results", len(results.Results))
-			database.DB.Model(&req).Update("status", "completed")
+			log.Printf("✅ SQL Search Request completed: saved %d results", totalListings)
+			database.DB.Model(&req).Update(map[string]interface{}{
+				"status": "completed",
+			})
 		} else {
 			database.DB.Model(&req).Update("status", "failed")
 		}
