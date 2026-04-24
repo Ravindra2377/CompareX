@@ -179,7 +179,7 @@ func startSearchWorker(s *scraper.Service) {
 				}
 			}
 			log.Printf("✅ SQL Search Request completed: saved %d results", totalListings)
-			database.DB.Model(&req).Update(map[string]interface{}{
+			database.DB.Model(&req).Updates(map[string]interface{}{
 				"status": "completed",
 			})
 		} else {
