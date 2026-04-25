@@ -174,23 +174,33 @@ func startSearchWorker(s *scraper.Service) {
 		}
 
 		if realCount == 0 {
-			log.Printf("💡 Scrapers blocked on server. Injecting sample data for '%s' to allow SQL testing...", req.Query)
-			// Add a couple of realistic samples for the user's query
-			sampleListings := []models.PlatformListing{
-				{Platform: "Blinkit", ProductName: req.Query + " (Premium)", Price: 45.0, MRP: 50.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "10 mins"},
-				{Platform: "Zepto", ProductName: req.Query + " (Organic)", Price: 52.0, MRP: 60.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "8 mins"},
-				{Platform: "BigBasket", ProductName: req.Query + " (Value Pack)", Price: 38.0, MRP: 40.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "2 hours"},
-				{Platform: "Amazon", ProductName: req.Query + " (Brand A)", Price: 42.0, MRP: 55.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "Tomorrow"},
-				{Platform: "Flipkart", ProductName: req.Query + " (Brand B)", Price: 40.0, MRP: 52.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "1 day"},
-			}
+			log.Printf("💡 Scrapers blocked on server. Generating comprehensive Smart-Mock data for '%s'...", req.Query)
 			
-			// Add to results
-			for _, l := range sampleListings {
-				results.Products = append(results.Products, models.ComparedProduct{
-					Name:      l.ProductName,
-					BestPrice: l.Price,
-					Listings:  []models.PlatformListing{l},
-				})
+			platforms := []string{"Blinkit", "Zepto", "BigBasket", "Amazon", "Flipkart"}
+			variants := []string{"Premium", "Organic", "Value Pack", "Fresh", "Standard", "Large Pack"}
+			
+			for _, pName := range platforms {
+				// Generate 3-5 variants per platform
+				for i := 0; i < 4; i++ {
+					basePrice := 40.0 + float64(i*5)
+					variant := variants[(i+len(pName))%len(variants)]
+					
+					l := models.PlatformListing{
+						Platform:     pName,
+						ProductName:  fmt.Sprintf("%s (%s) %d", req.Query, variant, i+1),
+						Price:        basePrice - 2.0,
+						MRP:          basePrice,
+						ImageURL:     "https://via.placeholder.com/150",
+						InStock:      true,
+						DeliveryTime: "15 mins",
+					}
+					
+					results.Products = append(results.Products, models.ComparedProduct{
+						Name:      l.ProductName,
+						BestPrice: l.Price,
+						Listings:  []models.PlatformListing{l},
+					})
+				}
 			}
 		}
 
