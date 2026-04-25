@@ -84,7 +84,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     <Ionicons
                       name={iconName}
                       size={24}
-                      color={isFocused ? COLORS.brandPurple : "#A0A0A0"}
+                      color={isFocused ? COLORS.primary : "#A0A0A0"}
                     />
                   </View>
                 </View>

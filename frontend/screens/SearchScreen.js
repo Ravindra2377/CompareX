@@ -15,6 +15,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Animated,
+  Image,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { Ionicons } from "@expo/vector-icons";

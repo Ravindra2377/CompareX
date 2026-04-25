@@ -130,7 +130,7 @@ const ProductCard = ({ product, onPress }) => {
 
               <View style={styles.priceRow}>
                 <View>
-                  <Text style={styles.priceLabel}>BEST PRICE</Text>
+                  <Text style={[styles.priceLabel, { color: COLORS.accent }]}>BEST PRICE</Text>
                   <Text style={styles.price}>₹{formatPrice(effectivePrice)}</Text>
                 </View>
 
@@ -144,13 +144,13 @@ const ProductCard = ({ product, onPress }) => {
                 ) : null}
 
                 {savingsValue > 0 ? (
-                  <View style={styles.savingsChip}>
+                  <View style={[styles.savingsChip, { backgroundColor: COLORS.savings, paddingHorizontal: 10 }]}>
                     <Ionicons
                       name="trending-down"
                       size={11}
-                      color={COLORS.savings}
+                      color="#FFF"
                     />
-                    <Text style={styles.savingsText}>
+                    <Text style={[styles.savingsText, { color: "#FFF" }]}>
                       Save ₹{formatPrice(savingsValue)}
                     </Text>
                   </View>

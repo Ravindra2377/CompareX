@@ -5,20 +5,20 @@
 
 const COLORS = {
   // ── Core backgrounds ──────────────────────────────────────────────
-  primary:        "#5B5AE6",        // brand purple
-  primaryLight:   "#7A6CF6",        // brand purple light
-  brandPurple:    "#5B5AE6",
-  brandPurpleLight: "#7A6CF6",
-  background:     "#F8FAFC",        // slate-50 — cool off-white
-  backgroundDark: "#0F172A",        // slate-900 — rich dark
+  primary:        "#7C3AED",        // Logo Purple
+  primaryLight:   "#A78BFA",        // Logo Purple Light
+  brandPurple:    "#7C3AED",
+  brandPurpleLight: "#A78BFA",
+  background:     "#F8FAFC",
+  backgroundDark: "#0F172A",
   surface:        "#FFFFFF",
-  surfaceDark:    "#1E293B",        // slate-800
+  surfaceDark:    "#1E293B",
   card:           "#FFFFFF",
-  cardAlt:        "#F1F5F9",        // slate-100
+  cardAlt:        "#F1F5F9",
   cardDark:       "#1E293B",
-  border:         "#E2E8F0",        // slate-200
-  borderDark:     "#334155",        // slate-700
-  borderLight:    "#F1F5F9",        // slate-100
+  border:         "#E2E8F0",
+  borderDark:     "#334155",
+  borderLight:    "#F1F5F9",
   divider:        "#E2E8F0",
 
   // ── Glassmorphism ─────────────────────────────────────────────────
@@ -28,55 +28,55 @@ const COLORS = {
   glassBorderDark:  "rgba(255, 255, 255, 0.10)",
   glassHighlight:   "rgba(255, 255, 255, 0.60)",
 
-  // ── Accent ────────────────────────────────────────────────────────
-  accent:       "#4F46E5",          // indigo primary CTA
-  accentGold:   "#4F46E5",         // mapped to primary for compat
-  accentLight:  "rgba(79, 70, 229, 0.10)",
-  accentStrong: "#3730A3",
-  accentMuted:  "rgba(79, 70, 229, 0.06)",
-  secondary:    "#0EA5E9",          // sky-500
-  secondaryLight: "rgba(14, 165, 233, 0.10)",
-  violet:       "#7C3AED",          // violet-600
-  violetLight:  "rgba(124, 58, 237, 0.10)",
+  // ── Accent (Logo Derived) ─────────────────────────────────────────
+  accent:       "#EC4899",          // Logo Pink
+  accentGold:   "#F97316",          // Logo Orange
+  accentLight:  "rgba(236, 72, 153, 0.10)",
+  accentStrong: "#BE185D",
+  accentMuted:  "rgba(236, 72, 153, 0.06)",
+  secondary:    "#06B6D4",          // Logo Cyan
+  secondaryLight: "rgba(6, 182, 212, 0.10)",
+  violet:       "#8B5CF6",          // Logo Violet
+  violetLight:  "rgba(139, 92, 246, 0.10)",
 
   // ── Semantic ──────────────────────────────────────────────────────
-  savings:      "#10B981",          // emerald-500
+  savings:      "#10B981",
   savingsLight: "rgba(16, 185, 129, 0.08)",
   savingsDark:  "#059669",
-  warning:      "#F59E0B",          // amber-500
+  warning:      "#F59E0B",
   warningLight: "rgba(245, 158, 11, 0.08)",
-  error:        "#EF4444",          // red-500
+  error:        "#EF4444",
   errorLight:   "rgba(239, 68, 68, 0.08)",
-  info:         "#3B82F6",          // blue-500
+  info:         "#3B82F6",
   infoLight:    "rgba(59, 130, 246, 0.08)",
 
   // ── Platform accent colors ────────────────────────────────────────
-  platformBlinkit:   "#EAB308",     // yellow-500
-  platformZepto:     "#8B5CF6",     // violet-500
-  platformBigBasket: "#22C55E",     // green-500
-  platformAmazon:    "#F97316",     // orange-500
-  platformFlipkart:  "#3B82F6",     // blue-500
+  platformBlinkit:   "#F8CB46",
+  platformZepto:     "#5901C9",
+  platformBigBasket: "#84C225",
+  platformAmazon:    "#FF9900",
+  platformFlipkart:  "#2874F0",
 
   // ── Text ──────────────────────────────────────────────────────────
-  textPrimary:   "#0F172A",         // slate-900
-  textSecondary: "#64748B",         // slate-500
-  textTertiary:  "#94A3B8",         // slate-400
+  textPrimary:   "#0F172A",
+  textSecondary: "#64748B",
+  textTertiary:  "#94A3B8",
   textOnDark:    "#FFFFFF",
   textOnDarkSec: "rgba(255,255,255,0.70)",
   textOnDarkTer: "rgba(255,255,255,0.45)",
   textInverse:   "#FFFFFF",
-  textAccent:    "#4F46E5",
+  textAccent:    "#EC4899",
 
   // ── Gradients ─────────────────────────────────────────────────────
-  gradientHero:     ["#312E81", "#4F46E5", "#6366F1"],       // indigo depth
+  gradientHero:     ["#4C1D95", "#7C3AED", "#A855F7"],       // Purple depth
   gradientCard:     ["#FFFFFF", "#F8FAFC"],
   gradientCardDark: ["rgba(30,41,59,0.98)", "rgba(15,23,42,0.98)"],
-  gradientAccent:   ["#4F46E5", "#7C3AED"],                  // indigo → violet
+  gradientAccent:   ["#7C3AED", "#EC4899"],                  // Purple → Pink
   gradientSavings:  ["#10B981", "#059669"],
   gradientGlass:    ["rgba(255,255,255,0.95)", "rgba(248,250,252,0.90)"],
-  gradientGold:     ["#4F46E5", "#6366F1"],
-  gradientWarm:     ["#F97316", "#EAB308"],                   // orange → yellow
-  gradientCool:     ["#0EA5E9", "#6366F1"],                   // sky → indigo
+  gradientGold:     ["#F97316", "#FB923C"],                  // Orange gradient
+  gradientWarm:     ["#F97316", "#EC4899"],                   // Orange → Pink
+  gradientCool:     ["#06B6D4", "#7C3AED"],                   // Cyan → Purple
 };
 
 const SPACING = {
