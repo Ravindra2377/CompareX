@@ -180,6 +180,8 @@ func startSearchWorker(s *scraper.Service) {
 				{Platform: "Blinkit", ProductName: req.Query + " (Premium)", Price: 45.0, MRP: 50.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "10 mins"},
 				{Platform: "Zepto", ProductName: req.Query + " (Organic)", Price: 52.0, MRP: 60.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "8 mins"},
 				{Platform: "BigBasket", ProductName: req.Query + " (Value Pack)", Price: 38.0, MRP: 40.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "2 hours"},
+				{Platform: "Amazon", ProductName: req.Query + " (Brand A)", Price: 42.0, MRP: 55.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "Tomorrow"},
+				{Platform: "Flipkart", ProductName: req.Query + " (Brand B)", Price: 40.0, MRP: 52.0, ImageURL: "https://via.placeholder.com/150", InStock: true, DeliveryTime: "1 day"},
 			}
 			
 			// Add to results
