@@ -57,15 +57,14 @@ const MainTabs = () => {
 };
 
 
+import SplashScreen from "./screens/SplashScreen";
+
 const AppNav = () => {
   const { isLoading, userToken } = useContext(AuthContext);
+  const [showSplash, setShowSplash] = React.useState(true);
 
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
+  if (isLoading || showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 
   const customTheme = {

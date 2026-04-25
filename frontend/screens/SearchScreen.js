@@ -727,16 +727,19 @@ const SearchScreen = ({ navigation, route }) => {
         true;
       `;
 
-      const finalScript = sessionPreamble + probe + (apiScript || "") + (parseScript || "");
+      const finalScript =
+        sessionPreamble + probe + (apiScript || "") + (parseScript || "");
       webViewRefs.current[platform]?.injectJavaScript(finalScript);
-      
+
       // Fallback: If CSP blocks injectJavaScript (evaluateJavaScript), send via postMessage
-      webViewRefs.current[platform]?.postMessage(JSON.stringify({
-        type: 'EXECUTE_PARSER',
-        query: currentSearchQueryRef.current,
-        sessionId: sessionId,
-        script: finalScript
-      }));
+      webViewRefs.current[platform]?.postMessage(
+        JSON.stringify({
+          type: "EXECUTE_PARSER",
+          query: currentSearchQueryRef.current,
+          sessionId: sessionId,
+          script: finalScript,
+        }),
+      );
     } catch (err) {
       console.error(`[Search] Failed to inject parser for ${platform}:`, err);
     }
@@ -1475,12 +1478,8 @@ const SearchScreen = ({ navigation, route }) => {
       };
     });
 
-    console.log(
-      "╔═════════════════ SEARCH DEBUG SUMMARY ════════════════╗",
-    );
-    console.log(
-      `║ Query: "${stableQuery.padEnd(41)}" ║`,
-    );
+    console.log("╔═════════════════ SEARCH DEBUG SUMMARY ════════════════╗");
+    console.log(`║ Query: "${stableQuery.padEnd(41)}" ║`);
     Object.entries(platformStats).forEach(([plat, stats]) => {
       const status =
         stats.relevant > 0
@@ -1494,9 +1493,7 @@ const SearchScreen = ({ navigation, route }) => {
         `║ ${plat.padEnd(10)}: ${String(stats.relevant).padStart(3)} items | ${status.padEnd(15)} ║`,
       );
     });
-    console.log(
-      "╚════════════════════════════════════════════════════════╝",
-    );
+    console.log("╚════════════════════════════════════════════════════════╝");
 
     // Convert to array format
     const aggregated = Object.values(productMap).map((group, idx) => {
@@ -1674,7 +1671,6 @@ const SearchScreen = ({ navigation, route }) => {
     ({ item }) => <ProductCard product={item} onPress={handleProduct} />,
     [handleProduct],
   );
-
 
   const renderEmpty = () => {
     if (loading) return null;
@@ -1924,11 +1920,14 @@ const SearchScreen = ({ navigation, route }) => {
           onMessage={(event) => handleWebViewMessage(platform, event)}
           // ── Optimization 1: Block images, fonts, and trackers ──────────
           onShouldStartLoadWithRequest={(request) => {
-            // CRITICAL: Block non-http deep links (e.g. flipkart://, intent://) 
+            // CRITICAL: Block non-http deep links (e.g. flipkart://, intent://)
             // otherwise Flipkart will redirect out of the WebView and hang the scraper forever
-            if (request.url && !request.url.toLowerCase().startsWith('http')) {
-              if (request.url !== 'about:blank' && !request.url.startsWith('blob:')) {
-                return false; 
+            if (request.url && !request.url.toLowerCase().startsWith("http")) {
+              if (
+                request.url !== "about:blank" &&
+                !request.url.startsWith("blob:")
+              ) {
+                return false;
               }
             }
             if (shouldBlockWebViewRequest(request)) {
@@ -1963,7 +1962,7 @@ const SearchScreen = ({ navigation, route }) => {
               // Embed the actual parser directly to bypass CSP eval() blocks!
               window.__CX_EXECUTE_PARSER = function() {
                 try {
-                  ${PlatformDOMScraperService.getParseScript ? PlatformDOMScraperService.getParseScript(platform, null) : ''}
+                  ${PlatformDOMScraperService.getParseScript ? PlatformDOMScraperService.getParseScript(platform, null) : ""}
                 } catch(e) {}
               };
 
