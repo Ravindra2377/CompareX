@@ -55,7 +55,7 @@ const PLATFORM_TIMEOUTS = {
   Flipkart: 22000,
 };
 const SEARCH_DEBOUNCE_MS = 400;
-const PARTIAL_AGGREGATION_DELAY_MS = 30; // ⬇ was 60ms — surface partial results faster
+const PARTIAL_AGGREGATION_DELAY_MS = 150; // ⬆ increased from 30ms to batch updates better and reduce scroll lag
 
 // Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
 // Blocks images, fonts, analytics, and stylesheets to cut WebView load time by 1.5-3s.
@@ -110,7 +110,6 @@ const shouldBlockWebViewRequest = (request) => {
     return false;
   }
 };
-const RESULT_CARD_HEIGHT = 184;
 const SEARCH_CACHE_VERSION = 2;
 
 const NON_PRICE_TOKEN_REGEX =
@@ -1556,6 +1555,14 @@ const SearchScreen = ({ navigation, route }) => {
         uniqueListings.find((l) => l.raw_product_name)?.raw_product_name ||
         selectBestDisplayName(uniqueListings, group.name);
 
+      const imageCandidates = [
+        first.image_url,
+        ...uniqueListings.map((listing) => listing?.image_url),
+      ]
+        .map((url) => (url ? String(url).trim() : ""))
+        .filter((url) => url && !url.startsWith("data:"));
+      const uniqueImages = Array.from(new Set(imageCandidates));
+
       return {
         id: idx,
         name: displayName,
@@ -1573,10 +1580,8 @@ const SearchScreen = ({ navigation, route }) => {
           listings.length > 0
             ? listings.reduce((a, b) => (a.price < b.price ? a : b)).platform
             : "",
-        image_url:
-          first.image_url ||
-          uniqueListings.find((listing) => listing.image_url)?.image_url ||
-          "",
+        image_url: first.image_url || uniqueImages[0] || "",
+        imageCandidates: uniqueImages,
       };
     });
 
@@ -1670,14 +1675,6 @@ const SearchScreen = ({ navigation, route }) => {
     [handleProduct],
   );
 
-  const getResultItemLayout = useCallback(
-    (_, index) => ({
-      length: RESULT_CARD_HEIGHT,
-      offset: RESULT_CARD_HEIGHT * index,
-      index,
-    }),
-    [],
-  );
 
   const renderEmpty = () => {
     if (loading) return null;
@@ -1897,11 +1894,11 @@ const SearchScreen = ({ navigation, route }) => {
         data={results}
         renderItem={renderProductItem}
         keyExtractor={(item) => String(item.id)}
-        getItemLayout={results.length > 0 ? getResultItemLayout : undefined}
-        initialNumToRender={6}
-        maxToRenderPerBatch={8}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
         windowSize={5}
-        removeClippedSubviews={results.length > 0}
+        updateCellsBatchingPeriod={100}
+        removeClippedSubviews={false}
         contentContainerStyle={styles.list}
         ListHeaderComponent={renderSearchProgress}
         ListEmptyComponent={renderEmpty}
