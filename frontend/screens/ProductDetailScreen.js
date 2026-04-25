@@ -12,6 +12,10 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import { API_URL } from "../config/api";
+import { buildPlatformSearchUrl } from "../config/utils";
 import PlatformRow from "../components/PlatformRow";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 import * as Haptics from "expo-haptics";
@@ -186,33 +190,13 @@ const normalizeListingPrice = (listing) => {
 };
 
 const ProductDetailScreen = ({ route, navigation }) => {
+  const { user } = React.useContext(AuthContext);
   const { product } = route.params || {};
   const [saved, setSaved] = useState(false);
+  const [wishlistId, setWishlistId] = useState(null);
+  const [checkingWishlist, setCheckingWishlist] = useState(true);
 
   const heartScale = React.useRef(new Animated.Value(1)).current;
-
-  const toggleSave = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const willSave = !saved;
-    setSaved(willSave);
-
-    Animated.sequence([
-      Animated.timing(heartScale, {
-        toValue: 1.3,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.spring(heartScale, {
-        toValue: 1,
-        friction: 3,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    if (willSave) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    }
-  };
 
   const rawListings = product?.listings || [];
 
@@ -247,22 +231,89 @@ const ProductDetailScreen = ({ route, navigation }) => {
       deliveryTime: listing.delivery_time || "",
       deliveryCharge: listing.delivery_charge || 0,
       inStock: listing.in_stock !== false && listing.price > 0,
-      productUrl: listing.product_url || listing.deep_link || "", // Use product_url from DOM scraper
+      productUrl: listing.product_url || listing.deep_link || "",
     };
   });
 
   const available = allPlatforms.filter((p) => p.inStock && p.price > 0);
   const unavailable = allPlatforms.filter((p) => !p.inStock || p.price === 0);
-
-  // Keep original platform order for reference price, but also track best price
   const sorted = [...available, ...unavailable];
-  const displayTitle = pickDisplayTitle(product?.name, sorted);
 
-  // Reference price priority:
-  // 1. Use product.price from original search (if available)
-  // 2. Otherwise use first available platform price
-  // 3. This prevents showing the extreme discounted price as the main price
-  const referencePrice = product?.price || available[0]?.price || 0;
+  const displayTitle = React.useMemo(() => 
+    pickDisplayTitle(product?.name, sorted),
+    [product, sorted]
+  );
+
+  const referencePrice = React.useMemo(() => {
+    return product?.price || available[0]?.price || 0;
+  }, [product, available]);
+
+  React.useEffect(() => {
+    const checkStatus = async () => {
+      if (!user?.id || !displayTitle) return;
+      try {
+        const response = await axios.get(`${API_URL}/wishlist?user_id=${user.id}`);
+        const found = (response.data || []).find(
+          item => item.product_name === displayTitle
+        );
+        if (found) {
+          setSaved(true);
+          setWishlistId(found.id);
+        }
+      } catch (err) {
+        console.error("[ProductDetail] Check wishlist error:", err);
+      } finally {
+        setCheckingWishlist(false);
+      }
+    };
+    checkStatus();
+  }, [user?.id, displayTitle]);
+
+  const toggleSave = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const willSave = !saved;
+    
+    try {
+      if (willSave) {
+        setSaved(true);
+        const response = await axios.post(`${API_URL}/wishlist`, {
+          user_id: user?.id,
+          product_name: displayTitle,
+          best_price: referencePrice,
+          platform: available[0]?.name || "Online",
+          image_url: product?.image_url || "",
+          product_url: available[0]?.productUrl || ""
+        });
+        setWishlistId(response.data.id);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } else {
+        setSaved(false);
+        if (wishlistId) {
+          await axios.delete(`${API_URL}/wishlist/${wishlistId}`);
+          setWishlistId(null);
+        }
+      }
+    } catch (error) {
+      console.error("[ProductDetail] Wishlist error:", error);
+      setSaved(!willSave); // Revert on failure
+      Alert.alert("Error", "Could not update wishlist. Please try again.");
+    }
+
+    Animated.sequence([
+      Animated.timing(heartScale, {
+        toValue: 1.3,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.spring(heartScale, {
+        toValue: 1,
+        friction: 3,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+
 
   // Find best (cheapest) price for comparison
   const pricesSorted = [...available].sort((a, b) => a.price - b.price);
@@ -506,21 +557,6 @@ const buildAndroidIntentUrl = (webUrl, packageName) => {
   }
 };
 
-const buildPlatformSearchUrl = (platformName, query) => {
-  const q = encodeURIComponent(String(query || "").trim());
-  if (!q) return "";
-
-  if (platformName.includes("blinkit")) return `https://blinkit.com/s/?q=${q}`;
-  if (platformName.includes("zepto"))
-    return `https://www.zepto.com/search?query=${q}`;
-  if (platformName.includes("bigbasket"))
-    return `https://www.bigbasket.com/ps/?q=${q}`;
-  if (platformName.includes("amazon"))
-    return `https://www.amazon.in/s?k=${q}`;
-  if (platformName.includes("flipkart"))
-    return `https://www.flipkart.com/search?q=${q}`;
-  return "";
-};
 
 const styles = StyleSheet.create({
   container: {

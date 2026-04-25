@@ -60,6 +60,11 @@ export const AuthProvider = ({ children }) => {
       await tokenStorage.setItem("userToken", token);
       await tokenStorage.setItem("userData", JSON.stringify(userData));
     } catch (e) {
+      console.log("[Auth] Login Error:", {
+        status: e?.response?.status,
+        data: e?.response?.data,
+        message: e?.message
+      });
       const statusCode = e?.response?.status;
       const serverError = e?.response?.data?.error;
 
@@ -71,7 +76,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         Alert.alert(
           "Login failed",
-          serverError || "Unable to sign in right now. Please try again.",
+          serverError || `Unable to sign in (Error ${statusCode || 'Network'}).`,
         );
       }
     } finally {
@@ -101,6 +106,11 @@ export const AuthProvider = ({ children }) => {
         "Please sign in with your new account.",
       );
     } catch (e) {
+      console.log("[Auth] Registration Error:", {
+        status: e?.response?.status,
+        data: e?.response?.data,
+        message: e?.message
+      });
       const statusCode = e?.response?.status;
       const serverError = e?.response?.data?.error;
 
@@ -112,7 +122,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         Alert.alert(
           "Registration failed",
-          serverError || "Unable to create account right now.",
+          serverError || `Unable to create account (Error ${statusCode || 'Network'}).`,
         );
       }
     } finally {
