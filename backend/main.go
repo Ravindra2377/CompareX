@@ -207,8 +207,9 @@ func startSearchWorker(s *scraper.Service) {
 
 		// Save results to SearchHistory for SQL testing
 		history := models.SearchHistory{
-			Query:     req.Query,
-			CreatedAt: time.Now(),
+			Query:           req.Query,
+			SearchRequestID: req.ID,
+			CreatedAt:       time.Now(),
 		}
 
 		totalListings := 0

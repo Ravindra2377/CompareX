@@ -12,7 +12,8 @@ type SearchHistory struct {
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
-	UserID        uint           `gorm:"index;not null" json:"user_id"`
+	UserID        uint           `gorm:"index" json:"user_id"`
+	SearchRequestID uint         `gorm:"index" json:"search_request_id,omitempty"`
 	Query         string         `gorm:"not null;size:255" json:"query"`
 	ResultCount   int            `json:"result_count"`           // Total products found
 	BestPrice     float64        `json:"best_price,omitempty"`   // Lowest price across platforms
