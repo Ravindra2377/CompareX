@@ -7,6 +7,7 @@ import (
 	"comparez/scraper"
 	"comparez/search"
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
