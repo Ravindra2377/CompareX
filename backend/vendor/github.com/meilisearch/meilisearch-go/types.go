@@ -14,11 +14,69 @@ const (
 	nullBody                 = "null"
 )
 
+type SearchRulesRequest struct {
+	Description string      `json:"description,omitempty"`
+	Priority    *int        `json:"priority,omitempty"`
+	Active      *bool       `json:"active,omitempty"`
+	Conditions  []Condition `json:"conditions,omitempty"`
+	Actions     []Action    `json:"actions,omitempty"`
+}
+
+type SearchRulesResults struct {
+	Results []SearchRule `json:"results"`
+	Offset  int64        `json:"offset"`
+	Limit   int64        `json:"limit"`
+	Total   int64        `json:"total"`
+}
+
+type SearchRulesParams struct {
+	Offset int64              `json:"offset"`
+	Limit  int64              `json:"limit"`
+	Filter *SearchRulesFilter `json:"filter,omitempty"`
+}
+
+type SearchRulesFilter struct {
+	AttributePatterns []string `json:"attributePatterns,omitempty"`
+	Active            *bool    `json:"active,omitempty"`
+}
+
+type SearchRule struct {
+	Uid         string      `json:"uid"`
+	Description string      `json:"description"`
+	Priority    int         `json:"priority"`
+	Active      bool        `json:"active"`
+	Conditions  []Condition `json:"conditions"`
+	Actions     []Action    `json:"actions"`
+}
+
+type Condition struct {
+	Scope   string     `json:"scope"`
+	IsEmpty *bool      `json:"isEmpty,omitempty"`
+	Start   *time.Time `json:"start,omitempty"`
+	End     *time.Time `json:"end,omitempty"`
+}
+
+type Action struct {
+	Selector Selector  `json:"selector"`
+	Action   ActionDef `json:"action"`
+}
+
+type Selector struct {
+	IndexUid string `json:"indexUid"`
+	ID       string `json:"id,omitempty"`
+}
+
+type ActionDef struct {
+	Type     string `json:"type"`
+	Position int    `json:"position"`
+}
+
 // Network represents the Meilisearch network configuration.
 type Network struct {
 	Self    string            `json:"self,omitempty"`
 	Leader  string            `json:"leader,omitempty"`
 	Remotes map[string]Remote `json:"remotes,omitempty"`
+	Shards  map[string]Shard  `json:"shards,omitempty"`
 	Version string            `json:"version,omitempty"`
 }
 
@@ -29,14 +87,20 @@ type Remote struct {
 	WriteAPIKey  string `json:"writeApiKey"`
 }
 
+// Shard represents a shard in the network
+type Shard struct {
+	Remotes []string `json:"remotes"`
+}
+
 // UpdateNetworkRequest represents the Meilisearch network configuration update without leader.
 // Each field is wrapped in an Opt so it can be explicitly included,
 // set to JSON null, or omitted entirely.
 type UpdateNetworkRequest struct {
-	Self    Opt[string]                       `json:"self,omitempty"`
-	Leader  Opt[string]                       `json:"leader,omitempty"`
-	Remotes Opt[map[string]Opt[UpdateRemote]] `json:"remotes,omitempty"`
-	Version Opt[string]                       `json:"version,omitempty"`
+	Self    Opt[string]                            `json:"self,omitempty"`
+	Leader  Opt[string]                            `json:"leader,omitempty"`
+	Remotes Opt[map[string]Opt[UpdateRemote]]      `json:"remotes,omitempty"`
+	Shards  Opt[map[string]Opt[UpdateRemoteShard]] `json:"shards,omitempty"` // FIXED
+	Version Opt[string]                            `json:"version,omitempty"`
 }
 
 func (n UpdateNetworkRequest) MarshalJSON() ([]byte, error) {
@@ -58,6 +122,12 @@ func (n UpdateNetworkRequest) MarshalJSON() ([]byte, error) {
 		m["leader"] = n.Leader.Value
 	} else if n.Leader.Null() {
 		m["leader"] = nil
+	}
+
+	if n.Shards.Valid() {
+		m["shards"] = n.Shards.Value
+	} else if n.Shards.Null() {
+		m["shards"] = nil
 	}
 
 	if n.Version.Valid() {
@@ -97,6 +167,37 @@ func (r UpdateRemote) MarshalJSON() ([]byte, error) {
 		m["writeApiKey"] = r.WriteAPIKey.Value
 	} else if r.WriteAPIKey.Null() {
 		m["writeApiKey"] = nil
+	}
+
+	return json.Marshal(m)
+}
+
+// UpdateRemoteShard represents a shard update request
+type UpdateRemoteShard struct {
+	Remotes       Opt[[]string] `json:"remotes,omitempty"`
+	AddRemotes    Opt[[]string] `json:"addRemotes,omitempty"`
+	RemoveRemotes Opt[[]string] `json:"removeRemotes,omitempty"`
+}
+
+func (u UpdateRemoteShard) MarshalJSON() ([]byte, error) {
+	m := make(map[string]any)
+
+	if u.Remotes.Valid() {
+		m["remotes"] = u.Remotes.Value
+	} else if u.Remotes.Null() {
+		m["remotes"] = nil
+	}
+
+	if u.AddRemotes.Valid() {
+		m["addRemotes"] = u.AddRemotes.Value
+	} else if u.AddRemotes.Null() {
+		m["addRemotes"] = nil
+	}
+
+	if u.RemoveRemotes.Valid() {
+		m["removeRemotes"] = u.RemoveRemotes.Value
+	} else if u.RemoveRemotes.Null() {
+		m["removeRemotes"] = nil
 	}
 
 	return json.Marshal(m)
@@ -300,21 +401,27 @@ type Version struct {
 	PkgVersion string `json:"pkgVersion"`
 }
 
+type StatsParams struct {
+	ShowInternalDatabaseSizes bool   `json:"showInternalDatabaseSizes,omitempty"`
+	SizeFormat                string `json:"sizeFormat,omitempty"` // human, raw
+}
+
 // StatsIndex is the type that represent the stats of an index in meilisearch
 type StatsIndex struct {
 	NumberOfDocuments         int64            `json:"numberOfDocuments"`
 	IsIndexing                bool             `json:"isIndexing"`
 	FieldDistribution         map[string]int64 `json:"fieldDistribution"`
-	RawDocumentDbSize         int64            `json:"rawDocumentDbSize"`
-	AvgDocumentSize           int64            `json:"avgDocumentSize"`
+	RawDocumentDbSize         any              `json:"rawDocumentDbSize"`
+	AvgDocumentSize           any              `json:"avgDocumentSize"`
 	NumberOfEmbeddedDocuments int64            `json:"numberOfEmbeddedDocuments"`
 	NumberOfEmbeddings        int64            `json:"numberOfEmbeddings"`
+	InternalDatabaseSizes     map[string]any   `json:"internalDatabaseSizes"`
 }
 
 // Stats is the type that represent all stats
 type Stats struct {
-	DatabaseSize     int64                 `json:"databaseSize"`
-	UsedDatabaseSize int64                 `json:"usedDatabaseSize"`
+	DatabaseSize     any                   `json:"databaseSize"`
+	UsedDatabaseSize any                   `json:"usedDatabaseSize"`
 	LastUpdate       time.Time             `json:"lastUpdate"`
 	Indexes          map[string]StatsIndex `json:"indexes"`
 }
@@ -542,7 +649,7 @@ type SearchRequest struct {
 	Facets                  []string                 `json:"facets,omitempty"`
 	Sort                    []string                 `json:"sort,omitempty"`
 	Vector                  []float32                `json:"vector,omitempty"`
-	HitsPerPage             int64                    `json:"hitsPerPage,omitempty"`
+	HitsPerPage             *int64                   `json:"hitsPerPage,omitempty"`
 	Page                    int64                    `json:"page,omitempty"`
 	IndexUID                string                   `json:"indexUid,omitempty"`
 	Query                   string                   `json:"q"`
@@ -575,6 +682,7 @@ type MultiSearchFederation struct {
 	Limit         int64                             `json:"limit,omitempty"`
 	FacetsByIndex map[string][]string               `json:"facetsByIndex,omitempty"`
 	MergeFacets   *MultiSearchFederationMergeFacets `json:"mergeFacets,omitempty"`
+	Distinct      string                            `json:"distinct,omitempty"`
 }
 
 type MultiSearchFederationMergeFacets struct {
@@ -726,6 +834,8 @@ type ExperimentalFeaturesBase struct {
 	CompositeEmbedders      *bool `json:"compositeEmbedders,omitempty"`
 	ChatCompletions         *bool `json:"chatCompletions,omitempty"`
 	MultiModal              *bool `json:"multimodal,omitempty"`
+	DynamicSearchRules      *bool `json:"dynamicSearchRules,omitempty"`
+	GetTaskDocumentsRoute   *bool `json:"getTaskDocumentsRoute,omitempty"`
 }
 
 type ExperimentalFeaturesResult struct {
@@ -737,6 +847,8 @@ type ExperimentalFeaturesResult struct {
 	CompositeEmbedders      bool `json:"compositeEmbedders"`
 	ChatCompletions         bool `json:"chatCompletions"`
 	MultiModal              bool `json:"multimodal,omitempty"`
+	DynamicSearchRules      bool `json:"dynamicSearchRules"`
+	GetTaskDocumentsRoute   bool `json:"getTaskDocumentsRoute"`
 }
 
 type SwapIndexesParams struct {
