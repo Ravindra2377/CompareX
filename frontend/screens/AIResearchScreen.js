@@ -21,6 +21,7 @@ import { WishlistContext } from "../context/WishlistContext";
 import { FONTS, SPACING, RADIUS, SHADOWS } from "../config/theme";
 import GroqService from "../services/GroqService";
 import LocationService from "../services/LocationService";
+import BrandHeader from "../components/BrandHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 
@@ -209,40 +210,23 @@ const AIResearchScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: themeColors.paper }]}>
-      {/* ── Header ── */}
-      <View style={[styles.header, { borderBottomColor: themeColors.line, backgroundColor: themeColors.card }]}>
-        <TouchableOpacity
-          style={[styles.headerButton, { borderColor: themeColors.line }]}
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        >
-          <Ionicons name="arrow-back" size={20} color={themeColors.ink} />
-        </TouchableOpacity>
-
-        <View style={styles.headerTitleWrap}>
-          <Text style={[FONTS.editorialBold, { fontSize: 17, color: themeColors.ink }]} numberOfLines={1}>
-            AI Research Canvas
-          </Text>
-          <View style={styles.headerMetaRow}>
-            <View style={[styles.modeIndicator, { backgroundColor: `${themeColors.primary}20` }]}>
-              <Ionicons name="sparkles" size={10} color={themeColors.primary} />
-              <Text style={[FONTS.monoBold, { fontSize: 9, color: themeColors.primary, textTransform: "uppercase" }]}>
-                {activeMode}
-              </Text>
-            </View>
-            <Text style={[FONTS.uiBody, { fontSize: 11, color: themeColors.inkFaint, marginLeft: 6 }]}>
-              {locationInfo.city}
-            </Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          style={[styles.headerButton, { borderColor: themeColors.line }]}
-          onPress={() => navigation.navigate("Library")}
-        >
-          <Ionicons name="bookmark-outline" size={18} color={themeColors.ink} />
-        </TouchableOpacity>
-      </View>
+      {/* ── CompareZ Brand Header ── */}
+      <BrandHeader
+        city={locationInfo.city}
+        pincode={locationInfo.pincode}
+        editorial
+        showBack={Boolean(navigation.canGoBack && navigation.canGoBack())}
+        onBackPress={() => navigation.goBack()}
+        rightComponent={
+          <TouchableOpacity
+            style={[styles.headerButton, { borderColor: themeColors.line, backgroundColor: themeColors.card }]}
+            onPress={() => navigation.navigate("Library")}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name="bookmark-outline" size={18} color={themeColors.ink} />
+          </TouchableOpacity>
+        }
+      />
 
       {/* ── Mode Switcher Pills ── */}
       <View style={[styles.modesBar, { borderBottomColor: themeColors.line }]}>
