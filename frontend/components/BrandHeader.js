@@ -15,6 +15,9 @@ export default function BrandHeader({
   onLocationSave,
   editorial = false,
   backgroundColor,
+  showBack = false,
+  onBackPress,
+  rightComponent,
 }) {
   const { themeColors } = useTheme();
   const [city, setCity] = useState("");
@@ -48,6 +51,9 @@ export default function BrandHeader({
     <>
       <ScreenHeader
         leftAlign
+        showBack={showBack}
+        onBackPress={onBackPress}
+        rightComponent={rightComponent}
         backgroundColor={backgroundColor || themeColors.paper}
         style={{ borderBottomWidth: 0 }}
         centerComponent={

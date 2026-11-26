@@ -27,8 +27,8 @@ describe("Test Environment Setup", () => {
 
   it("should properly mock modules", () => {
     // Verify React Native is mocked
-    expect(require("react-native").View).toBe("View");
-    expect(require("react-native").Text).toBe("Text");
+    expect(require("react-native").View).toBeDefined();
+    expect(require("react-native").Text).toBeDefined();
   });
 });
 

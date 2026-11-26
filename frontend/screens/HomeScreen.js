@@ -53,6 +53,49 @@ const getGreeting = () => {
   return "Good evening";
 };
 
+const INSPIRATION_CARDS = [
+  {
+    id: "1",
+    tag: "PRICE COMPARE",
+    tagColor: "#059669",
+    icon: "pricetags-outline",
+    title: "Amul vs Nandini Milk",
+    subtitle: "Compare Blinkit 10m vs Zepto vs BigBasket",
+    query: "Compare Amul Gold Milk and Nandini GoodLife prices across platforms",
+    mode: "compare",
+  },
+  {
+    id: "2",
+    tag: "HEALTH EVIDENCE",
+    tagColor: "#D97706",
+    icon: "globe-outline",
+    title: "Cold-Pressed Mustard Oil",
+    subtitle: "Health benefits, purity checks & verified sources",
+    query: "Is cold-pressed mustard oil healthier? Evidence and fssai norms",
+    mode: "research",
+  },
+  {
+    id: "3",
+    tag: "NUTRITION PLAN",
+    tagColor: "#16845B",
+    icon: "flame-outline",
+    title: "Protein Basket under ₹250",
+    subtitle: "Cheapest vegetarian protein combos in India",
+    query: "High protein vegetarian Indian grocery basket plan under 250 rupees per day",
+    mode: "shopping",
+  },
+  {
+    id: "4",
+    tag: "TECH COMPARISON",
+    tagColor: "#3B82F6",
+    icon: "speedometer-outline",
+    title: "iPhone 16 Delivery Check",
+    subtitle: "Blinkit 10-min instant vs Amazon next-day price",
+    query: "iPhone 16 128gb price compare blinkit amazon",
+    mode: "compare",
+  },
+];
+
 const HomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const { wishlist } = useContext(WishlistContext);
@@ -157,80 +200,16 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  const sendPrompt = async (value) => {
+  const sendPrompt = (value, targetMode = "all") => {
     const text = (typeof value === "string" ? value : prompt).trim();
-    if (!text || thinking) return;
+    if (!text) return;
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      text,
-    };
-    setMessages((current) => [...current, userMessage]);
     setPrompt("");
-    setThinking(true);
-
-    const nextHistory = [
-      ...historyRef.current,
-      { role: "user", content: text },
-    ].slice(-10);
-    historyRef.current = nextHistory;
-
-    try {
-      const requestedPlatforms = getMentionedPlatforms(text);
-      const reply = await GroqService.copilotChat(nextHistory, {
-        screen: "Home",
-        city: currentCity,
-        pincode: currentPincode,
-        wishlistCount: wishlist.length,
-        wishlistItems: wishlist
-          .map((item) => item.name || item.title)
-          .filter(Boolean)
-          .slice(0, 6),
-        recentSearches,
-        requestedPlatforms,
-      });
-
-      const searches = [];
-      const searchRegex = /\[SUGGEST_SEARCH:\s*(.*?)\]/g;
-      let match;
-      while ((match = searchRegex.exec(reply)) !== null) {
-        if (match[1]) searches.push(match[1].trim());
-      }
-      const cleanedReply = reply
-        .replace(/\[SHOW_CART\]/g, "")
-        .replace(searchRegex, "")
-        .trim();
-
-      historyRef.current = [
-        ...nextHistory,
-        { role: "assistant", content: cleanedReply },
-      ];
-      setMessages((current) => [
-        ...current,
-        {
-          id: `assistant-${Date.now()}`,
-          role: "assistant",
-          text: cleanedReply,
-          searches: searches.length > 0 ? searches : [text],
-          usesRequestAsSearch: searches.length === 0,
-          requestedPlatforms,
-        },
-      ]);
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    } catch {
-      setMessages((current) => [
-        ...current,
-        {
-          id: `assistant-${Date.now()}`,
-          role: "assistant",
-          text: "I couldn’t connect just now. You can still open Search, Meal Cart, or Wishlist below.",
-        },
-      ]);
-    } finally {
-      setThinking(false);
-    }
+    navigation.navigate("AIResearch", {
+      initialQuery: text,
+      mode: targetMode,
+    });
   };
 
   const firstName =
@@ -320,6 +299,22 @@ const HomeScreen = ({ navigation }) => {
             >
               {getGreeting()}, {firstName}
             </Animated.Text>
+
+            <Text
+              style={[
+                FONTS.editorialBold,
+                {
+                  fontSize: 26,
+                  color: themeColors.ink,
+                  marginTop: 4,
+                  marginBottom: 14,
+                  lineHeight: 32,
+                },
+              ]}
+            >
+              What would you like to explore or compare today?
+            </Text>
+
             <Animated.View
               style={{
                 opacity: searchEntrance,
@@ -351,9 +346,15 @@ const HomeScreen = ({ navigation }) => {
                 ]}
                 contentStyle={styles.composerContent}
               >
+                <Ionicons
+                  name="sparkles"
+                  size={18}
+                  color={themeColors.primary}
+                  style={{ marginLeft: 6, marginRight: 2 }}
+                />
                 <TextInput
                   style={[styles.composerInput, { color: themeColors.ink }]}
-                  placeholder="Describe what you want to buy or save on..."
+                  placeholder="Ask anything, research web, or compare prices..."
                   placeholderTextColor={themeColors.inkFaint}
                   value={prompt}
                   onChangeText={setPrompt}
@@ -367,27 +368,140 @@ const HomeScreen = ({ navigation }) => {
                     styles.composerSend,
                     {
                       backgroundColor: prompt.trim()
-                        ? "rgba(209,241,228,0.82)"
+                        ? themeColors.primary
                         : "rgba(255,255,255,0.34)",
                       borderColor: "rgba(255,255,255,0.78)",
                     },
                   ]}
                   onPress={() => sendPrompt()}
-                  disabled={!prompt.trim() || thinking}
+                  disabled={!prompt.trim()}
                   activeOpacity={0.8}
                 >
                   <Ionicons
                     name="arrow-forward"
                     size={20}
-                    color={
-                      prompt.trim()
-                        ? themeColors.primary
-                        : themeColors.inkFaint
-                    }
+                    color={prompt.trim() ? "#FFFFFF" : themeColors.inkFaint}
                   />
                 </TouchableOpacity>
               </LiquidGlass>
             </Animated.View>
+
+            {/* Inspiration Research & Comparison Cards */}
+            <View style={{ marginTop: 18, marginBottom: 8 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+              >
+                <Text
+                  style={[
+                    FONTS.monoBold,
+                    {
+                      fontSize: 11,
+                      color: themeColors.inkSoft,
+                      letterSpacing: 0.5,
+                    },
+                  ]}
+                >
+                  DISCOVER & RESEARCH
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Discover")}
+                >
+                  <Text
+                    style={[
+                      FONTS.uiBodyBold,
+                      { fontSize: 12, color: themeColors.primary },
+                    ]}
+                  >
+                    Explore all →
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginHorizontal: -4 }}
+              >
+                {INSPIRATION_CARDS.map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={{
+                      width: 220,
+                      padding: 14,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      backgroundColor: themeColors.card,
+                      borderColor: themeColors.line,
+                      marginHorizontal: 4,
+                      ...SHADOWS.sm,
+                    }}
+                    onPress={() => sendPrompt(item.query, item.mode)}
+                    activeOpacity={0.8}
+                  >
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <View
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 12,
+                          backgroundColor: `${item.tagColor}18`,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Ionicons
+                          name={item.icon}
+                          size={12}
+                          color={item.tagColor}
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          FONTS.monoBold,
+                          {
+                            fontSize: 9,
+                            color: item.tagColor,
+                            marginLeft: 6,
+                            letterSpacing: 0.5,
+                          },
+                        ]}
+                      >
+                        {item.tag}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        FONTS.uiBodyBold,
+                        { fontSize: 14, color: themeColors.ink, marginTop: 8 },
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={[
+                        FONTS.uiBody,
+                        {
+                          fontSize: 11,
+                          color: themeColors.inkSoft,
+                          marginTop: 4,
+                          lineHeight: 16,
+                        },
+                      ]}
+                      numberOfLines={2}
+                    >
+                      {item.subtitle}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
 
             {messages.length === 0 ? (
               <>

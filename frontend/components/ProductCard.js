@@ -62,8 +62,10 @@ const ProductCard = ({
     isPrimaryBestValue = false,
   } = product;
 
-  const { toggleWishlist, isLiked } = useContext(WishlistContext);
-  const liked = isLiked(product.id);
+  const wishlist = useContext(WishlistContext) || {};
+  const toggleWishlist = wishlist.toggleWishlist || (() => {});
+  const isLiked = wishlist.isLiked || (() => false);
+  const liked = isLiked(product?.id);
 
   const [imageError, setImageError] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);

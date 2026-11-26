@@ -52,4 +52,15 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export const useTheme = () => useContext(ThemeContext);
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    return {
+      themeColors: lightColors,
+      isDark: false,
+      themeMode: "light",
+      toggleTheme: () => {},
+    };
+  }
+  return context;
+};

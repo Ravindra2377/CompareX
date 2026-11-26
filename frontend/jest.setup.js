@@ -1,48 +1,58 @@
-import "@testing-library/jest-native/extend-expect";
+global.__DEV__ = true;
+process.env.EXPO_OS = "ios";
 
-// Mock React Native modules
-jest.mock("react-native", () => {
-  const React = require("react");
-  const RealRN = jest.requireActual("react-native");
-
-  const MockComponent = (name) => {
-    return (props) => React.createElement(name, props, props.children);
+if (!globalThis.expo) {
+  globalThis.expo = {
+    EventEmitter: class EventEmitter {
+      addListener() { return { remove: () => {} }; }
+      removeListener() {}
+      emit() {}
+    },
+    modules: {},
   };
+}
 
-  return {
-    ...RealRN,
-    View: MockComponent("View"),
-    Text: MockComponent("Text"),
-    TextInput: MockComponent("TextInput"),
-    ScrollView: MockComponent("ScrollView"),
-    FlatList: MockComponent("FlatList"),
-    TouchableOpacity: MockComponent("TouchableOpacity"),
-    TouchableWithoutFeedback: MockComponent("TouchableWithoutFeedback"),
-    Image: MockComponent("Image"),
-    Modal: MockComponent("Modal"),
-    Button: MockComponent("Button"),
-    StatusBar: MockComponent("StatusBar"),
-    ActivityIndicator: MockComponent("ActivityIndicator"),
-    StyleSheet: { 
-      create: (obj) => obj,
-      flatten: (obj) => obj 
-    },
-    Platform: { 
-      OS: "ios",
-      select: (dict) => dict.ios || dict.default
-    },
-    Alert: { alert: jest.fn() },
-    Dimensions: {
-      get: () => ({ width: 375, height: 812 }),
-    },
-    AsyncStorage: {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn(),
-      clear: jest.fn(),
-    },
-  };
-});
+require("react-native/jest/setup");
+require("@testing-library/jest-native/extend-expect");
+
+jest.mock("expo-font", () => ({
+  useFonts: () => [true, null],
+  isLoaded: () => true,
+  loadAsync: jest.fn().mockResolvedValue(true),
+}));
+
+jest.mock("expo-location", () => ({
+  requestForegroundPermissionsAsync: jest.fn().mockResolvedValue({ status: "granted" }),
+  getCurrentPositionAsync: jest.fn().mockResolvedValue({
+    coords: { latitude: 12.9716, longitude: 77.5946 },
+  }),
+  reverseGeocodeAsync: jest.fn().mockResolvedValue([
+    { city: "Bengaluru", postalCode: "560034", formattedAddress: "Bengaluru, Karnataka 560034" },
+  ]),
+}));
+
+jest.mock("expo-asset", () => ({
+  Asset: {
+    loadAsync: jest.fn().mockResolvedValue([]),
+    fromModule: jest.fn(() => ({ uri: "test-uri" })),
+  },
+}));
+
+jest.mock("expo-audio", () => ({
+  useAudioRecorder: () => ({
+    isRecording: false,
+    record: jest.fn(),
+    stop: jest.fn(),
+  }),
+  AudioModule: {
+    requestRecordingPermissionsAsync: jest.fn().mockResolvedValue({ status: "granted" }),
+  },
+  RecordingPresets: {
+    HIGH_QUALITY: {},
+  },
+}));
+
+// Standard React Native mocks are provided by react-native/jest/setup above
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
@@ -119,6 +129,43 @@ jest.mock("react-native-safe-area-context", () => ({
   SafeAreaView: "SafeAreaView",
   useSafeAreaInsets: () => ({ top: 0, right: 0, bottom: 0, left: 0 }),
 }));
+
+jest.mock("react-native-svg", () => {
+  const React = require("react");
+  const MockSvg = (props) => React.createElement("Svg", props, props.children);
+  const MockComponent = (name) => (props) => React.createElement(name, props, props.children);
+  return {
+    __esModule: true,
+    default: MockSvg,
+    Svg: MockSvg,
+    Path: MockComponent("Path"),
+    Circle: MockComponent("Circle"),
+    Line: MockComponent("Line"),
+    Polyline: MockComponent("Polyline"),
+    Polygon: MockComponent("Polygon"),
+    Rect: MockComponent("Rect"),
+    G: MockComponent("G"),
+    Text: MockComponent("Text"),
+    Defs: MockComponent("Defs"),
+    LinearGradient: MockComponent("LinearGradient"),
+    Stop: MockComponent("Stop"),
+    ClipPath: MockComponent("ClipPath"),
+  };
+});
+
+jest.mock("expo-image", () => {
+  const React = require("react");
+  return {
+    Image: (props) => React.createElement("Image", props, props.children),
+  };
+});
+
+jest.mock("expo-status-bar", () => {
+  const React = require("react");
+  return {
+    StatusBar: (props) => React.createElement("StatusBar", props, null),
+  };
+});
 
 // Global fetch mock
 global.fetch = jest.fn();

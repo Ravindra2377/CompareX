@@ -28,6 +28,9 @@ import RegisterScreen from "./screens/RegisterScreen";
 
 // Main Screens
 import HomeScreen from "./screens/HomeScreen";
+import DiscoverScreen from "./screens/DiscoverScreen";
+import AIResearchScreen from "./screens/AIResearchScreen";
+import LibraryScreen from "./screens/LibraryScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProductDetailScreen from "./screens/ProductDetailScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -65,9 +68,9 @@ const MainTabs = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="MealPlanner" component={MealPlannerScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Likes" component={WishlistScreen} />
+      <Tab.Screen name="Discover" component={DiscoverScreen} />
+      <Tab.Screen name="Research" component={AIResearchScreen} />
+      <Tab.Screen name="Library" component={LibraryScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -159,6 +162,21 @@ const AppNav = () => {
             <>
               <Stack.Screen name="MainTabs" component={MainTabs} />
               <Stack.Screen
+                name="AIResearch"
+                component={AIResearchScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="Discover"
+                component={DiscoverScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="Library"
+                component={LibraryScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
                 name="Search"
                 component={SearchScreen}
                 options={{ animation: "slide_from_right" }}
@@ -192,6 +210,11 @@ const AppNav = () => {
                 name="MealPlanner"
                 component={MealPlannerScreen}
                 options={{ animation: "slide_from_bottom", headerShown: false }}
+              />
+              <Stack.Screen
+                name="Likes"
+                component={WishlistScreen}
+                options={{ animation: "slide_from_right" }}
               />
             </>
           ) : (

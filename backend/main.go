@@ -171,6 +171,12 @@ func main() {
 	protected.GET("/compare", handlers.CompareProducts)
 	protected.POST("/tokens", handlers.BulkConnectAccounts, middleware.BodyLimit("1M"))
 
+	// AI Assistant & Research Platform Routes
+	e.POST("/ai/research", handlers.AIResearch, aiLimiter, middleware.BodyLimit("64K"))
+	protected.GET("/ai/conversations", handlers.ListConversations)
+	protected.GET("/ai/conversations/:id", handlers.GetConversation)
+	protected.DELETE("/ai/conversations/:id", handlers.DeleteConversation)
+
 	// AI Proxy Routes (Groq key stays server-side)
 	protected.POST("/ai/chat", handlers.AIChat, aiLimiter, middleware.BodyLimit("256K"))
 	protected.POST("/ai/transcribe", handlers.AITranscribe, aiLimiter, middleware.BodyLimit("26M"))
