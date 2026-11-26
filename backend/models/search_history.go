@@ -20,3 +20,16 @@ type SearchHistory struct {
 	PlatformsUsed   string             `bson:"platforms_used,omitempty" json:"platforms_used,omitempty"`
 	Listings        []PlatformListing  `bson:"listings,omitempty" json:"listings,omitempty"`
 }
+
+// SearchHistorySQL is the relational representation of search history for PostgreSQL.
+type SearchHistorySQL struct {
+	ID            uint      `gorm:"primaryKey" json:"id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UserID        string    `gorm:"index;not null" json:"user_id"`
+	Query         string    `gorm:"size:255;not null" json:"query"`
+	ResultCount   int       `json:"result_count"`
+	BestPrice     float64   `json:"best_price"`
+	BestPlatform  string    `gorm:"size:64" json:"best_platform"`
+	PlatformsUsed string    `gorm:"size:255" json:"platforms_used"`
+	ListingsJSON  string    `gorm:"type:text" json:"listings_json"`
+}

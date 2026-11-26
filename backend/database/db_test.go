@@ -1,53 +1,72 @@
-//go:build ignore
-
 package database
 
 import (
+	"os"
 	"testing"
+	"time"
 
 	"comparez/models"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
-func TestDatabaseMigration(t *testing.T) {
-	// Use in-memory sqlite for testing
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	assert.NoError(t, err)
-	assert.NotNil(t, db)
+func TestConnectGracefulFallback(t *testing.T) {
+	// With no database configured, Connect should not panic
+	os.Setenv("DATABASE_URL", "")
+	os.Setenv("POSTGRES_URL", "")
+	os.Setenv("MONGO_URI", "")
+	os.Setenv("REDIS_ADDR", "localhost:59999") // unreachable port
 
-	// Test migration for all models
-	err = db.AutoMigrate(&models.User{})
-	assert.NoError(t, err)
-
-	// Verify table exists
-	assert.True(t, db.Migrator().HasTable(&models.User{}))
+	assert.NotPanics(t, func() {
+		Connect()
+	})
 }
 
-func TestDatabaseOperations(t *testing.T) {
-	db, _ := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	db.AutoMigrate(&models.User{})
+func TestRelationalModelsInstantiation(t *testing.T) {
+	conv := models.Conversation{
+		UserID:    "user_123",
+		Title:     "iPhone 16 Best Price",
+		Mode:      "compare",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+	assert.Equal(t, "user_123", conv.UserID)
+	assert.Equal(t, "compare", conv.Mode)
 
-	// Test Create
-	user := models.User{Email: "test@example.com", Password: "hashedpassword"}
-	result := db.Create(&user)
-	assert.NoError(t, result.Error)
-	assert.NotZero(t, user.ID)
+	msg := models.Message{
+		ConversationID: 1,
+		Role:           "assistant",
+		Content:        "Best price found on Blinkit [1].",
+	}
+	assert.Equal(t, "assistant", msg.Role)
 
-	// Test Read
-	var foundUser models.User
-	result = db.First(&foundUser, user.ID)
-	assert.NoError(t, result.Error)
-	assert.Equal(t, "test@example.com", foundUser.Email)
+	source := models.Source{
+		MessageID: 1,
+		Number:    1,
+		Title:     "Blinkit Store",
+		URL:       "https://blinkit.com/item",
+		Domain:    "blinkit.com",
+	}
+	assert.Equal(t, 1, source.Number)
+	assert.Equal(t, "blinkit.com", source.Domain)
 
-	// Test Update
-	db.Model(&foundUser).Update("Email", "updated@example.com")
-	db.First(&foundUser, user.ID)
-	assert.Equal(t, "updated@example.com", foundUser.Email)
+	comparison := models.ProductComparisonRecord{
+		MessageID:      1,
+		Query:          "Amul Milk",
+		BestPlatform:   "Blinkit",
+		BestPrice:      27.0,
+		ComparisonJSON: `{"platforms":[{"name":"Blinkit","price":27}]}`,
+	}
+	assert.Equal(t, "Blinkit", comparison.BestPlatform)
+	assert.Equal(t, 27.0, comparison.BestPrice)
 
-	// Test Delete
-	db.Delete(&foundUser)
-	result = db.First(&foundUser, user.ID)
-	assert.Error(t, result.Error) // Should be record not found
+	wishlist := models.WishlistItem{
+		UserID:       "user_123",
+		ProductName:  "Amul Taaza Milk 500ml",
+		CurrentPrice: 27,
+		TargetPrice:  25,
+		BestPlatform: "Zepto",
+		IsAlertOn:    true,
+	}
+	assert.Equal(t, "Zepto", wishlist.BestPlatform)
+	assert.True(t, wishlist.IsAlertOn)
 }
