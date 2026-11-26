@@ -96,25 +96,11 @@ const INSPIRATION_CARDS = [
   },
 ];
 
-const getComposerPlaceholder = (mode) => {
-  switch (mode) {
-    case "research":
-      return "Ask any research question with web citations...";
-    case "compare":
-      return "Compare products across Blinkit, Zepto, BB, Amazon...";
-    case "shopping":
-      return "Ask for product recommendations or deals...";
-    default:
-      return "Ask anything, research web, or compare prices...";
-  }
-};
-
 const HomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const { wishlist } = useContext(WishlistContext);
   const { themeColors } = useTheme();
   const [prompt, setPrompt] = useState("");
-  const [selectedMode, setSelectedMode] = useState("all");
   const [messages, setMessages] = useState([]);
   const [thinking, setThinking] = useState(false);
   const [recentSearches, setRecentSearches] = useState([]);
@@ -214,7 +200,7 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  const sendPrompt = (value, targetMode = selectedMode) => {
+  const sendPrompt = (value, targetMode = "all") => {
     const text = (typeof value === "string" ? value : prompt).trim();
     if (!text) return;
 
@@ -329,60 +315,6 @@ const HomeScreen = ({ navigation }) => {
               What would you like to explore or compare today?
             </Text>
 
-            {/* Capability Mode Pills */}
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginBottom: 12 }}
-            >
-              {[
-                { id: "all", label: "All Capabilities", icon: "sparkles" },
-                { id: "research", label: "Web Research", icon: "globe-outline" },
-                { id: "compare", label: "Compare Prices", icon: "pricetags-outline" },
-                { id: "shopping", label: "Buying Advice", icon: "basket-outline" },
-              ].map((m) => {
-                const isSelected = selectedMode === m.id;
-                return (
-                  <TouchableOpacity
-                    key={m.id}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingHorizontal: 12,
-                      paddingVertical: 7,
-                      borderRadius: 16,
-                      borderWidth: 1,
-                      marginRight: 8,
-                      backgroundColor: isSelected ? themeColors.primary : themeColors.card,
-                      borderColor: isSelected ? themeColors.primary : themeColors.line,
-                    }}
-                    onPress={() => {
-                      setSelectedMode(m.id);
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    }}
-                  >
-                    <Ionicons
-                      name={m.icon}
-                      size={13}
-                      color={isSelected ? "#FFFFFF" : themeColors.inkSoft}
-                    />
-                    <Text
-                      style={[
-                        FONTS.uiBodyBold,
-                        {
-                          fontSize: 12,
-                          marginLeft: 5,
-                          color: isSelected ? "#FFFFFF" : themeColors.inkSoft,
-                        },
-                      ]}
-                    >
-                      {m.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-
             <Animated.View
               style={{
                 opacity: searchEntrance,
@@ -422,7 +354,7 @@ const HomeScreen = ({ navigation }) => {
                 />
                 <TextInput
                   style={[styles.composerInput, { color: themeColors.ink }]}
-                  placeholder={getComposerPlaceholder(selectedMode)}
+                  placeholder="Ask anything, research web, or compare prices..."
                   placeholderTextColor={themeColors.inkFaint}
                   value={prompt}
                   onChangeText={setPrompt}
