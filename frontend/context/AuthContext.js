@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       markSessionActive();
       await secureStorage.setItem("userToken", token);
-      await secureStorage.setItem("userData", JSON.stringify(userData));
+      await secureStorage.setItem("userData", JSON.stringify(userData || {}));
     } catch (e) {
       console.log("[Auth] Login Error:", {
         status: e?.response?.status,
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       markSessionActive();
       await secureStorage.setItem("userToken", token);
-      await secureStorage.setItem("userData", JSON.stringify(userData));
+      await secureStorage.setItem("userData", JSON.stringify(userData || {}));
     } catch (e) {
       console.log("[Auth] Registration Error:", {
         status: e?.response?.status,

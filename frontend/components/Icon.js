@@ -3,7 +3,7 @@
 // This component renders pure SVG — no font files needed.
 
 import React from "react";
-import Svg, { Path, Circle, Line, Polyline, Rect, G } from "react-native-svg";
+import Svg, { Path, Circle, Line, Polyline, Polygon, Rect, G } from "react-native-svg";
 
 const Icon = ({ name, size = 24, color = "#000", style }) => {
   const s = size;
@@ -270,6 +270,26 @@ const ICONS = {
   "bell": (c, sw) => <G><Path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" /><Path d="M13.73 21A2 2 0 0 1 10.27 21" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" /></G>,
   "flame": (c, sw) => <Path d="M12 22c-4 0-7-3-7-7 0-3 2-5 4-7l1-1 1 2c.5-1 1.5-3 1.5-5.5 0-.5.5-1 1-.5C16 5 19 9 19 15c0 4-3 7-7 7z" stroke={c} strokeWidth={sw} fill="none" strokeLinejoin="round" />,
   "link": (c, sw) => <G><Path d="M10 13a4.5 4.5 0 006.36 0l3-3a4.5 4.5 0 00-6.36-6.36l-1 1" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" /><Path d="M14 11a4.5 4.5 0 00-6.36 0l-3 3a4.5 4.5 0 006.36 6.36l1-1" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" /></G>,
+
+  // ── AI Platform Icons (CompareZ V2) ──
+  "compass": (c) => <G><Circle cx="12" cy="12" r="10" fill={c} opacity={0.15} /><Circle cx="12" cy="12" r="10" stroke={c} strokeWidth={1.5} fill="none" /><Polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill={c} /></G>,
+  "compass-outline": (c, sw) => <G><Circle cx="12" cy="12" r="10" stroke={c} strokeWidth={sw} fill="none" /><Path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z" stroke={c} strokeWidth={sw} fill="none" strokeLinejoin="round" /></G>,
+
+  "library": (c) => <G><Path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke={c} strokeWidth={2} fill="none" /><Path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill={c} opacity={0.2} /><Path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke={c} strokeWidth={1.5} fill="none" /></G>,
+  "library-outline": (c, sw) => <G><Path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke={c} strokeWidth={sw} fill="none" /><Path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke={c} strokeWidth={sw} fill="none" /></G>,
+  "bookmark": (c) => <Path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill={c} />,
+  "bookmark-outline": (c, sw) => <Path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke={c} strokeWidth={sw} fill="none" strokeLinejoin="round" />,
+
+  "chatbubbles": (c) => <G><Path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill={c} opacity={0.2} /><Path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke={c} strokeWidth={1.5} fill="none" strokeLinejoin="round" /></G>,
+  "chatbubbles-outline": (c, sw) => <Path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke={c} strokeWidth={sw} fill="none" strokeLinejoin="round" />,
+
+  "globe": (c) => <G><Circle cx="12" cy="12" r="10" stroke={c} strokeWidth={1.5} fill="none" /><Line x1="2" y1="12" x2="22" y2="12" stroke={c} strokeWidth={1.5} strokeLinecap="round" /><Path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill={c} opacity={0.2} /><Path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke={c} strokeWidth={1.5} fill="none" /></G>,
+  "globe-outline": (c, sw) => <G><Circle cx="12" cy="12" r="10" stroke={c} strokeWidth={sw} fill="none" /><Line x1="2" y1="12" x2="22" y2="12" stroke={c} strokeWidth={sw} strokeLinecap="round" /><Path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke={c} strokeWidth={sw} fill="none" /></G>,
+
+  "open-outline": (c, sw) => <G><Path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" /><Polyline points="15 3 21 3 21 9" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" /><Line x1="10" y1="14" x2="21" y2="3" stroke={c} strokeWidth={sw} strokeLinecap="round" /></G>,
+  "copy-outline": (c, sw) => <G><Rect x="9" y="9" width="13" height="13" rx="2" stroke={c} strokeWidth={sw} fill="none" strokeLinejoin="round" /><Path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" /></G>,
+  "thumbs-up-outline": (c, sw) => <Path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" />,
+  "thumbs-down-outline": (c, sw) => <Path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" stroke={c} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round" />,
 };
 
 // Also export as default AND as named export so existing `import { Ionicons }` syntax works

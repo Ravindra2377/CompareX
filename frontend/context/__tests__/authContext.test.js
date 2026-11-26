@@ -5,30 +5,33 @@ import axios from "axios";
 import { Text, Button, Platform, Alert } from "react-native";
 
 // Mock axios
-jest.mock("axios");
-
-// Setup for web
-Platform.OS = "web";
-Alert.alert = jest.fn();
-
-// Mock localStorage
-const localStorageMock = (function() {
-  let store = {};
-  return {
-    getItem: jest.fn(key => store[key] || null),
-    setItem: jest.fn((key, value) => { store[key] = value.toString(); }),
-    clear: jest.fn(() => { store = {}; }),
-    removeItem: jest.fn(key => { delete store[key]; }),
+jest.mock("axios", () => {
+  const instance = {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    interceptors: {
+      request: { use: jest.fn(), eject: jest.fn() },
+      response: { use: jest.fn(), eject: jest.fn() },
+    },
+    defaults: { headers: { common: {} } },
   };
-})();
-Object.defineProperty(global, 'localStorage', { value: localStorageMock });
+  instance.create = jest.fn(() => instance);
+  instance.default = instance;
+  return instance;
+});
 
-// Mock SecureStore
-jest.mock("expo-secure-store", () => ({
-  getItemAsync: jest.fn(),
-  setItemAsync: jest.fn(),
-  deleteItemAsync: jest.fn(),
+let mockStorageData = {};
+jest.mock("../../services/secureStorage", () => ({
+  secureStorage: {
+    getItem: jest.fn(async (key) => mockStorageData[key] || null),
+    setItem: jest.fn(async (key, val) => { mockStorageData[key] = val; }),
+    removeItem: jest.fn(async (key) => { delete mockStorageData[key]; }),
+  },
 }));
+
+Alert.alert = jest.fn();
 
 const TestComponent = () => {
   const { login, logout, register, userToken, isLoading } = useContext(AuthContext);
@@ -38,7 +41,7 @@ const TestComponent = () => {
       <Text testID="loading">{isLoading ? "loading" : "idle"}</Text>
       <Button title="Login" onPress={() => login("test@example.com", "password")} testID="login-btn" />
       <Button title="Logout" onPress={() => logout()} testID="logout-btn" />
-      <Button title="Register" onPress={() => register("new@example.com", "password")} testID="register-btn" />
+      <Button title="Register" onPress={() => register("Test User", "new@example.com", "password")} testID="register-btn" />
     </>
   );
 };
@@ -46,7 +49,7 @@ const TestComponent = () => {
 describe("AuthContext", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    localStorage.clear();
+    mockStorageData = {};
   });
 
   it("should initialize with null token", async () => {
@@ -63,7 +66,9 @@ describe("AuthContext", () => {
   });
 
   it("should login successfully", async () => {
-    axios.post.mockResolvedValueOnce({ data: { token: "fake-jwt-token" } });
+    axios.post.mockResolvedValueOnce({
+      data: { token: "fake-jwt-token", user: { id: "1", name: "Test" } },
+    });
 
     const { getByTestId } = render(
       <AuthProvider>
@@ -71,16 +76,20 @@ describe("AuthContext", () => {
       </AuthProvider>
     );
 
+    await waitFor(() => {
+      expect(getByTestId("loading").props.children).toBe("idle");
+    });
+
     fireEvent.press(getByTestId("login-btn"));
 
     await waitFor(() => {
       expect(getByTestId("token").props.children).toBe("fake-jwt-token");
-      expect(localStorage.getItem("userToken")).toBe("fake-jwt-token");
+      expect(mockStorageData["userToken"]).toBe("fake-jwt-token");
     });
   });
 
   it("should logout successfully", async () => {
-    localStorage.setItem("userToken", "fake-jwt-token");
+    mockStorageData["userToken"] = "fake-jwt-token";
     
     const { getByTestId } = render(
       <AuthProvider>
@@ -97,7 +106,7 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(getByTestId("token").children).toEqual([]);
-      expect(localStorage.getItem("userToken")).toBeNull();
+      expect(mockStorageData["userToken"]).toBeUndefined();
     });
   });
 
@@ -112,6 +121,10 @@ describe("AuthContext", () => {
       </AuthProvider>
     );
 
+    await waitFor(() => {
+      expect(getByTestId("loading").props.children).toBe("idle");
+    });
+
     fireEvent.press(getByTestId("login-btn"));
 
     await waitFor(() => {
@@ -120,7 +133,9 @@ describe("AuthContext", () => {
   });
 
   it("should register successfully", async () => {
-    axios.post.mockResolvedValueOnce({ data: { success: true } });
+    axios.post.mockResolvedValueOnce({
+      data: { token: "new-jwt-token", user: { id: "1", name: "Test User" } },
+    });
 
     const { getByTestId } = render(
       <AuthProvider>
@@ -128,10 +143,15 @@ describe("AuthContext", () => {
       </AuthProvider>
     );
 
+    await waitFor(() => {
+      expect(getByTestId("loading").props.children).toBe("idle");
+    });
+
     fireEvent.press(getByTestId("register-btn"));
 
     await waitFor(() => {
-      expect(Alert.alert).toHaveBeenCalledWith("Registration successful", expect.any(String));
+      expect(getByTestId("token").props.children).toBe("new-jwt-token");
+      expect(mockStorageData["userToken"]).toBe("new-jwt-token");
     });
   });
 });

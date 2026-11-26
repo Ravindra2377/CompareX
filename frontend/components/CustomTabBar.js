@@ -176,7 +176,9 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                 ? "Meal Cart"
                 : route.name === "Likes"
                   ? "Wishlist"
-                  : route.name;
+                  : route.name === "Research"
+                    ? "AI Research"
+                    : route.name;
 
             const onPress = () => {
               if (swipeInProgress.current) return;
@@ -219,6 +221,15 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                   iconName = isFocused
                     ? "comparez-home-active"
                     : "comparez-home";
+                  break;
+                case "Discover":
+                  iconName = isFocused ? "compass" : "compass-outline";
+                  break;
+                case "Research":
+                  iconName = isFocused ? "chatbubbles" : "chatbubbles-outline";
+                  break;
+                case "Library":
+                  iconName = isFocused ? "library" : "library-outline";
                   break;
                 case "MealPlanner":
                   iconName = "comparez-meal-cart";
