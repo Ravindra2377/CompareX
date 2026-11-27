@@ -258,7 +258,19 @@ CRITICAL RULES:
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ query, mode }),
+        body: JSON.stringify({
+          query,
+          mode,
+          conversation_id: context.conversationId || undefined,
+          location: context.city || undefined,
+          pincode: context.pincode || undefined,
+          latitude: context.latitude || undefined,
+          longitude: context.longitude || undefined,
+          history: (history || []).slice(-6).map((h) => ({
+            role: h.role,
+            content: h.content || h.text || h.summary || "",
+          })),
+        }),
       });
       if (resp.ok) {
         const data = await resp.json();
@@ -296,6 +308,9 @@ CRITICAL RULES:
           }
         }
         return {
+          conversationId: data.conversation_id || context.conversationId || null,
+          messageId: data.message_id || null,
+          intent: data.intent || "all",
           summary: data.summary,
           keyTakeaways: data.key_takeaways || [],
           sources: (data.sources || []).map((s, idx) => ({

@@ -7,12 +7,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"mime"
 	"mime/multipart"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"comparez/database"
@@ -39,16 +42,41 @@ var allowedChatModels = map[string]bool{
 	"qwen/qwen3.8-27b":        true,
 }
 
+var citationRegex = regexp.MustCompile(`\[(\d+)\]`)
+
+// ─── Abuse Prevention & Rate Limiting ─────────────────────────────────────────
+
+type inMemoryLimiter struct {
+	mu     sync.Mutex
+	counts map[string]int
+	hour   int64
+}
+
+var memoryGuestLimiter = &inMemoryLimiter{
+	counts: make(map[string]int),
+	hour:   time.Now().Unix() / 3600,
+}
+
+func (l *inMemoryLimiter) check(key string, limit int) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	currentHour := time.Now().Unix() / 3600
+	if currentHour != l.hour {
+		l.counts = make(map[string]int)
+		l.hour = currentHour
+	}
+
+	l.counts[key]++
+	return l.counts[key] <= limit
+}
+
 // checkGuestAIRateLimit enforces abuse prevention for guest users.
-// Authenticated users bypass this or have much higher quotas.
+// Uses Redis if connected, otherwise falls back to memoryGuestLimiter so requests are NEVER unmetered.
 func checkGuestAIRateLimit(c echo.Context, endpoint string, maxRequestsPerHour int) bool {
 	_, isAuth := authenticatedUserID(c)
 	if isAuth {
 		return true // Authenticated users covered by middleware limiter
-	}
-
-	if database.RedisClient == nil {
-		return true
 	}
 
 	clientIP := c.RealIP()
@@ -56,19 +84,22 @@ func checkGuestAIRateLimit(c echo.Context, endpoint string, maxRequestsPerHour i
 		clientIP = c.Request().RemoteAddr
 	}
 
-	hourKey := fmt.Sprintf("rl_ai:%s:%s:%d", endpoint, clientIP, time.Now().Unix()/3600)
-	ctx := c.Request().Context()
+	key := fmt.Sprintf("rl_ai:%s:%s", endpoint, clientIP)
 
-	count, err := database.RedisClient.Incr(ctx, hourKey).Result()
-	if err != nil {
-		return true
+	if database.RedisClient != nil {
+		ctx := c.Request().Context()
+		hourKey := fmt.Sprintf("%s:%d", key, time.Now().Unix()/3600)
+		count, err := database.RedisClient.Incr(ctx, hourKey).Result()
+		if err == nil {
+			if count == 1 {
+				database.RedisClient.Expire(ctx, hourKey, 2*time.Hour)
+			}
+			return count <= int64(maxRequestsPerHour)
+		}
 	}
 
-	if count == 1 {
-		database.RedisClient.Expire(ctx, hourKey, 2*time.Hour)
-	}
-
-	return count <= int64(maxRequestsPerHour)
+	// Safe fallback when Redis is offline
+	return memoryGuestLimiter.check(key, maxRequestsPerHour)
 }
 
 func validateAIChatRequest(req *AIChatRequest) bool {
@@ -102,7 +133,6 @@ func validateAIChatRequest(req *AIChatRequest) bool {
 
 // ─── Request / Response types ────────────────────────────────────────────────
 
-// AIChatRequest mirrors the Groq chat completions request shape.
 type AIChatRequest struct {
 	Model          string                 `json:"model"`
 	Messages       []map[string]string    `json:"messages"`
@@ -112,7 +142,6 @@ type AIChatRequest struct {
 }
 
 // ─── POST /ai/chat ───────────────────────────────────────────────────────────
-// Proxies a chat completion request to Groq with the server-side API key.
 
 func AIChat(c echo.Context) error {
 	apiKey := os.Getenv("GROQ_API_KEY")
@@ -175,7 +204,6 @@ func AIChat(c echo.Context) error {
 }
 
 // ─── POST /ai/transcribe ────────────────────────────────────────────────────
-// Proxies an audio transcription (Whisper) request to Groq.
 
 func AITranscribe(c echo.Context) error {
 	apiKey := os.Getenv("GROQ_API_KEY")
@@ -296,11 +324,14 @@ func AITranscribe(c echo.Context) error {
 // ─── AI Research & Multi-Source Orchestration ───────────────────────────────
 
 type ResearchRequest struct {
-	Query          string `json:"query"`
-	Mode           string `json:"mode"` // "all", "research", "compare", "buying"
-	ConversationID uint   `json:"conversation_id,omitempty"`
-	Location       string `json:"location,omitempty"`
-	Pincode        string `json:"pincode,omitempty"`
+	Query          string              `json:"query"`
+	Mode           string              `json:"mode"` // "all", "research", "compare", "buying"
+	ConversationID uint                `json:"conversation_id,omitempty"`
+	Location       string              `json:"location,omitempty"`
+	Pincode        string              `json:"pincode,omitempty"`
+	Latitude       float64             `json:"latitude,omitempty"`
+	Longitude      float64             `json:"longitude,omitempty"`
+	History        []map[string]string `json:"history,omitempty"`
 }
 
 type ResearchResponse struct {
@@ -314,9 +345,21 @@ type ResearchResponse struct {
 	Comparison        *models.ProductComparisonRecord `json:"comparison,omitempty"`
 	FollowUpQuestions []string                        `json:"follow_up_questions"`
 	Mode              string                          `json:"mode"`
+	Intent            string                          `json:"intent"`
 }
 
-// AIResearch handles multi-source conversational research with cited web findings and quick commerce comparison.
+// CachedResearchSynthesis caches purely reusable synthesis, isolating user-specific conversation IDs.
+type CachedResearchSynthesis struct {
+	Summary           string                          `json:"summary"`
+	KeyTakeaways      []string                        `json:"key_takeaways"`
+	DetailedEvidence  string                          `json:"detailed_evidence"`
+	Sources           []models.Source                 `json:"sources"`
+	Comparison        *models.ProductComparisonRecord `json:"comparison,omitempty"`
+	FollowUpQuestions []string                        `json:"follow_up_questions"`
+	Intent            string                          `json:"intent"`
+}
+
+// AIResearch handles multi-source conversational research with intelligent intent routing.
 // POST /ai/research
 func AIResearch(c echo.Context) error {
 	var req ResearchRequest
@@ -343,46 +386,72 @@ func AIResearch(c echo.Context) error {
 		})
 	}
 
+	// 1. Resolve Indian location & pincode accurately
 	pincode := strings.TrimSpace(req.Pincode)
 	if pincode == "" {
 		pincode = c.Request().Header.Get("X-Pincode")
 	}
-	location := strings.TrimSpace(req.Location)
-	if location == "" {
-		location = c.Request().Header.Get("X-City")
+	cityName := strings.TrimSpace(req.Location)
+	if cityName == "" {
+		cityName = c.Request().Header.Get("X-City")
 	}
+	locDetails := ResolveIndianLocation(cityName, pincode, req.Latitude, req.Longitude)
 
+	// 2. Classify intent: direct_answer, calculation, shopping, or web_search
+	intent := ClassifyQueryIntent(query, mode)
+
+	// 3. Redis Cache Check (isolated synthesis only, no shared conversation IDs)
 	ctx := c.Request().Context()
-	cacheKey := fmt.Sprintf("ai_research:%s:%s:%x", location, pincode, sha256.Sum256([]byte(query+":"+mode)))
+	cacheKey := fmt.Sprintf("ai_research:%s:%s:%x", locDetails.City, locDetails.Pincode, sha256.Sum256([]byte(query+":"+mode)))
 
-	// 1. Check Redis cache
-	if database.RedisClient != nil {
+	if database.RedisClient != nil && len(req.History) == 0 {
 		if cached, err := database.RedisClient.Get(ctx, cacheKey).Result(); err == nil && cached != "" {
-			var resp ResearchResponse
-			if err := json.Unmarshal([]byte(cached), &resp); err == nil {
-				// Persist conversation messages even on cache HIT if user is authenticated
+			var cachedData CachedResearchSynthesis
+			if err := json.Unmarshal([]byte(cached), &cachedData); err == nil {
+				resp := ResearchResponse{
+					Query:             query,
+					Summary:           cachedData.Summary,
+					KeyTakeaways:      cachedData.KeyTakeaways,
+					DetailedEvidence:  cachedData.DetailedEvidence,
+					Sources:           cachedData.Sources,
+					Comparison:        cachedData.Comparison,
+					FollowUpQuestions: cachedData.FollowUpQuestions,
+					Mode:              mode,
+					Intent:            string(intent),
+				}
+
 				userID, isAuth := authenticatedUserID(c)
 				if isAuth && database.GormDB != nil {
 					persistConversationTurn(userID, req.ConversationID, query, mode, &resp)
 				}
+
 				c.Response().Header().Set("X-Cache", "HIT")
 				return c.JSON(http.StatusOK, resp)
 			}
 		}
 	}
 
-	// 2. Synthesize Grounded AI Research with real web search and verified product listings
-	resp := synthesizeGroundedResearch(ctx, query, mode, location, pincode)
+	// 4. Synthesize Grounded Research based on classified Intent
+	resp := synthesizeGroundedResearch(ctx, query, mode, locDetails, intent, req.History, req.ConversationID)
 
-	// 3. Persist to PostgreSQL if authenticated and GORM is configured
+	// 5. Persist to PostgreSQL if authenticated and GORM is configured
 	userID, isAuth := authenticatedUserID(c)
 	if isAuth && database.GormDB != nil {
 		persistConversationTurn(userID, req.ConversationID, query, mode, &resp)
 	}
 
-	// 4. Cache in Redis for 10 minutes
-	if database.RedisClient != nil {
-		if data, err := json.Marshal(resp); err == nil {
+	// 6. Cache isolated synthesis in Redis for 10 minutes (only if not a multi-turn continuation)
+	if database.RedisClient != nil && len(req.History) == 0 {
+		cachedData := CachedResearchSynthesis{
+			Summary:           resp.Summary,
+			KeyTakeaways:      resp.KeyTakeaways,
+			DetailedEvidence:  resp.DetailedEvidence,
+			Sources:           resp.Sources,
+			Comparison:        resp.Comparison,
+			FollowUpQuestions: resp.FollowUpQuestions,
+			Intent:            string(intent),
+		}
+		if data, err := json.Marshal(cachedData); err == nil {
 			database.RedisClient.Set(ctx, cacheKey, data, 10*time.Minute)
 		}
 	}
@@ -390,44 +459,68 @@ func AIResearch(c echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 
-func isCommercialQuery(query, mode string) bool {
-	lower := strings.ToLower(query)
-	if mode == "compare" || mode == "buying" || mode == "shopping" {
-		return true
-	}
-	commercialKeywords := []string{
-		"price", "buy", "cost", "cheap", "deal", "discount", "compare", "vs", "which is better",
-		"milk", "phone", "laptop", "eggs", "rice", "oil", "atta", "butter", "bread", "iphone",
-	}
-	for _, kw := range commercialKeywords {
-		if strings.Contains(lower, kw) {
-			return true
+func synthesizeGroundedResearch(
+	ctx context.Context,
+	query, mode string,
+	loc LocationDetails,
+	intent QueryIntent,
+	clientHistory []map[string]string,
+	conversationID uint,
+) ResearchResponse {
+	// Gather prior conversation context for multi-turn coherence
+	var conversationHistory []map[string]string
+	if len(clientHistory) > 0 {
+		conversationHistory = clientHistory
+	} else if conversationID > 0 && database.GormDB != nil {
+		var prevMessages []models.Message
+		if err := database.GormDB.Where("conversation_id = ?", conversationID).Order("created_at ASC").Limit(6).Find(&prevMessages).Error; err == nil {
+			for _, m := range prevMessages {
+				conversationHistory = append(conversationHistory, map[string]string{
+					"role":    m.Role,
+					"content": truncateString(m.Content, 400),
+				})
+			}
 		}
 	}
-	return false
-}
 
-func synthesizeGroundedResearch(ctx context.Context, query, mode, location, pincode string) ResearchResponse {
-	isCommercial := isCommercialQuery(query, mode)
+	apiKey := os.Getenv("GROQ_API_KEY")
 
-	// 1. Real web search retrieval (DuckDuckGo Lite / Serper)
-	sources, err := search.SearchWeb(ctx, query, 4)
-	if err != nil || sources == nil {
-		sources = []models.Source{}
+	// ── ROUTE 1: Direct Answer (Coding, explanations, writing) ────────────────
+	if intent == IntentDirectAnswer && apiKey != "" {
+		directResp, err := synthesizeDirectAnswer(ctx, apiKey, query, conversationHistory)
+		if err == nil {
+			directResp.Query = query
+			directResp.Mode = mode
+			directResp.Intent = string(intent)
+			return directResp
+		}
 	}
 
-	// 2. Verified product comparison retrieval
+	// ── ROUTE 2: Calculation & Finance (EMI, percentages, unit conversions) ────
+	if intent == IntentCalculation && apiKey != "" {
+		calcResp, err := synthesizeCalculation(ctx, apiKey, query, conversationHistory)
+		if err == nil {
+			calcResp.Query = query
+			calcResp.Mode = mode
+			calcResp.Intent = string(intent)
+			return calcResp
+		}
+	}
+
+	// ── ROUTE 3 & 4: Shopping Comparison & Web Search Retrieval ────────────────
+	var sources []models.Source
 	var comparison *models.ProductComparisonRecord
-	if isCommercial && ScraperSvc != nil {
-		lat, lng := 12.9716, 77.5946 // Default Bengaluru
-		if pincode == "110001" {
-			lat, lng = 28.6139, 77.2090 // Delhi
-		} else if pincode == "400001" {
-			lat, lng = 18.9388, 72.8354 // Mumbai
-		}
 
+	if intent == IntentWebSearch || intent == IntentShopping {
+		retrievedSources, err := search.SearchWeb(ctx, query, 4)
+		if err == nil && retrievedSources != nil {
+			sources = retrievedSources
+		}
+	}
+
+	if intent == IntentShopping && ScraperSvc != nil {
 		userTokens := map[string]map[string]string{}
-		compResult, compErr := ScraperSvc.Compare(ctx, query, lat, lng, userTokens)
+		compResult, compErr := ScraperSvc.Compare(ctx, query, loc.Latitude, loc.Longitude, userTokens)
 		if compErr == nil && compResult != nil && len(compResult.Products) > 0 {
 			firstProd := compResult.Products[0]
 			if firstProd.BestPrice > 0 && len(firstProd.Listings) > 0 {
@@ -472,21 +565,25 @@ func synthesizeGroundedResearch(ctx context.Context, query, mode, location, pinc
 		}
 	}
 
-	// 3. Grounded Synthesis via Groq LLM using real retrieved sources
-	apiKey := os.Getenv("GROQ_API_KEY")
+	// Grounded synthesis using retrieved real sources
 	if apiKey != "" {
-		llmResp, llmErr := synthesizeViaGroq(ctx, apiKey, query, mode, location, sources, comparison)
+		llmResp, llmErr := synthesizeViaGroq(ctx, apiKey, query, mode, loc, sources, comparison, conversationHistory)
 		if llmErr == nil && llmResp.Summary != "" {
+			llmResp.Summary = validateAndSanitizeCitations(llmResp.Summary, len(sources))
+			llmResp.DetailedEvidence = validateAndSanitizeCitations(llmResp.DetailedEvidence, len(sources))
 			llmResp.Sources = sources
 			llmResp.Comparison = comparison
 			llmResp.Query = query
 			llmResp.Mode = mode
+			llmResp.Intent = string(intent)
 			return llmResp
 		}
 	}
 
-	// 4. Deterministic fallback grounded on retrieved sources without hallucinations
-	return buildDeterministicGroundedResponse(query, mode, sources, comparison)
+	// Deterministic fallback grounded on retrieved evidence without hallucinations
+	fallback := buildDeterministicGroundedResponse(query, mode, loc, sources, comparison)
+	fallback.Intent = string(intent)
+	return fallback
 }
 
 type groqSynthesisJSON struct {
@@ -496,21 +593,87 @@ type groqSynthesisJSON struct {
 	FollowUpQuestions []string `json:"follow_up_questions"`
 }
 
-func synthesizeViaGroq(ctx context.Context, apiKey, query, mode, location string, sources []models.Source, comparison *models.ProductComparisonRecord) (ResearchResponse, error) {
+func synthesizeDirectAnswer(ctx context.Context, apiKey, query string, history []map[string]string) (ResearchResponse, error) {
+	systemPrompt := `You are CompareZ AI, an intelligent, authoritative assistant.
+The user is asking a general knowledge, conceptual, or programming query.
+Answer directly, clearly, and concisely in markdown.
+Provide actionable key takeaways and follow-up ideas.
+Output valid JSON only with keys:
+- "summary": string (markdown answer)
+- "key_takeaways": array of 2-3 concise strings
+- "detailed_evidence": string (concise explanation)
+- "follow_up_questions": array of 3 relevant follow-up questions`
+
+	messages := []map[string]string{
+		{"role": "system", "content": systemPrompt},
+	}
+	for _, h := range history {
+		if content := strings.TrimSpace(h["content"]); content != "" {
+			messages = append(messages, map[string]string{
+				"role":    h["role"],
+				"content": truncateString(content, 400),
+			})
+		}
+	}
+	messages = append(messages, map[string]string{
+		"role":    "user",
+		"content": query,
+	})
+
+	return callGroqJSON(ctx, apiKey, messages)
+}
+
+func synthesizeCalculation(ctx context.Context, apiKey, query string, history []map[string]string) (ResearchResponse, error) {
+	systemPrompt := `You are CompareZ Financial & Mathematical Calculator.
+Calculate the exact answer with clear mathematical breakdown, formulas used, and financial insights for India (e.g. INR ₹, monthly EMI, total interest, or unit conversion).
+Output valid JSON only with keys:
+- "summary": string (markdown with calculated figures highlighted)
+- "key_takeaways": array of 2-3 key numeric takeaways (e.g. "Monthly EMI: ₹...", "Total Interest: ₹...")
+- "detailed_evidence": string (formula and step-by-step arithmetic)
+- "follow_up_questions": array of 3 follow-up scenario questions`
+
+	messages := []map[string]string{
+		{"role": "system", "content": systemPrompt},
+	}
+	for _, h := range history {
+		if content := strings.TrimSpace(h["content"]); content != "" {
+			messages = append(messages, map[string]string{
+				"role":    h["role"],
+				"content": truncateString(content, 400),
+			})
+		}
+	}
+	messages = append(messages, map[string]string{
+		"role":    "user",
+		"content": query,
+	})
+
+	return callGroqJSON(ctx, apiKey, messages)
+}
+
+func synthesizeViaGroq(
+	ctx context.Context,
+	apiKey, query, mode string,
+	loc LocationDetails,
+	sources []models.Source,
+	comparison *models.ProductComparisonRecord,
+	history []map[string]string,
+) (ResearchResponse, error) {
 	var sourcesText strings.Builder
 	for _, s := range sources {
 		sourcesText.WriteString(fmt.Sprintf("[%d] Title: %s\nDomain: %s\nSnippet: %s\nURL: %s\n\n", s.Number, s.Title, s.Domain, s.Snippet, s.URL))
 	}
 
-	comparisonNote := "No verified live price listings available in local database for this specific SKU."
+	comparisonNote := fmt.Sprintf("No verified catalog listing in local database for this specific item. Location: %s (Pincode: %s). %s", loc.City, loc.Pincode, loc.CoverageNote)
 	if comparison != nil {
-		comparisonNote = fmt.Sprintf("Verified product comparison available: Best Price ₹%.2f on %s.", comparison.BestPrice, comparison.BestPlatform)
+		comparisonNote = fmt.Sprintf("Verified catalog comparison: Best Price ₹%.2f on %s in %s.", comparison.BestPrice, comparison.BestPlatform, loc.City)
 	}
 
 	prompt := fmt.Sprintf(`You are CompareZ AI Research Engine, providing trusted, verified information for Indian shoppers.
 Query: "%s"
 Mode: %s
-Location: %s
+Location: %s (Pincode: %s)
+Quick Commerce Status: %v
 
 REAL RETRIEVED SOURCES:
 %s
@@ -522,18 +685,36 @@ RULES:
 1. Synthesize a concise, authoritative answer based STRICTLY on the retrieved sources.
 2. Use inline numerical citations like [1], [2] referencing the source numbers above.
 3. If no verified prices exist in the PRODUCT DATA, explicitly state that live pricing is unavailable for this item. Do NOT invent prices or merchant listings.
-4. Output valid JSON only with keys:
+4. If quick commerce is unavailable in this location, note that delivery is via nationwide e-commerce platforms.
+5. Output valid JSON only with keys:
    - "summary": string (markdown with [1] citations)
    - "key_takeaways": array of 2-3 concise strings
    - "detailed_evidence": string (concise markdown evidence section)
-   - "follow_up_questions": array of 3 actionable follow-up questions`, query, mode, location, sourcesText.String(), comparisonNote)
+   - "follow_up_questions": array of 3 actionable follow-up questions`, query, mode, loc.City, loc.Pincode, loc.HasQuickCommerce, sourcesText.String(), comparisonNote)
 
+	messages := []map[string]string{
+		{"role": "system", "content": "You are CompareZ AI Research Engine. Output valid JSON only with verified citations and grounded facts."},
+	}
+	for _, h := range history {
+		if content := strings.TrimSpace(h["content"]); content != "" {
+			messages = append(messages, map[string]string{
+				"role":    h["role"],
+				"content": truncateString(content, 400),
+			})
+		}
+	}
+	messages = append(messages, map[string]string{
+		"role":    "user",
+		"content": prompt,
+	})
+
+	return callGroqJSON(ctx, apiKey, messages)
+}
+
+func callGroqJSON(ctx context.Context, apiKey string, messages []map[string]string) (ResearchResponse, error) {
 	payload := map[string]interface{}{
-		"model": "openai/gpt-oss-20b",
-		"messages": []map[string]string{
-			{"role": "system", "content": "You are CompareZ AI Research Engine. Output valid JSON only with verified citations and grounded facts."},
-			{"role": "user", "content": prompt},
-		},
+		"model":           "openai/gpt-oss-20b",
+		"messages":        messages,
 		"response_format": map[string]string{"type": "json_object"},
 		"temperature":     0.2,
 		"max_tokens":      750,
@@ -587,7 +768,30 @@ RULES:
 	}, nil
 }
 
-func buildDeterministicGroundedResponse(query, mode string, sources []models.Source, comparison *models.ProductComparisonRecord) ResearchResponse {
+// validateAndSanitizeCitations ensures citation markers like [1], [2] only reference valid, retrieved sources.
+func validateAndSanitizeCitations(text string, numSources int) string {
+	if numSources <= 0 {
+		return citationRegex.ReplaceAllString(text, "")
+	}
+
+	return citationRegex.ReplaceAllStringFunc(text, func(match string) string {
+		sub := citationRegex.FindStringSubmatch(match)
+		if len(sub) >= 2 {
+			idx, err := strconv.Atoi(sub[1])
+			if err == nil && (idx < 1 || idx > numSources) {
+				return "" // Strip invalid citation number
+			}
+		}
+		return match
+	})
+}
+
+func buildDeterministicGroundedResponse(
+	query, mode string,
+	loc LocationDetails,
+	sources []models.Source,
+	comparison *models.ProductComparisonRecord,
+) ResearchResponse {
 	var summary strings.Builder
 	var evidence strings.Builder
 	var takeaways []string
@@ -609,9 +813,13 @@ func buildDeterministicGroundedResponse(query, mode string, sources []models.Sou
 	}
 
 	if comparison != nil {
-		takeaways = append(takeaways, fmt.Sprintf("Verified catalog price: ₹%.2f on %s.", comparison.BestPrice, comparison.BestPlatform))
-	} else if isCommercialQuery(query, mode) {
-		takeaways = append(takeaways, "Real-time pricing is unavailable for this item. Search directly or connect accounts to check live prices.")
+		takeaways = append(takeaways, fmt.Sprintf("Verified catalog price: ₹%.2f on %s in %s.", comparison.BestPrice, comparison.BestPlatform, loc.City))
+	} else if ClassifyQueryIntent(query, mode) == IntentShopping {
+		if !loc.HasQuickCommerce {
+			takeaways = append(takeaways, fmt.Sprintf("10-minute quick-commerce is not yet active in %s. Check nationwide delivery on Amazon and Flipkart.", loc.City))
+		} else {
+			takeaways = append(takeaways, "Real-time pricing is unavailable for this item. Search directly or connect accounts to check live prices.")
+		}
 	}
 
 	followUps := []string{
@@ -645,7 +853,10 @@ func persistConversationTurn(userID string, conversationID uint, query, mode str
 				Title:  truncateString(query, 50),
 				Mode:   mode,
 			}
-			database.GormDB.Create(&conv)
+			if err := database.GormDB.Create(&conv).Error; err != nil {
+				log.Printf("⚠️  Failed to create conversation: %v", err)
+				return
+			}
 		}
 	} else {
 		conv = models.Conversation{
@@ -653,7 +864,10 @@ func persistConversationTurn(userID string, conversationID uint, query, mode str
 			Title:  truncateString(query, 50),
 			Mode:   mode,
 		}
-		database.GormDB.Create(&conv)
+		if err := database.GormDB.Create(&conv).Error; err != nil {
+			log.Printf("⚠️  Failed to create conversation: %v", err)
+			return
+		}
 	}
 
 	resp.ConversationID = conv.ID
@@ -663,24 +877,32 @@ func persistConversationTurn(userID string, conversationID uint, query, mode str
 		Role:           "user",
 		Content:        query,
 	}
-	database.GormDB.Create(&userMsg)
+	if err := database.GormDB.Create(&userMsg).Error; err != nil {
+		log.Printf("⚠️  Failed to persist user message: %v", err)
+	}
 
 	asstMsg := models.Message{
 		ConversationID: conv.ID,
 		Role:           "assistant",
 		Content:        resp.Summary + "\n\n" + resp.DetailedEvidence,
 	}
-	database.GormDB.Create(&asstMsg)
+	if err := database.GormDB.Create(&asstMsg).Error; err != nil {
+		log.Printf("⚠️  Failed to persist assistant message: %v", err)
+	}
 	resp.MessageID = asstMsg.ID
 
 	for i := range resp.Sources {
 		resp.Sources[i].MessageID = asstMsg.ID
-		database.GormDB.Create(&resp.Sources[i])
+		if err := database.GormDB.Create(&resp.Sources[i]).Error; err != nil {
+			log.Printf("⚠️  Failed to persist source [%d]: %v", i+1, err)
+		}
 	}
 
 	if resp.Comparison != nil {
 		resp.Comparison.MessageID = asstMsg.ID
-		database.GormDB.Create(resp.Comparison)
+		if err := database.GormDB.Create(resp.Comparison).Error; err != nil {
+			log.Printf("⚠️  Failed to persist comparison record: %v", err)
+		}
 	}
 }
 

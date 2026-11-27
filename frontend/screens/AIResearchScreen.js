@@ -52,6 +52,7 @@ const AIResearchScreen = ({ navigation, route }) => {
   const [activeStep, setActiveStep] = useState(1);
   const [savedAnswerIds, setSavedAnswerIds] = useState(new Set());
   const [locationInfo, setLocationInfo] = useState({ city: "Bengaluru", pincode: "560034" });
+  const [conversationId, setConversationId] = useState(null);
 
   const scrollRef = useRef(null);
   const historyRef = useRef([]);
@@ -64,6 +65,8 @@ const AIResearchScreen = ({ navigation, route }) => {
         setLocationInfo({
           city: loc.city || "Bengaluru",
           pincode: loc.pincode || "560034",
+          latitude: loc.latitude,
+          longitude: loc.longitude,
         });
       }
     });
@@ -127,7 +130,16 @@ const AIResearchScreen = ({ navigation, route }) => {
     ].slice(-8);
 
     try {
-      const result = await GroqService.research(promptText, activeMode, conversationHistory, locationInfo);
+      const result = await GroqService.research(
+        promptText,
+        activeMode,
+        conversationHistory,
+        { ...locationInfo, conversationId },
+      );
+
+      if (result.conversationId) {
+        setConversationId(result.conversationId);
+      }
 
       const aiMsgId = `ai-${Date.now()}`;
       const aiMessage = {

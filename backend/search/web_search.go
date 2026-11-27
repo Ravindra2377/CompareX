@@ -21,9 +21,16 @@ var (
 		Timeout: 10 * time.Second,
 	}
 
+	pageFetchClient = &http.Client{
+		Timeout: 4 * time.Second,
+	}
+
 	linkRegex    = regexp.MustCompile(`<a[^>]+class=['"]result-link['"][^>]+href=['"]([^'"]+)['"][^>]*>([\s\S]*?)</a>`)
 	snippetRegex = regexp.MustCompile(`<td[^>]+class=['"]result-snippet['"][^>]*>([\s\S]*?)</td>`)
 	htmlTagRegex = regexp.MustCompile(`<[^>]+>`)
+	scriptRegex  = regexp.MustCompile(`(?is)<(script|style|nav|header|footer)[^>]*>.*?</(script|style|nav|header|footer)>`)
+
+	promptInjectionRegex = regexp.MustCompile(`(?i)(ignore\s+(all\s+)?(previous|prior)\s+instructions|system\s*prompt|you\s+are\s+now\s+a|output\s+the\s+secret)`)
 )
 
 // SearchWeb performs real, live web search using DuckDuckGo or Serper (if configured).
@@ -41,16 +48,37 @@ func SearchWeb(ctx context.Context, query string, maxResults int) ([]models.Sour
 		maxResults = 10
 	}
 
+	var sources []models.Source
+	var err error
+
 	// 1. Try Serper API if key is provided in environment
 	if serperKey := os.Getenv("SERPER_API_KEY"); serperKey != "" {
-		sources, err := searchSerper(ctx, cleanQuery, serperKey, maxResults)
-		if err == nil && len(sources) > 0 {
-			return sources, nil
+		sources, err = searchSerper(ctx, cleanQuery, serperKey, maxResults)
+	}
+
+	// 2. Query DuckDuckGo Lite search if Serper not configured or returned empty
+	if len(sources) == 0 {
+		sources, err = searchDuckDuckGoLite(ctx, cleanQuery, maxResults)
+	}
+
+	if err != nil && len(sources) == 0 {
+		return []models.Source{}, err
+	}
+
+	// 3. Enrich top result with full page text if snippet is brief
+	for i := range sources {
+		if i >= 2 {
+			break
+		}
+		if len(sources[i].Snippet) < 100 && sources[i].URL != "" {
+			pageText, fetchErr := FetchPageContent(ctx, sources[i].URL, 400)
+			if fetchErr == nil && len(pageText) > len(sources[i].Snippet) {
+				sources[i].Snippet = pageText
+			}
 		}
 	}
 
-	// 2. Query DuckDuckGo Lite search
-	return searchDuckDuckGoLite(ctx, cleanQuery, maxResults)
+	return sources, nil
 }
 
 func searchDuckDuckGoLite(ctx context.Context, query string, maxResults int) ([]models.Source, error) {
@@ -108,11 +136,11 @@ func searchDuckDuckGoLite(ctx context.Context, query string, maxResults int) ([]
 		}
 
 		domain := strings.TrimPrefix(parsedURL.Host, "www.")
-		cleanTitle := cleanHTMLText(rawTitle)
+		cleanTitle := SanitizePromptInjection(cleanHTMLText(rawTitle))
 
 		cleanSnippet := ""
 		if i < len(snippetMatches) && len(snippetMatches[i]) >= 2 {
-			cleanSnippet = cleanHTMLText(snippetMatches[i][1])
+			cleanSnippet = SanitizePromptInjection(cleanHTMLText(snippetMatches[i][1]))
 		}
 
 		if cleanTitle == "" {
@@ -182,20 +210,69 @@ func searchSerper(ctx context.Context, query string, apiKey string, maxResults i
 		if err == nil {
 			domain = strings.TrimPrefix(parsedURL.Host, "www.")
 		}
+		cleanTitle := SanitizePromptInjection(strings.TrimSpace(item.Title))
+		cleanSnippet := SanitizePromptInjection(strings.TrimSpace(item.Snippet))
+
 		sources = append(sources, models.Source{
 			Number:  len(sources) + 1,
-			Title:   strings.TrimSpace(item.Title),
+			Title:   cleanTitle,
 			URL:     item.Link,
 			Domain:  domain,
-			Snippet: strings.TrimSpace(item.Snippet),
+			Snippet: cleanSnippet,
 		})
 	}
 
 	return sources, nil
 }
 
+// FetchPageContent retrieves the readable text of an external web page, protected against prompt injection.
+func FetchPageContent(ctx context.Context, pageURL string, maxChars int) (string, error) {
+	if maxChars <= 0 {
+		maxChars = 600
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", pageURL, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+	req.Header.Set("Accept", "text/html,text/plain;q=0.9")
+
+	resp, err := pageFetchClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", nil
+	}
+
+	// Limit reader to 256KB to avoid memory exhaustion
+	bodyBytes, err := io.ReadAll(io.LimitReader(resp.Body, 256*1024))
+	if err != nil {
+		return "", err
+	}
+
+	rawHTML := string(bodyBytes)
+	strippedScripts := scriptRegex.ReplaceAllString(rawHTML, " ")
+	plainText := cleanHTMLText(strippedScripts)
+	safeText := SanitizePromptInjection(plainText)
+
+	if len(safeText) > maxChars {
+		safeText = safeText[:maxChars] + "..."
+	}
+
+	return safeText, nil
+}
+
+// SanitizePromptInjection filters known injection patterns from external content.
+func SanitizePromptInjection(text string) string {
+	return promptInjectionRegex.ReplaceAllString(text, "[filtered safety pattern]")
+}
+
 func cleanHTMLText(raw string) string {
-	stripped := htmlTagRegex.ReplaceAllString(raw, "")
+	stripped := htmlTagRegex.ReplaceAllString(raw, " ")
 	unescaped := html.UnescapeString(stripped)
 	fields := strings.Fields(unescaped)
 	return strings.Join(fields, " ")
