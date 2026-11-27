@@ -62,10 +62,12 @@ func accountKey(c echo.Context) (string, bool) {
 	return authenticatedUserID(c)
 }
 
-// ConnectAccount stores authentication tokens for a platform
+// ConnectAccount handles legacy platform credential connection.
+// NOTE: Retired in AI Platform V5 in favor of Privacy & Verified Data Sources.
+// Third-party retailer token extraction is deprecated and inactive.
 // POST /accounts/connect
-// Body: {"platform": "Blinkit", "tokens": {"auth": "...", "cookie": "..."}}
 func ConnectAccount(c echo.Context) error {
+	c.Response().Header().Set("X-CompareZ-Deprecated", "Retailer authentication retired in AI Platform V5")
 	var req struct {
 		Platform string            `json:"platform"`
 		Tokens   map[string]string `json:"tokens"`
@@ -201,10 +203,11 @@ func GetAccountStatus(c echo.Context) error {
 	})
 }
 
-// BulkConnectAccounts stores tokens for multiple platforms at once
+// BulkConnectAccounts handles bulk token submission.
+// NOTE: Retired in AI Platform V5 in favor of Privacy & Verified Data Sources.
 // POST /accounts/bulk-connect
-// Body: {"Blinkit": {"auth": "...", "cookie": "..."}, "Zepto": {...}}
 func BulkConnectAccounts(c echo.Context) error {
+	c.Response().Header().Set("X-CompareZ-Deprecated", "Retailer authentication retired in AI Platform V5")
 	var payload map[string]map[string]string
 
 	if err := c.Bind(&payload); err != nil {

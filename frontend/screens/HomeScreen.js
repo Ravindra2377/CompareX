@@ -33,19 +33,6 @@ import { FONTS, SHADOWS, SPACING } from "../config/theme";
 import GroqService from "../services/GroqService";
 import LocationService from "../services/LocationService";
 
-const PLATFORM_MENTIONS = [
-  { name: "Blinkit", pattern: /\bblinkit\b/i },
-  { name: "Zepto", pattern: /\bzepto\b/i },
-  { name: "BigBasket", pattern: /\b(?:big\s*basket|bigbasket)\b/i },
-  { name: "Amazon", pattern: /\bamazon\b/i },
-  { name: "Flipkart", pattern: /\bflipkart\b/i },
-];
-
-const getMentionedPlatforms = (text = "") =>
-  PLATFORM_MENTIONS.filter(({ pattern }) => pattern.test(text)).map(
-    ({ name }) => name,
-  );
-
 const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -56,43 +43,43 @@ const getGreeting = () => {
 const INSPIRATION_CARDS = [
   {
     id: "1",
-    tag: "PRICE COMPARE",
-    tagColor: "#059669",
-    icon: "pricetags-outline",
-    title: "Amul vs Nandini Milk",
-    subtitle: "Compare Blinkit 10m vs Zepto vs BigBasket",
-    query: "Compare Amul Gold Milk and Nandini GoodLife prices across platforms",
+    tag: "SMARTPHONES",
+    tagColor: "#3B82F6",
+    icon: "phone-portrait-outline",
+    title: "iPhone 16 vs Galaxy S25",
+    subtitle: "A18 vs Snapdragon 8 Elite, Display, Refresh Rate & OS",
+    query: "Which smartphone should I buy? Apple iPhone 16 vs Samsung Galaxy S25 comparison",
     mode: "compare",
   },
   {
     id: "2",
-    tag: "HEALTH EVIDENCE",
+    tag: "HEALTH & DIET",
     tagColor: "#D97706",
     icon: "globe-outline",
-    title: "Cold-Pressed Mustard Oil",
-    subtitle: "Health benefits, purity checks & verified sources",
-    query: "Is cold-pressed mustard oil healthier? Evidence and fssai norms",
+    title: "Cold-Pressed vs Refined Oil",
+    subtitle: "Health evidence, smoke points & lab norms",
+    query: "Is cold-pressed mustard oil healthier than refined oil? Evidence and scientific research",
     mode: "research",
   },
   {
     id: "3",
-    tag: "NUTRITION PLAN",
+    tag: "EV & AUTOMOTIVE",
     tagColor: "#16845B",
-    icon: "flame-outline",
-    title: "Protein Basket under ₹250",
-    subtitle: "Cheapest vegetarian protein combos in India",
-    query: "High protein vegetarian Indian grocery basket plan under 250 rupees per day",
-    mode: "shopping",
+    icon: "speedometer-outline",
+    title: "Tata Punch EV vs Nexon EV",
+    subtitle: "Real-world range, battery pack & value comparison",
+    query: "Tata Punch EV vs Nexon EV comparison range battery and specs",
+    mode: "compare",
   },
   {
     id: "4",
-    tag: "TECH COMPARISON",
-    tagColor: "#3B82F6",
-    icon: "speedometer-outline",
-    title: "iPhone 16 Delivery Check",
-    subtitle: "Blinkit 10-min instant vs Amazon next-day price",
-    query: "iPhone 16 128gb price compare blinkit amazon",
-    mode: "compare",
+    tag: "FINANCIAL CALC",
+    tagColor: "#8B5CF6",
+    icon: "calculator-outline",
+    title: "Home Loan EMI: 20 vs 30 Yrs",
+    subtitle: "Calculate interest payout & prepayment savings",
+    query: "Calculate home loan EMI for 30 lakhs at 8.5% for 20 years vs 30 years",
+    mode: "calculation",
   },
 ];
 
@@ -312,7 +299,20 @@ const HomeScreen = ({ navigation }) => {
                 },
               ]}
             >
-              What would you like to explore or compare today?
+              What are you curious about?
+            </Text>
+            <Text
+              style={[
+                FONTS.uiBody,
+                {
+                  fontSize: 14,
+                  color: themeColors.inkSoft,
+                  marginBottom: 16,
+                  marginTop: -6,
+                },
+              ]}
+            >
+              Ask anything... Research, compare products, discover, analyse.
             </Text>
 
             <Animated.View
@@ -354,7 +354,7 @@ const HomeScreen = ({ navigation }) => {
                 />
                 <TextInput
                   style={[styles.composerInput, { color: themeColors.ink }]}
-                  placeholder="Ask anything, research web, or compare prices..."
+                  placeholder="Ask anything, compare products, or research..."
                   placeholderTextColor={themeColors.inkFaint}
                   value={prompt}
                   onChangeText={setPrompt}

@@ -178,7 +178,9 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                   ? "Wishlist"
                   : route.name === "Research"
                     ? "AI Research"
-                    : route.name;
+                    : route.name === "Shopping"
+                      ? "Shopping"
+                      : route.name;
 
             const onPress = () => {
               if (swipeInProgress.current) return;
@@ -224,6 +226,10 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                   break;
                 case "Discover":
                   iconName = isFocused ? "compass" : "compass-outline";
+                  break;
+                case "Shopping":
+                case "Search":
+                  iconName = isFocused ? "cart" : "cart-outline";
                   break;
                 case "Research":
                   iconName = isFocused ? "chatbubbles" : "chatbubbles-outline";

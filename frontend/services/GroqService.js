@@ -55,16 +55,15 @@ async function groqFetch(model, messages, maxTokens = 300, jsonMode = false) {
 
 // ─── GroqService Public API ───────────────────────────────────────────────────
 const GroqService = {
-  // ── 1. Support Chat ────────────────────────────────────────────────────────
+  // ── 1. Support & General AI Chat ──────────────────────────────────────────
   async chat(history) {
     const messages = [
       {
         role: "system",
-        content: `Your name is BEANS. You are CompareZ's friendly AI shopping assistant for Indian grocery shoppers.
-CompareZ compares prices across Blinkit, Zepto, BigBasket, Amazon, and Flipkart in real-time.
-Help users find the best deals, understand platform differences, and navigate the app.
-Be concise (2-3 sentences max), helpful, and use occasional emojis.
-Always answer in English. If asked about specific prices, remind them to search in the app.`,
+        content: `You are CompareZ AI, an authoritative, helpful consumer research, product comparison, and decision assistant.
+CompareZ helps consumers research questions, compare product specifications (smartphones, electronics, appliances, groceries, nutrition), understand tradeoffs, and make informed choices.
+Be concise (2-3 sentences max), objective, and insightful.
+Always answer in English. Provide grounded, factual information.`,
       },
       ...history.slice(-20),
     ];
@@ -77,11 +76,12 @@ Always answer in English. If asked about specific prices, remind them to search 
       const messages = [
         {
           role: "system",
-          content: `You convert natural language grocery queries into the single best search keyword for Indian grocery apps.
+          content: `You convert natural language research and shopping queries into the single best search keyword for product discovery and web research.
 Return ONLY a JSON object: {"keyword": "...", "isNaturalLanguage": true/false}
 keyword must be 1-3 words max. Examples:
-"healthy breakfast for kids" -> {"keyword": "oats", "isNaturalLanguage": true}
-"amul butter" -> {"keyword": "amul butter", "isNaturalLanguage": false}`,
+"which smartphone has best battery under 30k" -> {"keyword": "smartphone 30000", "isNaturalLanguage": true}
+"is cold pressed oil healthy" -> {"keyword": "cold pressed oil", "isNaturalLanguage": true}
+"iphone 16" -> {"keyword": "iphone 16", "isNaturalLanguage": false}`,
         },
         { role: "user", content: query },
       ];
@@ -94,21 +94,21 @@ keyword must be 1-3 words max. Examples:
     }
   },
 
-  // ── 3. Deal Analysis (Product Detail card) ────────────────────────────────
+  // ── 3. Product Intelligence & Value Analysis ───────────────────────────────
   async getDealAnalysis(product) {
-    const priceList = product.prices
+    const priceList = (product.prices || [])
       .filter((p) => p.price > 0)
       .sort((a, b) => a.price - b.price)
-      .map((p) => `${p.platform}: Rs.${p.price}`)
+      .map((p) => `${p.platform || "Source"}: Rs.${p.price}`)
       .join(", ");
     const messages = [
       {
         role: "system",
-        content: `You are a grocery price analyst. Given a product and its prices across platforms, write a 2-sentence deal verdict. Be direct. Use Rs. symbol.`,
+        content: `You are a consumer product and value analyst. Given a product, write a 2-sentence objective verdict on value, specifications, and buying advice. Be direct.`,
       },
       {
         role: "user",
-        content: `Product: "${product.name}"\nPrices: ${priceList}`,
+        content: `Product: "${product.name || product.title}"\nDetails: ${priceList || "Standard market listing"}`,
       },
     ];
     return groqFetch(MODELS.smart, messages, 120);
@@ -221,13 +221,12 @@ Return JSON only:
     const messages = [
       {
         role: "system",
-        content: `You are CompareZ's smart AI Shopping Copilot for Indian grocery shoppers. ${contextBlock}
-CompareZ compares prices on Blinkit, Zepto, BigBasket, Amazon, Flipkart. Be very concise (max 3 sentences). Use Rs. Be proactive and insightful based on context.
+        content: `You are CompareZ's AI Copilot, a context-aware consumer decision and product research assistant. ${contextBlock}
+You help consumers compare products across specifications, evaluate pros and cons, and research questions. Be very concise (max 3 sentences).
 CRITICAL RULES:
-1. ONLY append the exact string [SHOW_CART] to your message if the user EXPLICITLY asks to see their cart or wishlist. Do NOT use this flag if you are just comparing their saved items to new items.
-2. For every product search or price-comparison request, append [SUGGEST_SEARCH: <product name>] using only the clean product keyword. This opens CompareZ's real live results.
-3. Never invent availability, prices, savings, or a winning platform. Only state price facts when they are present in the supplied screen context. On Home, tell the user you are ready to run the comparison instead.
-4. If the user names specific platforms, acknowledge only those platforms and do not mention results from any other platform.`,
+1. For every product search or comparison request, append [SUGGEST_SEARCH: <product name>] using only the clean product keyword.
+2. When comparing products, highlight key technical differences (e.g. processor, display, durability, battery life, nutritional profile).
+3. Never invent unverified pricing, discounts, or unauthorized merchant claims. If price is unknown, remind the user to check verified sources.`,
       },
       ...history.slice(-10),
     ];

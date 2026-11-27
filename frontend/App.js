@@ -69,7 +69,7 @@ const MainTabs = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Discover" component={DiscoverScreen} />
-      <Tab.Screen name="Research" component={AIResearchScreen} />
+      <Tab.Screen name="Shopping" component={SearchScreen} />
       <Tab.Screen name="Library" component={LibraryScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -179,6 +179,16 @@ const AppNav = () => {
               <Stack.Screen
                 name="Search"
                 component={SearchScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="Shopping"
+                component={SearchScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="Research"
+                component={AIResearchScreen}
                 options={{ animation: "slide_from_right" }}
               />
               <Stack.Screen

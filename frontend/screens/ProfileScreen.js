@@ -21,9 +21,9 @@ import * as Haptics from "expo-haptics";
 
 const MENU = [
   {
-    icon: "link",
-    label: "Linked accounts",
-    subtitle: "Blinkit, Zepto & 3 more",
+    icon: "shield-checkmark-outline",
+    label: "Privacy & data sources",
+    subtitle: "Data policy & on-device controls",
     color: "coriander",
   },
   {
@@ -189,7 +189,7 @@ const ProfileScreen = () => {
                   activeOpacity={0.6}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    if (item.label.includes("accounts")) {
+                    if (item.label.includes("Privacy") || item.label.includes("accounts")) {
                       navigation.navigate("Accounts");
                     } else if (item.label.includes("Help")) {
                       navigation.navigate("SupportChat");

@@ -2,13 +2,10 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useReducer,
   useCallback,
   useContext,
   useMemo,
 } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTheme } from "../context/ThemeContext";
 import {
   View,
   Text,
@@ -17,1126 +14,362 @@ import {
   TouchableOpacity,
   Animated,
   ActivityIndicator,
-  AccessibilityInfo,
-  LayoutAnimation,
+  ScrollView,
   Platform,
-  UIManager,
 } from "react-native";
 import { Image } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { WebView } from "react-native-webview";
 import { Ionicons } from "../components/Icon";
-import { useFocusEffect } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
-import BrandHeader from "../components/BrandHeader";
-import ProductCard from "../components/ProductCard";
-import FilterModal from "../components/FilterModal";
-import { getGlobalMonitor } from "../services/PerformanceMonitor";
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
+import { useTheme } from "../context/ThemeContext";
 import * as Haptics from "expo-haptics";
-import PlatformDOMScraperService from "../services/PlatformDOMScraperService";
 import api from "../config/api";
-import { AuthContext } from "../context/AuthContext";
 import GroqService from "../services/GroqService";
-import { platformTokenStorage } from "../services/platformTokenStorage";
 import { useAudioRecorder, AudioModule, RecordingPresets } from "expo-audio";
 
+// Curated comparison knowledge base for instant head-to-head spec intelligence
+const COMPARISON_DATABASE = {
+  "iphone 16 vs galaxy s25": {
+    title: "iPhone 16 vs Samsung Galaxy S25",
+    category: "Smartphones",
+    productA: {
+      name: "iPhone 16",
+      brand: "Apple",
+      image:
+        "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80",
+    },
+    productB: {
+      name: "Galaxy S25",
+      brand: "Samsung",
+      image:
+        "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=600&q=80",
+    },
+    specs: [
+      { feature: "Processor", a: "Apple A18 (3nm)", b: "Snapdragon 8 Elite" },
+      { feature: "Display", a: "6.1-inch Super Retina", b: "6.2-inch Dynamic AMOLED 2X" },
+      { feature: "Refresh rate", a: "60 Hz", b: "120 Hz (LTPO)" },
+      { feature: "OS", a: "iOS 18", b: "Android 15 (One UI 7)" },
+      { feature: "Live price", a: "Not verified", b: "Not verified" },
+    ],
+    recommendation:
+      "Choose the iPhone for Apple's ecosystem, ProRes video, and high resale value. Choose the Galaxy S25 for a 120Hz display, Snapdragon 8 Elite peak performance, and Android multitasking flexibility.",
+  },
+  "sony wh-1000xm5 vs bose qc ultra": {
+    title: "Sony WH-1000XM5 vs Bose QuietComfort Ultra",
+    category: "Audio",
+    productA: {
+      name: "Sony WH-1000XM5",
+      brand: "Sony",
+      image:
+        "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80",
+    },
+    productB: {
+      name: "Bose QC Ultra",
+      brand: "Bose",
+      image:
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80",
+    },
+    specs: [
+      { feature: "ANC Quality", a: "Industry-leading (8 mics)", b: "Best-in-class low frequency cancel" },
+      { feature: "Battery Life", a: "30 hours (ANC on)", b: "24 hours (ANC on)" },
+      { feature: "Codec Support", a: "LDAC, AAC, SBC", b: "aptX Adaptive, AAC, SBC" },
+      { feature: "Weight & Fold", a: "250g (non-folding)", b: "253g (collapsible fold)" },
+      { feature: "Live price", a: "Not verified", b: "Not verified" },
+    ],
+    recommendation:
+      "Choose Sony for battery longevity, LDAC high-res audio, and rich EQ customization. Choose Bose QC Ultra for maximum travel comfort and superior physical noise isolation.",
+  },
+  "cold-pressed oil vs refined oil": {
+    title: "Cold-Pressed vs Refined Cooking Oil",
+    category: "Groceries & Nutrition",
+    productA: {
+      name: "Cold-Pressed Oil",
+      brand: "Wood-Pressed / Kachi Ghani",
+      image:
+        "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80",
+    },
+    productB: {
+      name: "Refined Oil",
+      brand: "Industrial Extracted",
+      image:
+        "https://images.unsplash.com/photo-1541256942802-7b299b48368f?auto=format&fit=crop&w=600&q=80",
+    },
+    specs: [
+      { feature: "Extraction", a: "Mechanically pressed < 45°C", b: "High heat + hexane solvent" },
+      { feature: "Antioxidants", a: "Retained (Vitamin E, Polyphenols)", b: "Depleted during refining" },
+      { feature: "Smoke Point", a: "Medium (160°C - 190°C)", b: "High (220°C - 240°C)" },
+      { feature: "Best For", a: "Daily cooking, tadka, dressings", b: "Commercial deep frying" },
+      { feature: "Live price", a: "Not verified", b: "Not verified" },
+    ],
+    recommendation:
+      "Cold-pressed oils preserve heart-healthy nutrients and natural aromas for everyday cooking. Refined oils offer a neutral taste and high smoke point for rare deep-frying.",
+  },
+  "tata punch ev vs nexon ev": {
+    title: "Tata Punch EV vs Tata Nexon EV",
+    category: "Automotive & Clean Energy",
+    productA: {
+      name: "Punch EV (Empowered+)",
+      brand: "Tata Motors",
+      image:
+        "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=600&q=80",
+    },
+    productB: {
+      name: "Nexon EV (Long Range)",
+      brand: "Tata Motors",
+      image:
+        "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80",
+    },
+    specs: [
+      { feature: "Battery Pack", a: "35 kWh LFP", b: "45 kWh LFP" },
+      { feature: "Real-World Range", a: "240 – 270 km", b: "310 – 340 km" },
+      { feature: "Frunk Storage", a: "14-litre front trunk", b: "No front trunk" },
+      { feature: "DC Fast Charge", a: "50 kW (10-80% in 56m)", b: "50 kW (10-80% in 56m)" },
+      { feature: "Live price", a: "Not verified", b: "Not verified" },
+    ],
+    recommendation:
+      "Punch EV is the superior city runabout with tighter turning radius and newer Acti.EV architecture. Nexon EV remains the pick for highway cruising and rear passenger space.",
+  },
+};
+
+// Universal product catalog for discovery
+const UNIVERSAL_PRODUCTS = [
+  {
+    id: "prod_1",
+    name: "Apple iPhone 16 (128GB)",
+    brand: "Apple",
+    category: "Smartphones",
+    specs: "A18 Bionic · 6.1\" OLED · 48MP Fusion Camera · Action Button",
+    mrp: 79900,
+    price: 74900,
+    image_url:
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=400&q=80",
+    rating: 4.7,
+    reviews: 2840,
+    sources: ["Apple Official", "Licensed Electronics Distributors"],
+  },
+  {
+    id: "prod_2",
+    name: "Samsung Galaxy S25 5G (256GB)",
+    brand: "Samsung",
+    category: "Smartphones",
+    specs: "Snapdragon 8 Elite · 6.2\" 120Hz AMOLED · Galaxy AI suite",
+    mrp: 84999,
+    price: 79999,
+    image_url:
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=400&q=80",
+    rating: 4.8,
+    reviews: 1420,
+    sources: ["Samsung Electronics", "Authorized Resellers"],
+  },
+  {
+    id: "prod_3",
+    name: "Sony WH-1000XM5 Noise Cancelling Headphones",
+    brand: "Sony",
+    category: "Audio",
+    specs: "Industry-leading ANC · 30hr Battery · LDAC Hi-Res Audio",
+    mrp: 34990,
+    price: 28990,
+    image_url:
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=400&q=80",
+    rating: 4.6,
+    reviews: 5820,
+    sources: ["Sony Official", "Audio Specialists"],
+  },
+  {
+    id: "prod_4",
+    name: "Bose QuietComfort Ultra Wireless Headphones",
+    brand: "Bose",
+    category: "Audio",
+    specs: "Spatial Audio · CustomTune Tech · Ultra-plush comfort",
+    mrp: 35900,
+    price: 32900,
+    image_url:
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80",
+    rating: 4.5,
+    reviews: 1950,
+    sources: ["Bose India", "Authorized Retailers"],
+  },
+  {
+    id: "prod_5",
+    name: "Two Brothers Organic Farms Cold-Pressed Mustard Oil (1L)",
+    brand: "Two Brothers",
+    category: "Groceries & Nutrition",
+    specs: "100% Wood-Pressed (Kachi Ghani) · Unfiltered · Zero Additives",
+    mrp: 450,
+    price: 410,
+    image_url:
+      "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80",
+    rating: 4.9,
+    reviews: 3200,
+    sources: ["Organic Farm Direct", "Certified Grocery Channels"],
+  },
+  {
+    id: "prod_6",
+    name: "Apple MacBook Air 13-inch (M3, 16GB, 512GB)",
+    brand: "Apple",
+    category: "Laptops & Computing",
+    specs: "Apple M3 8-core CPU · 10-core GPU · 18h Battery · MagSafe 3",
+    mrp: 134900,
+    price: 124900,
+    image_url:
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80",
+    rating: 4.8,
+    reviews: 890,
+    sources: ["Apple Store", "Enterprise Channels"],
+  },
+  {
+    id: "prod_7",
+    name: "Philips Digital Air Fryer XL (6.2L, 2000W)",
+    brand: "Philips",
+    category: "Home Appliances",
+    specs: "Rapid Air Tech · Touch Screen with 7 Presets · Fat Removal",
+    mrp: 12995,
+    price: 8999,
+    image_url:
+      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80",
+    rating: 4.6,
+    reviews: 7400,
+    sources: ["Philips Domestic Appliances", "Authorized Distributors"],
+  },
+];
+
+const CATEGORIES = [
+  "All",
+  "Smartphones",
+  "Audio",
+  "Groceries & Nutrition",
+  "Laptops & Computing",
+  "Home Appliances",
+];
+
 const SUGGESTIONS = [
-  {
-    name: "Eggs",
-    emoji: "🥚",
-    bg: "rgba(255, 176, 32, 0.15)",
-    color: "#FFB020",
-  },
-  {
-    name: "Milk",
-    emoji: "🥛",
-    bg: "rgba(78, 168, 222, 0.15)",
-    color: "#4EA8DE",
-  },
-  {
-    name: "Rice",
-    emoji: "🍚",
-    bg: "rgba(128, 185, 24, 0.15)",
-    color: "#80B918",
-  },
-  {
-    name: "Chicken",
-    emoji: "🍗",
-    bg: "rgba(224, 122, 95, 0.15)",
-    color: "#E07A5F",
-  },
-  {
-    name: "Bread",
-    emoji: "🍞",
-    bg: "rgba(212, 163, 115, 0.15)",
-    color: "#D4A373",
-  },
-  {
-    name: "Atta",
-    emoji: "🌾",
-    bg: "rgba(233, 196, 106, 0.15)",
-    color: "#E9C46A",
-  },
-  {
-    name: "Paneer",
-    emoji: "🧀",
-    bg: "rgba(244, 162, 97, 0.15)",
-    color: "#F4A261",
-  },
-  {
-    name: "Oil",
-    emoji: "🫙",
-    bg: "rgba(231, 111, 81, 0.15)",
-    color: "#E76F51",
-  },
+  { name: "iPhone 16 vs Galaxy S25", emoji: "📱", bg: "rgba(78, 168, 222, 0.15)" },
+  { name: "Sony WH-1000XM5 vs Bose QC Ultra", emoji: "🎧", bg: "rgba(128, 185, 24, 0.15)" },
+  { name: "Cold-Pressed Oil vs Refined Oil", emoji: "🫒", bg: "rgba(255, 176, 32, 0.15)" },
+  { name: "Tata Punch EV vs Nexon EV", emoji: "⚡", bg: "rgba(224, 122, 95, 0.15)" },
+  { name: "MacBook Air M3", emoji: "💻", bg: "rgba(99, 102, 241, 0.15)" },
+  { name: "Air Fryer 6L", emoji: "🍳", bg: "rgba(244, 162, 97, 0.15)" },
 ];
-
-const PLATFORMS = ["Blinkit", "Zepto", "BigBasket", "Amazon", "Flipkart"];
-const PLATFORM_HOSTS = {
-  Blinkit: ["blinkit.com"],
-  Zepto: ["zepto.com", "zepto.co.in"],
-  BigBasket: ["bigbasket.com"],
-  Amazon: ["amazon.in", "amazon.com"],
-  Flipkart: ["flipkart.com"],
-};
-
-const isAllowedPlatformNavigation = (platform, rawUrl) => {
-  if (rawUrl === "about:blank" || rawUrl?.startsWith("blob:")) return true;
-  try {
-    const url = new URL(rawUrl);
-    if (url.protocol !== "https:") return false;
-    const host = url.hostname.replace(/^www\./, "");
-    return (PLATFORM_HOSTS[platform] || []).some(
-      (allowed) => host === allowed || host.endsWith(`.${allowed}`),
-    );
-  } catch {
-    return false;
-  }
-};
-
-const sanitizeWebViewTokenPayload = (payload) => {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-    return null;
-  }
-  const entries = Object.entries(payload);
-  if (entries.length === 0 || entries.length > 20) return null;
-  let totalSize = 0;
-  const result = {};
-  for (const [key, value] of entries) {
-    if (
-      typeof key !== "string" ||
-      key.length === 0 ||
-      key.length > 64 ||
-      typeof value !== "string" ||
-      value.length > 64 * 1024
-    ) {
-      return null;
-    }
-    totalSize += key.length + value.length;
-    if (totalSize > 128 * 1024) return null;
-    result[key] = value;
-  }
-  return result;
-};
-
-const getPlatformSelection = (platforms) => {
-  const requested = Array.isArray(platforms)
-    ? new Set(platforms.filter((platform) => PLATFORMS.includes(platform)))
-    : null;
-  return PLATFORMS.reduce(
-    (selection, platform) => ({
-      ...selection,
-      [platform]: requested?.size ? requested.has(platform) : true,
-    }),
-    {},
-  );
-};
-const ENABLE_BACKEND_FALLBACK = true;
-const ENABLE_BACKEND_COLLECTION = true;
-const DEFAULT_PLATFORM_TIMEOUT_MS = 8000;
-const OVERALL_SEARCH_TIMEOUT_MS = 12000;
-const PLATFORM_TIMEOUTS = {
-  Blinkit: 7000,
-  Zepto: 9000,
-  BigBasket: 9000,
-  Amazon: 8000,
-  Flipkart: 12000,
-};
-const SEARCH_DEBOUNCE_MS = 400;
-const PARTIAL_AGGREGATION_DELAY_MS = 800; // ⬆ increased for better batching while searching
-const INITIAL_RESULT_COUNT = 18;
-const RESULT_PAGE_SIZE = 12;
-const MAX_PREFETCH_IMAGES = 12;
-
-const AnimatedSearchResult = React.memo(
-  ({
-    item,
-    index,
-    onPress,
-    revealKey,
-    reduceMotion,
-    animateEntrance,
-  }) => {
-    const shouldAnimate = animateEntrance && !reduceMotion;
-    const opacity = useRef(new Animated.Value(shouldAnimate ? 0 : 1)).current;
-    const translateY = useRef(
-      new Animated.Value(shouldAnimate ? 18 : 0),
-    ).current;
-    const scale = useRef(
-      new Animated.Value(shouldAnimate ? 0.985 : 1),
-    ).current;
-
-    useEffect(() => {
-      opacity.stopAnimation();
-      translateY.stopAnimation();
-      scale.stopAnimation();
-
-      if (!shouldAnimate) {
-        opacity.setValue(1);
-        translateY.setValue(0);
-        scale.setValue(1);
-        return undefined;
-      }
-
-      opacity.setValue(0);
-      translateY.setValue(18);
-      scale.setValue(0.985);
-
-      const animation = Animated.parallel([
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 320,
-          delay: Math.min(index, 7) * 72,
-          useNativeDriver: true,
-        }),
-        Animated.spring(translateY, {
-          toValue: 0,
-          delay: Math.min(index, 7) * 72,
-          stiffness: 155,
-          damping: 19,
-          mass: 0.85,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scale, {
-          toValue: 1,
-          delay: Math.min(index, 7) * 72 + 90,
-          stiffness: 175,
-          damping: 17,
-          mass: 0.8,
-          useNativeDriver: true,
-        }),
-      ]);
-
-      animation.start();
-      return () => animation.stop();
-    }, [
-      index,
-      opacity,
-      revealKey,
-      scale,
-      shouldAnimate,
-      translateY,
-    ]);
-
-    return (
-      <Animated.View
-        style={{
-          opacity,
-          transform: [{ translateY }, { scale }],
-        }}
-      >
-        <ProductCard
-          product={item}
-          onPress={onPress}
-          animateBestPrice={shouldAnimate}
-          bestPriceRevealDelay={Math.min(index, 7) * 72 + 250}
-          bestPriceRevealKey={revealKey}
-        />
-      </Animated.View>
-    );
-  },
-);
-
-const SearchResultSkeleton = React.memo(
-  ({ shimmer, pulse, themeColors, reduceMotion }) => (
-    <Animated.View
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      style={[
-        styles.skeletonCard,
-        {
-          backgroundColor: themeColors.card,
-          borderColor: themeColors.line,
-          opacity: reduceMotion ? 0.72 : pulse,
-        },
-      ]}
-    >
-      <View
-        style={[
-          styles.skeletonImage,
-          { backgroundColor: themeColors.cardAlt },
-        ]}
-      />
-      <View style={styles.skeletonCopy}>
-        <View
-          style={[
-            styles.skeletonLineWide,
-            { backgroundColor: themeColors.cardAlt },
-          ]}
-        />
-        <View
-          style={[
-            styles.skeletonLineMedium,
-            { backgroundColor: themeColors.cardAlt },
-          ]}
-        />
-        <View
-          style={[
-            styles.skeletonPrice,
-            { backgroundColor: themeColors.cardAlt },
-          ]}
-        />
-        <View style={styles.skeletonPills}>
-          <View
-            style={[
-              styles.skeletonPill,
-              { backgroundColor: themeColors.cardAlt },
-            ]}
-          />
-          <View
-            style={[
-              styles.skeletonPillSmall,
-              { backgroundColor: themeColors.cardAlt },
-            ]}
-          />
-        </View>
-      </View>
-      {!reduceMotion ? (
-        <Animated.View
-          pointerEvents="none"
-          style={[
-            styles.skeletonShimmer,
-            {
-              backgroundColor: "rgba(255,255,255,0.58)",
-              transform: [
-                {
-                  translateX: shimmer.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-120, 430],
-                  }),
-                },
-                { rotate: "10deg" },
-              ],
-            },
-          ]}
-        />
-      ) : null}
-    </Animated.View>
-  ),
-);
-
-const PlatformScanStatus = React.memo(
-  ({
-    platform,
-    isDone,
-    entry,
-    meta,
-    themeColors,
-    isDark,
-    pulseAnim,
-    reduceMotion,
-  }) => {
-    const completionScale = useRef(new Animated.Value(1)).current;
-
-    useEffect(() => {
-      if (!isDone) {
-        completionScale.setValue(1);
-        return;
-      }
-
-      if (reduceMotion) {
-        completionScale.setValue(1);
-        return;
-      }
-
-      const animation = Animated.sequence([
-        Animated.spring(completionScale, {
-          toValue: 1.08,
-          stiffness: 230,
-          damping: 15,
-          mass: 0.65,
-          useNativeDriver: true,
-        }),
-        Animated.spring(completionScale, {
-          toValue: 1,
-          stiffness: 210,
-          damping: 17,
-          mass: 0.7,
-          useNativeDriver: true,
-        }),
-      ]);
-      animation.start();
-      return () => animation.stop();
-    }, [completionScale, isDone, reduceMotion]);
-
-    const products = entry?.products || [];
-    const count = products.filter((product) => product?.in_stock === true).length;
-
-    return (
-      <Animated.View
-        style={[
-          styles.platformStatusCard,
-          {
-            backgroundColor: themeColors.background,
-            borderColor: themeColors.border,
-            opacity: isDone ? 1 : pulseAnim,
-            transform: [{ scale: completionScale }],
-          },
-          isDone && {
-            borderColor: themeColors.primary,
-            backgroundColor: isDark
-              ? `${themeColors.primary}15`
-              : COLORS.accentMuted,
-          },
-        ]}
-      >
-        <Ionicons
-          name={isDone ? "checkmark-circle" : meta.icon}
-          size={18}
-          color={isDone ? "#10B981" : themeColors.textTertiary}
-          style={styles.platformStatusIcon}
-        />
-        <Text
-          style={[
-            styles.platformStatusName,
-            { color: isDone ? themeColors.primary : themeColors.textPrimary },
-          ]}
-        >
-          {meta.label}
-        </Text>
-        <Text
-          style={[
-            styles.platformStatusCount,
-            { color: themeColors.textTertiary },
-          ]}
-        >
-          {isDone ? `${count} items` : "Scanning..."}
-        </Text>
-      </Animated.View>
-    );
-  },
-);
-
-// Resource-blocking helper: allow only navigation, API/JSON, and WebSocket traffic.
-// Blocks images, fonts, analytics, and stylesheets to cut WebView load time by 1.5-3s.
-const BLOCKED_RESOURCE_EXTENSIONS = [
-  ".ico",
-  ".woff",
-  ".woff2",
-  ".ttf",
-  ".eot",
-  ".mp4",
-  ".webm",
-];
-const BLOCKED_TRACKER_DOMAINS = [
-  "google-analytics.com",
-  "googletagmanager.com",
-  "facebook.net",
-  "doubleclick.net",
-  "hotjar.com",
-  "segment.com",
-  "mixpanel.com",
-  "amplitude.com",
-  "sentry.io",
-  "newrelic.com",
-  "datadog-browser-agent",
-  "clevertap.com",
-  "moengage.com",
-  "webengage.com",
-  "appsflyer.com",
-];
-
-const shouldBlockWebViewRequest = (request) => {
-  try {
-    const url = (request.url || "").toLowerCase();
-    if (!url.startsWith("http")) return false; // allow blob://, about:blank etc.
-    // Block by file extension
-    for (const ext of BLOCKED_RESOURCE_EXTENSIONS) {
-      const urlWithoutQuery = url.split("?")[0];
-      if (urlWithoutQuery.endsWith(ext)) return true;
-    }
-    // Block tracker domains
-    for (const domain of BLOCKED_TRACKER_DOMAINS) {
-      if (url.includes(domain)) return true;
-    }
-    return false;
-  } catch {
-    return false;
-  }
-};
-const SEARCH_CACHE_VERSION = 3;
-
-const NON_PRICE_TOKEN_REGEX =
-  /%|\b(off|mins?|min|ml|ltr|litre|litres|kg|g|gm|grams?|pcs?|piece|pack|combo)\b/i;
-
-const sanitizeProductName = (rawName) => {
-  const name = String(rawName || "").trim();
-  if (!name) return "";
-
-  let cleaned = name
-    .replace(/\u00a0/g, " ")
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([A-Za-z])(\d)/g, "$1 $2")
-    .replace(/(\d)([A-Za-z])/g, "$1 $2")
-    .replace(/\b\d+\s*mins?\b/gi, " ")
-    .replace(/₹\s*[0-9]+(?:\.[0-9]+)?/gi, " ")
-    .replace(/\b(add|buy\s*now|qty|view\s*more|off)\b/gi, " ")
-    .replace(/\b\d+(?:\.\d+)?\s*[kK]?\s*Ratings?.*$/i, "")
-    .replace(/\bRatings?.*$/i, "")
-    .replace(/\bReviews?.*$/i, "")
-    .replace(/[|]+/g, " ")
-    .replace(/\s*-\s*/g, " - ")
-    .replace(/\s*\(\s*/g, " (")
-    .replace(/\s*\)\s*/g, ") ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  // Repair common fragmented tokens from DOM text merges, e.g. "Go d rej" -> "Godrej".
-  for (let i = 0; i < 3; i += 1) {
-    cleaned = cleaned.replace(
-      /\b([A-Za-z]{2,})\s([A-Za-z])\s([A-Za-z]{2,})\b/g,
-      "$1$2$3",
-    );
-  }
-
-  cleaned = cleaned.replace(/\s+/g, " ").trim();
-
-  // Remove duplicated trailing quantities like "... 1 kg ... 1 kg" from merged platform titles.
-  const qtyPattern = /(\d+(?:\.\d+)?\s*(?:kg|g|gm|l|ml|pcs?|pack))$/i;
-  const trailingQty = cleaned.match(qtyPattern)?.[1] || "";
-  if (trailingQty) {
-    const head = cleaned.slice(0, -trailingQty.length).trim();
-    const escapedQty = trailingQty.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const qtyRegex = new RegExp(`\\b${escapedQty}\\b`, "ig");
-    const count = (cleaned.match(qtyRegex) || []).length;
-    if (count > 1) {
-      const collapsedHead = head
-        .replace(qtyRegex, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-      cleaned = `${collapsedHead} ${trailingQty}`.replace(/\s+/g, " ").trim();
-    }
-  }
-
-  return cleaned;
-};
-
-const normalizeUnits = (str) => {
-  return str
-    .replace(/\b0\.5\s*l\b/gi, "500ml")
-    .replace(/\b1\s*l\b/gi, "1000ml")
-    .replace(/\b0\.25\s*l\b/gi, "250ml")
-    .replace(/\blitres?\b/gi, "l")
-    .replace(/\b1\s*kg\b/gi, "1000g")
-    .replace(/\b0\.5\s*kg\b/gi, "500g")
-    .replace(/\b0\.25\s*kg\b/gi, "250g")
-    .replace(/\bgrams?\b/gi, "g")
-    .replace(/\bgm\b/gi, "g");
-};
-
-// Parse quantity like "500g", "1 kg", "250 ml" from a product title.
-// Returns {amount: number, unit: 'g'|'ml'|'unknown'} or null.
-const parseQuantity = (text) => {
-  if (!text) return null;
-  const s = String(text).toLowerCase();
-
-  // Normalize common forms
-  const replaced = s
-    .replace(/([a-z])([0-9])/gi, "$1 $2")
-    .replace(/([0-9])([a-z])/gi, "$1 $2")
-    .replace(/\bgrams?\b/gi, "g")
-    .replace(/\bgm\b/gi, "g")
-    .replace(/\bkilograms?\b/gi, "kg")
-    .replace(/\blitres?\b/gi, "l")
-    .replace(/\bml\b/gi, "ml")
-    .replace(/\bltr\b/gi, "l");
-
-  const toBaseQuantity = (rawValue, unit) => {
-    const value = Number(rawValue);
-    if (!Number.isFinite(value) || value <= 0) return null;
-    if (unit === "kg") return { amount: value * 1000, unit: "g" };
-    if (unit === "g") return { amount: value, unit: "g" };
-    if (unit === "l") return { amount: value * 1000, unit: "ml" };
-    if (unit === "ml") return { amount: value, unit: "ml" };
-    return null;
-  };
-
-  // Multipacks: "4 x 100 g" and "100 g x 4".
-  const countFirst = replaced.match(
-    /\b([0-9]+)\s*[x×]\s*([0-9]+(?:\.[0-9]+)?)\s*(kg|g|ml|l)\b/,
-  );
-  if (countFirst) {
-    const each = toBaseQuantity(countFirst[2], countFirst[3]);
-    if (each) {
-      return {
-        amount: Number(countFirst[1]) * each.amount,
-        unit: each.unit,
-      };
-    }
-  }
-
-  const quantityFirst = replaced.match(
-    /\b([0-9]+(?:\.[0-9]+)?)\s*(kg|g|ml|l)\s*[x×]\s*([0-9]+)\b/,
-  );
-  if (quantityFirst) {
-    const each = toBaseQuantity(quantityFirst[1], quantityFirst[2]);
-    if (each) {
-      return {
-        amount: Number(quantityFirst[3]) * each.amount,
-        unit: each.unit,
-      };
-    }
-  }
-
-  // Match patterns like 1kg, 1 kg, 500g, 250 ml, 0.5 l
-  const m = replaced.match(/([0-9]+(?:\.[0-9]+)?)\s*(kg|g|ml|l)\b/);
-  if (m) return toBaseQuantity(m[1], m[2]);
-
-  const pieces = replaced.match(
-    /\b(?:pack\s+of\s+)?([0-9]+)\s*(?:pcs?|pieces?|count|units?)\b/,
-  );
-  if (pieces) {
-    return { amount: Number(pieces[1]), unit: "item" };
-  }
-  const packOf = replaced.match(/\bpack\s+of\s+([0-9]+)\b/);
-  if (packOf) {
-    return { amount: Number(packOf[1]), unit: "item" };
-  }
-
-  // Item-count listings often omit "pcs", for example "12 white eggs".
-  const countedItems = replaced.match(
-    /\b([0-9]+)\s+(?:(?:white|brown|large|medium|small|farm|free\s*range)\s+){0,3}(eggs?|capsules?|tablets?|sachets?|bags?|rolls?|bottles?|cans?)\b/,
-  );
-  if (countedItems) {
-    return { amount: Number(countedItems[1]), unit: "item" };
-  }
-
-  return null;
-};
-
-// Compute normalized unit price per 100g or per 100ml when possible.
-// Returns { unitPrice: number, unitLabel: string } or null.
-const computeUnitPrice = (price, title) => {
-  const qty = parseQuantity(title);
-  if (!qty || !price || price <= 0) return null;
-
-  if (qty.unit === "g") {
-    // price per 100g
-    const per100 = (price / qty.amount) * 100;
-    return {
-      unitPrice: Math.round(per100 * 100) / 100,
-      unitLabel: "per 100 g",
-      unitType: "weight",
-    };
-  }
-  if (qty.unit === "ml") {
-    const per100 = (price / qty.amount) * 100;
-    return {
-      unitPrice: Math.round(per100 * 100) / 100,
-      unitLabel: "per 100 ml",
-      unitType: "volume",
-    };
-  }
-  if (qty.unit === "item") {
-    return {
-      unitPrice: Math.round((price / qty.amount) * 100) / 100,
-      unitLabel: "per item",
-      unitType: "item",
-    };
-  }
-  return null;
-};
-
-const getProductMatchKey = (name, extraTextForQty = "") => {
-  // 1. EXTRACT QUANTITY FROM COMBINED TEXT FIRST
-  let qtyText = `${name} ${extraTextForQty}`.toLowerCase();
-  qtyText = normalizeUnits(qtyText);
-  let preNormalizedForQty = qtyText
-    .replace(/(\d+)\s+(ml|g|kg|l|gm|ltr|pcs?|pack)\b/g, "$1$2")
-    .replace(/(ml|g|kg|l|gm|ltr|pcs?|pack)\b/g, " $1")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  const qtyRegex = /\b(\d+(?:\.\d+)?)\s*(ml|g|kg|l|gm|ltr|pcs?|pack)\b/g;
-  let matches = [];
-  let m;
-  while ((m = qtyRegex.exec(preNormalizedForQty)) !== null) {
-    matches.push({
-      full: m[0],
-      num: parseFloat(m[1]),
-      unit: m[2].toLowerCase(),
-    });
-  }
-
-  let qty = "";
-  if (matches.length > 0) {
-    let best = matches[0];
-    for (const match of matches) {
-      if (match.unit.includes("pc") && best.unit.includes("pack")) {
-        best = match;
-      }
-    }
-    let u = best.unit;
-    if (u.startsWith("g")) u = "g";
-    else if (u.startsWith("k")) u = "kg";
-    else if (u.startsWith("m")) u = "ml";
-    else if (u.startsWith("l")) u = "l";
-    else if (u.startsWith("pc")) u = "pc";
-    else if (u === "pack") u = "pack";
-
-    qty = best.num + u;
-  }
-
-  // 2. EXTRACT BASE WORDS ONLY FROM NAME
-  let clean = sanitizeProductName(name).toLowerCase();
-  if (!clean) return "";
-
-  clean = normalizeUnits(clean);
-
-  // Common brand normalizations for grocery
-  clean = clean
-    .replace(/\bbrittania\b/gi, "britannia")
-    .replace(/\bcoca\s*cola\b/gi, "coke")
-    .replace(/\bpepsico\b/gi, "pepsi")
-    .replace(/\bthums\s*up\b/gi, "thumsup")
-    .replace(/\btata\s*salt\b/gi, "tata salt")
-    .replace(/\bamul\s+pure\s+ghee\b/gi, "amul ghee");
-
-  const stopWords = new Set([
-    "fresh",
-    "new",
-    "original",
-    "pouch",
-    "bottle",
-    "net",
-    "quantity",
-    "medium",
-    "large",
-    "small",
-    "the",
-    "a",
-    "an",
-    "of",
-    "best",
-    "quality",
-    "premium",
-    "super",
-    "tasty",
-    "natural",
-    "pure",
-  ]);
-
-  let baseWords = clean
-    .replace(/\([^)]*\)/g, " ")
-    .replace(/[^a-z0-9.\s]/g, " ")
-    .split(/\s+/)
-    .map((t) => t.trim())
-    .filter(Boolean)
-    .filter((t) => !stopWords.has(t));
-
-  let normalized = baseWords.join(" ");
-
-  // Remove all numbers to prevent noise in base string
-  normalized = normalized
-    .split(/\s+/)
-    .filter(
-      (t) =>
-        !/^\d+(\.\d+)?$/.test(t) &&
-        !/^\d+(ml|g|kg|l|gm|ltr|pcs?|pack)$/.test(t),
-    )
-    .join(" ");
-
-  let finalWords = normalized.split(/\s+/).slice(0, 4);
-
-  // Stemming
-  finalWords = finalWords.map((t) =>
-    t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t,
-  );
-
-  const key = (finalWords.join(" ") + (qty ? " " + qty : "")).trim();
-
-  if (!key) return clean.slice(0, 30);
-  return key;
-};
-
-const getProductIdentityTokens = (name = "") => {
-  const identityStopWords = new Set([
-    "a",
-    "an",
-    "and",
-    "best",
-    "buy",
-    "fresh",
-    "large",
-    "medium",
-    "new",
-    "of",
-    "original",
-    "pack",
-    "premium",
-    "product",
-    "pure",
-    "quality",
-    "small",
-    "the",
-  ]);
-
-  return Array.from(
-    new Set(
-      sanitizeProductName(name)
-        .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, " ")
-        .split(/\s+/)
-        .map((token) => token.trim())
-        .filter(
-          (token) =>
-            token &&
-            !identityStopWords.has(token) &&
-            !/^\d+(?:\.\d+)?$/.test(token) &&
-            !/^\d+(?:ml|g|kg|l|gm|ltr|pcs?)$/.test(token),
-        )
-        .map((token) =>
-          token.length > 3 && token.endsWith("s") && !token.endsWith("ss")
-            ? token.slice(0, -1)
-            : token,
-        ),
-    ),
-  );
-};
-
-const getIdentitySimilarity = (leftTokens = [], rightTokens = []) => {
-  if (!leftTokens.length || !rightTokens.length) return 0;
-  const right = new Set(rightTokens);
-  const shared = leftTokens.filter((token) => right.has(token)).length;
-  return (2 * shared) / (leftTokens.length + rightTokens.length);
-};
-
-const selectBestDisplayName = (listings = [], fallback = "") => {
-  const candidates = listings
-    .map((l) => sanitizeProductName(l?.product_name || ""))
-    .filter((name) => name.length >= 4);
-
-  if (!candidates.length) {
-    return sanitizeProductName(fallback || "Product");
-  }
-
-  const scoreName = (name) => {
-    const parenCount = (name.match(/[()]/g) || []).length;
-    const qtyCount = (
-      name.match(/\b\d+(?:\.\d+)?\s*(?:kg|g|gm|l|ml|pcs?|pack)\b/gi) || []
-    ).length;
-    const pipeCount = (name.match(/\|/g) || []).length;
-    return (
-      name.length +
-      parenCount * 10 +
-      Math.max(0, qtyCount - 1) * 14 +
-      pipeCount * 2
-    );
-  };
-
-  return candidates.sort((a, b) => scoreName(a) - scoreName(b))[0];
-};
-
-const CACHE_TTL_MS = 5 * 60 * 1000;
-
-const areStringArraysEqual = (a = [], b = []) => {
-  if (a.length !== b.length) return false;
-  for (let i = 0; i < a.length; i += 1) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
-};
-
-const extractNumericPrice = (raw) => {
-  if (raw === null || raw === undefined) return 0;
-
-  if (typeof raw === "number") {
-    if (!Number.isFinite(raw) || raw <= 0) return 0;
-    return Math.round(raw * 100) / 100;
-  }
-
-  if (typeof raw !== "string") return 0;
-  const text = raw.trim();
-  if (!text) return 0;
-
-  if (NON_PRICE_TOKEN_REGEX.test(text) && !/(₹|rs\.?|inr)/i.test(text)) {
-    return 0;
-  }
-
-  const currencyMatch = text.match(
-    /(?:₹|rs\.?|inr)\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
-  );
-  if (currencyMatch?.[1]) {
-    const parsed = parseFloat(currencyMatch[1].replace(/,/g, ""));
-    if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-    return Math.round(parsed * 100) / 100;
-  }
-
-  const genericMatch = text.match(/([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/);
-  if (!genericMatch?.[1]) return 0;
-  const parsed = parseFloat(genericMatch[1].replace(/,/g, ""));
-  if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-  return Math.round(parsed * 100) / 100;
-};
-
-const extractLabeledPriceHints = (rawText) => {
-  const compact = String(rawText || "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (!compact) {
-    return { price: 0, mrp: 0 };
-  }
-
-  const priceMatch = compact.match(
-    /\bprice\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
-  );
-  const mrpMatch = compact.match(
-    /\bmrp\b\s*:?\s*₹\s*([0-9]+(?:,[0-9]{2,3})*(?:\.[0-9]+)?)/i,
-  );
-
-  return {
-    price: priceMatch?.[1] ? parseFloat(priceMatch[1].replace(/,/g, "")) : 0,
-    mrp: mrpMatch?.[1] ? parseFloat(mrpMatch[1].replace(/,/g, "")) : 0,
-  };
-};
-
-const normalizeIncomingPrice = (product) => {
-  const sellingCandidates = [
-    product?.price,
-    product?.discountPrice,
-    product?.discount_price,
-    product?.offerPrice,
-    product?.offer_price,
-    product?.sellingPrice,
-    product?.selling_price,
-    product?.finalPrice,
-    product?.final_price,
-  ];
-
-  const mrpCandidates = [
-    product?.mrp,
-    product?.originalPrice,
-    product?.original_price,
-    product?.listPrice,
-    product?.list_price,
-    product?.strikePrice,
-    product?.strike_price,
-  ];
-
-  let price = 0;
-  for (const candidate of sellingCandidates) {
-    const parsed = extractNumericPrice(candidate);
-    if (parsed > 0) {
-      price = parsed;
-      break;
-    }
-  }
-
-  let mrp = 0;
-  for (const candidate of mrpCandidates) {
-    const parsed = extractNumericPrice(candidate);
-    if (parsed > 0) {
-      mrp = parsed;
-      break;
-    }
-  }
-
-  const labeledHints = extractLabeledPriceHints(
-    product?.raw_text || product?.rawText || "",
-  );
-
-  if (labeledHints.price > 0) {
-    price = labeledHints.price;
-  }
-
-  if (labeledHints.mrp > 0) {
-    mrp = labeledHints.mrp;
-  }
-
-  if (!price && mrp) price = mrp;
-  if (!mrp && price) mrp = price;
-
-  const discountValue = extractNumericPrice(
-    product?.discount_value ?? product?.discountValue,
-  );
-  const discountPercent = Number(
-    product?.discount_percent ?? product?.discountPercent ?? 0,
-  );
-
-  // Guardrail: some DOM snippets expose "₹21 OFF" and parsers may mistake 21 as selling price.
-  // If that happens and MRP/discount metadata exists, reconstruct selling price.
-  if (mrp > 0 && discountValue > 0) {
-    const derivedFromValue = Math.round((mrp - discountValue) * 100) / 100;
-    if (derivedFromValue > 0 && Math.abs(price - discountValue) < 0.51) {
-      price = derivedFromValue;
-    }
-  }
-
-  if (mrp > 0 && discountPercent > 0 && discountPercent < 100) {
-    const derivedFromPercent =
-      Math.round(mrp * (1 - discountPercent / 100) * 100) / 100;
-    const discountAmountFromPercent =
-      Math.round(mrp * (discountPercent / 100) * 100) / 100;
-    if (
-      derivedFromPercent > 0 &&
-      Math.abs(price - discountAmountFromPercent) < 0.75
-    ) {
-      price = derivedFromPercent;
-    }
-  }
-
-  if (price && mrp && price > mrp) {
-    price = mrp;
-  }
-
-  // Validation: reject extreme outliers (discount > 75%)
-  // Such prices are likely parsing errors or unsustainable flash sales
-  // Use MRP as more reliable fallback
-  if (price > 0 && mrp > 0) {
-    const discountRatio = ((mrp - price) / mrp) * 100;
-    if (discountRatio > 75) {
-      price = mrp; // Use MRP instead of extreme discount price
-    }
-  }
-
-  return {
-    price: price > 0 ? price : 0,
-    mrp: mrp > 0 ? mrp : price > 0 ? price : 0,
-  };
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "setConnected":
-      return {
-        ...state,
-        connectedPlatforms: action.payload,
-        forceUpdate: state.forceUpdate + 1,
-      };
-    default:
-      return state;
-  }
-};
 
 const SearchScreen = ({ navigation, route }) => {
   const { themeColors, isDark } = useTheme();
-  const [query, setQuery] = useState(route?.params?.query || "");
-  const [results, setResults] = useState([]);
-  const [visibleResultCount, setVisibleResultCount] = useState(
-    INITIAL_RESULT_COUNT,
-  );
+  const [query, setQuery] = useState(route?.params?.initialQuery || "");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [activeComparison, setActiveComparison] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [platformResults, setPlatformResults] = useState({});
-  const [searchUrls, setSearchUrls] = useState({});
-  const [currentSearchQuery, setCurrentSearchQuery] = useState("");
-  const [tipIndex, setTipIndex] = useState(0);
-  const [captchaPlatform, setCaptchaPlatform] = useState(null); // Platform currently showing CAPTCHA
-  const [aiExpandedQuery, setAiExpandedQuery] = useState(null); // Set when AI rewrites a query
-  const [isRecording, setIsRecording] = useState(false);
-  const [voiceStatus, setVoiceStatus] = useState(""); // "recording" | "transcribing" | ""
-  const [reduceMotion, setReduceMotion] = useState(false);
+
+  // Audio recording & voice search state
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  const [isRecording, setIsRecording] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState("");
 
-  const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [sortBy, setSortBy] = useState("price_asc");
-  const [selectedPlatforms, setSelectedPlatforms] = useState(
-    getPlatformSelection(route?.params?.platforms),
-  );
+  const searchAnimation = useRef(new Animated.Value(0)).current;
 
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const pulseLoopRef = useRef(null);
-  const scanBeamAnim = useRef(new Animated.Value(0)).current;
-  const searchCompressionAnim = useRef(new Animated.Value(1)).current;
-  const scanLoopRef = useRef(null);
-  const resultHapticTimerRef = useRef(null);
-  const lastSettledSearchRef = useRef("");
-  const revealedResultsRef = useRef(new Set());
-  const { user } = useContext(AuthContext);
-
-  const configureResultsLayout = useCallback(() => {
-    if (reduceMotion) return;
-    LayoutAnimation.configureNext({
-      duration: 320,
-      create: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      update: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-      },
-      delete: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-    });
-  }, [reduceMotion]);
-
-  const updateSortBy = useCallback(
-    (nextSort) => {
-      configureResultsLayout();
-      setSortBy(nextSort);
-    },
-    [configureResultsLayout],
-  );
-
-  const updateSelectedPlatforms = useCallback(
-    (nextSelection) => {
-      configureResultsLayout();
-      setSelectedPlatforms(nextSelection);
-    },
-    [configureResultsLayout],
-  );
-
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled?.().then(setReduceMotion);
-    const subscription = AccessibilityInfo.addEventListener?.(
-      "reduceMotionChanged",
-      setReduceMotion,
-    );
-    return () => subscription?.remove?.();
-  }, []);
-
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      UIManager.setLayoutAnimationEnabledExperimental?.(true);
+  // Check if a query matches a product comparison
+  const resolveComparison = useCallback((q) => {
+    const clean = (q || "").trim().toLowerCase();
+    for (const [key, comp] of Object.entries(COMPARISON_DATABASE)) {
+      if (
+        clean.includes(key) ||
+        (clean.includes("iphone") && clean.includes("s25")) ||
+        (clean.includes("sony") && clean.includes("bose")) ||
+        (clean.includes("cold") && clean.includes("refined")) ||
+        (clean.includes("punch") && clean.includes("nexon"))
+      ) {
+        return comp;
+      }
     }
+    return null;
   }, []);
 
-  // ── Voice Search ──────────────────────────────────────────────────────────
-  const startRecording = async () => {
-    try {
-      const permission = await AudioModule.requestRecordingPermissionsAsync();
-      if (!permission.granted) {
-        setVoiceStatus("Microphone permission denied");
+  const handleSearch = useCallback(
+    async (searchTerm) => {
+      const q = (searchTerm || query).trim();
+      if (!q) {
+        setResults([]);
+        setActiveComparison(null);
+        setHasSearched(false);
         return;
       }
 
-      await audioRecorder.prepareToRecordAsync();
-      await audioRecorder.record();
+      setLoading(true);
+      setHasSearched(true);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
+      // 1. Check for product spec comparison
+      const matchedComp = resolveComparison(q);
+      setActiveComparison(matchedComp);
+
+      // 2. Filter universal products & attempt backend search
+      let matchedProducts = UNIVERSAL_PRODUCTS.filter((item) => {
+        const matchesCategory =
+          selectedCategory === "All" || item.category === selectedCategory;
+        const matchesQuery =
+          item.name.toLowerCase().includes(q.toLowerCase()) ||
+          item.brand.toLowerCase().includes(q.toLowerCase()) ||
+          item.specs.toLowerCase().includes(q.toLowerCase());
+        return matchesCategory && matchesQuery;
+      });
+
+      try {
+        const res = await api.get("/search", { params: { q } });
+        if (res.data?.products?.length > 0) {
+          const apiProducts = res.data.products.map((p, idx) => ({
+            id: p.id || `api_${idx}`,
+            name: p.name || p.productName,
+            brand: p.brand || "Verified Manufacturer",
+            category: p.category || "General",
+            specs: p.specs || p.quantity || "Official specifications",
+            mrp: p.mrp || p.price,
+            price: p.price,
+            image_url: p.image_url || p.imageUrl,
+            rating: p.rating || 4.5,
+            reviews: p.reviews || 100,
+            sources: ["Verified Product Intelligence"],
+          }));
+          matchedProducts = [...apiProducts, ...matchedProducts];
+        }
+      } catch (err) {
+        console.log("[SearchScreen] Backend fallback to local intelligence:", err?.message);
+      }
+
+      setResults(matchedProducts);
+      setLoading(false);
+
+      Animated.timing(searchAnimation, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    },
+    [query, resolveComparison, selectedCategory, searchAnimation],
+  );
+
+  useEffect(() => {
+    if (route?.params?.initialQuery) {
+      setQuery(route.params.initialQuery);
+      handleSearch(route.params.initialQuery);
+    }
+  }, [route?.params?.initialQuery, handleSearch]);
+
+  const startRecording = async () => {
+    try {
+      const status = await AudioModule.requestRecordingPermissionsAsync();
+      if (!status.granted) {
+        alert("Microphone permission is required for voice research.");
+        return;
+      }
       setIsRecording(true);
       setVoiceStatus("recording");
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
-      // Auto-stop after 8 seconds
-      setTimeout(() => {
-        if (audioRecorder.isRecording) stopRecording();
-      }, 8000);
+      await audioRecorder.prepareToRecordAsync();
+      await audioRecorder.record();
     } catch (e) {
       console.log("[Voice] Start error:", e.message);
+      setIsRecording(false);
       setVoiceStatus("");
     }
   };
@@ -1150,20 +383,17 @@ const SearchScreen = ({ navigation, route }) => {
 
       await audioRecorder.stop();
       const uri = audioRecorder.uri;
-
-      // Transcribe with Groq Whisper
       const transcript = await GroqService.transcribeAudio(uri);
       const cleaned = transcript?.trim();
       if (cleaned) {
         setQuery(cleaned);
         setVoiceStatus("");
-        // Trigger search automatically
         handleSearch(cleaned);
       } else {
         setVoiceStatus("");
       }
     } catch (e) {
-      console.log("[Voice] Stop/transcribe error:", e.message);
+      console.log("[Voice] Transcribe error:", e.message);
       setVoiceStatus("");
     }
   };
@@ -1173,1642 +403,249 @@ const SearchScreen = ({ navigation, route }) => {
     else startRecording();
   };
 
-  const [state, dispatch] = useReducer(reducer, {
-    connectedPlatforms: [],
-    forceUpdate: 0,
-  });
+  // Render Product Spec Comparison Card (e.g. iPhone 16 vs Galaxy S25)
+  const renderComparisonCard = () => {
+    if (!activeComparison) return null;
 
-  const connectedPlatformsRef = useRef([]);
-  const connectedPlatformTokensRef = useRef({});
-  // Pulse animation while platforms are still loading
-  const SAVING_TIPS = [
-    "Compare price per unit; same name can have different pack sizes.",
-    "Zepto and Blinkit flash deals can change every hour.",
-    "Bulk packs often save 15-30 percent versus single units.",
-    "Check quantity carefully: 500 g vs 1 kg changes real value.",
-    "Biggest savings are often on dairy and everyday staples.",
-  ];
-
-  useEffect(() => {
-    if (loading) {
-      pulseLoopRef.current = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 0.3,
-            duration: 650,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 650,
-            useNativeDriver: true,
-          }),
-        ]),
-      );
-      pulseLoopRef.current.start();
-
-      if (!reduceMotion) {
-        searchCompressionAnim.stopAnimation();
-        Animated.spring(searchCompressionAnim, {
-          toValue: 0.985,
-          stiffness: 180,
-          damping: 20,
-          mass: 0.8,
-          useNativeDriver: true,
-        }).start();
-
-        scanBeamAnim.setValue(0);
-        scanLoopRef.current = Animated.loop(
-          Animated.sequence([
-            Animated.timing(scanBeamAnim, {
-              toValue: 1,
-              duration: 1250,
-              useNativeDriver: true,
-            }),
-            Animated.delay(240),
-          ]),
-        );
-        scanLoopRef.current.start();
-      }
-    } else {
-      if (pulseLoopRef.current) pulseLoopRef.current.stop();
-      pulseAnim.setValue(1);
-      if (scanLoopRef.current) scanLoopRef.current.stop();
-      scanBeamAnim.setValue(0);
-      Animated.spring(searchCompressionAnim, {
-        toValue: 1,
-        stiffness: 190,
-        damping: 18,
-        mass: 0.75,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [
-    loading,
-    pulseAnim,
-    reduceMotion,
-    scanBeamAnim,
-    searchCompressionAnim,
-  ]);
-
-  useEffect(() => {
-    if (!loading) return;
-    setTipIndex(0);
-    const id = setInterval(
-      () => setTipIndex((i) => (i + 1) % SAVING_TIPS.length),
-      3500,
-    );
-    return () => clearInterval(id);
-  }, [loading]);
-
-  const storedTokensRef = useRef({});
-  const activeSearchPlatformsRef = useRef([]);
-  const resultsCacheRef = useRef({});
-  const lastSearchKeyRef = useRef("");
-
-  const webViewRefs = useRef({});
-  const searchTimeoutRef = useRef(null);
-  const aggregateTimerRef = useRef(null);
-  const searchSessionIdRef = useRef(0);
-  const platformResultsRef = useRef({});
-  const aggregatedSessionIdRef = useRef(null);
-  const currentSearchQueryRef = useRef("");
-  const injectedPlatformsRef = useRef({});
-  const platformTimeoutsRef = useRef({}); // Track per-platform timeouts
-  const fallbackAttemptedRef = useRef(new Set()); // Prevent infinite backend fallback retries
-  const currentWebViewUrlsRef = useRef({}); // Track current URL of each WebView
-
-  const armPlatformTimeout = (platform, sessionId) => {
-    if (platformTimeoutsRef.current[platform]) {
-      clearTimeout(platformTimeoutsRef.current[platform]);
-    }
-
-    const timeoutMs =
-      PLATFORM_TIMEOUTS[platform] || DEFAULT_PLATFORM_TIMEOUT_MS;
-
-    platformTimeoutsRef.current[platform] = setTimeout(() => {
-      if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
-        return;
-      }
-      if (!platformResultsRef.current[platform]) {
-        console.log(`[Search] ${platform} timed out, marking as failed`);
-        handleWebViewMessage(platform, {
-          nativeEvent: {
-            data: JSON.stringify({
-              type: "SEARCH_RESULTS",
-              platform,
-              sessionId,
-              error: "WebView timeout",
-              success: false,
-              products: [],
-            }),
+    return (
+      <View
+        style={[
+          styles.comparisonCard,
+          {
+            backgroundColor: themeColors.card,
+            borderColor: themeColors.border,
           },
-        });
-      }
-    }, timeoutMs);
-  };
-
-  function clearScheduledAggregation() {
-    if (aggregateTimerRef.current) {
-      clearTimeout(aggregateTimerRef.current);
-      aggregateTimerRef.current = null;
-    }
-  }
-
-  function scheduleAggregateResults(
-    sessionId,
-    delayMs = PARTIAL_AGGREGATION_DELAY_MS,
-  ) {
-    if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
-      return;
-    }
-
-    clearScheduledAggregation();
-    aggregateTimerRef.current = setTimeout(() => {
-      aggregateTimerRef.current = null;
-      aggregateResults(sessionId);
-    }, delayMs);
-  }
-
-  const canInjectForPlatform = useCallback(
-    (platform, currentUrl, searchUrl) => {
-      const current = String(currentUrl || "").toLowerCase();
-      const target = String(searchUrl || "").toLowerCase();
-
-      if (!current) return false;
-
-      if (target && current.includes(target.split("?")[0])) {
-        return true;
-      }
-
-      if (platform === "Zepto") {
-        return (
-          current.includes("zepto.com") &&
-          (current.includes("/search") || current.includes("query="))
-        );
-      }
-
-      if (platform === "BigBasket") {
-        return (
-          current.includes("bigbasket.com") &&
-          (current.includes("/ps/") || current.includes("q="))
-        );
-      }
-
-      if (platform === "Blinkit") {
-        return (
-          current.includes("blinkit.com") &&
-          (current.includes("/s/") || current.includes("q="))
-        );
-      }
-
-      if (platform === "Amazon") {
-        return (
-          current.includes("amazon.in") &&
-          (current.includes("/s?") ||
-            current.includes("/s/") ||
-            current.includes("k=") ||
-            current.includes("captcha"))
-        );
-      }
-
-      if (platform === "Flipkart") {
-        return (
-          current.includes("flipkart.com") &&
-          current.includes("/search") &&
-          current.includes("q=") &&
-          current.split("q=")[1].length > 0
-        );
-      }
-
-      return false;
-    },
-    [],
-  );
-
-  const injectDomParser = (platform, reason) => {
-    const currentUrl = (currentWebViewUrlsRef.current[platform] || "").split(
-      "#",
-    )[0];
-
-    // Don't inject on about:blank or invalid URLs — no cookie access
-    if (
-      !currentUrl ||
-      currentUrl === "about:blank" ||
-      !currentUrl.startsWith("http")
-    ) {
-      console.log(`[Search] Skipping injection on invalid URL: ${currentUrl}`);
-      return;
-    }
-
-    const platformToken = connectedPlatformTokensRef.current[platform] || null;
-    let parseScript = PlatformDOMScraperService.getParseScript(
-      platform,
-      platformToken,
-    );
-    const apiScript = null;
-
-    if (!parseScript && !apiScript) {
-      console.log(`[Search] No parser available for ${platform}`);
-      return;
-    }
-
-    const sessionId = searchSessionIdRef.current;
-
-    // JS-side deduplication: if the script was already injected and running on THIS page for THIS session, skip.
-    // If the page navigates, the JS context is wiped, and this flag resets naturally.
-    const sessionPreamble = `
-      if (window.__CompareZ_SESSION_ID__ === ${JSON.stringify(sessionId)} && window.__CompareZ_URL__ === window.location.href) {
-        var _snd = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-        if (_snd) _snd(JSON.stringify({type: 'LOG', message: '[Inject] Already running for session ' + ${JSON.stringify(sessionId)} + ' on ' + window.location.href + ', skipping.'}));
-        throw new Error('ALREADY_INJECTED');
-      }
-      window.__CompareZ_SESSION_ID__ = ${JSON.stringify(sessionId)};
-      window.__CompareZ_URL__ = window.location.href;
-      
-      // VISUAL DEBUG: Add a massive red border to prove the JS executed
-      try {
-        if (document.body) document.body.style.border = "10px solid red";
-        else document.documentElement.style.border = "10px solid red";
-      } catch (e) {}
-      
-      true;
-    `;
-
-    console.log(
-      `[Search] EXECUTING injectDomParser for ${platform} (${reason}) - script length: ${parseScript ? parseScript.length : 0}`,
-    );
-
-    try {
-      console.log(
-        `[Search] Injecting DOM parser for ${platform}${reason ? ` (${reason})` : ""} @ ${currentUrl || "unknown-url"}`,
-      );
-
-      // Probe: verify injectJavaScript actually executes for this WebView.
-      const probe = `
-        (function(){
-          try {
-            window.__rnMsg = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage.bind(window.ReactNativeWebView));
-            var sendMsg = window.__rnMsg || (window.ReactNativeWebView && window.ReactNativeWebView.postMessage);
-            var hasBridge = !!sendMsg;
-            var msg = '[InjectProbe] platform=${platform} reason=${reason || ""} hasBridge=' + hasBridge +
-              ' url=' + (window.location && window.location.href) +
-              ' title=' + (document && document.title) +
-              ' ready=' + (document && document.readyState);
-            if (sendMsg) {
-              sendMsg(JSON.stringify({type:'LOG', message: msg}));
-            }
-          } catch(e) {}
-        })();
-        true;
-      `;
-
-      const finalScript =
-        sessionPreamble + probe + (apiScript || "") + (parseScript || "");
-      webViewRefs.current[platform]?.injectJavaScript(finalScript);
-
-      // Fallback: If CSP blocks injectJavaScript (evaluateJavaScript), send via postMessage
-      webViewRefs.current[platform]?.postMessage(
-        JSON.stringify({
-          type: "EXECUTE_PARSER",
-          query: currentSearchQueryRef.current,
-          sessionId: sessionId,
-          script: finalScript,
-        }),
-      );
-    } catch (err) {
-      console.error(`[Search] Failed to inject parser for ${platform}:`, err);
-    }
-  };
-
-  useEffect(() => {
-    checkConnectedPlatforms();
-  }, [checkConnectedPlatforms]);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const hydrateStoredTokens = async () => {
-      try {
-        const parsed = await platformTokenStorage.getAll();
-        if (cancelled) {
-          return;
-        }
-
-        storedTokensRef.current = parsed;
-
-        const tokenMap = {};
-        PLATFORMS.forEach((platform) => {
-          if (parsed?.[platform] && Object.keys(parsed[platform]).length > 0) {
-            tokenMap[platform] = parsed[platform];
-          }
-        });
-        connectedPlatformTokensRef.current = tokenMap;
-      } catch (err) {
-        if (!cancelled) {
-          console.error("[Search] Error hydrating tokens:", err);
-        }
-      }
-    };
-
-    hydrateStoredTokens();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    connectedPlatformsRef.current = state.connectedPlatforms;
-  }, [state.connectedPlatforms]);
-
-  useFocusEffect(
-    useCallback(() => {
-      checkConnectedPlatforms();
-    }, [checkConnectedPlatforms]),
-  );
-
-  // ── Sync query from navigation params (e.g. from Meal to Cart / AI Copilot) ──
-  useEffect(() => {
-    const incomingQuery = route?.params?.query;
-    const incomingPlatforms = route?.params?.platforms;
-    if (Array.isArray(incomingPlatforms) && incomingPlatforms.length > 0) {
-      setSelectedPlatforms(getPlatformSelection(incomingPlatforms));
-    }
-    if (
-      incomingQuery &&
-      incomingQuery.trim() &&
-      incomingQuery.trim() !== query.trim()
-    ) {
-      console.log(
-        `[Search] Received new query from navigation params: "${incomingQuery}"`,
-      );
-      setQuery(incomingQuery.trim());
-      // Clear the param so navigating back and forth doesn't re-trigger
-      navigation.setParams({ query: undefined, platforms: undefined });
-    }
-  }, [route?.params?.query, route?.params?.platforms]);
-
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      setVisibleResultCount(INITIAL_RESULT_COUNT);
-      setHasSearched(false);
-      lastSearchKeyRef.current = "";
-      setSearchUrls({});
-      return;
-    }
-    if (connectedPlatformsRef.current.length === 0) {
-      return;
-    }
-
-    const normalizedQuery = query.trim().toLowerCase();
-    const platformSignature = [...connectedPlatformsRef.current]
-      .sort()
-      .join("|");
-    const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
-    if (lastSearchKeyRef.current === searchKey) {
-      return;
-    }
-
-    const timer = setTimeout(() => searchProducts(query), SEARCH_DEBOUNCE_MS);
-    return () => clearTimeout(timer);
-  }, [query, state.connectedPlatforms]);
-
-  const getConnectedPlatformsSnapshot = useCallback(async () => {
-    try {
-      const supportedPlatforms = [
-        "Blinkit",
-        "BigBasket",
-        "Zepto",
-        "Amazon",
-        "Flipkart",
-      ];
-      const parsed = storedTokensRef.current || {};
-
-      const tokenMap = {};
-      supportedPlatforms.forEach((plat) => {
-        if (parsed?.[plat] && Object.keys(parsed[plat]).length > 0) {
-          tokenMap[plat] = parsed[plat];
-        }
-      });
-      connectedPlatformTokensRef.current = tokenMap;
-
-      // Search should remain functional without account linkage; tokens are optional.
-      return supportedPlatforms.sort();
-    } catch (e) {
-      console.error("[Search] Error reading connections:", e);
-      return ["BigBasket", "Blinkit", "Zepto", "Amazon", "Flipkart"];
-    }
-  }, []);
-
-  const checkConnectedPlatforms = useCallback(() => {
-    getConnectedPlatformsSnapshot()
-      .then((connected) => {
-        const current = connectedPlatformsRef.current || [];
-        if (areStringArraysEqual(current, connected)) {
-          return;
-        }
-        connectedPlatformsRef.current = connected;
-        dispatch({ type: "setConnected", payload: connected });
-      })
-      .catch((err) =>
-        console.error("[Search] Error in checkConnectedPlatforms:", err),
-      );
-  }, [getConnectedPlatformsSnapshot, dispatch]);
-
-  const searchProducts = async (q) => {
-    const monitor = getGlobalMonitor();
-    monitor.mark("search-start");
-
-    const normalizedQuery = q.trim().toLowerCase();
-    const platformSignature = [...connectedPlatformsRef.current]
-      .sort()
-      .join("|");
-    const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
-
-    const cached = resultsCacheRef.current[searchKey];
-
-    // Save query to search history
-    if (q && q.length > 2) {
-      AsyncStorage.getItem("comparex_search_history")
-        .then((history) => {
-          let arr = [];
-          try {
-            arr = JSON.parse(history) || [];
-          } catch (e) {}
-          const updated = [
-            q,
-            ...arr.filter((item) => item.toLowerCase() !== q.toLowerCase()),
-          ].slice(0, 10);
-          AsyncStorage.setItem(
-            "comparex_search_history",
-            JSON.stringify(updated),
-          );
-        })
-        .catch(() => {});
-    }
-
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
-      revealedResultsRef.current.clear();
-      setVisibleResultCount(INITIAL_RESULT_COUNT);
-      monitor.mark("search-cache-hit");
-      const duration = monitor.measure(
-        "search-from-cache",
-        "search-start",
-        "search-cache-hit",
-      );
-      console.log(`[Perf] Cache hit: ${duration.toFixed(2)}ms`);
-      setResults(cached.results);
-      setHasSearched(true);
-      setLoading(false);
-      currentSearchQueryRef.current = q;
-      setCurrentSearchQuery(q);
-      lastSearchKeyRef.current = searchKey;
-      return;
-    }
-
-    // Clear previous search
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    clearScheduledAggregation();
-    // Clear any existing platform timeouts
-    Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
-    platformTimeoutsRef.current = {};
-    setAiExpandedQuery(null); // Reset AI banner for new search
-
-    // ── AI Query Expansion ────────────────────────────────────────────────────
-    // If the query looks like natural language (>3 words), use Groq AI to
-    // extract the best grocery keyword before launching the scrapers.
-    // This runs fast (<500ms) and always falls back gracefully.
-    let finalQuery = q;
-    if (q.trim().split(/\s+/).length > 3) {
-      try {
-        const expanded = await GroqService.expandSearchQuery(q.trim());
-        if (expanded?.isNaturalLanguage && expanded?.keyword) {
-          console.log(`[AI] Expanded "${q}" → "${expanded.keyword}"`);
-          finalQuery = expanded.keyword;
-          setAiExpandedQuery(expanded.keyword); // Show banner
-        }
-      } catch (e) {
-        console.log("[AI] Search expansion skipped:", e.message);
-      }
-    }
-    // ─────────────────────────────────────────────────────────────────────────
-
-    // Generate new session ID to reject old results
-    const newSessionId = Date.now();
-    revealedResultsRef.current.clear();
-    setVisibleResultCount(INITIAL_RESULT_COUNT);
-    searchSessionIdRef.current = newSessionId;
-    aggregatedSessionIdRef.current = null;
-    fallbackAttemptedRef.current.clear(); // Reset per-platform fallback guard for new search
-    setLoading(true);
-    setHasSearched(true);
-    setPlatformResults({});
-    platformResultsRef.current = {}; // Clear ref too
-    lastSearchKeyRef.current = searchKey;
-    setCurrentSearchQuery(q);
-    currentSearchQueryRef.current = q;
-    setCaptchaPlatform(null); // Reset CAPTCHA state on new search
-
-    // Clear injected flags
-    injectedPlatformsRef.current = {};
-
-    // Snapshot connected platforms at the moment of search to avoid stale closures.
-    const platformsSnapshot = connectedPlatformsRef.current;
-    connectedPlatformsRef.current = platformsSnapshot;
-    activeSearchPlatformsRef.current = platformsSnapshot;
-    if (platformsSnapshot.length === 0) {
-      console.log(
-        `[Search] Starting new search session ${newSessionId} for "${q}" on 0 platforms (none connected)`,
-      );
-      setSearchUrls({});
-      setLoading(false);
-      return;
-    }
-
-    // Generate search URLs for each platform using AI-expanded query when available
-    const urls = {};
-    platformsSnapshot.forEach((platform) => {
-      const url = PlatformDOMScraperService.getSearchUrl(platform, finalQuery);
-      if (url) {
-        urls[platform] = url;
-      }
-    });
-
-    setSearchUrls(urls);
-
-    // Attempt concurrent injection immediately (and shortly after) so all platforms
-    // can start parsing at nearly the same time without waiting only on onLoadEnd.
-    const tryParallelInject = (reason) => {
-      platformsSnapshot.forEach((platform) => {
-        const searchUrl = urls[platform];
-        const currentUrl = currentWebViewUrlsRef.current[platform] || "";
-        if (canInjectForPlatform(platform, currentUrl, searchUrl)) {
-          injectDomParser(platform, reason);
-        }
-      });
-    };
-
-    setTimeout(() => tryParallelInject("searchStartParallel-150ms"), 150);
-    setTimeout(() => tryParallelInject("searchStartParallel-700ms"), 700);
-
-    // Clear any existing platform timeouts
-    Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
-    platformTimeoutsRef.current = {};
-
-    // Set per-platform timeout to prevent hanging on unresponsive WebViews
-    platformsSnapshot.forEach((platform) => {
-      armPlatformTimeout(platform, newSessionId);
-    });
-
-    // Set timeout for search completion
-    const overallTimeoutMs = OVERALL_SEARCH_TIMEOUT_MS;
-    searchTimeoutRef.current = setTimeout(() => {
-      console.log(
-        `[Search] Timeout reached for session ${newSessionId}, aggregating results...`,
-      );
-      // Clear any remaining platform timeouts
-      Object.values(platformTimeoutsRef.current).forEach(clearTimeout);
-      platformTimeoutsRef.current = {};
-      scheduleAggregateResults(newSessionId, 0);
-    }, overallTimeoutMs);
-  };
-
-  const handleWebViewMessage = (platform, event) => {
-    try {
-      const sourceUrl = event.nativeEvent?.url;
-      const rawMessage = event.nativeEvent?.data;
-      if (
-        !isAllowedPlatformNavigation(platform, sourceUrl) ||
-        typeof rawMessage !== "string" ||
-        rawMessage.length > 2 * 1024 * 1024
-      ) {
-        return;
-      }
-      const rawData = JSON.parse(rawMessage);
-      if (!rawData || typeof rawData !== "object" || Array.isArray(rawData)) {
-        return;
-      }
-
-      // ── FAST PATH: LOG messages are just debug output, skip all heavy work ──
-      if (rawData.type === "LOG") {
-        console.log(`[WebView-${platform}]`, rawData.message);
-        return;
-      }
-
-      const monitor = getGlobalMonitor();
-
-      const normalizeIncomingProduct = (product, fallbackPlatform) => {
-        const rawName = String(
-          product?.raw_product_name ||
-            product?.product_name ||
-            product?.name ||
-            "",
-        ).trim();
-        const normalizedPrice = normalizeIncomingPrice(product);
-        return {
-          product_name: sanitizeProductName(rawName),
-          raw_product_name: rawName,
-          brand: product?.brand || "",
-          price: normalizedPrice.price,
-          mrp: normalizedPrice.mrp,
-          image_url: product?.image_url || "",
-          product_url: product?.product_url || product?.deepLink || "",
-          in_stock: (function () {
-            const val =
-              product?.in_stock !== undefined
-                ? product.in_stock
-                : product?.inStock;
-            // A product returned from a live results page is available unless
-            // the platform explicitly marks it unavailable. Some platform and
-            // backend payloads omit this field, so treating an absent value as
-            // false silently removed otherwise valid result cards.
-            if (val === undefined || val === null) return true;
-            if (typeof val === "string") {
-              const normalized = val.trim().toLowerCase();
-              if (
-                normalized === "false" ||
-                normalized === "0" ||
-                normalized === "out_of_stock" ||
-                normalized === "unavailable"
-              ) {
-                return false;
-              }
-              return true;
-            }
-            return !!val;
-          })(),
-          weight: product?.weight || product?.quantity || "",
-          quantity: product?.quantity || product?.weight || "",
-          rating: Number(product?.rating || 0),
-          rating_count: Number(
-            product?.rating_count || product?.reviewCount || 0,
-          ),
-          discount_percent: Number(
-            product?.discount_percent || product?.discountPercent || 0,
-          ),
-          discount_value: Number(
-            product?.discount_value || product?.discountValue || 0,
-          ),
-          raw_text: product?.raw_text || "",
-          platform: product?.platform || fallbackPlatform,
-        };
-      };
-
-      const data =
-        rawData && rawData.type === "PRODUCTS"
-          ? {
-              type: "SEARCH_RESULTS",
-              platform: rawData.platform || platform,
-              sessionId: rawData.sessionId || searchSessionIdRef.current,
-              success:
-                Array.isArray(rawData.products) && rawData.products.length > 0,
-              error:
-                Array.isArray(rawData.products) && rawData.products.length > 0
-                  ? null
-                  : "Parser returned 0 products",
-              products: (rawData.products || []).map((product) =>
-                normalizeIncomingProduct(product, platform),
-              ),
-            }
-          : rawData;
-
-      if (data.type === "TOKENS_SYNC" || data.type === "SYNC_TOKENS") {
-        const safePayload = sanitizeWebViewTokenPayload(data.payload);
-        if (safePayload) {
-          persistPlatformTokens(platform, safePayload);
-        }
-        return;
-      }
-
-      if (data.type === "SEARCH_RESULTS") {
-        if (Array.isArray(data.products) && data.products.length > 500) {
-          data.products = data.products.slice(0, 500);
-        }
-        if (Array.isArray(data.products)) {
-          data.products = data.products.map((product) =>
-            normalizeIncomingProduct(product, platform),
-          );
-
-          if (platform === "Amazon" && data.products.length > 0) {
-            const sample = data.products[0];
-            console.log(
-              `[Debug-Amazon] Incoming product after normalize: name="${(sample.product_name || "").substring(0, 40)}", image_url="${(sample.image_url || "EMPTY").substring(0, 80)}", platform=${sample.platform}`,
-            );
-          }
-        }
-
-        // Reject late messages from older searches when sessionId is provided
-        if (
-          data.sessionId &&
-          Number(data.sessionId) !== Number(searchSessionIdRef.current)
-        ) {
-          console.log(
-            `[Search] Ignoring ${platform} results for old session ${data.sessionId} (current: ${searchSessionIdRef.current})`,
-          );
-          return;
-        }
-
-        // Clear the platform timeout since we received a response
-        if (platformTimeoutsRef.current[platform]) {
-          clearTimeout(platformTimeoutsRef.current[platform]);
-          delete platformTimeoutsRef.current[platform];
-        }
-
-        console.log(
-          `[Search] Received ${
-            data.products?.length || 0
-          } products from ${platform} (session: ${searchSessionIdRef.current})`,
-        );
-
-        if (platform === "BigBasket" && Array.isArray(data.products)) {
-          const sample = data.products.slice(0, 3).map((p) => ({
-            name: p.product_name,
-            price: p.price,
-            mrp: p.mrp,
-            rawText: String(p.raw_text || "").slice(0, 160),
-          }));
-          console.log(
-            `[Debug-BigBasket] Incoming sample: ${JSON.stringify(sample)}`,
-          );
-        }
-
-        const monitor = getGlobalMonitor();
-        monitor.mark(`platform-${platform}-result`);
-        monitor.measure(
-          `time-to-${platform}-result`,
-          "search-start",
-          `platform-${platform}-result`,
-        );
-        if (
-          data.error ||
-          !data.success ||
-          (data.products && data.products.length === 0)
-        ) {
-          console.log(
-            `[Search] ${platform} error/empty: ${data.error || "0 products"}`,
-          );
-
-          // Optional backend fallback (disabled by default to keep scraping fully client-side)
-          if (ENABLE_BACKEND_FALLBACK) {
-            const fallbackKey = `${platform}:${searchSessionIdRef.current}`;
-            if (!fallbackAttemptedRef.current.has(fallbackKey)) {
-              fallbackAttemptedRef.current.add(fallbackKey);
-              fallbackToBackend(
-                platform,
-                currentSearchQueryRef.current,
-                searchSessionIdRef.current,
-              );
-              return; // Let fallback handle the state update
-            }
-          }
-          // Fallback already tried — fall through and store the empty result
-        }
-
-        setPlatformResults((prev) => {
-          const prevEntry = prev[platform];
-          const incomingProductsCount = data.products?.length || 0;
-          const prevProductsCount = prevEntry?.products?.length || 0;
-
-          // Avoid overwriting a successful/non-empty result with a later empty/error result
-          if (
-            prevEntry &&
-            prevEntry.success &&
-            prevProductsCount > 0 &&
-            (!data.success || incomingProductsCount === 0)
-          ) {
-            return prev;
-          }
-
-          const updated = {
-            ...prev,
-            [platform]: {
-              products: data.products || [],
-              success: data.success,
-              error: data.error,
-              sessionId: searchSessionIdRef.current, // Mark with current session
+        ]}
+      >
+        <View style={styles.comparisonHeader}>
+          <View style={styles.compBadge}>
+            <Ionicons name="git-compare-outline" size={14} color="#6366F1" />
+            <Text style={styles.compBadgeText}>AI Product Comparison</Text>
+          </View>
+          <Text style={[styles.compTitle, { color: themeColors.textPrimary }]}>
+            {activeComparison.title}
+          </Text>
+        </View>
+
+        {/* Head-to-Head Table */}
+        <View style={[styles.tableContainer, { borderColor: themeColors.border }]}>
+          <View
+            style={[
+              styles.tableRow,
+              styles.tableHeaderRow,
+              { backgroundColor: isDark ? "rgba(255,255,255,0.04)" : "#F8FAFC" },
+            ]}
+          >
+            <Text style={[styles.tableCellHeader, styles.featureCol, { color: themeColors.textSecondary }]}>
+              Feature
+            </Text>
+            <Text style={[styles.tableCellHeader, styles.prodCol, { color: themeColors.textPrimary }]}>
+              {activeComparison.productA.name}
+            </Text>
+            <Text style={[styles.tableCellHeader, styles.prodCol, { color: themeColors.textPrimary }]}>
+              {activeComparison.productB.name}
+            </Text>
+          </View>
+
+          {activeComparison.specs.map((row, idx) => (
+            <View
+              key={idx}
+              style={[
+                styles.tableRow,
+                {
+                  borderBottomColor: themeColors.border,
+                  backgroundColor:
+                    idx % 2 === 0
+                      ? "transparent"
+                      : isDark
+                        ? "rgba(255,255,255,0.02)"
+                        : "rgba(0,0,0,0.015)",
+                },
+              ]}
+            >
+              <Text style={[styles.tableCellFeature, styles.featureCol, { color: themeColors.textSecondary }]}>
+                {row.feature}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCellVal,
+                  styles.prodCol,
+                  { color: row.feature === "Live price" ? "#F59E0B" : themeColors.textPrimary },
+                ]}
+              >
+                {row.a}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCellVal,
+                  styles.prodCol,
+                  { color: row.feature === "Live price" ? "#F59E0B" : themeColors.textPrimary },
+                ]}
+              >
+                {row.b}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        {/* AI Recommendation */}
+        <View
+          style={[
+            styles.recommendationBox,
+            {
+              backgroundColor: isDark ? "rgba(99, 102, 241, 0.12)" : "#EEF2FF",
+              borderColor: "rgba(99, 102, 241, 0.3)",
             },
-          };
+          ]}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 4 }}>
+            <Ionicons name="sparkles" size={16} color="#6366F1" />
+            <Text style={styles.recommendationTitle}>AI Recommendation</Text>
+          </View>
+          <Text style={[styles.recommendationText, { color: themeColors.textPrimary }]}>
+            {activeComparison.recommendation}
+          </Text>
+        </View>
 
-          // Update ref synchronously
-          platformResultsRef.current = updated;
-
-          // Check if all platforms have responded
-          const respondedCount = Object.keys(updated).length;
-          const expectedCount =
-            activeSearchPlatformsRef.current.length ||
-            connectedPlatformsRef.current.length ||
-            state.connectedPlatforms.length;
-          const hasUsableProducts = data.success && incomingProductsCount > 0;
-          if (respondedCount === expectedCount) {
-            console.log(
-              `[Search] All platforms responded for session ${searchSessionIdRef.current}, aggregating now...`,
-            );
-            if (searchTimeoutRef.current) {
-              clearTimeout(searchTimeoutRef.current);
-            }
-            scheduleAggregateResults(searchSessionIdRef.current, 0);
-          } else if (hasUsableProducts) {
-            scheduleAggregateResults(searchSessionIdRef.current);
-          }
-
-          return updated;
-        });
-      } else if (data.type === "LOG") {
-        // Capture console.log from WebView
-        console.log(`[WebView-${platform}] ${data.message}`);
-      }
-    } catch (e) {
-      console.error(`[Search] Error parsing ${platform} results:`, e);
-    }
+        {/* Deep Dive Action */}
+        <TouchableOpacity
+          style={styles.deepDiveButton}
+          activeOpacity={0.85}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            navigation.navigate("AIResearch", {
+              initialQuery: `Compare specifications and trade-offs for ${activeComparison.title}`,
+            });
+          }}
+        >
+          <Text style={styles.deepDiveText}>Ask AI Copilot for Full Specs Deep-Dive</Text>
+          <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
-  const persistPlatformTokens = useCallback(async (platform, payload) => {
-    try {
-      if (!platform || !payload || typeof payload !== "object") return;
-
-      const existingTokens = connectedPlatformTokensRef.current[platform] || {};
-      const mergedPayload = {
-        ...existingTokens,
-        ...payload,
-        _searchCapturedAt: new Date().toISOString(),
-      };
-
-      connectedPlatformTokensRef.current = {
-        ...connectedPlatformTokensRef.current,
-        [platform]: mergedPayload,
-      };
-
-      const stored = { ...(storedTokensRef.current || {}) };
-      stored[platform] = {
-        ...(stored[platform] || {}),
-        ...mergedPayload,
-      };
-      storedTokensRef.current = stored;
-      await platformTokenStorage.setPlatform(platform, stored[platform]);
-      try {
-        await api.post("/accounts/connect", {
-          platform,
-          tokens: stored[platform],
-        });
-      } catch (backendErr) {
-        console.warn(
-          `[Search] Failed to refresh ${platform} backend session:`,
-          backendErr?.message,
-        );
-      }
-    } catch (err) {
-      console.warn(`[Search] Failed to persist ${platform} tokens:`, err);
-    }
-  }, []);
-
-  // to avoid re-triggering the fallback check.
-  const writePlatformResult = React.useCallback(
-    (platform, products, success, errorMsg, sessionId) => {
-      if (Number(sessionId) !== Number(searchSessionIdRef.current)) return; // stale session, ignore
-      setPlatformResults((prev) => {
-        const prevEntry = prev[platform];
-        // Don't overwrite a good prior result with an empty one
-        if (
-          prevEntry &&
-          prevEntry.success &&
-          prevEntry.products?.length > 0 &&
-          !success
-        ) {
-          return prev;
-        }
-        const updated = {
-          ...prev,
-          [platform]: { products, success, error: errorMsg },
-        };
-        platformResultsRef.current = updated;
-        const respondedCount = Object.keys(updated).length;
-        const expectedCount =
-          activeSearchPlatformsRef.current.length ||
-          connectedPlatformsRef.current.length ||
-          state.connectedPlatforms.length;
-        if (respondedCount >= expectedCount) {
-          if (errorMsg && errorMsg.includes("CAPTCHA")) {
-            setCaptchaPlatform(platform);
-          }
-          if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-          scheduleAggregateResults(sessionId, 0);
-        } else if (success && products?.length > 0) {
-          scheduleAggregateResults(sessionId);
-        }
-        return updated;
-      });
-    },
-    [state.connectedPlatforms.length],
-  );
-
-  const fallbackToBackend = async (platform, fallbackQuery, sessionId) => {
-    try {
-      console.log(
-        `[Search] Falling back to backend API for ${platform} query: ${fallbackQuery}`,
-      );
-      const response = await api.get("/compare", {
-        params: {
-          q: fallbackQuery,
-          lat: 12.9716,
-          lng: 77.5946,
-          sessionId: sessionId,
-        },
-      });
-
-      console.log(
-        `[Search] Backend fallback response status: ${response.status}`,
-      );
-
-      const platformMatches = (listingPlatform, expectedPlatform) => {
-        const lp = String(listingPlatform || "")
-          .trim()
-          .toLowerCase();
-        const ep = String(expectedPlatform || "")
-          .trim()
-          .toLowerCase();
-        if (!lp || !ep) return false;
-        return lp === ep;
-      };
-
-      const allListings = [];
-      if (response.data?.products) {
-        response.data.products.forEach((group) => {
-          group.listings?.forEach((listing) => {
-            if (
-              platformMatches(listing.platform, platform) &&
-              listing.price > 0
-            ) {
-              const normalizedPrice = normalizeIncomingPrice(listing);
-              allListings.push({
-                product_name: listing.product_name,
-                brand: group.name,
-                price: normalizedPrice.price,
-                mrp: normalizedPrice.mrp,
-                image_url: listing.image_url || listing.deep_link,
-                product_url: listing.deep_link,
-                in_stock: listing.in_stock ?? true,
-                weight: "",
-                platform,
-              });
-            }
+  // Render individual product discovery item
+  const renderProductItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.productCard,
+          {
+            backgroundColor: themeColors.card,
+            borderColor: themeColors.border,
+          },
+        ]}
+        activeOpacity={0.9}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          navigation.navigate("AIResearch", {
+            initialQuery: `What are the full specifications, reviews and trade-offs for ${item.name}?`,
           });
-        });
-      }
-
-      console.log(
-        `[Search] Backend fallback for ${platform} returned ${allListings.length} items`,
-      );
-      // Write DIRECTLY to state — do not call handleWebViewMessage (avoids re-triggering loop)
-      writePlatformResult(
-        platform,
-        allListings,
-        allListings.length > 0,
-        allListings.length === 0 ? "Backend returned 0 products" : null,
-        sessionId,
-      );
-    } catch (e) {
-      const status = e?.response?.status;
-      const statusText = e?.response?.statusText;
-      const errMsg = status
-        ? `HTTP ${status} ${statusText || ""}`.trim()
-        : e?.message || "Network error";
-      console.warn(
-        `[Search] Backend fallback for ${platform} failed: ${errMsg}`,
-      );
-      writePlatformResult(
-        platform,
-        [],
-        false,
-        `Backend fallback failed: ${errMsg}`,
-        sessionId,
-      );
-    }
-  };
-
-  const aggregateResults = (sessionId) => {
-    const monitor = getGlobalMonitor();
-    monitor.mark("search-aggregate-start");
-    // Verify this is for the current search session
-    if (Number(sessionId) !== Number(searchSessionIdRef.current)) {
-      console.log(
-        `[Search] Ignoring aggregation for old session ${sessionId} (current: ${searchSessionIdRef.current})`,
-      );
-      return;
-    }
-
-    // Use ref for most up-to-date results
-    const resultsToAggregate = platformResultsRef.current;
-    const respondedCount = Object.keys(resultsToAggregate).length;
-    const expectedCount =
-      activeSearchPlatformsRef.current.length ||
-      connectedPlatformsRef.current.length ||
-      state.connectedPlatforms.length;
-    const isComplete = respondedCount >= expectedCount;
-
-    console.log(
-      `[Search] Aggregating results for session ${sessionId} from:`,
-      Object.keys(resultsToAggregate),
-    );
-
-    // Filter products by search relevance
-    const stableQuery = (currentSearchQueryRef.current || "").trim();
-    const searchTerm = stableQuery.toLowerCase();
-    const searchWords = searchTerm.split(/\s+/).filter(Boolean);
-    const PER_PLATFORM_LIMIT = 999; // No hard limit — show all products from each platform
-    const MAX_RESULTS = 999; // No hard limit — show all deduplicated products
-    const RELEVANCE_THRESHOLD = 0; // Show ALL products — no filtering on relevance
-
-    const normalizeToken = (token = "") => {
-      const t = String(token || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "")
-        .trim();
-      if (!t) return "";
-      if (t.length > 3 && t.endsWith("es")) return t.slice(0, -2);
-      if (t.length > 2 && t.endsWith("s")) return t.slice(0, -1);
-      return t;
-    };
-
-    const normalizedSearchWords = searchWords
-      .map((w) => normalizeToken(w))
-      .filter(Boolean);
-
-    const calculateRelevanceScore = (productName) => {
-      const rawName = String(productName || "").toLowerCase();
-      if (rawName.includes(searchTerm)) return 100; // Exact phrase match
-
-      const nameWords = rawName
-        .split(/\s+/)
-        .map((w) => normalizeToken(w))
-        .filter(Boolean);
-
-      let matchedWords = 0;
-      normalizedSearchWords.forEach((word) => {
-        if (nameWords.includes(word) || rawName.includes(word)) {
-          matchedWords++;
-        }
-      });
-
-      if (matchedWords === 0) return 0;
-
-      // coverage percentage
-      const coverage = matchedWords / normalizedSearchWords.length;
-      let score = coverage * 80;
-
-      // Bonus for matching the first word of the query (often the brand or main item)
-      if (nameWords.includes(normalizedSearchWords[0])) {
-        score += 15;
-      }
-
-      // Penalty for excessive length (helps prioritize shorter, more accurate titles)
-      score -= Math.min(10, nameWords.length / 2);
-
-      return Math.max(0, score);
-    };
-
-    // Count total products before filtering
-    let totalProducts = 0;
-    let relevantProducts = 0;
-    Object.values(resultsToAggregate).forEach(({ products }) => {
-      totalProducts += products?.length || 0;
-    });
-
-    // Group products by name similarity
-    const productMap = {};
-    const productBuckets = {};
-    const platformCounts = {};
-
-    Object.values(resultsToAggregate).forEach(({ products }) => {
-      products?.forEach((product) => {
-        const score = calculateRelevanceScore(product.product_name);
-        if (score < RELEVANCE_THRESHOLD) {
-          // Filter only very irrelevant products
-          return;
-        }
-
-        if (!product.in_stock) {
-          // Do not display out of stock products
-          return;
-        }
-
-        // Secondary safety: check for OOS keywords in the name itself
-        const nameLower = (product.product_name || "").toLowerCase();
-        if (
-          nameLower.includes("out of stock") ||
-          nameLower.includes("sold out") ||
-          nameLower.includes("unavailable")
-        ) {
-          return;
-        }
-
-        const platform = product.platform || "Unknown";
-        const currentPlatformCount = platformCounts[platform] || 0;
-        if (currentPlatformCount >= PER_PLATFORM_LIMIT) {
-          return;
-        }
-        platformCounts[platform] = currentPlatformCount + 1;
-
-        relevantProducts++;
-
-        const extraText =
-          `${product.quantity || product.weight || ""} ${product.raw_text || ""}`.trim();
-        const baseKey = getProductMatchKey(product.product_name, extraText);
-        const identityTokens = getProductIdentityTokens(product.product_name);
-        const bucketKeys = productBuckets[baseKey] || [];
-        let bestGroupKey = "";
-        let bestGroupScore = 0;
-
-        bucketKeys.forEach((candidateKey) => {
-          const candidate = productMap[candidateKey];
-          if (!candidate) return;
-
-          const samePlatformListings = candidate.listings.filter(
-            (listing) => listing.platform === product.platform,
-          );
-          const similarity = getIdentitySimilarity(
-            identityTokens,
-            candidate.identityTokens,
-          );
-          const isExactPlatformDuplicate = samePlatformListings.some(
-            (listing) =>
-              (listing.product_url &&
-                listing.product_url === product.product_url) ||
-              sanitizeProductName(listing.product_name).toLowerCase() ===
-                sanitizeProductName(product.product_name).toLowerCase(),
-          );
-
-          // One platform can return many flavours with the same opening words.
-          // Only keep those in one comparison group when they are genuinely
-          // the same listing; otherwise preserve the variant as its own card.
-          if (
-            samePlatformListings.length > 0 &&
-            !isExactPlatformDuplicate
-          ) {
-            return;
-          }
-
-          if (similarity >= 0.58 && similarity > bestGroupScore) {
-            bestGroupKey = candidateKey;
-            bestGroupScore = similarity;
-          }
-        });
-
-        const key =
-          bestGroupKey || `${baseKey || "product"}::${bucketKeys.length}`;
-
-        if (!productMap[key]) {
-          productMap[key] = {
-            name: product.product_name,
-            listings: [],
-            maxRelevance: 0,
-            identityTokens,
-          };
-          productBuckets[baseKey] = [...bucketKeys, key];
-        }
-
-        productMap[key].maxRelevance = Math.max(
-          productMap[key].maxRelevance,
-          score,
-        );
-
-        productMap[key].listings.push({
-          platform: product.platform,
-          product_name: product.product_name,
-          raw_product_name: product.raw_product_name || product.product_name,
-          brand: product.brand,
-          price: product.price,
-          mrp: product.mrp,
-          image_url: product.image_url,
-          product_url: product.product_url,
-          in_stock: product.in_stock,
-          weight: product.weight,
-          quantity: product.quantity || product.weight || "",
-          rating: Number(product.rating || 0),
-          rating_count: Number(product.rating_count || 0),
-          discount_percent: Number(product.discount_percent || 0),
-          discount_value: Number(product.discount_value || 0),
-          raw_text: product.raw_text || "",
-        });
-      });
-    });
-
-    console.log(
-      `[Search] Filtered ${relevantProducts}/${totalProducts} products matching "${stableQuery}"`,
-    );
-
-    // DEBUG SUMMARY
-    const platformStats = {};
-    Object.keys(resultsToAggregate).forEach((plat) => {
-      const items = resultsToAggregate[plat]?.products || [];
-      const relevant = items.filter(
-        (p) => calculateRelevanceScore(p.product_name) >= RELEVANCE_THRESHOLD,
-      );
-      const withPhotos = relevant.filter(
-        (p) =>
-          typeof p.image_url === "string" &&
-          p.image_url.trim() !== "" &&
-          !p.image_url.includes("placeholder") &&
-          !p.image_url.includes("blank"),
-      ).length;
-      platformStats[plat] = {
-        total: items.length,
-        relevant: relevant.length,
-        withPhotos,
-      };
-    });
-
-    console.log("╔═════════════════ SEARCH DEBUG SUMMARY ════════════════╗");
-    console.log(`║ Query: "${stableQuery.padEnd(41)}" ║`);
-    console.log(`║ Threshold: ${RELEVANCE_THRESHOLD.toString().padEnd(35)} ║`);
-    Object.entries(platformStats).forEach(([plat, stats]) => {
-      const status =
-        stats.relevant > 0
-          ? stats.withPhotos === stats.relevant
-            ? "✅ Photos OK"
-            : stats.withPhotos > 0
-              ? "⚠️ Some Missing"
-              : "❌ NO PHOTOS"
-          : "⚪ Filtered Out";
-      console.log(
-        `║ ${plat.padEnd(10)}: ${String(stats.total).padStart(3)} total → ${String(stats.relevant).padStart(2)} relevant | ${status.padEnd(15)} ║`,
-      );
-    });
-    console.log("╚════════════════════════════════════════════════════════╝");
-
-    // Convert to array format
-    const aggregated = Object.entries(productMap).map(([groupKey, group]) => {
-      // Deduplicate listings by platform (keep the first one for each platform)
-      const platformBestListings = new Map();
-
-      group.listings.forEach((listing) => {
-        const existing = platformBestListings.get(listing.platform);
-        if (!existing) {
-          platformBestListings.set(listing.platform, listing);
-          return;
-        }
-
-        const listingPrice = Number(listing.price || 0);
-        const existingPrice = Number(existing.price || 0);
-        const listingHasLabeledPrice = /\bprice\b\s*:?\s*₹\s*[0-9]+/i.test(
-          listing.raw_text || "",
-        );
-        const existingHasLabeledPrice = /\bprice\b\s*:?\s*₹\s*[0-9]+/i.test(
-          existing.raw_text || "",
-        );
-
-        if (listingHasLabeledPrice && !existingHasLabeledPrice) {
-          platformBestListings.set(listing.platform, listing);
-          return;
-        }
-
-        if (
-          listingHasLabeledPrice === existingHasLabeledPrice &&
-          listingPrice > 0 &&
-          (existingPrice <= 0 || listingPrice < existingPrice)
-        ) {
-          platformBestListings.set(listing.platform, listing);
-        }
-      });
-
-      const uniqueListings = Array.from(platformBestListings.values());
-
-      const bbListing = uniqueListings.find((l) => l.platform === "BigBasket");
-      if (bbListing) {
-        console.log(
-          `[Debug-BigBasket] Aggregated listing for "${group?.name || "Unknown"}": price=${bbListing.price}, mrp=${bbListing.mrp}, raw="${String(
-            bbListing.raw_text || "",
-          ).slice(0, 180)}"`,
-        );
-      }
-
-      const listings = uniqueListings.filter(
-        (l) => l.price > 0 && l.in_stock !== false,
-      );
-      const prices = listings.map((l) => l.price);
-      const best = prices.length > 0 ? Math.min(...prices) : 0;
-      const worst = prices.length > 0 ? Math.max(...prices) : 0;
-      const first = listings[0] || uniqueListings[0] || {};
-      const displayName =
-        uniqueListings.find((l) => l.raw_product_name)?.raw_product_name ||
-        selectBestDisplayName(uniqueListings, group?.name || "");
-
-      const imageCandidates = [
-        first.image_url,
-        ...uniqueListings.map((listing) => listing?.image_url),
-      ]
-        .map((url) => (url ? String(url).trim() : ""))
-        .filter((url) => url && !url.startsWith("data:"));
-      const uniqueImages = Array.from(new Set(imageCandidates));
-
-      return {
-        // Keep the key tied to the product rather than its current array
-        // position. Results arrive platform-by-platform and are re-sorted by
-        // value; index keys made React reuse a card for a different product.
-        id: groupKey,
-        name: displayName,
-        searchQuery: stableQuery,
-        brand: first.brand || "",
-        price: best > 0 ? best : first.price || 0,
-        originalPrice: worst > best ? worst : undefined,
-        // Unit price normalization (per 100g / per 100ml) when quantity is present in title
-        ...(() => {
-          const resolvedPrice = best > 0 ? best : first.price || 0;
-          const titleForQty =
-            uniqueListings
-              .map(
-                (listing) =>
-                  `${listing.raw_product_name || listing.product_name || ""} ${
-                    listing.quantity || listing.weight || ""
-                  } ${listing.raw_text || ""}`,
-              )
-              .join(" ") ||
-            displayName ||
-            group?.name ||
-            "";
-          const unitInfo = computeUnitPrice(resolvedPrice, titleForQty);
-          if (unitInfo) {
-            return {
-              unitPrice: unitInfo.unitPrice,
-              unitLabel: unitInfo.unitLabel,
-              unitType: unitInfo.unitType,
-            };
-          }
-          return {
-            unitPrice: undefined,
-            unitLabel: undefined,
-            unitType: undefined,
-          };
-        })(),
-        platformCount: listings.length,
-        totalPlatforms: uniqueListings.length,
-        discount:
-          worst > best && best > 0
-            ? Math.round(((worst - best) / worst) * 100)
-            : 0,
-        listings: uniqueListings,
-        bestPlatform:
-          listings.length > 0
-            ? listings.reduce((a, b) => (a.price < b.price ? a : b)).platform
-            : "",
-        image_url: first.image_url || uniqueImages[0] || "",
-        imageCandidates: uniqueImages,
-        relevance: group.maxRelevance,
-      };
-    });
-
-    // Sort by relevance first, then platform count
-    aggregated.sort((a, b) => {
-      if (Math.abs(b.relevance - a.relevance) > 10) {
-        return b.relevance - a.relevance;
-      }
-      return b.platformCount - a.platformCount;
-    });
-
-    const cappedResults = aggregated.slice(0, MAX_RESULTS);
-
-    if (isComplete || aggregated.length > 0) {
-      setLoading(false);
-    }
-
-    // Log final results summary
-    console.log(
-      `[Search] Aggregation complete: ${aggregated.length} products → ${cappedResults.length} capped results`,
-    );
-    if (cappedResults.length > 0) {
-      console.log(`[Search] Showing ${cappedResults.length} products:`);
-      cappedResults.forEach((p, idx) => {
-        if (!p) return;
-        console.log(
-          `  ${idx + 1}. "${(p.name || "Unknown").substring(0, 40)}" (${p.platformCount || 0} platform${p.platformCount !== 1 ? "s" : ""}, ₹${p.price || 0})`,
-        );
-      });
-    }
-
-    // Record aggregation timing
-    monitor.mark("search-aggregate-end");
-    const aggregateDuration = monitor.measure(
-      "search-aggregate",
-      "search-aggregate-start",
-      "search-aggregate-end",
-    );
-    const totalDuration = monitor.measure(
-      "search-total",
-      "search-start",
-      "search-aggregate-end",
-    );
-    console.log(
-      `[Perf] Search update: aggregation=${(aggregateDuration || 0).toFixed(2)}ms, total=${(totalDuration || 0).toFixed(2)}ms, complete=${isComplete}`,
-    );
-
-    if (cappedResults.length > 0) {
-      // Do not run a parent LayoutAnimation while partial platform results are
-      // replacing and reordering FlatList data. On Android this can leave
-      // recycled cells transparent. AnimatedSearchResult already provides the
-      // entrance motion for genuinely new cards.
-      setResults(cappedResults);
-
-      // Warm only the first visible images. Starting a request for every image
-      // in a large result set floods the network and JS bridge, which makes the
-      // list stutter while the user is trying to scroll.
-      try {
-        const allImageUrls = [];
-        cappedResults.slice(0, INITIAL_RESULT_COUNT).forEach((p) => {
-          if (p.imageCandidates && p.imageCandidates.length > 0) {
-            allImageUrls.push(p.imageCandidates[0]);
-          } else if (p.image_url) {
-            allImageUrls.push(p.image_url);
-          }
-        });
-        Array.from(new Set(allImageUrls))
-          .slice(0, MAX_PREFETCH_IMAGES)
-          .forEach((url) => {
-            if (url && url.startsWith("http")) {
-              Image.prefetch(url).catch(() => {});
-            }
-          });
-      } catch (prefetchErr) {
-        // Non-critical — silently ignore prefetch failures
-      }
-      const normalizedQuery = (stableQuery || "").toLowerCase();
-      const platformSignature = [...(connectedPlatformsRef.current || [])]
-        .sort()
-        .join("|");
-      const searchKey = `${SEARCH_CACHE_VERSION}::${normalizedQuery}::${platformSignature}`;
-      resultsCacheRef.current[searchKey] = {
-        results: cappedResults,
-        timestamp: Date.now(),
-      };
-
-      // Send results to backend for analytics/caching (optional)
-      if (ENABLE_BACKEND_COLLECTION) {
-        collectResultsToBackend(stableQuery, resultsToAggregate);
-      }
-    } else if (isComplete) {
-      // No products found
-      setResults([]);
-      console.log(
-        `[Search] Session ${sessionId}: No products found from any platform`,
-      );
-    }
-  };
-
-  const collectResultsToBackend = async (query, platformResults) => {
-    try {
-      // Flatten the results to match backend expectation: map[string][]ProductListing
-      const flattenedPlatforms = {};
-      Object.keys(platformResults).forEach((platform) => {
-        flattenedPlatforms[platform] =
-          platformResults[platform]?.products || [];
-      });
-
-      const payload = {
-        query: query,
-        platforms: flattenedPlatforms,
-      };
-
-      if (user && user.id) {
-        payload.user_id = user.id;
-      }
-
-      await api.post("/search/collect", payload);
-      console.log(`[Search] Sent results to backend for analytics`);
-    } catch (err) {
-      // Silently fail - backend collection is optional
-      console.log(`[Search] Backend collection skipped:`, err?.message);
-    }
-  };
-
-  // Removed auto-aggregate useEffect that was causing multiple re-aggregations
-  // Aggregation now only happens once after search timeout in searchProducts
-
-  const handleProduct = useCallback(
-    (product) => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      navigation.navigate("ProductDetail", { product });
-    },
-    [navigation],
-  );
-
-  const renderProductItem = useCallback(
-    ({ item, index }) => {
-      const revealKey = `${currentSearchQuery}:${searchSessionIdRef.current}`;
-      const resultKey = `${revealKey}:${item.id}`;
-      const animateEntrance = !revealedResultsRef.current.has(resultKey);
-      revealedResultsRef.current.add(resultKey);
-
-      return (
-        <AnimatedSearchResult
-          item={item}
-          index={index}
-          onPress={handleProduct}
-          revealKey={revealKey}
-          reduceMotion={reduceMotion}
-          animateEntrance={animateEntrance}
+        }}
+      >
+        <Image
+          source={{ uri: item.image_url }}
+          style={styles.productImage}
+          contentFit="cover"
+          transition={200}
         />
-      );
-    },
-    [currentSearchQuery, handleProduct, reduceMotion],
-  );
+        <View style={styles.productInfo}>
+          <View style={styles.brandRow}>
+            <Text style={[styles.brandText, { color: themeColors.textSecondary }]}>
+              {item.brand}
+            </Text>
+            <View style={styles.verifiedBadge}>
+              <Ionicons name="shield-checkmark" size={11} color="#10B981" />
+              <Text style={styles.verifiedText}>Verified Specs</Text>
+            </View>
+          </View>
+
+          <Text style={[styles.productName, { color: themeColors.textPrimary }]} numberOfLines={2}>
+            {item.name}
+          </Text>
+
+          <Text style={[styles.productSpecs, { color: themeColors.textSecondary }]} numberOfLines={2}>
+            {item.specs}
+          </Text>
+
+          <View style={styles.pricingRow}>
+            <View>
+              <Text style={[styles.priceText, { color: themeColors.textPrimary }]}>
+                ₹{item.price.toLocaleString("en-IN")}
+              </Text>
+              {item.mrp > item.price && (
+                <Text style={[styles.mrpText, { color: themeColors.textTertiary }]}>
+                  MSRP ₹{item.mrp.toLocaleString("en-IN")}
+                </Text>
+              )}
+            </View>
+
+            <TouchableOpacity
+              style={styles.compareBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                navigation.navigate("AIResearch", {
+                  initialQuery: `Analyze whether ${item.name} is worth buying right now versus top alternatives.`,
+                });
+              }}
+            >
+              <Ionicons name="analytics-outline" size={14} color="#6366F1" />
+              <Text style={styles.compareBtnText}>Analyze</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.sourceDisclaimer}>
+            <Ionicons name="information-circle-outline" size={12} color={themeColors.textTertiary} />
+            <Text style={[styles.sourceText, { color: themeColors.textTertiary }]}>
+              Official manufacturer specifications & licensed sources
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderEmpty = () => {
     if (loading) return null;
+
     if (!hasSearched) {
       return (
-        <View style={styles.emptyState}>
-          <Text
-            style={[
-              FONTS.heading,
-              { fontSize: 20, color: themeColors.ink, marginBottom: 6 },
-            ]}
-          >
-            Search for a product
+        <View style={styles.emptyContainer}>
+          <View style={[styles.emptyIconCircle, { backgroundColor: isDark ? "#1E293B" : "#EEF2FF" }]}>
+            <Ionicons name="compass-outline" size={36} color="#6366F1" />
+          </View>
+
+          <Text style={[styles.emptyHeading, { color: themeColors.textPrimary }]}>
+            Product Discovery & Intelligence
           </Text>
-          <Text
-            style={[
-              FONTS.uiBody,
-              { fontSize: 13, color: themeColors.inkSoft, marginBottom: 26 },
-            ]}
-          >
-            {`Compare prices across ${state.connectedPlatforms.length} connected platforms`}
+          <Text style={[styles.emptySubtitle, { color: themeColors.textSecondary }]}>
+            Search specifications, head-to-head comparisons, and unbiased AI shopping analysis across any product.
           </Text>
 
-          {state.connectedPlatforms.length === 0 && (
-            <View
-              style={[
-                styles.warning,
-                {
-                  backgroundColor: themeColors.errorLight,
-                  borderColor: themeColors.error + "30",
-                },
-              ]}
-            >
-              <Ionicons
-                name="warning-outline"
-                size={24}
-                color={themeColors.error}
-              />
-              <Text style={[styles.warningText, { color: themeColors.error }]}>
-                No platforms connected. Go to Accounts tab to link your
-                accounts.
-              </Text>
-            </View>
-          )}
-
-          <View style={styles.suggestions}>
-            <Text
-              style={[
-                FONTS.monoBold,
-                {
-                  fontSize: 10.5,
-                  letterSpacing: 1.5,
-                  textTransform: "uppercase",
-                  color: themeColors.inkFaint,
-                  marginBottom: 12,
-                },
-              ]}
-            >
-              Trending near you
+          <View style={styles.trendingSection}>
+            <Text style={[styles.trendingHeader, { color: themeColors.textSecondary }]}>
+              Popular Comparisons & Research
             </Text>
-            <View style={styles.chips}>
-              {SUGGESTIONS.map((s) => (
+            <View style={styles.chipsContainer}>
+              {SUGGESTIONS.map((item, idx) => (
                 <TouchableOpacity
-                  key={s.name}
-                  onPress={() => setQuery(s.name)}
-                  activeOpacity={0.85}
+                  key={idx}
                   style={[
-                    styles.chipButton,
+                    styles.chip,
                     {
                       backgroundColor: themeColors.card,
-                      borderColor: themeColors.line,
-                      paddingLeft: SPACING.xs + 2,
+                      borderColor: themeColors.border,
                     },
                   ]}
-                  testID={`searchSuggestion_${s.name}`}
+                  onPress={() => {
+                    setQuery(item.name);
+                    handleSearch(item.name);
+                  }}
                 >
-                  <View
-                    style={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: 13,
-                      backgroundColor: s.bg,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginRight: 8,
-                    }}
-                  >
-                    <Text style={{ fontSize: 13 }}>{s.emoji}</Text>
-                  </View>
-                  <Text
-                    style={[
-                      FONTS.uiBodyBold,
-                      { fontSize: 13, color: themeColors.ink },
-                    ]}
-                  >
-                    {s.name}
+                  <Text style={styles.chipEmoji}>{item.emoji}</Text>
+                  <Text style={[styles.chipText, { color: themeColors.textPrimary }]}>
+                    {item.name}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -2817,824 +654,173 @@ const SearchScreen = ({ navigation, route }) => {
         </View>
       );
     }
-    if (results.length === 0) {
-      return (
-        <View style={styles.emptyState}>
-          <View
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 32,
-              backgroundColor: themeColors.card,
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 16,
-            }}
-          >
-            <Ionicons
-              name="search-outline"
-              size={28}
-              color={themeColors.inkFaint}
-            />
-          </View>
-          <Text
-            style={[
-              FONTS.heading,
-              { fontSize: 20, color: themeColors.ink, marginBottom: 6 },
-            ]}
-          >
-            No results found
-          </Text>
-          <Text
-            style={[FONTS.uiBody, { fontSize: 13, color: themeColors.inkSoft }]}
-          >
-            Try a different search term
-          </Text>
-        </View>
-      );
-    }
-    return null;
-  };
-
-  const PLATFORM_META = {
-    Blinkit: { color: "#FFCE00", icon: "flash", label: "Blinkit" },
-    Zepto: { color: "#9747FF", icon: "rocket", label: "Zepto" },
-    BigBasket: { color: "#84C225", icon: "basket", label: "BigBasket" },
-    Amazon: { color: "#FF9900", icon: "cart", label: "Amazon" },
-    Flipkart: { color: "#2874F0", icon: "bag", label: "Flipkart" },
-  };
-
-  const renderSearchProgress = () => {
-    if (!loading) return null;
-
-    const completedCount = Object.keys(platformResults).length;
-    const totalCount = Math.max(1, state.connectedPlatforms.length);
-    const progressRatio = Math.min(1, completedCount / totalCount);
 
     return (
-      <View
-        style={[
-          styles.loaderContainer,
-          {
-            backgroundColor: themeColors.surface,
-            borderColor: themeColors.border,
-          },
-        ]}
-      >
-        {/* Title row */}
-        <View style={styles.loaderTitleRow}>
-          <ActivityIndicator
-            size="small"
-            color={themeColors.primary}
-            style={{ marginRight: 8 }}
-          />
-          <Text
-            style={[
-              styles.loaderStatusText,
-              { color: themeColors.textPrimary },
-            ]}
-          >
-            Scanning Prices
-          </Text>
-        </View>
-        <Text
-          style={[styles.loaderDetail, { color: themeColors.textSecondary }]}
-        >
-          {completedCount === 0
-            ? "Opening platforms..."
-            : completedCount < totalCount
-              ? `${completedCount}/${totalCount} done — more coming`
-              : "All platforms scanned"}
+      <View style={styles.emptyContainer}>
+        <Ionicons name="search-outline" size={42} color={themeColors.textTertiary} />
+        <Text style={[styles.emptyHeading, { color: themeColors.textPrimary, marginTop: 12 }]}>
+          No exact matches found
         </Text>
-
-        <View
-          style={[
-            styles.scanTrack,
-            {
-              backgroundColor: isDark
-                ? `${themeColors.primary}12`
-                : `${themeColors.primary}0A`,
-              borderColor: `${themeColors.primary}22`,
-            },
-          ]}
+        <Text style={[styles.emptySubtitle, { color: themeColors.textSecondary }]}>
+          Ask CompareZ AI Copilot to retrieve live specifications and manufacturer research for "{query}".
+        </Text>
+        <TouchableOpacity
+          style={styles.deepDiveButton}
+          onPress={() => {
+            navigation.navigate("AIResearch", {
+              initialQuery: `Research and summarize specifications for ${query}`,
+            });
+          }}
         >
-          <Animated.View
-            style={[
-              styles.scanBeam,
-              {
-                backgroundColor: themeColors.primary,
-                opacity: reduceMotion
-                  ? 0.28
-                  : scanBeamAnim.interpolate({
-                      inputRange: [0, 0.12, 0.82, 1],
-                      outputRange: [0, 0.72, 0.72, 0],
-                    }),
-                transform: [
-                  {
-                    translateX: reduceMotion
-                      ? 0
-                      : scanBeamAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [-64, 340],
-                        }),
-                  },
-                ],
-              },
-            ]}
-          />
-        </View>
-
-        {/* Per-platform status cards */}
-        <View style={styles.platformStatusRow}>
-          {state.connectedPlatforms.map((platform) => {
-            const isDone = !!platformResults[platform];
-            const meta = PLATFORM_META[platform] || {
-              color: themeColors.textPrimary,
-              icon: "search",
-              label: platform,
-            };
-            const entry = platformResults[platform];
-            return (
-              <PlatformScanStatus
-                key={platform}
-                platform={platform}
-                isDone={isDone}
-                entry={entry}
-                meta={meta}
-                themeColors={themeColors}
-                isDark={isDark}
-                pulseAnim={pulseAnim}
-                reduceMotion={reduceMotion}
-              />
-            );
-          })}
-        </View>
-
-        {/* Progress bar */}
-        <View
-          style={[
-            styles.progressTrack,
-            { backgroundColor: themeColors.background },
-          ]}
-        >
-          <View
-            style={[
-              styles.progressFill,
-              {
-                width: `${Math.max(progressRatio * 100, 8)}%`,
-                backgroundColor: themeColors.primary,
-              },
-            ]}
-          />
-        </View>
-
-        {/* Cycling tip */}
-        <View
-          style={[
-            styles.tipBox,
-            {
-              backgroundColor: isDark
-                ? themeColors.primary + "10"
-                : COLORS.cardAlt,
-              borderColor: themeColors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="bulb"
-            size={13}
-            color={themeColors.accent}
-            style={styles.tipIcon}
-          />
-          <Text style={[styles.tipLabel, { color: themeColors.accent }]}>
-            Tip
-          </Text>
-          <Text style={[styles.tipText, { color: themeColors.textSecondary }]}>
-            {SAVING_TIPS[tipIndex]}
-          </Text>
-        </View>
-
-        {results.length === 0 ? (
-          <View style={styles.skeletonResults}>
-            <Text
-              style={[
-                styles.skeletonHeading,
-                { color: themeColors.textSecondary },
-              ]}
-            >
-              Preparing comparisons
-            </Text>
-            {[0, 1, 2].map((item) => (
-              <SearchResultSkeleton
-                key={item}
-                shimmer={scanBeamAnim}
-                pulse={pulseAnim}
-                themeColors={themeColors}
-                reduceMotion={reduceMotion}
-              />
-            ))}
-          </View>
-        ) : null}
+          <Text style={styles.deepDiveText}>Research "{query}" with AI</Text>
+          <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+        </TouchableOpacity>
       </View>
     );
   };
 
-  const filteredAndSortedResults = useMemo(() => {
-    let finalResults = [...results];
-
-    // Filter by platforms and update prices
-    finalResults = finalResults
-      .map((product) => {
-        if (!product || !product.listings) return null;
-        const filteredListings = product.listings.filter(
-          (listing) =>
-            listing &&
-            selectedPlatforms[listing.platform] &&
-            Number(listing.price) > 0 &&
-            listing.in_stock !== false,
-        );
-        if (filteredListings.length === 0) return null;
-
-        const bestListing = filteredListings.reduce((a, b) =>
-          a.price < b.price ? a : b,
-        );
-        const bestListingTitle =
-          `${bestListing.raw_product_name || bestListing.product_name || product.name || ""} ${
-            bestListing.quantity || bestListing.weight || ""
-          } ${bestListing.raw_text || ""}`.trim();
-        const unitInfo = computeUnitPrice(
-          Number(bestListing.price),
-          bestListingTitle,
-        );
-        return {
-          ...product,
-          listings: filteredListings,
-          price: Number(bestListing.price),
-          bestPlatform: bestListing.platform,
-          platformCount: filteredListings.length,
-          unitPrice: unitInfo?.unitPrice,
-          unitLabel: unitInfo?.unitLabel,
-          unitType: unitInfo?.unitType,
-        };
-      })
-      .filter(Boolean);
-
-    const lowestCheckoutPrice = Math.min(
-      ...finalResults.map((product) => Number(product.price)),
-    );
-    const lowestUnitPriceByType = finalResults.reduce((lowest, product) => {
-      if (!product.unitType || !Number.isFinite(product.unitPrice)) {
-        return lowest;
-      }
-      const current = lowest[product.unitType];
-      return {
-        ...lowest,
-        [product.unitType]:
-          current === undefined
-            ? product.unitPrice
-            : Math.min(current, product.unitPrice),
-      };
-    }, {});
-
-    finalResults = finalResults.map((product) => ({
-      ...product,
-      isLowestPrice: product.price === lowestCheckoutPrice,
-      isBestValue:
-        !!product.unitType &&
-        Number.isFinite(product.unitPrice) &&
-        product.unitPrice === lowestUnitPriceByType[product.unitType],
-    }));
-
-    // Sort
-    if (sortBy === "price_asc") {
-      finalResults.sort(
-        (a, b) =>
-          (Number.isFinite(a.unitPrice)
-            ? a.unitPrice
-            : Number(a.price)) -
-            (Number.isFinite(b.unitPrice)
-              ? b.unitPrice
-              : Number(b.price)) ||
-          Number(a.price) - Number(b.price) ||
-          b.platformCount - a.platformCount,
-      );
-    } else if (sortBy === "price_desc") {
-      finalResults.sort((a, b) => b.price - a.price);
-    }
-
-    const primaryBestValueIndex = finalResults.findIndex(
-      (product) => product.isBestValue,
-    );
-    finalResults = finalResults.map((product, index) => ({
-      ...product,
-      isPrimaryBestValue: index === primaryBestValueIndex,
-    }));
-
-    return finalResults;
-  }, [results, selectedPlatforms, sortBy]);
-
-  const visibleResults = useMemo(
-    () => filteredAndSortedResults.slice(0, visibleResultCount),
-    [filteredAndSortedResults, visibleResultCount],
-  );
-
-  const revealMoreResults = useCallback(() => {
-    setVisibleResultCount((current) => {
-      if (current >= filteredAndSortedResults.length) return current;
-      return Math.min(
-        current + RESULT_PAGE_SIZE,
-        filteredAndSortedResults.length,
-      );
-    });
-  }, [filteredAndSortedResults.length]);
-
-  useEffect(() => {
-    if (loading || filteredAndSortedResults.length === 0) return undefined;
-
-    const settledKey = `${currentSearchQuery}:${results.length}`;
-    if (!currentSearchQuery || lastSettledSearchRef.current === settledKey) {
-      return undefined;
-    }
-
-    lastSettledSearchRef.current = settledKey;
-    if (resultHapticTimerRef.current) {
-      clearTimeout(resultHapticTimerRef.current);
-    }
-    resultHapticTimerRef.current = setTimeout(() => {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
-        () => {},
-      );
-    }, reduceMotion ? 80 : 620);
-
-    return () => {
-      if (resultHapticTimerRef.current) {
-        clearTimeout(resultHapticTimerRef.current);
-      }
-    };
-  }, [
-    currentSearchQuery,
-    filteredAndSortedResults.length,
-    loading,
-    reduceMotion,
-    results.length,
-  ]);
-
   return (
-    <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: themeColors.paper }]}
-    >
-      <View style={[styles.container, { backgroundColor: themeColors.paper }]}>
-        <BrandHeader />
-        <View style={styles.searchSectionHeading}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={[styles.searchBackButton, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}
-            activeOpacity={0.75}
-          >
-            <Ionicons name="arrow-back" size={19} color={themeColors.ink} />
-          </TouchableOpacity>
-          <View style={{ flex: 1 }}>
-            <Text style={[FONTS.heading, styles.searchSectionTitle, { color: themeColors.ink }]}>
-              Search products
-            </Text>
-            <Text style={[FONTS.uiBody, styles.searchSectionSubtitle, { color: themeColors.inkSoft }]}>
-              Compare prices across every connected store.
-            </Text>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: themeColors.background }]} edges={["top"]}>
+      {/* Search Header */}
+      <View style={styles.header}>
+        <View style={styles.titleRow}>
+          <Text style={[styles.title, { color: themeColors.textPrimary }]}>Shopping</Text>
+          <View style={styles.intelBadge}>
+            <Ionicons name="shield-checkmark-outline" size={13} color="#10B981" />
+            <Text style={styles.intelBadgeText}>Independent Intelligence</Text>
           </View>
         </View>
-        <View
-          style={[
-            styles.header,
-            {
-              backgroundColor: themeColors.paper,
-            },
-          ]}
-        >
-          <Animated.View
-            style={{
-              transform: [
-                { scaleX: searchCompressionAnim },
-                { scaleY: searchCompressionAnim },
-              ],
-            }}
-          >
-            <SearchBar
-              value={query}
-              onChangeText={(text) => {
-                setQuery(text);
-                if (!text) setAiExpandedQuery(null);
-              }}
-              onClear={() => {
-                setQuery("");
-                setResults([]);
-                setVisibleResultCount(INITIAL_RESULT_COUNT);
-                setHasSearched(false);
-                setAiExpandedQuery(null);
-              }}
-              onFilterPress={() => setFilterModalVisible(true)}
-              onMicPress={handleMicPress}
-              isRecording={isRecording}
-              autoFocus={!hasSearched && query === ""}
-              testID="searchInput"
-            />
-          </Animated.View>
 
-          {/* Voice status banner */}
-          {voiceStatus === "recording" && (
-            <View
-              style={[
-                styles.voiceBanner,
-                {
-                  backgroundColor: isDark
-                    ? themeColors.primary + "20"
-                    : "#FEF2F2",
-                },
-              ]}
-            >
-              <View style={styles.voiceDot} />
-              <Text
-                style={[styles.voiceBannerText, { color: themeColors.primary }]}
-              >
-                Listening... Tap mic to stop
-              </Text>
-            </View>
-          )}
-          {voiceStatus === "transcribing" && (
-            <View
-              style={[
-                styles.voiceBanner,
-                {
-                  backgroundColor: isDark
-                    ? themeColors.primary + "20"
-                    : "#FEF2F2",
-                },
-              ]}
-            >
-              <Ionicons name="sparkles" size={13} color={themeColors.primary} />
-              <Text
-                style={[styles.voiceBannerText, { color: themeColors.primary }]}
-              >
-                AI is transcribing your voice...
-              </Text>
-            </View>
-          )}
+        <SearchBar
+          value={query}
+          onChangeText={setQuery}
+          onSubmitEditing={() => handleSearch(query)}
+          onClear={() => {
+            setQuery("");
+            setResults([]);
+            setActiveComparison(null);
+            setHasSearched(false);
+          }}
+          onMicPress={handleMicPress}
+          isRecording={isRecording}
+          placeholder="Compare products or ask anything..."
+          testID="searchInput"
+        />
 
-          {/* AI Query Expansion Banner */}
-          {aiExpandedQuery ? (
-            <View
-              style={[
-                styles.aiBanner,
-                {
-                  backgroundColor: isDark
-                    ? themeColors.primary + "20"
-                    : themeColors.aubergineSoft,
-                },
-              ]}
-            >
-              <Ionicons
-                name="sparkles"
-                size={13}
-                color={themeColors.primary}
-              />
-              <Text
-                style={[
-                  styles.aiBannerText,
-                  { color: isDark ? themeColors.textPrimary : themeColors.primary },
-                ]}
-              >
-                AI searched for{" "}
-                <Text
-                  style={[
-                    styles.aiBannerKeyword,
-                    { color: themeColors.primary },
-                  ]}
-                >
-                  "{aiExpandedQuery}"
-                </Text>
-              </Text>
-              <TouchableOpacity onPress={() => setAiExpandedQuery(null)}>
-                <Ionicons
-                  name="close"
-                  size={14}
-                  color={isDark ? themeColors.textSecondary : themeColors.primary}
-                />
-              </TouchableOpacity>
-            </View>
-          ) : null}
-        </View>
-
-        {captchaPlatform && (
-          <View style={styles.captchaOverlay}>
-            <Text style={styles.captchaText}>
-              Please solve the CAPTCHA for {captchaPlatform} to continue saving.
-            </Text>
-            <TouchableOpacity
-              style={styles.captchaDismissBtn}
-              onPress={() => setCaptchaPlatform(null)}
-            >
-              <Text style={styles.captchaDismissTxt}>Close</Text>
-            </TouchableOpacity>
+        {voiceStatus === "recording" && (
+          <View style={[styles.voiceBanner, { backgroundColor: "#FEF2F2" }]}>
+            <View style={styles.voiceDot} />
+            <Text style={styles.voiceBannerText}>Listening to your request...</Text>
           </View>
         )}
+      </View>
 
+      {/* Category Pills */}
+      <View style={styles.categoryBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScroll}>
+          {CATEGORIES.map((cat) => (
+            <TouchableOpacity
+              key={cat}
+              style={[
+                styles.categoryPill,
+                selectedCategory === cat && styles.categoryPillActive,
+                {
+                  backgroundColor:
+                    selectedCategory === cat
+                      ? "#6366F1"
+                      : isDark
+                        ? "rgba(255,255,255,0.06)"
+                        : "#F1F5F9",
+                },
+              ]}
+              onPress={() => {
+                setSelectedCategory(cat);
+                if (query) handleSearch(query);
+              }}
+            >
+              <Text
+                style={[
+                  styles.categoryText,
+                  {
+                    color:
+                      selectedCategory === cat
+                        ? "#FFFFFF"
+                        : themeColors.textSecondary,
+                  },
+                ]}
+              >
+                {cat}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Main Results List */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#6366F1" />
+          <Text style={[styles.loadingText, { color: themeColors.textSecondary }]}>
+            Gathering product intelligence & specifications...
+          </Text>
+        </View>
+      ) : (
         <FlatList
-          data={visibleResults}
+          data={results}
           renderItem={renderProductItem}
           keyExtractor={(item) => String(item.id)}
-          initialNumToRender={6}
-          maxToRenderPerBatch={4}
-          windowSize={7}
-          updateCellsBatchingPeriod={80}
-          removeClippedSubviews={false}
-          onEndReached={revealMoreResults}
-          onEndReachedThreshold={0.6}
-          contentContainerStyle={styles.list}
-          ListHeaderComponent={renderSearchProgress}
+          contentContainerStyle={styles.listContent}
+          ListHeaderComponent={renderComparisonCard}
           ListEmptyComponent={renderEmpty}
           testID="resultsList"
-          accessibilityLabel="resultsList"
         />
-
-        {/* Hidden WebViews: always mounted to pre-warm platforms for faster parallel searches */}
-        {state.connectedPlatforms.map((platform) => (
-          <WebView
-            key={platform}
-            ref={(ref) => (webViewRefs.current[platform] = ref)}
-            source={{ uri: searchUrls[platform] || getPlatformUrl(platform) }}
-            originWhitelist={["https://*"]}
-            mixedContentMode="never"
-            allowFileAccess={false}
-            allowFileAccessFromFileURLs={false}
-            allowUniversalAccessFromFileURLs={false}
-            style={
-              captchaPlatform === platform
-                ? styles.visibleWebView
-                : styles.hiddenWebView
-            }
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            cacheEnabled={false}
-            cacheMode="LOAD_NO_CACHE"
-            onMessage={(event) => handleWebViewMessage(platform, event)}
-            // ── Optimization 1: Block images, fonts, and trackers ──────────
-            onShouldStartLoadWithRequest={(request) => {
-              if (!isAllowedPlatformNavigation(platform, request.url)) {
-                return false;
-              }
-              // CRITICAL: Block non-http deep links (e.g. flipkart://, intent://)
-              // otherwise Flipkart will redirect out of the WebView and hang the scraper forever
-              if (
-                request.url &&
-                !request.url.toLowerCase().startsWith("http")
-              ) {
-                if (
-                  request.url !== "about:blank" &&
-                  !request.url.startsWith("blob:")
-                ) {
-                  return false;
-                }
-              }
-              if (shouldBlockWebViewRequest(request)) {
-                return false; // silently drop — saves 1.5–3s per search
-              }
-              return true;
-            }}
-            // ── Optimization 2: Inject early — fires as soon as JS context is ready
-            // before images/CSS have even been requested by the browser
-            injectedJavaScriptBeforeContentLoaded={`
-            (function() {
-              window.__CX_SEARCH_QUERY__ = ${JSON.stringify(query)};
-
-              // Trap ReactNativeWebView injection to survive anti-bot deletion
-              let _rnwv = window.ReactNativeWebView;
-              Object.defineProperty(window, 'ReactNativeWebView', {
-                get: function() { return _rnwv; },
-                set: function(val) {
-                  _rnwv = val;
-                  if (val && val.postMessage) {
-                    window.__rnMsg = val.postMessage.bind(val);
-                  }
-                },
-                configurable: true,
-                enumerable: true
-              });
-              
-              if (_rnwv && _rnwv.postMessage) {
-                window.__rnMsg = _rnwv.postMessage.bind(_rnwv);
-              }
-
-              // Embed the actual parser directly to bypass CSP eval() blocks!
-              window.__CX_EXECUTE_PARSER = function() {
-                try {
-                  ${PlatformDOMScraperService.getParseScript ? PlatformDOMScraperService.getParseScript(platform, null) : ""}
-                } catch(e) {}
-              };
-
-              // Listen for messages from React Native
-              document.addEventListener('message', function(e) {
-                try {
-                  const data = JSON.parse(e.data);
-                  if (data.type === 'EXECUTE_PARSER') {
-                    window.__CX_SEARCH_QUERY__ = data.query;
-                    window.__CX_SESSION_ID__ = data.sessionId;
-                    window.__CX_EXECUTE_PARSER();
-                  }
-                } catch(err) {}
-              });
-              window.addEventListener('message', function(e) {
-                try {
-                  const data = JSON.parse(e.data);
-                  if (data.type === 'EXECUTE_PARSER') {
-                    window.__CX_SEARCH_QUERY__ = data.query;
-                    window.__CX_SESSION_ID__ = data.sessionId;
-                    window.__CX_EXECUTE_PARSER();
-                  }
-                } catch(err) {}
-              });
-
-              window.__CX_INTERCEPT_PLATFORM__ = ${JSON.stringify(platform)};
-              window.__CX_SEARCH_ACTIVE__ = false;
-            })();
-            true;
-          `}
-            onLoadStart={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              currentWebViewUrlsRef.current[platform] = nativeEvent.url;
-              console.log(
-                `[Search] ${platform} load start: ${nativeEvent.url}`,
-              );
-              // Try inject immediately — the URL already contains the search query
-              const searchUrl = searchUrls[platform];
-              if (canInjectForPlatform(platform, nativeEvent.url, searchUrl)) {
-                // Small delay to let the cookie jar settle
-                setTimeout(
-                  () => injectDomParser(platform, "onLoadStart-early"),
-                  300,
-                );
-              }
-            }}
-            onLoadEnd={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              const currentUrl =
-                nativeEvent.url || currentWebViewUrlsRef.current[platform];
-              console.log(`[Search] ${platform} onLoadEnd: ${currentUrl}`);
-              const searchUrl = searchUrls[platform];
-              if (canInjectForPlatform(platform, currentUrl, searchUrl)) {
-                injectDomParser(platform, "onLoadEnd");
-              }
-            }}
-            onNavigationStateChange={(navState) => {
-              currentWebViewUrlsRef.current[platform] = navState.url;
-              // For SPAs on iOS, onLoadEnd might not fire for internal navigations.
-              // Trigger injection here too if loading is complete.
-              if (!navState.loading) {
-                const searchUrl = searchUrls[platform];
-                if (canInjectForPlatform(platform, navState.url, searchUrl)) {
-                  injectDomParser(platform, "onNavigationStateChange");
-                }
-              }
-            }}
-            userAgent={
-              platform === "Amazon"
-                ? "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-                : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            }
-            incognito={false}
-            sharedCookiesEnabled={true}
-            thirdPartyCookiesEnabled={true}
-            geolocationEnabled={true}
-            onError={(e) =>
-              console.log(`[Search] ${platform} WebView error:`, e.nativeEvent)
-            }
-            onHttpError={(e) =>
-              console.log(
-                `[Search] ${platform} HTTP ${e.nativeEvent.statusCode}:`,
-                e.nativeEvent.url,
-              )
-            }
-          />
-        ))}
-        <FilterModal
-          visible={filterModalVisible}
-          onClose={() => setFilterModalVisible(false)}
-          sortBy={sortBy}
-          setSortBy={updateSortBy}
-          selectedPlatforms={selectedPlatforms}
-          setSelectedPlatforms={updateSelectedPlatforms}
-        />
-      </View>
+      )}
     </SafeAreaView>
   );
 };
-
-function getPlatformUrl(platform) {
-  const urls = {
-    Blinkit: "https://blinkit.com/",
-    Zepto: "https://www.zepto.com/",
-    BigBasket: "https://www.bigbasket.com/",
-    Amazon: "https://www.amazon.in/",
-    Flipkart: "https://www.flipkart.com/",
-  };
-  return urls[platform] || "about:blank";
-}
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
   header: {
-    paddingTop: 6,
-    paddingBottom: SPACING.md,
-    paddingHorizontal: SPACING.xl,
-    zIndex: 10,
+    paddingHorizontal: SPACING.lg,
+    paddingTop: SPACING.sm,
+    paddingBottom: SPACING.sm,
   },
-  searchSectionHeading: {
+  titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    paddingHorizontal: SPACING.xl,
-    paddingTop: 10,
-    paddingBottom: 8,
-  },
-  searchBackButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchSectionTitle: {
-    fontSize: 21,
-    lineHeight: 26,
-  },
-  searchSectionSubtitle: {
-    fontSize: 12.5,
-    lineHeight: 17,
-    marginTop: 1,
-  },
-  visibleWebView: {
-    flex: 1,
-    height: 400,
-    marginTop: 10,
-  },
-  captchaOverlay: {
-    padding: SPACING.lg,
-    backgroundColor: COLORS.warningLight,
-    borderBottomWidth: 1,
-    borderColor: "rgba(212, 168, 83, 0.2)",
-    alignItems: "center",
-  },
-  captchaText: {
-    ...FONTS.bodyBold,
-    color: COLORS.warning,
-    textAlign: "center",
+    justifyContent: "space-between",
     marginBottom: SPACING.sm,
   },
-  captchaDismissBtn: {
-    backgroundColor: COLORS.textPrimary,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.md,
+  title: {
+    ...FONTS.h1,
+    fontSize: 26,
+    fontWeight: "700",
   },
-  captchaDismissTxt: {
-    ...FONTS.bodyBold,
-    color: "#fff",
-  },
-  aiBanner: {
+  intelBadge: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: 7,
-    marginHorizontal: SPACING.md,
-    marginTop: 6,
-    marginBottom: 2,
+    gap: 4,
+    backgroundColor: "rgba(16, 185, 129, 0.12)",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: RADIUS.full,
   },
-  aiBannerText: {
-    flex: 1,
-    ...FONTS.caption,
-    color: "#5B21B6",
-    fontSize: 12,
-  },
-  aiBannerKeyword: {
-    ...FONTS.captionBold,
-    color: "#5B21B6",
+  intelBadgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#10B981",
   },
   voiceBanner: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    borderRadius: RADIUS.md,
     paddingHorizontal: SPACING.md,
-    paddingVertical: 7,
-    marginHorizontal: SPACING.md,
-    marginTop: 4,
+    paddingVertical: 8,
+    borderRadius: RADIUS.md,
+    marginTop: 6,
   },
   voiceDot: {
     width: 8,
@@ -3643,291 +829,290 @@ const styles = StyleSheet.create({
     backgroundColor: "#EF4444",
   },
   voiceBannerText: {
-    ...FONTS.caption,
-    color: COLORS.primary,
     fontSize: 12,
+    color: "#EF4444",
+    fontWeight: "500",
+  },
+  categoryBar: {
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(0,0,0,0.05)",
+  },
+  categoryScroll: {
+    paddingHorizontal: SPACING.lg,
+    gap: 8,
+  },
+  categoryPill: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: RADIUS.full,
+  },
+  categoryPillActive: {
+    backgroundColor: "#6366F1",
+  },
+  categoryText: {
+    fontSize: 12.5,
+    fontWeight: "600",
+  },
+  listContent: {
+    padding: SPACING.lg,
+    paddingBottom: 100,
+  },
+  loadingContainer: {
     flex: 1,
-  },
-  loaderContainer: {
-    paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.lg,
-    paddingBottom: SPACING.md,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
-    marginBottom: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    ...SHADOWS.sm,
-  },
-  loaderStatusText: {
-    ...FONTS.bodyBold,
-    textAlign: "center",
-    letterSpacing: 0.3,
-  },
-  loaderTitleRow: {
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: SPACING.sm,
+    padding: SPACING.xl,
+    gap: 12,
   },
-  loaderDetail: {
-    marginTop: SPACING.xs,
-    ...FONTS.caption,
-    textAlign: "center",
-    marginBottom: SPACING.md,
+  loadingText: {
+    fontSize: 13,
   },
-  platformStatusRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
-  },
-  platformStatusCard: {
-    flexGrow: 1,
-    flexBasis: 82,
-    alignItems: "center",
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.sm,
-    borderRadius: RADIUS.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.cardAlt,
-  },
-  scanTrack: {
-    height: 10,
-    borderRadius: RADIUS.full,
-    borderWidth: 1,
-    overflow: "hidden",
-    marginBottom: SPACING.md,
-  },
-  scanBeam: {
-    width: 64,
-    height: "100%",
-    borderRadius: RADIUS.full,
-  },
-  platformStatusIcon: {
-    marginBottom: SPACING.xs,
-  },
-  platformStatusName: {
-    ...FONTS.caption,
-    fontSize: 12,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  platformStatusCount: {
-    ...FONTS.badge,
-    color: COLORS.textTertiary,
-    marginTop: SPACING.xs,
-    textAlign: "center",
-    fontSize: 10,
-  },
-  progressTrack: {
-    height: 4,
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.border,
-    overflow: "hidden",
-    marginBottom: SPACING.sm,
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.primary,
-  },
-  tipBox: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: COLORS.cardAlt,
-    borderRadius: RADIUS.sm,
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    marginTop: SPACING.xs,
-  },
-  tipLabel: {
-    fontSize: 10,
-    fontWeight: "600",
-    color: COLORS.accentGold,
-    marginRight: 4,
-    flexShrink: 0,
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-  },
-  tipIcon: {
-    marginRight: 4,
-    marginTop: 1,
-  },
-  tipText: {
-    fontSize: 11,
-    color: COLORS.textSecondary,
-    flex: 1,
-    lineHeight: 16,
-  },
-  skeletonResults: {
-    marginTop: SPACING.lg,
-    gap: SPACING.sm,
-  },
-  skeletonHeading: {
-    ...FONTS.captionBold,
-    marginBottom: 2,
-    letterSpacing: 0.35,
-  },
-  skeletonCard: {
-    minHeight: 132,
+  // Comparison Spec Table
+  comparisonCard: {
     borderRadius: RADIUS.lg,
     borderWidth: 1,
     padding: SPACING.md,
-    flexDirection: "row",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  skeletonImage: {
-    width: 82,
-    height: 82,
-    borderRadius: RADIUS.md,
-  },
-  skeletonCopy: {
-    flex: 1,
-    marginLeft: SPACING.md,
-  },
-  skeletonLineWide: {
-    width: "86%",
-    height: 12,
-    borderRadius: 6,
-  },
-  skeletonLineMedium: {
-    width: "58%",
-    height: 9,
-    borderRadius: 5,
-    marginTop: 9,
-  },
-  skeletonPrice: {
-    width: 68,
-    height: 21,
-    borderRadius: 7,
-    marginTop: 14,
-  },
-  skeletonPills: {
-    flexDirection: "row",
-    gap: 7,
-    marginTop: 11,
-  },
-  skeletonPill: {
-    width: 76,
-    height: 20,
-    borderRadius: 10,
-  },
-  skeletonPillSmall: {
-    width: 54,
-    height: 20,
-    borderRadius: 10,
-  },
-  skeletonShimmer: {
-    position: "absolute",
-    top: -32,
-    bottom: -32,
-    width: 58,
-    opacity: 0.32,
-  },
-  list: {
-    paddingHorizontal: SPACING.xl,
-    paddingTop: SPACING.lg,
-    paddingBottom: 180,
-  },
-  hiddenWebView: {
-    position: "absolute",
-    width: 1,
-    height: 1,
-    opacity: 0,
-    left: -9999,
-    top: -9999,
-  },
-  emptyState: {
-    paddingTop: SPACING.xl,
-    paddingHorizontal: SPACING.xl,
-  },
-  emptyCard: {
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.xl,
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.xxl,
-    backgroundColor: COLORS.surface,
+    marginBottom: SPACING.lg,
     ...SHADOWS.sm,
   },
-  emptyIconWrap: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.cardAlt,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+  comparisonHeader: {
+    marginBottom: SPACING.sm,
   },
-  emptyTitle: {
+  compBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    alignSelf: "flex-start",
+    backgroundColor: "rgba(99, 102, 241, 0.12)",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: RADIUS.sm,
+    marginBottom: 6,
+  },
+  compBadgeText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#6366F1",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  compTitle: {
     ...FONTS.h2,
-    marginTop: SPACING.lg,
-    textAlign: "center",
+    fontSize: 19,
+    fontWeight: "700",
   },
-  emptySubtitle: {
-    ...FONTS.body,
-    marginTop: SPACING.sm,
-    textAlign: "center",
-  },
-  warning: {
-    flexDirection: "row",
-    backgroundColor: COLORS.warningLight,
+  tableContainer: {
     borderWidth: 1,
-    borderColor: "rgba(212, 168, 83, 0.2)",
     borderRadius: RADIUS.md,
-    padding: SPACING.lg,
-    marginTop: SPACING.xl,
+    overflow: "hidden",
+    marginVertical: SPACING.sm,
+  },
+  tableRow: {
+    flexDirection: "row",
+    paddingVertical: 9,
+    paddingHorizontal: 10,
     alignItems: "center",
   },
-  warningText: {
-    flex: 1,
-    marginLeft: SPACING.sm,
-    color: COLORS.warning,
-    fontSize: 14,
+  tableHeaderRow: {
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(0,0,0,0.08)",
   },
-  suggestions: {
-    marginTop: SPACING.xl,
-    width: "100%",
+  featureCol: {
+    width: "30%",
   },
-  suggestTitle: {
-    ...FONTS.bodyBold,
-    marginBottom: SPACING.md,
-    color: COLORS.textSecondary,
-    textAlign: "center",
+  prodCol: {
+    width: "35%",
+    paddingLeft: 6,
   },
-  chips: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: SPACING.sm,
-    justifyContent: "flex-start",
+  tableCellHeader: {
+    fontSize: 12,
+    fontWeight: "700",
   },
-  chipButton: {
-    flexDirection: "row",
-    backgroundColor: COLORS.cardAlt,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    paddingRight: SPACING.md,
-    paddingLeft: SPACING.sm,
-    paddingVertical: 6,
-    borderRadius: RADIUS.full,
-    alignItems: "center",
+  tableCellFeature: {
+    fontSize: 12,
+    fontWeight: "500",
   },
-  chip: {
-    ...FONTS.caption,
+  tableCellVal: {
+    fontSize: 12,
     fontWeight: "600",
   },
-  loaderHint: {
+  recommendationBox: {
+    borderWidth: 1,
+    borderRadius: RADIUS.md,
+    padding: SPACING.sm + 2,
+    marginTop: SPACING.sm,
+  },
+  recommendationTitle: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#6366F1",
+  },
+  recommendationText: {
+    fontSize: 12.5,
+    lineHeight: 18,
+  },
+  deepDiveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#6366F1",
+    borderRadius: RADIUS.md,
+    paddingVertical: 11,
+    paddingHorizontal: SPACING.md,
+    gap: 8,
+    marginTop: SPACING.md,
+  },
+  deepDiveText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  // Product item card
+  productCard: {
+    flexDirection: "row",
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    padding: SPACING.md,
+    marginBottom: SPACING.md,
+    gap: SPACING.md,
+    ...SHADOWS.sm,
+  },
+  productImage: {
+    width: 90,
+    height: 90,
+    borderRadius: RADIUS.md,
+  },
+  productInfo: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  brandRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 2,
+  },
+  brandText: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    fontWeight: "600",
+    textTransform: "uppercase",
+  },
+  verifiedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+  },
+  verifiedText: {
+    fontSize: 10,
+    fontWeight: "600",
+    color: "#10B981",
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: "700",
+    lineHeight: 19,
+    marginBottom: 4,
+  },
+  productSpecs: {
+    fontSize: 11.5,
+    lineHeight: 16,
+    marginBottom: 6,
+  },
+  pricingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 4,
+  },
+  priceText: {
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  mrpText: {
+    fontSize: 10.5,
+    textDecorationLine: "line-through",
+  },
+  compareBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: "rgba(99, 102, 241, 0.1)",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: RADIUS.sm,
+  },
+  compareBtnText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#6366F1",
+  },
+  sourceDisclaimer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 6,
+  },
+  sourceText: {
+    fontSize: 9.5,
+  },
+  // Empty State
+  emptyContainer: {
+    alignItems: "center",
+    paddingTop: 36,
+    paddingHorizontal: SPACING.lg,
+  },
+  emptyIconCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+  },
+  emptyHeading: {
+    ...FONTS.h2,
+    fontSize: 20,
+    fontWeight: "700",
     textAlign: "center",
-    marginTop: SPACING.xs,
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 13,
+    lineHeight: 19,
+    textAlign: "center",
+    marginBottom: 28,
+  },
+  trendingSection: {
+    width: "100%",
+  },
+  trendingHeader: {
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 12,
+  },
+  chipsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  chip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    gap: 6,
+  },
+  chipEmoji: {
+    fontSize: 14,
+  },
+  chipText: {
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
 

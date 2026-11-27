@@ -34,12 +34,12 @@ const FAB_EDGE_MARGIN = 12;
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const WELCOME_MESSAGE =
-  "Hi, I'm CompareZ AI. I can help you research products, compare prices across Indian stores, and find the best deals.";
+  "Hi, I'm CompareZ AI. Ask me anything — research questions, product specifications comparison, and consumer advice.";
 
 const STARTER_PROMPTS = [
-  { label: "Find the best price", prompt: "Help me find the best price for a product" },
-  { label: "Compare my wishlist", prompt: "Compare the products in my wishlist" },
-  { label: "Plan a grocery basket", prompt: "Help me plan a grocery basket" },
+  { label: "Compare Smartphones", prompt: "Compare iPhone 16 vs Galaxy S25 specifications and features" },
+  { label: "Research Question", prompt: "What are the health benefits of cold-pressed mustard oil?" },
+  { label: "Financial Calculation", prompt: "Calculate home loan EMI for 30 lakhs at 8.5% for 20 years" },
 ];
 
 const AICopilot = ({ activeRouteName }) => {

@@ -1,545 +1,304 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Modal,
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { WebView } from "react-native-webview";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "../components/Icon";
-import api from "../config/api";
 import { SPACING, RADIUS, FONTS, SHADOWS } from "../config/theme";
 import { useTheme } from "../context/ThemeContext";
 import * as Haptics from "expo-haptics";
 import ScreenHeader from "../components/ScreenHeader";
-import { platformTokenStorage } from "../services/platformTokenStorage";
+import LocationService from "../services/LocationService";
 
-// Platform configuration with proper login URLs
-const PLATFORMS = [
+const DATA_SOURCES = [
   {
-    id: "Blinkit",
-    name: "Blinkit",
-    loginUrl: "https://blinkit.com/",
-    testUrl: "https://blinkit.com/v6/search/products?q=milk&start=0&size=5",
-    color: "#F8CB46",
-    icon: "flash",
-    requiredTokens: ["auth", "authKey"],
+    icon: "globe-outline",
+    title: "Licensed Web Intelligence",
+    description: "Real-time grounded search retrieval with numerical citations from public web sources.",
+    tag: "ACTIVE",
+    tagColor: "#059669",
   },
   {
-    id: "Zepto",
-    name: "Zepto",
-    loginUrl: "https://www.zepto.com/",
-    testUrl: "https://api.zepto.co.in/api/v1/search",
-    color: "#7C3AED",
-    icon: "bicycle",
-    requiredTokens: ["user", "cart"],
+    icon: "document-text-outline",
+    title: "Manufacturer Specifications",
+    description: "Official hardware, nutritional, and technical parameters for objective product comparisons.",
+    tag: "ACTIVE",
+    tagColor: "#059669",
   },
   {
-    id: "BigBasket",
-    name: "BigBasket",
-    loginUrl: "https://www.bigbasket.com/",
-    testUrl: "https://www.bigbasket.com/listing-svc/v2/products?q=milk&page=1",
-    color: "#84C225",
-    icon: "basket",
-    requiredTokens: ["sessionid", "_bb_vid"],
+    icon: "shield-checkmark-outline",
+    title: "Independent Product Evaluation",
+    description: "CompareZ does not extract third-party user credentials or scrape private dark-store sessions.",
+    tag: "V5 POLICY",
+    tagColor: "#3B82F6",
   },
   {
-    id: "Amazon",
-    name: "Amazon",
-    loginUrl: "https://www.amazon.in/ap/signin",
-    testUrl: "https://www.amazon.in/s?k=milk",
-    color: "#FF9900",
-    icon: "cart",
-    requiredTokens: ["session-id"],
-  },
-  {
-    id: "Flipkart",
-    name: "Flipkart",
-    loginUrl: "https://www.flipkart.com/",
-    testUrl: "https://www.flipkart.com/search?q=milk",
-    color: "#2874F0",
-    icon: "bag",
-    requiredTokens: ["T"],
+    icon: "storefront-outline",
+    title: "Authorised Affiliate & Merchant APIs",
+    description: "Permitted direct partner integrations and verified affiliate referral channels.",
+    tag: "PLANNED",
+    tagColor: "#8B5CF6",
   },
 ];
 
-const isAllowedPlatformUrl = (platform, rawUrl) => {
-  if (!platform || !rawUrl) return false;
-  try {
-    const url = new URL(rawUrl);
-    if (url.protocol !== "https:") return false;
-    const allowedHost = new URL(platform.loginUrl).hostname.replace(/^www\./, "");
-    const requestedHost = url.hostname.replace(/^www\./, "");
-    return (
-      requestedHost === allowedHost ||
-      requestedHost.endsWith(`.${allowedHost}`)
-    );
-  } catch {
-    return false;
-  }
-};
-
-const sanitizeCapturedTokens = (payload) => {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-    return null;
-  }
-  const entries = Object.entries(payload);
-  if (entries.length === 0 || entries.length > 20) return null;
-
-  let totalSize = 0;
-  const sanitized = {};
-  for (const [key, value] of entries) {
-    if (
-      typeof key !== "string" ||
-      key.length === 0 ||
-      key.length > 64 ||
-      typeof value !== "string" ||
-      value.length > 64 * 1024
-    ) {
-      return null;
-    }
-    totalSize += key.length + value.length;
-    if (totalSize > 128 * 1024) return null;
-    sanitized[key] = value;
-  }
-  return sanitized;
-};
-
-export default function AccountsScreen({ navigation }) {
+const AccountsScreen = ({ navigation }) => {
   const { themeColors, isDark } = useTheme();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [currentPlatform, setCurrentPlatform] = useState(null);
-  const [connected, setConnected] = useState({});
-  const [loading, setLoading] = useState({});
-  const webViewRef = useRef(null);
 
-  React.useEffect(() => {
-    checkConnections();
-  }, []);
-
-  const checkConnections = async () => {
-    try {
-      const parsed = await platformTokenStorage.getAll();
-      if (Object.keys(parsed).length > 0) {
-        const status = {};
-
-        PLATFORMS.forEach((platform) => {
-          const platformTokens = parsed[platform.id];
-          if (!platformTokens || Object.keys(platformTokens).length === 0) {
-            status[platform.id] = false;
-            return;
-          }
-
-          const hasRequiredToken = platform.requiredTokens.some(
-            (tokenKey) => {
-              const fromVal = platformTokens[tokenKey];
-              const fromCookie = platformTokens.cookie && platformTokens.cookie.includes(tokenKey);
-              return !!(fromVal || fromCookie);
-            }
-          );
-          status[platform.id] = hasRequiredToken;
-        });
-
-        setConnected(status);
-      }
-    } catch (e) {
-      console.error("[AccountsScreen] Error checking connections:", e);
-    }
-  };
-
-  const openLogin = (platform) => {
-    setCurrentPlatform(platform);
-    setModalVisible(true);
-  };
-
-  const disconnectAccount = async (platformId) => {
+  const handleClearHistory = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
-      "Disconnect Account",
-      `Are you sure you want to disconnect from ${platformId}?`,
+      "Clear Search History",
+      "Are you sure you want to delete all locally stored search queries?",
       [
         { text: "Cancel", style: "cancel" },
         {
-          text: "Disconnect",
+          text: "Clear",
           style: "destructive",
           onPress: async () => {
-            try {
-              const tokens = await platformTokenStorage.getAll();
-              if (tokens[platformId]) {
-                await platformTokenStorage.removePlatform(platformId);
-                try {
-                  await api.delete(
-                    `/accounts/disconnect/${encodeURIComponent(platformId)}`,
-                  );
-                } catch (backendErr) {
-                  console.warn(
-                    "[AccountsScreen] Backend disconnect failed:",
-                    backendErr?.message,
-                  );
-                }
-                await checkConnections();
-                Haptics.notificationAsync(
-                  Haptics.NotificationFeedbackType.Success,
-                );
-                Alert.alert("Success", `Disconnected from ${platformId}`);
-              }
-            } catch (e) {
-              console.error(e);
-            }
+            await AsyncStorage.removeItem("comparex_search_history");
+            Alert.alert("History Cleared", "Your search history has been removed.");
           },
         },
       ],
     );
   };
 
-  const handleWebViewMessage = async (event) => {
-    try {
-      const data = JSON.parse(event.nativeEvent.data);
-
-      if (data.type === "LOG") {
-        console.log(`[WebView-${currentPlatform?.id}] ${data.message}`);
-      } else if (data.type === "TOKENS" && currentPlatform) {
-        const sourceUrl = event.nativeEvent?.url;
-        const safePayload = sanitizeCapturedTokens(data.payload);
-        if (
-          !safePayload ||
-          !isAllowedPlatformUrl(currentPlatform, sourceUrl)
-        ) {
-          throw new Error("Rejected untrusted WebView credential message");
-        }
-
-        await saveTokens(currentPlatform.id, safePayload);
-        setModalVisible(false);
-        await checkConnections();
-
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        Alert.alert(
-          "Success!",
-          `✅ ${currentPlatform.name} connected successfully!\n\nYou can now search and compare prices.`,
-          [{ text: "OK" }],
-        );
-      }
-    } catch (e) {
-      console.error("[WebView] Error parsing message:", e);
-    }
+  const handleClearSavedResearch = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      "Clear Saved Research",
+      "Are you sure you want to delete all saved research answers in your library?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Clear All",
+          style: "destructive",
+          onPress: async () => {
+            await AsyncStorage.removeItem("comparez_saved_research");
+            Alert.alert("Library Cleared", "All saved research answers have been removed.");
+          },
+        },
+      ],
+    );
   };
 
-  const saveTokens = async (platformId, newTokens) => {
-    try {
-      const tokens = await platformTokenStorage.getAll();
-
-      tokens[platformId] = {
-        ...tokens[platformId],
-        ...newTokens,
-        _capturedAt: new Date().toISOString(),
-      };
-
-      await platformTokenStorage.setPlatform(platformId, tokens[platformId]);
-
-      try {
-        await api.post("/accounts/connect", {
-          platform: platformId,
-          tokens: tokens[platformId],
-        });
-        console.log(`[Tokens] Uploaded ${platformId} tokens to backend`);
-      } catch (backendErr) {
-        console.warn(
-          `[Tokens] Backend upload failed (non-critical):`,
-          backendErr?.message,
-        );
-      }
-    } catch (e) {
-      console.error("[Tokens] Save error:", e);
-      throw e;
-    }
+  const handleResetLocation = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    await LocationService.setLocation({
+      latitude: 12.9716,
+      longitude: 77.5946,
+      city: "Bengaluru",
+      pincode: "560001",
+    });
+    Alert.alert("Location Reset", "Default delivery location reset to Bengaluru (560001).");
   };
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: themeColors.paper }]}>
-      <View style={[styles.container, { backgroundColor: themeColors.paper }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: themeColors.paper }]}>
+      <ScreenHeader
+        title="Privacy & Data Sources"
+        onBack={() => navigation.goBack()}
+      />
 
-        <ScreenHeader
-          title="Link Accounts"
-          subtitle="Login once to enable price comparisons"
-          showBack={true}
-          onBackPress={() => navigation.goBack()}
-          leftAlign={true}
-        />
-
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* Info Card */}
-          <View style={[styles.infoCard, { backgroundColor: themeColors.card, borderColor: themeColors.line, borderWidth: 1 }]}>
-            <Ionicons name="information-circle" size={20} color={themeColors.inkSoft} />
-            <Text style={[styles.infoText, { color: themeColors.inkSoft }]}>
-              Tap "Connect" and log in to each platform. Your credentials stay secure in the app.
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        {/* Independence Badge */}
+        <View style={[styles.policyBanner, { backgroundColor: `${themeColors.primary}12`, borderColor: `${themeColors.primary}30` }]}>
+          <View style={styles.bannerHeader}>
+            <Ionicons name="shield-checkmark" size={20} color={themeColors.primary} />
+            <Text style={[FONTS.uiBodyBold, { fontSize: 14, color: themeColors.primary, marginLeft: 8 }]}>
+              CompareZ Independence Guarantee
             </Text>
           </View>
+          <Text style={[FONTS.uiBody, { fontSize: 12.5, color: themeColors.inkSoft, marginTop: 6, lineHeight: 18 }]}>
+            CompareZ is an independent, general-purpose AI research and product intelligence platform. We do not extract credentials, access private dark-store accounts, or execute unauthorised scrapers.
+          </Text>
+        </View>
 
-          {PLATFORMS.map((platform) => {
-            const isConnected = connected[platform.id];
-            return (
-              <View
-                key={platform.id}
-                style={[styles.card, { backgroundColor: themeColors.card, borderColor: themeColors.line, borderWidth: 1 }]}
-              >
-                <View style={styles.cardLeft}>
-                  <View
-                    style={[
-                      styles.iconContainer,
-                      { backgroundColor: platform.color + "20" },
-                    ]}
-                  >
-                    <Ionicons name={platform.icon} size={24} color={platform.color} />
-                  </View>
-                  <View style={styles.cardInfo}>
-                    <Text style={[styles.platformName, { color: themeColors.ink }]}>{platform.name}</Text>
-                    {isConnected ? (
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <Ionicons name="checkmark-circle" size={14} color="#10B981" />
-                        <Text style={[styles.statusText, { color: "#10B981" }]}>Connected</Text>
-                      </View>
-                    ) : (
-                      <Text style={[styles.statusText, { color: themeColors.inkSoft }]}>Not linked</Text>
-                    )}
-                  </View>
+        {/* Data Acquisition Strategy */}
+        <Text style={[styles.sectionTitle, { color: themeColors.ink }]}>
+          DATA ACQUISITION STANDARDS
+        </Text>
+        <Text style={[styles.sectionSubtitle, { color: themeColors.inkSoft }]}>
+          How CompareZ gathers specifications, intelligence, and verified research:
+        </Text>
+
+        <View style={styles.sourcesList}>
+          {DATA_SOURCES.map((source, index) => (
+            <View
+              key={index}
+              style={[
+                styles.sourceCard,
+                { backgroundColor: themeColors.card, borderColor: themeColors.line },
+              ]}
+            >
+              <View style={styles.sourceCardTop}>
+                <View style={[styles.sourceIconWrap, { backgroundColor: `${themeColors.primary}15` }]}>
+                  <Ionicons name={source.icon} size={18} color={themeColors.primary} />
                 </View>
-
-                <View style={styles.cardButtons}>
-                  {isConnected ? (
-                    <TouchableOpacity
-                      style={[styles.buttonDisconnect, { backgroundColor: themeColors.card, borderColor: themeColors.line, borderWidth: 1 }]}
-                      onPress={() => disconnectAccount(platform.id)}
-                    >
-                      <Text style={[styles.buttonDisconnectText, { color: themeColors.ink }]}>Disconnect</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={[styles.buttonConnect, { backgroundColor: themeColors.primary }]}
-                      onPress={() => openLogin(platform)}
-                    >
-                      <Text style={styles.buttonConnectText}>Connect</Text>
-                    </TouchableOpacity>
-                  )}
+                <View style={styles.sourceInfo}>
+                  <Text style={[FONTS.uiBodyBold, { fontSize: 14, color: themeColors.ink }]}>
+                    {source.title}
+                  </Text>
+                  <Text style={[FONTS.uiBody, { fontSize: 12, color: themeColors.inkSoft, marginTop: 2, lineHeight: 17 }]}>
+                    {source.description}
+                  </Text>
+                </View>
+                <View style={[styles.tagBadge, { backgroundColor: `${source.tagColor}18` }]}>
+                  <Text style={[FONTS.monoBold, { fontSize: 9, color: source.tagColor }]}>
+                    {source.tag}
+                  </Text>
                 </View>
               </View>
-            );
-          })}
-        </ScrollView>
-
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={[styles.modalOverlay, { backgroundColor: "rgba(0,0,0,0.6)" }]}>
-            <View style={[styles.modalContent, { backgroundColor: themeColors.paper }]}>
-              <View style={[styles.modalHeader, { borderBottomColor: themeColors.line }]}>
-                <Text style={[styles.modalTitle, { color: themeColors.ink }]}>Connect {currentPlatform?.name}</Text>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(false)}
-                  style={{ padding: 4 }}
-                >
-                  <Ionicons name="close" size={24} color={themeColors.ink} />
-                </TouchableOpacity>
-              </View>
-
-              <WebView
-                ref={webViewRef}
-                source={{ uri: currentPlatform?.loginUrl }}
-                originWhitelist={["https://*"]}
-                mixedContentMode="never"
-                allowFileAccess={false}
-                allowFileAccessFromFileURLs={false}
-                allowUniversalAccessFromFileURLs={false}
-                onShouldStartLoadWithRequest={(request) => {
-                  try {
-                    return isAllowedPlatformUrl(currentPlatform, request.url);
-                  } catch {
-                    return false;
-                  }
-                }}
-                style={styles.webview}
-                injectedJavaScript={`
-                  (function() {
-                    let hasProcessed = false;
-                    function log(msg) {
-                      try { window.ReactNativeWebView.postMessage(JSON.stringify({type: 'LOG', message: msg})); } catch(e) {}
-                    }
-                    function sendTokens() {
-                      if (hasProcessed) return;
-                      const cookies = document.cookie;
-                      const ls = {...localStorage};
-                      let payload = {};
-                      let isValid = false;
-                      const host = window.location.hostname;
-                      if (host.includes('blinkit') && (ls.auth || ls.authKey)) { payload['auth'] = ls.auth; payload['authKey'] = ls.authKey; payload['cookie'] = cookies; isValid = true; }
-                      else if (host.includes('zepto') && (ls.user || cookies.includes('session_id'))) { payload['user'] = ls.user; payload['cookie'] = cookies; isValid = true; }
-                      else if (host.includes('bigbasket') && (cookies.includes('sessionid') || cookies.includes('_bb_vid'))) { payload['cookie'] = cookies; isValid = true; }
-                      else if (host.includes('amazon') && cookies.includes('session-id')) { payload['cookie'] = cookies; isValid = true; }
-                      else if (host.includes('flipkart') && cookies.includes('T=')) { payload['cookie'] = cookies; isValid = true; }
-                      
-                      if (isValid) {
-                        window.ReactNativeWebView.postMessage(JSON.stringify({type: 'TOKENS', payload: payload}));
-                        hasProcessed = true;
-                      }
-                    }
-                    setInterval(sendTokens, 2000);
-                  })();
-                `}
-                onMessage={handleWebViewMessage}
-              />
             </View>
-          </View>
-        </Modal>
-      </View>
+          ))}
+        </View>
+
+        {/* Local Privacy Controls */}
+        <Text style={[styles.sectionTitle, { color: themeColors.ink, marginTop: 24 }]}>
+          ON-DEVICE PRIVACY CONTROLS
+        </Text>
+        <Text style={[styles.sectionSubtitle, { color: themeColors.inkSoft }]}>
+          Manage locally cached queries and research history stored on your device:
+        </Text>
+
+        <View style={[styles.controlsCard, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
+          <TouchableOpacity
+            style={[styles.controlRow, { borderBottomColor: themeColors.line }]}
+            onPress={handleClearHistory}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="trash-outline" size={18} color={themeColors.ink} />
+            <View style={styles.controlTextWrap}>
+              <Text style={[FONTS.uiBodyBold, { fontSize: 13.5, color: themeColors.ink }]}>
+                Clear Search History
+              </Text>
+              <Text style={[FONTS.uiBody, { fontSize: 11.5, color: themeColors.inkSoft, marginTop: 1 }]}>
+                Delete all previous search queries stored locally
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={themeColors.inkFaint} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.controlRow, { borderBottomColor: themeColors.line }]}
+            onPress={handleClearSavedResearch}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="library-outline" size={18} color={themeColors.ink} />
+            <View style={styles.controlTextWrap}>
+              <Text style={[FONTS.uiBodyBold, { fontSize: 13.5, color: themeColors.ink }]}>
+                Clear Saved Research Cache
+              </Text>
+              <Text style={[FONTS.uiBody, { fontSize: 11.5, color: themeColors.inkSoft, marginTop: 1 }]}>
+                Remove all bookmarked research responses from your library
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={themeColors.inkFaint} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.controlRow}
+            onPress={handleResetLocation}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="refresh-outline" size={18} color={themeColors.ink} />
+            <View style={styles.controlTextWrap}>
+              <Text style={[FONTS.uiBodyBold, { fontSize: 13.5, color: themeColors.ink }]}>
+                Reset Delivery Location
+              </Text>
+              <Text style={[FONTS.uiBody, { fontSize: 11.5, color: themeColors.inkSoft, marginTop: 1 }]}>
+                Reset geographical coordinates and delivery parameters
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={themeColors.inkFaint} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
   container: {
     flex: 1,
   },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-  },
-  headerTitle: {
-    ...FONTS.heading,
-    fontSize: 28,
-  },
-  headerSubtitle: {
-    ...FONTS.uiBody,
-    fontSize: 14,
-    marginTop: 4,
-  },
   scrollContent: {
-    padding: SPACING.xl,
-    paddingTop: SPACING.lg,
-  },
-  infoCard: {
-    flexDirection: "row",
     padding: SPACING.lg,
+  },
+  policyBanner: {
+    padding: SPACING.md,
     borderRadius: RADIUS.lg,
+    borderWidth: 1,
     marginBottom: SPACING.xl,
-    alignItems: "center",
-    gap: 12,
   },
-  infoText: {
-    ...FONTS.uiBody,
-    fontSize: 13,
-    flex: 1,
-    lineHeight: 20,
-  },
-  card: {
+  bannerHeader: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: SPACING.lg,
-    borderRadius: RADIUS.xl,
+  },
+  sectionTitle: {
+    ...FONTS.monoBold,
+    fontSize: 11,
+    letterSpacing: 0.8,
+  },
+  sectionSubtitle: {
+    ...FONTS.uiBody,
+    fontSize: 12,
+    marginTop: 2,
     marginBottom: SPACING.md,
   },
-  cardLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    flex: 1,
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardInfo: {
-    flex: 1,
-  },
-  platformName: {
-    ...FONTS.uiBodyBold,
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  statusText: {
-    ...FONTS.uiBody,
-    fontSize: 13,
-  },
-  cardButtons: {
-    flexDirection: "row",
+  sourcesList: {
     gap: SPACING.sm,
   },
-  buttonConnect: {
-    flexDirection: "row",
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: 10,
-    borderRadius: RADIUS.full,
-    alignItems: "center",
-    gap: 8,
-    ...SHADOWS.md,
-  },
-  buttonConnectText: {
-    color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  buttonReconnect: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+  sourceCard: {
+    borderRadius: RADIUS.md,
     borderWidth: 1,
+    padding: SPACING.md,
   },
-  buttonDisconnect: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
+  sourceCardTop: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  sourceIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: "center",
+    justifyContent: "center",
+    marginRight: SPACING.md,
   },
-  modalContainer: {
+  sourceInfo: {
     flex: 1,
+    paddingRight: SPACING.sm,
   },
-  modalHeader: {
+  tagBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.xs,
+  },
+  controlsCard: {
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    overflow: "hidden",
+  },
+  controlRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.lg,
+    paddingVertical: 14,
+    paddingHorizontal: SPACING.md,
     borderBottomWidth: 1,
   },
-  modalHeaderLeft: {
+  controlTextWrap: {
     flex: 1,
-  },
-  modalTitle: {
-    ...FONTS.h3,
-    fontSize: 18,
-  },
-  modalSubtitle: {
-    ...FONTS.caption,
-    marginTop: 2,
-  },
-  modalCloseButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-  },
-  webview: {
-    flex: 1,
+    marginLeft: SPACING.md,
   },
 });
+
+export default AccountsScreen;

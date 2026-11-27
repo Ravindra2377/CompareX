@@ -15,69 +15,69 @@ import BrandHeader from "../components/BrandHeader";
 import * as Haptics from "expo-haptics";
 
 const CATEGORIES = [
-  { id: "grocery", label: "Quick Grocery", icon: "basket-outline", color: "#16845B" },
-  { id: "tech", label: "Tech & Mobiles", icon: "speedometer-outline", color: "#3B82F6" },
-  { id: "health", label: "Health & Diet", icon: "flame-outline", color: "#F59E0B" },
-  { id: "personal", label: "Personal Care", icon: "sparkles", color: "#EC4899" },
-  { id: "home", label: "Home & Kitchen", icon: "restaurant-outline", color: "#8B5CF6" },
+  { id: "tech", label: "Tech & Mobiles", icon: "phone-portrait-outline", color: "#3B82F6" },
+  { id: "health", label: "Health & Nutrition", icon: "flame-outline", color: "#F59E0B" },
+  { id: "appliances", label: "Home & Appliances", icon: "home-outline", color: "#8B5CF6" },
+  { id: "audio", label: "Audio & Gadgets", icon: "headset-outline", color: "#EC4899" },
+  { id: "auto", label: "EV & Auto", icon: "speedometer-outline", color: "#16845B" },
 ];
 
 const TRENDING_COMPARISONS = [
   {
     id: "1",
-    title: "Amul Gold Milk vs Nandini GoodLife",
-    category: "Dairy & Milk",
-    bestDeal: "Compare live pricing across Zepto, Blinkit & BigBasket",
-    platforms: ["Zepto", "Blinkit", "BigBasket"],
-    query: "Amul Gold Milk vs Nandini GoodLife",
+    title: "iPhone 16 vs Samsung Galaxy S25",
+    category: "Flagship Smartphones",
+    bestDeal: "A18 vs Snapdragon 8 Elite • 60Hz vs 120Hz • iOS vs Android",
+    highlights: ["A18 Processor", "Snapdragon 8 Elite", "60Hz vs 120Hz", "AI Camera"],
+    query: "Which smartphone should I buy? Apple iPhone 16 vs Samsung Galaxy S25 full comparison",
   },
   {
     id: "2",
-    title: "Fortune Sunlite Oil vs Saffola Gold",
-    category: "Cooking Oils",
-    bestDeal: "Compare live oil rates across platforms",
-    platforms: ["Blinkit", "Zepto", "Amazon"],
-    query: "Fortune Sunlite Oil 1L price compare",
+    title: "Cold-Pressed vs Refined Cooking Oil",
+    category: "Health & Nutrition",
+    bestDeal: "Evidence-backed health analysis, smoke points & lab norms",
+    highlights: ["Nutrient Retention", "Heart Health", "Smoke Points", "FSSAI Norms"],
+    query: "Is cold-pressed mustard oil healthier than refined oil? Evidence and scientific research",
   },
   {
     id: "3",
-    title: "Aashirvaad Shudh Chakki Atta 5kg",
-    category: "Grains & Staples",
-    bestDeal: "Check bulk staples discounts & stock",
-    platforms: ["BigBasket", "Zepto", "Blinkit"],
-    query: "Aashirvaad Shudh Chakki Atta 5kg",
+    title: "Sony WH-1000XM5 vs Bose QC Ultra",
+    category: "Wireless Audio",
+    bestDeal: "Active noise cancellation, soundstage & comfort comparison",
+    highlights: ["Industry ANC", "Spatial Audio", "30h Battery", "Call Clarity"],
+    query: "Sony WH-1000XM5 vs Bose QuietComfort Ultra comparison which is better",
   },
   {
     id: "4",
-    title: "iPhone 16 (128GB) — Blinkit 10m vs Amazon",
-    category: "Smartphones",
-    bestDeal: "Compare 10-min quick commerce vs e-commerce",
-    platforms: ["Blinkit", "Amazon", "Flipkart"],
-    query: "iPhone 16 128gb price compare blinkit amazon",
+    title: "Tata Punch EV vs Nexon EV",
+    category: "Electric Vehicles",
+    bestDeal: "Range, battery capacity, fast charging & value comparison",
+    highlights: ["315km vs 465km", "Fast Charging", "City Commute", "Price-to-Value"],
+    query: "Tata Punch EV vs Nexon EV comparison range battery and specs",
   },
 ];
 
 const AI_RESEARCH_GUIDES = [
   {
     id: "g1",
-    title: "How to choose genuinely cold-pressed mustard oil in India?",
-    tag: "HEALTH RESEARCH",
+    title: "How to choose between iPhone 16 and Galaxy S25 in 2026?",
+    tag: "PRODUCT INTELLIGENCE",
     readTime: "3 min read",
-    query: "How to identify pure cold-pressed kachi ghani mustard oil with lab tests and fssai norms?",
+    query: "Which smartphone should I buy? Apple iPhone 16 vs Samsung Galaxy S25 comparison",
   },
   {
     id: "g2",
-    title: "High-protein vegetarian grocery list under ₹250/day",
-    tag: "NUTRITION & BUDGET",
+    title: "Evidence-backed guide: Identifying authentic cold-pressed oils",
+    tag: "HEALTH RESEARCH",
     readTime: "4 min read",
-    query: "High protein vegetarian Indian grocery basket plan under 250 rupees per day",
+    query: "How to identify pure cold-pressed kachi ghani mustard oil with lab tests and fssai norms?",
   },
   {
     id: "g3",
-    title: "Which quick-commerce app has the lowest delivery fees in 2026?",
-    tag: "SHOPPING INTELLIGENCE",
-    readTime: "2 min read",
-    query: "Compare delivery charges and handling fees between Blinkit, Zepto, Swiggy Instamart, and BigBasket",
+    title: "Air Purifier Guide: True HEPA vs H13 filters for high AQI",
+    tag: "HOME & SCIENCE",
+    readTime: "3 min read",
+    query: "How to choose an air purifier for high AQI in India? HEPA H13 CADR and room size guide",
   },
 ];
 
@@ -182,18 +182,18 @@ const DiscoverScreen = ({ navigation }) => {
                 </Text>
 
                 <View style={[styles.bestDealRow, { backgroundColor: `${themeColors.coriander || "#059669"}14` }]}>
-                  <Ionicons name="flash" size={12} color={themeColors.coriander || "#059669"} />
+                  <Ionicons name="sparkles" size={12} color={themeColors.coriander || "#059669"} />
                   <Text style={[FONTS.monoBold, { fontSize: 11, color: themeColors.coriander || "#059669", marginLeft: 4 }]}>
                     {comp.bestDeal}
                   </Text>
                 </View>
 
-                {/* Platform availability pills */}
+                {/* Highlights & specs pills */}
                 <View style={styles.platformPillsRow}>
-                  {comp.platforms.map((p, idx) => (
+                  {(comp.highlights || []).map((h, idx) => (
                     <View key={idx} style={[styles.platformPill, { backgroundColor: themeColors.paper }]}>
                       <Text style={[FONTS.mono, { fontSize: 10, color: themeColors.inkSoft }]}>
-                        {p}
+                        {h}
                       </Text>
                     </View>
                   ))}
@@ -201,21 +201,12 @@ const DiscoverScreen = ({ navigation }) => {
 
                 <View style={[styles.cardBtnRow, { borderTopColor: themeColors.line }]}>
                   <TouchableOpacity
-                    style={[styles.actionBtn, { borderColor: themeColors.line }]}
+                    style={[styles.actionBtn, { borderColor: themeColors.line, flex: 1 }]}
                     onPress={() => handleOpenResearch(comp.query)}
                   >
                     <Ionicons name="sparkles" size={12} color={themeColors.primary} />
                     <Text style={[FONTS.uiBodyBold, { fontSize: 11, color: themeColors.primary, marginLeft: 4 }]}>
-                      AI Research
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[styles.actionBtnFilled, { backgroundColor: themeColors.ink }]}
-                    onPress={() => handleOpenLiveCompare(comp.query)}
-                  >
-                    <Text style={[FONTS.uiBodyBold, { fontSize: 11, color: "#FFFFFF" }]}>
-                      Live Scan
+                      AI Product Compare
                     </Text>
                   </TouchableOpacity>
                 </View>
