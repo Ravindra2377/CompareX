@@ -16,6 +16,7 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 import { Ionicons } from "../components/Icon";
 import { WishlistContext } from "../context/WishlistContext";
@@ -58,6 +59,7 @@ const AICopilot = ({ activeRouteName }) => {
   const { wishlist } = useContext(WishlistContext);
   const navigation = useNavigation();
   const { themeColors, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -502,6 +504,9 @@ const AICopilot = ({ activeRouteName }) => {
                 {
                   backgroundColor: themeColors.paper,
                   borderTopColor: themeColors.line,
+                  paddingBottom: isKeyboardVisible
+                    ? 12
+                    : Math.max(insets.bottom, Platform.OS === "android" ? 44 : 24) + 18,
                 },
               ]}
             >
@@ -660,9 +665,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
+    paddingTop: SPACING.md,
     borderTopWidth: 1,
-    paddingBottom: Platform.OS === "ios" ? 36 : 32,
   },
   inputWrapper: {
     borderRadius: RADIUS.full,
