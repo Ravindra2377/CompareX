@@ -33,7 +33,7 @@ const FAB_EDGE_MARGIN = 12;
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const WELCOME_MESSAGE =
-  "Hi, I’m Beans. I can help you compare products, find better prices, and plan a grocery basket.";
+  "Hi, I'm CompareZ AI. I can help you research products, compare prices across Indian stores, and find the best deals.";
 
 const STARTER_PROMPTS = [
   { label: "Find the best price", prompt: "Help me find the best price for a product" },
@@ -418,8 +418,8 @@ const AICopilot = ({ activeRouteName }) => {
           <View style={[styles.panelHeader, { backgroundColor: themeColors.paper }]}>
             <View style={styles.panelHeaderLeft}>
               <View>
-                <Text style={[styles.panelTitle, { color: themeColors.ink }]}>Beans</Text>
-                <Text style={[styles.panelSubtitle, { color: themeColors.inkSoft }]}>Shopping companion</Text>
+                <Text style={[styles.panelTitle, { color: themeColors.ink }]}>CompareZ Copilot</Text>
+                <Text style={[styles.panelSubtitle, { color: themeColors.inkSoft }]}>AI Shopping Companion</Text>
               </View>
             </View>
             <TouchableOpacity onPress={closeCopilot} style={[styles.closeBtn, { backgroundColor: themeColors.aubergineSoft }]}>

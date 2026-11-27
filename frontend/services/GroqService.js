@@ -13,9 +13,12 @@ import { secureStorage } from "./secureStorage";
 const PROXY_CHAT_URL = `${API_URL}/ai/chat`;
 const PROXY_AUDIO_URL = `${API_URL}/ai/transcribe`;
 
+const DIRECT_GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const DIRECT_GROQ_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY || "";
+
 const MODELS = {
-  fast: "llama-3.1-8b-instant",
-  smart: "llama-3.3-70b-versatile",
+  fast: "openai/gpt-oss-20b",
+  smart: "openai/gpt-oss-120b",
   whisper: "whisper-large-v3-turbo",
 };
 
@@ -30,28 +33,45 @@ async function groqFetch(model, messages, maxTokens = 300, jsonMode = false) {
   };
   if (jsonMode) body.response_format = { type: "json_object" };
 
-  const response = await fetch(PROXY_CHAT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify(body),
-  });
+  // 1. First attempt: CompareZ Backend Proxy
+  try {
+    const response = await fetch(PROXY_CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(body),
+    });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    let message = "CompareZ AI is temporarily unavailable.";
-    try {
-      const parsed = JSON.parse(errorBody);
-      if (parsed?.error) message = parsed.error;
-    } catch {
-      // Keep the safe user-facing fallback for non-JSON upstream errors.
+    if (response.ok) {
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || "";
     }
-    throw new Error(message);
+  } catch (proxyErr) {
+    // Backend proxy unreachable
   }
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content || "";
+
+  // 2. Second attempt: Direct Groq Cloud fallback with user's key if proxy fails or returns 401
+  try {
+    const directResponse = await fetch(DIRECT_GROQ_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${DIRECT_GROQ_KEY}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (directResponse.ok) {
+      const data = await directResponse.json();
+      return data.choices?.[0]?.message?.content || "";
+    }
+  } catch (directErr) {
+    // Direct Groq fallback unreachable
+  }
+
+  throw new Error("CompareZ AI is temporarily unavailable. Please try again.");
 }
 
 // ─── GroqService Public API ───────────────────────────────────────────────────
