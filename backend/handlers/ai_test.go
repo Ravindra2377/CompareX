@@ -141,3 +141,40 @@ func TestListConversationsUnauthenticated(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }
+
+func TestAIResearchConversationOwnership_Unauthenticated(t *testing.T) {
+	e := echo.New()
+	// Unauthenticated request attempting to pass a conversation_id must be rejected with 401
+	reqBody := `{"query": "Follow up question", "conversation_id": 999, "mode": "all"}`
+	req := httptest.NewRequest(http.MethodPost, "/ai/research", bytes.NewReader([]byte(reqBody)))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	err := AIResearch(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+
+	var errResp map[string]string
+	json.Unmarshal(rec.Body.Bytes(), &errResp)
+	assert.Contains(t, errResp["error"], "Authentication required")
+}
+
+func TestAIResearchStream_Basic(t *testing.T) {
+	e := echo.New()
+	reqBody := `{"query": "Calculate EMI for 10 lakhs at 8.5% for 15 years", "mode": "all"}`
+	req := httptest.NewRequest(http.MethodPost, "/ai/research/stream", bytes.NewReader([]byte(reqBody)))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	err := AIResearchStream(c)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, "text/event-stream", rec.Header().Get("Content-Type"))
+
+	streamOutput := rec.Body.String()
+	assert.Contains(t, streamOutput, "event: intent")
+	assert.Contains(t, streamOutput, "event: done")
+}
+

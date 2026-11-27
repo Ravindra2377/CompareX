@@ -225,10 +225,17 @@ func searchSerper(ctx context.Context, query string, apiKey string, maxResults i
 	return sources, nil
 }
 
-// FetchPageContent retrieves the readable text of an external web page, protected against prompt injection.
+var safePageFetchClient = NewSafeHTTPClient(3 * time.Second)
+
+// FetchPageContent retrieves the readable text of an external web page, protected against SSRF and prompt injection.
 func FetchPageContent(ctx context.Context, pageURL string, maxChars int) (string, error) {
 	if maxChars <= 0 {
 		maxChars = 600
+	}
+
+	// 1. Strict SSRF destination validation (blocks loopback, private ranges, cloud metadata)
+	if err := ValidateSafeURL(pageURL); err != nil {
+		return "", err
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", pageURL, nil)
@@ -238,7 +245,7 @@ func FetchPageContent(ctx context.Context, pageURL string, maxChars int) (string
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 	req.Header.Set("Accept", "text/html,text/plain;q=0.9")
 
-	resp, err := pageFetchClient.Do(req)
+	resp, err := safePageFetchClient.Do(req)
 	if err != nil {
 		return "", err
 	}

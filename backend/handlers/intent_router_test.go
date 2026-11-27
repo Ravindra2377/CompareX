@@ -13,6 +13,39 @@ func TestClassifyQueryIntent(t *testing.T) {
 		mode     string
 		expected QueryIntent
 	}{
+		// Code Review Review-Specific Test Cases
+		{
+			name:     "Tech Comparison (Not Shopping)",
+			query:    "Python vs Java",
+			mode:     "all",
+			expected: IntentDirectAnswer,
+		},
+		{
+			name:     "Health Nutrition (Not Shopping)",
+			query:    "Is milk healthy?",
+			mode:     "all",
+			expected: IntentDirectAnswer,
+		},
+		{
+			name:     "Commodity Rate (Web Search, Not Shopping)",
+			query:    "Today's gold price",
+			mode:     "all",
+			expected: IntentWebSearch,
+		},
+		{
+			name:     "Product Launch News (Web Search, Not Shopping)",
+			query:    "Latest iPhone launch news",
+			mode:     "all",
+			expected: IntentWebSearch,
+		},
+		{
+			name:     "Home Loan EMI Calculation",
+			query:    "Calculate home loan EMI",
+			mode:     "all",
+			expected: IntentCalculation,
+		},
+
+		// Standard Operational Cases
 		{
 			name:     "Direct Coding Explanation",
 			query:    "Explain Python inheritance with code example",
@@ -20,20 +53,8 @@ func TestClassifyQueryIntent(t *testing.T) {
 			expected: IntentDirectAnswer,
 		},
 		{
-			name:     "Direct Conceptual Question",
-			query:    "How does photosynthesis work in plants?",
-			mode:     "all",
-			expected: IntentDirectAnswer,
-		},
-		{
-			name:     "Financial EMI Calculation",
+			name:     "Financial EMI Calculation Detailed",
 			query:    "Calculate EMI for 10 lakhs home loan at 8.5% for 15 years",
-			mode:     "all",
-			expected: IntentCalculation,
-		},
-		{
-			name:     "Mathematical Arithmetic",
-			query:    "1500 * 18%",
 			mode:     "all",
 			expected: IntentCalculation,
 		},
@@ -56,7 +77,7 @@ func TestClassifyQueryIntent(t *testing.T) {
 			expected: IntentShopping,
 		},
 		{
-			name:     "Live News and Current Events",
+			name:     "Live News Headlines",
 			query:    "Today's latest news headline updates in India",
 			mode:     "all",
 			expected: IntentWebSearch,

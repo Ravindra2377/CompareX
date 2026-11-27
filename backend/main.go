@@ -173,6 +173,7 @@ func main() {
 
 	// AI Assistant & Research Platform Routes
 	e.POST("/ai/research", handlers.AIResearch, aiLimiter, middleware.BodyLimit("64K"))
+	e.POST("/ai/research/stream", handlers.AIResearchStream, aiLimiter, middleware.BodyLimit("64K"))
 	protected.GET("/ai/conversations", handlers.ListConversations)
 	protected.GET("/ai/conversations/:id", handlers.GetConversation)
 	protected.DELETE("/ai/conversations/:id", handlers.DeleteConversation)
