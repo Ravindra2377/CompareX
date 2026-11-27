@@ -187,10 +187,6 @@ Return JSON only:
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
-        await expireSession("expired");
-        throw new Error("Your session expired. Sign in again to use voice search.");
-      }
       throw new Error("Voice search is temporarily unavailable.");
     }
     const data = await response.json();

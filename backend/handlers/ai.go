@@ -103,11 +103,21 @@ func checkGuestAIRateLimit(c echo.Context, endpoint string, maxRequestsPerHour i
 }
 
 func validateAIChatRequest(req *AIChatRequest) bool {
-	if !allowedChatModels[req.Model] || len(req.Messages) == 0 || len(req.Messages) > 30 {
+	if req.Model == "" || !allowedChatModels[req.Model] {
+		req.Model = "openai/gpt-oss-20b"
+	}
+	if len(req.Messages) == 0 || len(req.Messages) > 30 {
 		return false
 	}
-	if req.MaxTokens < 1 || req.MaxTokens > 1000 || req.Temperature < 0 || req.Temperature > 1.5 {
-		return false
+	if req.MaxTokens <= 0 {
+		req.MaxTokens = 300
+	} else if req.MaxTokens > 1000 {
+		req.MaxTokens = 1000
+	}
+	if req.Temperature <= 0 {
+		req.Temperature = 0.7
+	} else if req.Temperature > 1.5 {
+		req.Temperature = 1.5
 	}
 
 	totalContentSize := 0
@@ -147,7 +157,7 @@ func AIChat(c echo.Context) error {
 	apiKey := os.Getenv("GROQ_API_KEY")
 	if apiKey == "" {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "AI service not configured",
+			"error": "AI service not configured: GROQ_API_KEY is missing on server",
 		})
 	}
 
@@ -197,6 +207,13 @@ func AIChat(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadGateway, map[string]string{
 			"error": "Failed to read AI response",
+		})
+	}
+
+	// Never forward upstream 401/403 to mobile clients as 401; it triggers client auth logout
+	if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
+		return c.JSON(http.StatusBadGateway, map[string]string{
+			"error": "AI service authentication error: Server GROQ_API_KEY is invalid or expired. Please update GROQ_API_KEY in the server environment.",
 		})
 	}
 
@@ -315,6 +332,13 @@ func AITranscribe(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadGateway, map[string]string{
 			"error": "Failed to read AI response",
+		})
+	}
+
+	// Never forward upstream 401/403 to mobile clients as 401; it triggers client auth logout
+	if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
+		return c.JSON(http.StatusBadGateway, map[string]string{
+			"error": "AI service authentication error: Server GROQ_API_KEY is invalid or expired. Please update GROQ_API_KEY in the server environment.",
 		})
 	}
 
