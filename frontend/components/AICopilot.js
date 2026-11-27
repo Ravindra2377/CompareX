@@ -16,6 +16,7 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 import { Ionicons } from "../components/Icon";
 import { WishlistContext } from "../context/WishlistContext";
@@ -33,7 +34,7 @@ const FAB_EDGE_MARGIN = 12;
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const WELCOME_MESSAGE =
-  "Hi, I’m Beans. I can help you compare products, find better prices, and plan a grocery basket.";
+  "Hi, I'm CompareZ AI. I can help you research products, compare prices across Indian stores, and find the best deals.";
 
 const STARTER_PROMPTS = [
   { label: "Find the best price", prompt: "Help me find the best price for a product" },
@@ -58,6 +59,7 @@ const AICopilot = ({ activeRouteName }) => {
   const { wishlist } = useContext(WishlistContext);
   const navigation = useNavigation();
   const { themeColors, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -418,8 +420,8 @@ const AICopilot = ({ activeRouteName }) => {
           <View style={[styles.panelHeader, { backgroundColor: themeColors.paper }]}>
             <View style={styles.panelHeaderLeft}>
               <View>
-                <Text style={[styles.panelTitle, { color: themeColors.ink }]}>Beans</Text>
-                <Text style={[styles.panelSubtitle, { color: themeColors.inkSoft }]}>Shopping companion</Text>
+                <Text style={[styles.panelTitle, { color: themeColors.ink }]}>CompareZ Copilot</Text>
+                <Text style={[styles.panelSubtitle, { color: themeColors.inkSoft }]}>AI Shopping Companion</Text>
               </View>
             </View>
             <TouchableOpacity onPress={closeCopilot} style={[styles.closeBtn, { backgroundColor: themeColors.aubergineSoft }]}>
@@ -502,6 +504,9 @@ const AICopilot = ({ activeRouteName }) => {
                 {
                   backgroundColor: themeColors.paper,
                   borderTopColor: themeColors.line,
+                  paddingBottom: isKeyboardVisible
+                    ? 12
+                    : Math.max(insets.bottom, Platform.OS === "android" ? 44 : 24) + 18,
                 },
               ]}
             >
@@ -660,9 +665,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
+    paddingTop: SPACING.md,
     borderTopWidth: 1,
-    paddingBottom: Platform.OS === "ios" ? 36 : 32,
   },
   inputWrapper: {
     borderRadius: RADIUS.full,

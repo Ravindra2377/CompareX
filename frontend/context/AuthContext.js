@@ -179,7 +179,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       Alert.alert(
         "Session expired",
-        "Please sign in again to continue using Beans and connected services.",
+        "Please sign in again to continue using CompareZ.",
       );
     });
   }, []);

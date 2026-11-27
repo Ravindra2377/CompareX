@@ -32,6 +32,9 @@ var aiHTTPClient = &http.Client{Timeout: 60 * time.Second}
 var allowedChatModels = map[string]bool{
 	"llama-3.1-8b-instant":    true,
 	"llama-3.3-70b-versatile": true,
+	"openai/gpt-oss-20b":       true,
+	"openai/gpt-oss-120b":      true,
+	"qwen/qwen3.8-27b":        true,
 }
 
 func validateAIChatRequest(req *AIChatRequest) bool {

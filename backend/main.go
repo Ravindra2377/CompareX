@@ -177,9 +177,9 @@ func main() {
 	protected.GET("/ai/conversations/:id", handlers.GetConversation)
 	protected.DELETE("/ai/conversations/:id", handlers.DeleteConversation)
 
-	// AI Proxy Routes (Groq key stays server-side)
-	protected.POST("/ai/chat", handlers.AIChat, aiLimiter, middleware.BodyLimit("256K"))
-	protected.POST("/ai/transcribe", handlers.AITranscribe, aiLimiter, middleware.BodyLimit("26M"))
+	// AI Proxy Routes (Groq key stays server-side, accessible to guest & authenticated users)
+	e.POST("/ai/chat", handlers.AIChat, aiLimiter, middleware.BodyLimit("256K"))
+	e.POST("/ai/transcribe", handlers.AITranscribe, aiLimiter, middleware.BodyLimit("26M"))
 
 	// Start server
 	port := os.Getenv("PORT")
