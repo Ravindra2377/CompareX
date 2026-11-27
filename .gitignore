@@ -1,0 +1,22 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+*.env
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Go binaries
+backend/comparex
+backend/comparex_app
+backend/comparez
+*.log
+backend/backend.log
+
+# Node & dependencies
+node_modules/
+.expo/
+dist/
+web-build/
