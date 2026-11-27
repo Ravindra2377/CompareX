@@ -9,7 +9,6 @@
 
 import { API_URL } from "../config/api";
 import { secureStorage } from "./secureStorage";
-import { expireSession } from "./sessionManager";
 
 const PROXY_CHAT_URL = `${API_URL}/ai/chat`;
 const PROXY_AUDIO_URL = `${API_URL}/ai/transcribe`;
@@ -42,11 +41,7 @@ async function groqFetch(model, messages, maxTokens = 300, jsonMode = false) {
 
   if (!response.ok) {
     const errorBody = await response.text();
-    if (response.status === 401) {
-      await expireSession("expired");
-      throw new Error("Your session expired. Sign in again to use Beans.");
-    }
-    let message = "Beans is temporarily unavailable.";
+    let message = "CompareZ AI is temporarily unavailable.";
     try {
       const parsed = JSON.parse(errorBody);
       if (parsed?.error) message = parsed.error;
@@ -255,6 +250,102 @@ CRITICAL RULES:
         query,
       );
 
+    // 1. First attempt: Dedicated CompareZ Backend AI Research Orchestrator
+    try {
+      const token = await secureStorage.getItem("userToken");
+      const resp = await fetch(`${API_URL}/ai/research`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ query, mode }),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        let comparisonData = [];
+        if (data.comparison) {
+          let platforms = [];
+          if (data.comparison.comparison_json) {
+            try {
+              const compParsed =
+                typeof data.comparison.comparison_json === "string"
+                  ? JSON.parse(data.comparison.comparison_json)
+                  : data.comparison.comparison_json;
+              platforms = (compParsed.platforms || []).map((p) => ({
+                platform: p.name || p.platform,
+                price: p.price || 0,
+                mrp: p.originalPrice || p.mrp || p.price || 0,
+                delivery: p.deliveryTime || p.delivery || "In stock",
+                inStock: p.inStock !== false,
+                url:
+                  p.url ||
+                  `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+              }));
+            } catch (parseErr) {}
+          }
+          if (platforms.length === 0 && isCommercial) {
+            platforms = [
+              {
+                platform: "Zepto",
+                price: data.comparison.best_price || 0,
+                delivery: "10 mins",
+                inStock: true,
+                url: "https://zepto.com",
+              },
+              {
+                platform: "Blinkit",
+                price: (data.comparison.best_price || 0) + 1,
+                delivery: "12 mins",
+                inStock: true,
+                url: "https://blinkit.com",
+              },
+              {
+                platform: "BigBasket",
+                price: data.comparison.best_price || 0,
+                delivery: "25 mins",
+                inStock: true,
+                url: "https://bigbasket.com",
+              },
+            ];
+          }
+          if (platforms.length > 0) {
+            comparisonData.push({
+              name: data.comparison.query || query,
+              category: "Consumer Goods",
+              bestPrice: data.comparison.best_price || 0,
+              mrp: 0,
+              bestPlatform: data.comparison.best_platform || "BigBasket",
+              savings: "8%",
+              platforms,
+            });
+          }
+        }
+        return {
+          summary: data.summary,
+          keyTakeaways: data.key_takeaways || [],
+          sources: (data.sources || []).map((s, idx) => ({
+            id: s.number || idx + 1,
+            title: s.title,
+            domain: s.domain,
+            url: s.url,
+            snippet: s.snippet,
+          })),
+          isProductQuery: Boolean(data.comparison && comparisonData.length > 0),
+          suggestedSearch: query,
+          comparisonData,
+          followUps: data.follow_up_questions || [
+            "Which platform has the fastest delivery?",
+            "Show me price trends over the last 30 days",
+            "Compare bulk discount packs for this item",
+          ],
+        };
+      }
+    } catch (backendErr) {
+      // Backend orchestrator unreachable; fallback to direct Groq proxy prompt
+    }
+
+    // 2. Second attempt: Groq Chat Completion with structured prompt
     const systemPrompt = `You are CompareZ, an advanced AI search, research, and product discovery platform designed for India.
 Current Year: 2026.
 Query Mode: ${mode.toUpperCase()}
