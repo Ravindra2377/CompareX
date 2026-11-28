@@ -85,3 +85,53 @@ func TestSecurityConfigRejectsWeakSecret(t *testing.T) {
 		t.Fatal("expected weak JWT secret to be rejected")
 	}
 }
+
+func optionalEcho() *echo.Echo {
+	e := echo.New()
+	e.GET("/public-or-private", func(c echo.Context) error {
+		userID, ok := c.Get("user_id").(string)
+		if ok && userID != "" {
+			return c.String(http.StatusOK, "user:"+userID)
+		}
+		return c.String(http.StatusOK, "guest")
+	}, handlers.OptionalAuth)
+	return e
+}
+
+func TestOptionalAuthAcceptsGuestWithoutHeader(t *testing.T) {
+	t.Setenv("JWT_SECRET", testSecret)
+	rec := httptest.NewRecorder()
+	optionalEcho().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/public-or-private", nil))
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rec.Code)
+	}
+	if rec.Body.String() != "guest" {
+		t.Fatalf("expected 'guest', got %q", rec.Body.String())
+	}
+}
+
+func TestOptionalAuthIdentifiesUserWithValidToken(t *testing.T) {
+	t.Setenv("JWT_SECRET", testSecret)
+	req := httptest.NewRequest(http.MethodGet, "/public-or-private", nil)
+	req.Header.Set(echo.HeaderAuthorization, "Bearer "+signedToken(t, time.Now().Add(time.Hour)))
+	rec := httptest.NewRecorder()
+	optionalEcho().ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", rec.Code)
+	}
+	if rec.Body.String() != "user:507f1f77bcf86cd799439011" {
+		t.Fatalf("expected authenticated user string, got %q", rec.Body.String())
+	}
+}
+
+func TestOptionalAuthRejectsInvalidToken(t *testing.T) {
+	t.Setenv("JWT_SECRET", testSecret)
+	req := httptest.NewRequest(http.MethodGet, "/public-or-private", nil)
+	req.Header.Set(echo.HeaderAuthorization, "Bearer invalid-token-string")
+	rec := httptest.NewRecorder()
+	optionalEcho().ServeHTTP(rec, req)
+	if rec.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401, got %d", rec.Code)
+	}
+}
+

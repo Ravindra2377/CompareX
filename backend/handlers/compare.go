@@ -3,15 +3,15 @@ package handlers
 import (
 	"comparez/scraper"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-// ScraperSvc is the global scraper service instance
+// ScraperSvc is the global scraper service instance (retired in V5.1)
 var ScraperSvc *scraper.Service
 
 // CompareProducts handles GET /compare?q=eggs&lat=12.97&lng=77.59
+// NOTE: Retired in AI Platform V5.1 in favor of Universal Web Intelligence.
 func CompareProducts(c echo.Context) error {
 	query := c.QueryParam("q")
 	if query == "" {
@@ -20,37 +20,10 @@ func CompareProducts(c echo.Context) error {
 		})
 	}
 
-	// Default location: Bangalore center
-	lat := 12.9716
-	lng := 77.5946
-
-	if latStr := c.QueryParam("lat"); latStr != "" {
-		if parsed, err := strconv.ParseFloat(latStr, 64); err == nil {
-			lat = parsed
-		}
-	}
-	if lngStr := c.QueryParam("lng"); lngStr != "" {
-		if parsed, err := strconv.ParseFloat(lngStr, 64); err == nil {
-			lng = parsed
-		}
-	}
-
-	if ScraperSvc == nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "Scraper service not initialized",
-		})
-	}
-
-	// Platform credentials are retrieved only from the authenticated user's
-	// server-side session. They are never accepted through request headers.
-	userTokens := GetTokensForRequest(c)
-
-	result, err := ScraperSvc.Compare(c.Request().Context(), query, lat, lng, userTokens)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": "Comparison failed: " + err.Error(),
-		})
-	}
-
-	return c.JSON(http.StatusOK, result)
+	c.Response().Header().Set("X-CompareZ-Deprecated", "Legacy retailer scraper comparison is retired in AI Platform V5.1")
+	return c.JSON(http.StatusGone, map[string]string{
+		"error":   "scraper_comparison_retired",
+		"message": "Legacy retailer scraper comparison is retired in CompareZ AI Platform. Use /ai/research or Universal Product Intelligence.",
+	})
 }
+

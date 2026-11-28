@@ -21,11 +21,7 @@ func TestCompareProductsMissingQuery(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
-func TestCompareProductsServiceNotInitialized(t *testing.T) {
-	old := ScraperSvc
-	ScraperSvc = nil
-	t.Cleanup(func() { ScraperSvc = old })
-
+func TestCompareProductsRetired(t *testing.T) {
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/compare?q=milk", nil)
 	rec := httptest.NewRecorder()
@@ -33,5 +29,6 @@ func TestCompareProductsServiceNotInitialized(t *testing.T) {
 
 	err := CompareProducts(c)
 	require.NoError(t, err)
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+	assert.Equal(t, http.StatusGone, rec.Code)
 }
+

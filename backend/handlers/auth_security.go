@@ -103,6 +103,54 @@ func RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// OptionalAuth validates the bearer token if provided, placing the user id in the request context.
+// If no Authorization header is present, the request proceeds as an unauthenticated guest.
+// If an invalid or expired token is presented, it returns 401 Unauthorized.
+func OptionalAuth(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		header := strings.TrimSpace(c.Request().Header.Get(echo.HeaderAuthorization))
+		if header == "" {
+			return next(c)
+		}
+
+		parts := strings.Fields(header)
+		if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid authorization format"})
+		}
+
+		secret, err := jwtSecret()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Authentication is not configured"})
+		}
+
+		claims := new(authClaims)
+		token, err := jwt.ParseWithClaims(
+			parts[1],
+			claims,
+			func(token *jwt.Token) (interface{}, error) {
+				if token.Method != jwt.SigningMethodHS256 {
+					return nil, errors.New("unexpected signing algorithm")
+				}
+				return secret, nil
+			},
+			jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
+			jwt.WithIssuer(jwtIssuer),
+			jwt.WithAudience(jwtAudience),
+			jwt.WithExpirationRequired(),
+			jwt.WithLeeway(30*time.Second),
+		)
+		if err != nil || !token.Valid || claims.UserID == "" || claims.Subject != claims.UserID {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid or expired token"})
+		}
+		if _, err := primitive.ObjectIDFromHex(claims.UserID); err != nil {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token subject"})
+		}
+
+		c.Set(userIDContextKey, claims.UserID)
+		return next(c)
+	}
+}
+
 func authenticatedUserID(c echo.Context) (string, bool) {
 	id, ok := c.Get(userIDContextKey).(string)
 	if !ok || id == "" {

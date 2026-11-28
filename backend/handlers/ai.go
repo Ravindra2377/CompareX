@@ -442,11 +442,11 @@ func AIResearch(c echo.Context) error {
 	// 3. Classify intent: direct_answer, calculation, shopping, or web_search
 	intent := ClassifyQueryIntent(query, mode)
 
-	// 4. Redis Cache Check (isolated synthesis only, no shared conversation IDs)
+	// 4. Redis Cache Check (isolated generic synthesis only; multi-turn and saved conversations are strictly isolated)
 	ctx := c.Request().Context()
 	cacheKey := fmt.Sprintf("ai_research:%s:%s:%x", locDetails.City, locDetails.Pincode, sha256.Sum256([]byte(query+":"+mode)))
 
-	if database.RedisClient != nil && len(req.History) == 0 {
+	if database.RedisClient != nil && len(req.History) == 0 && req.ConversationID == 0 {
 		if cached, err := database.RedisClient.Get(ctx, cacheKey).Result(); err == nil && cached != "" {
 			var cachedData CachedResearchSynthesis
 			if err := json.Unmarshal([]byte(cached), &cachedData); err == nil {
@@ -480,8 +480,8 @@ func AIResearch(c echo.Context) error {
 		persistConversationTurn(userID, req.ConversationID, query, mode, &resp)
 	}
 
-	// 7. Cache isolated synthesis in Redis for 10 minutes (only if not a multi-turn continuation)
-	if database.RedisClient != nil && len(req.History) == 0 {
+	// 7. Cache isolated synthesis in Redis for 10 minutes (only for independent fresh queries; never cache personalized conversations)
+	if database.RedisClient != nil && len(req.History) == 0 && req.ConversationID == 0 {
 		cachedData := CachedResearchSynthesis{
 			Summary:           resp.Summary,
 			KeyTakeaways:      resp.KeyTakeaways,
@@ -513,8 +513,20 @@ func AIResearchStream(c echo.Context) error {
 	}
 
 	userID, isAuth := authenticatedUserID(c)
-	if req.ConversationID > 0 && !isAuth {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Authentication required for saved conversations"})
+	if req.ConversationID > 0 {
+		if !isAuth {
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"error": "Authentication required for saved conversations",
+			})
+		}
+		if database.GormDB != nil {
+			var existingConv models.Conversation
+			if err := database.GormDB.Where("id = ? AND user_id = ?", req.ConversationID, userID).First(&existingConv).Error; err != nil {
+				return c.JSON(http.StatusForbidden, map[string]string{
+					"error": "Conversation not found or access denied",
+				})
+			}
+		}
 	}
 
 	if !checkGuestAIRateLimit(c, "research", 30) {

@@ -3,7 +3,6 @@ package main
 import (
 	"comparez/database"
 	"comparez/handlers"
-	"comparez/scraper"
 	"comparez/search"
 	"context"
 	"log"
@@ -47,16 +46,10 @@ func main() {
 	// Initialize Meilisearch
 	search.Connect()
 
-	// Initialize Scraper Service
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if redisAddr == "" {
-		redisAddr = "localhost:6379"
-	}
-	// Load platform config
-	scraper.Initialize()
-
-	scraperService := scraper.NewService(redisAddr)
-	handlers.ScraperSvc = scraperService
+	// Legacy Scraper Service disabled in AI Platform V5.1.
+	// Backend scraper initialization and direct retailer scraping are retired
+	// in favor of Universal Web Intelligence and Dynamic Product Intelligence.
+	handlers.ScraperSvc = nil
 
 	// Initialize Echo
 	e := echo.New()
@@ -171,16 +164,16 @@ func main() {
 	protected.GET("/compare", handlers.CompareProducts)
 	protected.POST("/tokens", handlers.BulkConnectAccounts, middleware.BodyLimit("1M"))
 
-	// AI Assistant & Research Platform Routes
-	e.POST("/ai/research", handlers.AIResearch, aiLimiter, middleware.BodyLimit("64K"))
-	e.POST("/ai/research/stream", handlers.AIResearchStream, aiLimiter, middleware.BodyLimit("64K"))
+	// AI Assistant & Research Platform Routes (Supports guest access & authenticated persistence via OptionalAuth)
+	e.POST("/ai/research", handlers.AIResearch, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("64K"))
+	e.POST("/ai/research/stream", handlers.AIResearchStream, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("64K"))
 	protected.GET("/ai/conversations", handlers.ListConversations)
 	protected.GET("/ai/conversations/:id", handlers.GetConversation)
 	protected.DELETE("/ai/conversations/:id", handlers.DeleteConversation)
 
 	// AI Proxy Routes (Groq key stays server-side, accessible to guest & authenticated users)
-	e.POST("/ai/chat", handlers.AIChat, aiLimiter, middleware.BodyLimit("256K"))
-	e.POST("/ai/transcribe", handlers.AITranscribe, aiLimiter, middleware.BodyLimit("26M"))
+	e.POST("/ai/chat", handlers.AIChat, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("256K"))
+	e.POST("/ai/transcribe", handlers.AITranscribe, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("26M"))
 
 	// Start server
 	port := os.Getenv("PORT")

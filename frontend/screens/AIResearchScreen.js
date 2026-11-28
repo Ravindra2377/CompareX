@@ -25,18 +25,16 @@ import BrandHeader from "../components/BrandHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 
-const PLATFORM_COLORS = {
-  Blinkit: "#F8CB46",
-  Zepto: "#7C3AED",
-  BigBasket: "#84C225",
-  Amazon: "#FF9900",
-  Flipkart: "#2874F0",
+const SOURCE_BADGE_COLORS = {
+  "Official Source": "#10B981",
+  "Verified Manufacturer": "#6366F1",
+  "Benchmark Index": "#F59E0B",
 };
 
 const RESEARCH_STEPS = [
   { id: 1, label: "Analyzing query intent & context...", icon: "search-outline" },
   { id: 2, label: "Scanning web intelligence & databases...", icon: "globe-outline" },
-  { id: 3, label: "Verifying merchant prices in India...", icon: "basket-outline" },
+  { id: 3, label: "Verifying specifications & evidence...", icon: "shield-checkmark-outline" },
   { id: 4, label: "Synthesizing evidence and recommendations...", icon: "sparkles" },
 ];
 
@@ -130,11 +128,17 @@ const AIResearchScreen = ({ navigation, route }) => {
     ].slice(-8);
 
     try {
-      const result = await GroqService.research(
+      const result = await GroqService.researchStream(
         promptText,
         activeMode,
         conversationHistory,
         { ...locationInfo, conversationId },
+        {
+          onIntent: () => setActiveStep(2),
+          onSources: () => setActiveStep(3),
+          onDone: () => setActiveStep(4),
+          onError: (err) => console.log("[AIResearchScreen] Stream fallback:", err?.message),
+        }
       );
 
       if (result.conversationId) {
@@ -499,7 +503,7 @@ const AIResearchScreen = ({ navigation, route }) => {
                                 <View
                                   style={[
                                     styles.platformColorDot,
-                                    { backgroundColor: PLATFORM_COLORS[plat.platform] || themeColors.primary },
+                                    { backgroundColor: SOURCE_BADGE_COLORS[plat.platform] || themeColors.primary },
                                   ]}
                                 />
                                 <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: themeColors.ink, marginLeft: 5 }]}>
@@ -527,14 +531,14 @@ const AIResearchScreen = ({ navigation, route }) => {
                           ))}
                         </View>
 
-                        {/* Button to run full headless scan */}
+                        {/* Button to explore product intelligence & detailed specifications */}
                         <TouchableOpacity
                           style={[styles.fullScanBtn, { borderColor: themeColors.primary }]}
                           onPress={() => openLiveProductComparison(aiData.suggestedSearch || prod.name)}
                         >
-                          <Ionicons name="sync-outline" size={14} color={themeColors.primary} />
+                          <Ionicons name="layers-outline" size={14} color={themeColors.primary} />
                           <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: themeColors.primary, marginLeft: 6 }]}>
-                            Run Live 5-Platform WebView Scan
+                            Explore Product Intelligence & Specifications
                           </Text>
                         </TouchableOpacity>
                       </View>

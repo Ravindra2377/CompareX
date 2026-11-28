@@ -53,6 +53,66 @@ async function groqFetch(model, messages, maxTokens = 300, jsonMode = false) {
   }
 }
 
+// ─── Format helper for research responses ──────────────────────────────────
+function formatResearchData(data, query, context, isCommercial) {
+  let comparisonData = [];
+  if (data.comparison) {
+    let platforms = [];
+    if (data.comparison.comparison_json) {
+      try {
+        const compParsed =
+          typeof data.comparison.comparison_json === "string"
+            ? JSON.parse(data.comparison.comparison_json)
+            : data.comparison.comparison_json;
+        platforms = (compParsed.platforms || []).map((p) => ({
+          platform: p.name || p.platform,
+          price: p.price || 0,
+          mrp: p.originalPrice || p.mrp || p.price || 0,
+          delivery: p.deliveryTime || p.delivery || "In stock",
+          inStock: p.inStock !== false,
+          url:
+            p.url ||
+            `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+        }));
+      } catch (parseErr) {}
+    }
+    if (platforms.length > 0) {
+      comparisonData.push({
+        name: data.comparison.query || query,
+        category: "Consumer Goods",
+        bestPrice: data.comparison.best_price || 0,
+        mrp: 0,
+        bestPlatform:
+          data.comparison.best_platform || (platforms[0] ? platforms[0].platform : "Store"),
+        savings: "Verified",
+        platforms,
+      });
+    }
+  }
+  return {
+    conversationId: data.conversation_id || context?.conversationId || null,
+    messageId: data.message_id || null,
+    intent: data.intent || "all",
+    summary: data.summary,
+    keyTakeaways: data.key_takeaways || [],
+    sources: (data.sources || []).map((s, idx) => ({
+      id: s.number || idx + 1,
+      title: s.title,
+      domain: s.domain,
+      url: s.url,
+      snippet: s.snippet,
+    })),
+    isProductQuery: Boolean(data.comparison && comparisonData.length > 0),
+    suggestedSearch: query,
+    comparisonData,
+    followUps: data.follow_up_questions || [
+      "Which platform has the fastest delivery in my area?",
+      "Show me price trends over the last 30 days",
+      "Compare bulk discount packs for this item",
+    ],
+  };
+}
+
 // ─── GroqService Public API ───────────────────────────────────────────────────
 const GroqService = {
   // ── 1. Support & General AI Chat ──────────────────────────────────────────
@@ -244,6 +304,8 @@ CRITICAL RULES:
         query,
       );
 
+
+
     // 1. First attempt: Dedicated CompareZ Backend AI Research Orchestrator
     try {
       const token = await secureStorage.getItem("userToken");
@@ -269,61 +331,7 @@ CRITICAL RULES:
       });
       if (resp.ok) {
         const data = await resp.json();
-        let comparisonData = [];
-        if (data.comparison) {
-          let platforms = [];
-          if (data.comparison.comparison_json) {
-            try {
-              const compParsed =
-                typeof data.comparison.comparison_json === "string"
-                  ? JSON.parse(data.comparison.comparison_json)
-                  : data.comparison.comparison_json;
-              platforms = (compParsed.platforms || []).map((p) => ({
-                platform: p.name || p.platform,
-                price: p.price || 0,
-                mrp: p.originalPrice || p.mrp || p.price || 0,
-                delivery: p.deliveryTime || p.delivery || "In stock",
-                inStock: p.inStock !== false,
-                url:
-                  p.url ||
-                  `https://www.google.com/search?q=${encodeURIComponent(query)}`,
-              }));
-            } catch (parseErr) {}
-          }
-          if (platforms.length > 0) {
-            comparisonData.push({
-              name: data.comparison.query || query,
-              category: "Consumer Goods",
-              bestPrice: data.comparison.best_price || 0,
-              mrp: 0,
-              bestPlatform: data.comparison.best_platform || (platforms[0] ? platforms[0].platform : "Store"),
-              savings: "Verified",
-              platforms,
-            });
-          }
-        }
-        return {
-          conversationId: data.conversation_id || context.conversationId || null,
-          messageId: data.message_id || null,
-          intent: data.intent || "all",
-          summary: data.summary,
-          keyTakeaways: data.key_takeaways || [],
-          sources: (data.sources || []).map((s, idx) => ({
-            id: s.number || idx + 1,
-            title: s.title,
-            domain: s.domain,
-            url: s.url,
-            snippet: s.snippet,
-          })),
-          isProductQuery: Boolean(data.comparison && comparisonData.length > 0),
-          suggestedSearch: query,
-          comparisonData,
-          followUps: data.follow_up_questions || [
-            "Which platform has the fastest delivery in my area?",
-            "Show me price trends over the last 30 days",
-            "Compare bulk discount packs for this item",
-          ],
-        };
+        return formatResearchData(data, query, context, isCommercial);
       }
     } catch (backendErr) {
       // Backend orchestrator unreachable; fallback to grounded chat synthesis
@@ -367,6 +375,125 @@ RULES:
       };
     } catch (fallbackErr) {
       throw new Error("Unable to complete research. Please check your connection.");
+    }
+  },
+
+  // ── 9. Real-Time Research Streaming (SSE) ──────────────────────────────────
+  async researchStream(
+    query,
+    mode = "all",
+    history = [],
+    context = {},
+    callbacks = {}
+  ) {
+    const { onIntent, onSources, onDone, onError } = callbacks;
+    const isCommercial =
+      mode === "compare" ||
+      mode === "shopping" ||
+      /\b(price|buy|cost|cheap|deal|discount|compare|vs|which is better|milk|phone|laptop|eggs|rice|oil|atta|butter|bread)\b/i.test(
+        query,
+      );
+
+    try {
+      const token = await secureStorage.getItem("userToken");
+      const resp = await fetch(`${API_URL}/ai/research/stream`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/event-stream",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          query,
+          mode,
+          conversation_id: context.conversationId || undefined,
+          location: context.city || undefined,
+          pincode: context.pincode || undefined,
+          latitude: context.latitude || undefined,
+          longitude: context.longitude || undefined,
+          history: (history || []).slice(-6).map((h) => ({
+            role: h.role,
+            content: h.content || h.text || h.summary || "",
+          })),
+        }),
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Streaming failed with status: ${resp.status}`);
+      }
+
+      let parsedDoneResult = null;
+
+      if (resp.body && typeof resp.body.getReader === "function") {
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          const events = buffer.split("\n\n");
+          buffer = events.pop() || "";
+
+          for (const rawEvent of events) {
+            const lines = rawEvent.split("\n");
+            let event = "";
+            let data = "";
+            for (const line of lines) {
+              if (line.startsWith("event: ")) event = line.slice(7).trim();
+              else if (line.startsWith("data: ")) data = line.slice(6).trim();
+            }
+            if (data) {
+              try {
+                const parsed = JSON.parse(data);
+                if (event === "intent" && onIntent) {
+                  onIntent(parsed.intent || parsed);
+                } else if (event === "sources" && onSources) {
+                  onSources(parsed);
+                } else if (event === "done") {
+                  parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
+                  if (onDone) onDone(parsedDoneResult);
+                }
+              } catch {}
+            }
+          }
+        }
+      } else {
+        const text = await resp.text();
+        const events = text.split("\n\n");
+        for (const rawEvent of events) {
+          const lines = rawEvent.split("\n");
+          let event = "";
+          let data = "";
+          for (const line of lines) {
+            if (line.startsWith("event: ")) event = line.slice(7).trim();
+            else if (line.startsWith("data: ")) data = line.slice(6).trim();
+          }
+          if (data) {
+            try {
+              const parsed = JSON.parse(data);
+              if (event === "intent" && onIntent) {
+                onIntent(parsed.intent || parsed);
+              } else if (event === "sources" && onSources) {
+                onSources(parsed);
+              } else if (event === "done") {
+                parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
+                if (onDone) onDone(parsedDoneResult);
+              }
+            } catch {}
+          }
+        }
+      }
+
+      if (parsedDoneResult) {
+        return parsedDoneResult;
+      }
+      return this.research(query, mode, history, context);
+    } catch (err) {
+      if (onError) onError(err);
+      return this.research(query, mode, history, context);
     }
   },
 };
