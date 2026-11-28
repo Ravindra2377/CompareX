@@ -61,6 +61,11 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   clear: jest.fn(),
 }));
 
+jest.mock("expo-clipboard", () => ({
+  setStringAsync: jest.fn().mockResolvedValue(true),
+  getStringAsync: jest.fn().mockResolvedValue(""),
+}));
+
 jest.mock("expo-linear-gradient", () => ({
   LinearGradient: "LinearGradient",
 }));

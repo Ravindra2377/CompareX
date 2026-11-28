@@ -22,6 +22,7 @@ type Message struct {
 	ConversationID uint                     `gorm:"index;not null" json:"conversation_id"`
 	Role           string                   `gorm:"size:20;not null" json:"role"` // 'user', 'assistant', 'system'
 	Content        string                   `gorm:"type:text;not null" json:"content"`
+	MetadataJSON   string                   `gorm:"type:text" json:"metadata_json,omitempty"` // stores key_takeaways & follow_ups
 	Sources        []Source                 `gorm:"foreignKey:MessageID;constraint:OnDelete:CASCADE" json:"sources,omitempty"`
 	Comparison     *ProductComparisonRecord `gorm:"foreignKey:MessageID;constraint:OnDelete:CASCADE" json:"comparison,omitempty"`
 }

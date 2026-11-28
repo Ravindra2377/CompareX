@@ -572,20 +572,18 @@ func AIResearchStream(c echo.Context) error {
 	fmt.Fprintf(c.Response(), "event: intent\ndata: {\"intent\": %q}\n\n", intent)
 	c.Response().Flush()
 
-	// ── ROUTE 1: Direct Answer — bypass streaming (fast JSON non-streaming call) ──
+	// ── ROUTE 1: Direct Answer — incremental token streaming ──
 	if intent == IntentDirectAnswer && apiKey != "" {
-		directResp, err := synthesizeDirectAnswer(ctx, apiKey, query, conversationHistory)
-		if err == nil {
+		directResp, err := streamGroqDirectAnswer(ctx, apiKey, query, conversationHistory, func(summaryToken string) {
+			if tokenData, mErr := json.Marshal(map[string]string{"t": summaryToken}); mErr == nil {
+				fmt.Fprintf(c.Response(), "event: token\ndata: %s\n\n", tokenData)
+				c.Response().Flush()
+			}
+		})
+		if err == nil && directResp.Summary != "" {
 			directResp.Query = query
 			directResp.Mode = mode
 			directResp.Intent = string(intent)
-			// Emit the full summary as a single token so the UI can display it
-			if directResp.Summary != "" {
-				if tokenData, mErr := json.Marshal(map[string]string{"t": directResp.Summary}); mErr == nil {
-					fmt.Fprintf(c.Response(), "event: token\ndata: %s\n\n", tokenData)
-					c.Response().Flush()
-				}
-			}
 			if isAuth && database.GormDB != nil {
 				persistConversationTurn(userID, req.ConversationID, query, mode, &directResp)
 			}
@@ -1063,6 +1061,36 @@ type groqSynthesisJSON struct {
 	FollowUpQuestions []string `json:"follow_up_questions"`
 }
 
+func streamGroqDirectAnswer(ctx context.Context, apiKey, query string, history []map[string]string, onToken func(string)) (ResearchResponse, error) {
+	systemPrompt := `You are CompareZ AI, an intelligent, authoritative assistant.
+The user is asking a general knowledge, conceptual, or programming query.
+Answer directly, clearly, and concisely in markdown.
+Provide actionable key takeaways and follow-up ideas.
+Output valid JSON only with keys:
+- "summary": string (markdown answer)
+- "key_takeaways": array of 2-3 concise strings
+- "detailed_evidence": string (concise explanation)
+- "follow_up_questions": array of 3 relevant follow-up questions`
+
+	messages := []map[string]string{
+		{"role": "system", "content": systemPrompt},
+	}
+	for _, h := range history {
+		if content := strings.TrimSpace(h["content"]); content != "" {
+			messages = append(messages, map[string]string{
+				"role":    h["role"],
+				"content": truncateString(content, 400),
+			})
+		}
+	}
+	messages = append(messages, map[string]string{
+		"role":    "user",
+		"content": query,
+	})
+
+	return callGroqStream(ctx, apiKey, messages, onToken)
+}
+
 func synthesizeDirectAnswer(ctx context.Context, apiKey, query string, history []map[string]string) (ResearchResponse, error) {
 	systemPrompt := `You are CompareZ AI, an intelligent, authoritative assistant.
 The user is asking a general knowledge, conceptual, or programming query.
@@ -1358,10 +1386,18 @@ func persistConversationTurn(userID string, conversationID uint, query, mode str
 		log.Printf("⚠️  Failed to persist user message: %v", err)
 	}
 
+	metaObj := map[string]interface{}{
+		"key_takeaways":       resp.KeyTakeaways,
+		"follow_up_questions": resp.FollowUpQuestions,
+		"detailed_evidence":   resp.DetailedEvidence,
+	}
+	metaBytes, _ := json.Marshal(metaObj)
+
 	asstMsg := models.Message{
 		ConversationID: conv.ID,
 		Role:           "assistant",
 		Content:        resp.Summary + "\n\n" + resp.DetailedEvidence,
+		MetadataJSON:   string(metaBytes),
 	}
 	if err := database.GormDB.Create(&asstMsg).Error; err != nil {
 		log.Printf("⚠️  Failed to persist assistant message: %v", err)
@@ -1381,6 +1417,57 @@ func persistConversationTurn(userID string, conversationID uint, query, mode str
 			log.Printf("⚠️  Failed to persist comparison record: %v", err)
 		}
 	}
+}
+
+// TruncateConversationMessages deletes messages in a conversation beyond keep_count.
+// DELETE /ai/conversations/:id/messages?keep_count=N
+func TruncateConversationMessages(c echo.Context) error {
+	userID, ok := authenticatedUserID(c)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Authentication required"})
+	}
+
+	idParam := c.Param("id")
+	convID, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid conversation ID"})
+	}
+
+	keepCountStr := c.QueryParam("keep_count")
+	keepCount, err := strconv.Atoi(keepCountStr)
+	if err != nil || keepCount < 0 {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid keep_count"})
+	}
+
+	if database.GormDB == nil {
+		return c.JSON(http.StatusOK, map[string]interface{}{"status": "truncated", "kept_count": keepCount})
+	}
+
+	var conv models.Conversation
+	if err := database.GormDB.Where("id = ? AND user_id = ?", convID, userID).First(&conv).Error; err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "Conversation not found"})
+	}
+
+	var messages []models.Message
+	if err := database.GormDB.Where("conversation_id = ?", convID).Order("id ASC").Find(&messages).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to query messages"})
+	}
+
+	if len(messages) > keepCount {
+		toDelete := messages[keepCount:]
+		deleteIDs := make([]uint, len(toDelete))
+		for i, m := range toDelete {
+			deleteIDs[i] = m.ID
+		}
+		if err := database.GormDB.Where("id IN ?", deleteIDs).Delete(&models.Message{}).Error; err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete truncated messages"})
+		}
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"status":     "truncated",
+		"kept_count": keepCount,
+	})
 }
 
 func truncateString(s string, maxLen int) string {

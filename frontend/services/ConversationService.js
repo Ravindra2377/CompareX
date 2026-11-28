@@ -1,14 +1,31 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../config/api";
-import secureStorage from "./secureStorage";
+import { secureStorage } from "./secureStorage";
 
-const LOCAL_CONVERSATIONS_KEY = "comparez_saved_conversations";
+const BASE_CONVERSATIONS_KEY = "comparez_saved_conversations";
+
+/**
+ * Returns account-isolated storage key to prevent conversation leaks across shared devices.
+ */
+async function getAccountStorageKey() {
+  try {
+    const rawUser = await secureStorage.getItem("userData");
+    if (rawUser) {
+      const user = JSON.parse(rawUser);
+      const uid = user?.id || user?.email || user?.userId;
+      if (uid) return `${BASE_CONVERSATIONS_KEY}_${uid}`;
+    }
+  } catch {}
+  return `${BASE_CONVERSATIONS_KEY}_guest`;
+}
 
 const ConversationService = {
   /**
-   * Fetches list of conversations (from PostgreSQL backend if authenticated, fallback to local storage).
+   * Fetches list of conversations (from PostgreSQL backend if authenticated, fallback to account-isolated local storage).
    */
   async listConversations() {
+    const storageKey = await getAccountStorageKey();
+
     try {
       const token = await secureStorage.getItem("userToken");
       if (token) {
@@ -22,8 +39,8 @@ const ConversationService = {
         if (resp.ok) {
           const data = await resp.json();
           if (Array.isArray(data)) {
-            // Cache locally for offline availability
-            await AsyncStorage.setItem(LOCAL_CONVERSATIONS_KEY, JSON.stringify(data));
+            // Cache locally for offline availability under the active account's key
+            await AsyncStorage.setItem(storageKey, JSON.stringify(data));
             return data;
           }
         }
@@ -33,7 +50,7 @@ const ConversationService = {
     }
 
     try {
-      const raw = await AsyncStorage.getItem(LOCAL_CONVERSATIONS_KEY);
+      const raw = await AsyncStorage.getItem(storageKey);
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -41,14 +58,16 @@ const ConversationService = {
   },
 
   /**
-   * Loads a full conversation with its message turns and sources.
+   * Loads a full conversation with its message turns, sources, and metadata.
    */
   async getConversation(id) {
     if (!id) return null;
+    const isLocalOnly = String(id).startsWith("local-") || isNaN(Number(id));
+    const storageKey = await getAccountStorageKey();
 
     try {
       const token = await secureStorage.getItem("userToken");
-      if (token) {
+      if (token && !isLocalOnly) {
         const resp = await fetch(`${API_URL}/ai/conversations/${id}`, {
           method: "GET",
           headers: {
@@ -66,7 +85,7 @@ const ConversationService = {
     }
 
     try {
-      const raw = await AsyncStorage.getItem(LOCAL_CONVERSATIONS_KEY);
+      const raw = await AsyncStorage.getItem(storageKey);
       if (raw) {
         const list = JSON.parse(raw);
         const found = list.find((c) => String(c.id) === String(id));
@@ -78,30 +97,40 @@ const ConversationService = {
   },
 
   /**
-   * Deletes a conversation session.
+   * Deletes a conversation session. Confirms with backend before reporting success.
    */
   async deleteConversation(id) {
     if (!id) return false;
+    const isLocalOnly = String(id).startsWith("local-") || isNaN(Number(id));
+    const storageKey = await getAccountStorageKey();
 
     try {
       const token = await secureStorage.getItem("userToken");
-      if (token) {
-        await fetch(`${API_URL}/ai/conversations/${id}`, {
+      if (token && !isLocalOnly) {
+        const resp = await fetch(`${API_URL}/ai/conversations/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
+        if (!resp.ok && resp.status !== 404) {
+          return false;
+        }
       }
-    } catch (e) {}
+    } catch (e) {
+      const token = await secureStorage.getItem("userToken");
+      if (token && !isLocalOnly) {
+        return false;
+      }
+    }
 
     try {
-      const raw = await AsyncStorage.getItem(LOCAL_CONVERSATIONS_KEY);
+      const raw = await AsyncStorage.getItem(storageKey);
       if (raw) {
         const list = JSON.parse(raw);
         const filtered = list.filter((c) => String(c.id) !== String(id));
-        await AsyncStorage.setItem(LOCAL_CONVERSATIONS_KEY, JSON.stringify(filtered));
+        await AsyncStorage.setItem(storageKey, JSON.stringify(filtered));
       }
       return true;
     } catch {
@@ -110,12 +139,13 @@ const ConversationService = {
   },
 
   /**
-   * Saves or updates a local conversation session.
+   * Saves or updates a local conversation session with full metadata (takeaways, followups).
    */
   async saveLocalConversation(conv) {
     if (!conv || !conv.id) return;
     try {
-      const raw = await AsyncStorage.getItem(LOCAL_CONVERSATIONS_KEY);
+      const storageKey = await getAccountStorageKey();
+      const raw = await AsyncStorage.getItem(storageKey);
       let list = raw ? JSON.parse(raw) : [];
       const idx = list.findIndex((c) => String(c.id) === String(conv.id));
       if (idx >= 0) {
@@ -123,7 +153,43 @@ const ConversationService = {
       } else {
         list.unshift({ ...conv, created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
       }
-      await AsyncStorage.setItem(LOCAL_CONVERSATIONS_KEY, JSON.stringify(list.slice(0, 50)));
+      await AsyncStorage.setItem(storageKey, JSON.stringify(list.slice(0, 50)));
+    } catch {}
+  },
+
+  /**
+   * Truncates messages after an edited or regenerated turn so history stays synchronized.
+   */
+  async truncateConversation(id, messageCount) {
+    if (!id) return;
+    const isBackend = Number.isInteger(Number(id)) && Number(id) > 0;
+    if (isBackend) {
+      try {
+        const token = await secureStorage.getItem("userToken");
+        if (token) {
+          await fetch(`${API_URL}/ai/conversations/${id}/messages?keep_count=${messageCount}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        }
+      } catch {}
+    }
+
+    try {
+      const storageKey = await getAccountStorageKey();
+      const raw = await AsyncStorage.getItem(storageKey);
+      if (raw) {
+        const list = JSON.parse(raw);
+        const idx = list.findIndex((c) => String(c.id) === String(id));
+        if (idx >= 0 && Array.isArray(list[idx].messages)) {
+          list[idx].messages = list[idx].messages.slice(0, messageCount);
+          list[idx].updated_at = new Date().toISOString();
+          await AsyncStorage.setItem(storageKey, JSON.stringify(list));
+        }
+      }
     } catch {}
   },
 };

@@ -19,6 +19,7 @@ import BrandHeader from "../components/BrandHeader";
 import * as Haptics from "expo-haptics";
 
 import ConversationService from "../services/ConversationService";
+import ProductIntelligenceService from "../services/ProductIntelligenceService";
 
 const LibraryScreen = ({ navigation }) => {
   const { themeColors, isDark } = useTheme();
@@ -28,6 +29,7 @@ const LibraryScreen = ({ navigation }) => {
   const [conversations, setConversations] = useState([]);
   const [savedAnswers, setSavedAnswers] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [savedProducts, setSavedProducts] = useState([]);
 
   useEffect(() => {
     loadLibraryData();
@@ -47,6 +49,9 @@ const LibraryScreen = ({ navigation }) => {
 
       const historyRaw = await AsyncStorage.getItem("comparex_search_history");
       if (historyRaw) setSearchHistory(JSON.parse(historyRaw));
+
+      const prods = await ProductIntelligenceService.getSavedProducts();
+      setSavedProducts(prods || []);
     } catch {}
   };
 
@@ -174,12 +179,19 @@ const LibraryScreen = ({ navigation }) => {
   };
 
   const renderWishlistProduct = ({ item }) => {
-    const price = item.price || item.bestPrice || (item.listings && item.listings[0]?.price) || 0;
+    const price = item.benchmark_price || item.benchmarkPrice || item.price || (item.listings && item.listings[0]?.price) || 0;
     const name = item.name || item.title || "Product";
     const brand = item.brand || "Brand";
 
     return (
-      <View style={[styles.card, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          navigation.navigate("ProductIntelligence", { product: item, productId: item.id });
+        }}
+        style={[styles.card, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}
+      >
         <View style={styles.productRow}>
           {item.image_url || item.image ? (
             <Image
@@ -201,7 +213,7 @@ const LibraryScreen = ({ navigation }) => {
               {name}
             </Text>
             <Text style={[FONTS.monoBold, { fontSize: 16, color: themeColors.coriander || "#059669", marginTop: 4 }]}>
-              ₹{price}
+              {price > 0 ? `₹${price.toLocaleString("en-IN")}` : "Unverified"}
             </Text>
           </View>
 
@@ -212,22 +224,22 @@ const LibraryScreen = ({ navigation }) => {
               toggleWishlist(item);
             }}
           >
-            <Ionicons name="heart" size={22} color={themeColors.tomato || "#EF4444"} />
+            <Ionicons name="bookmark" size={20} color={themeColors.primary} />
           </TouchableOpacity>
         </View>
 
         <View style={[styles.productActions, { borderTopColor: themeColors.line }]}>
           <TouchableOpacity
             style={[styles.compareBtn, { backgroundColor: themeColors.paper }]}
-            onPress={() => navigation.navigate("Search", { query: name })}
+            onPress={() => navigation.navigate("ProductIntelligence", { product: item, productId: item.id })}
           >
-            <Ionicons name="pricetags-outline" size={13} color={themeColors.ink} />
+            <Ionicons name="analytics-outline" size={13} color={themeColors.ink} />
             <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: themeColors.ink, marginLeft: 5 }]}>
-              Compare Live Prices
+              View Verified Intelligence
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -343,7 +355,7 @@ const LibraryScreen = ({ navigation }) => {
 
       {activeTab === "products" && (
         <FlatList
-          data={wishlist}
+          data={[...savedProducts, ...(wishlist || []).filter((w) => !savedProducts.some((p) => p.id === w.id))]}
           keyExtractor={(item, index) => item.id || String(index)}
           renderItem={renderWishlistProduct}
           contentContainerStyle={styles.listContent}
@@ -351,17 +363,17 @@ const LibraryScreen = ({ navigation }) => {
           ListEmptyComponent={
             <View style={styles.emptyWrap}>
               <View style={[styles.emptyIconCircle, { backgroundColor: `${themeColors.primary}15` }]}>
-                <Ionicons name="heart-outline" size={30} color={themeColors.primary} />
+                <Ionicons name="bookmark-outline" size={30} color={themeColors.primary} />
               </View>
               <Text style={[FONTS.editorialBold, { fontSize: 18, color: themeColors.ink, marginTop: 12 }]}>
-                Your wishlist is empty
+                No saved products yet
               </Text>
               <Text style={[FONTS.uiBody, { fontSize: 13, color: themeColors.inkSoft, textAlign: "center", marginTop: 4, paddingHorizontal: 32 }]}>
-                Tap the heart on any product in Search or Research to track prices and receive alerts.
+                Bookmark products from Shopping or AI Research to review verified specifications and comparisons anytime.
               </Text>
               <TouchableOpacity
                 style={[styles.primaryActionBtn, { backgroundColor: themeColors.primary }]}
-                onPress={() => navigation.navigate("Search")}
+                onPress={() => navigation.navigate("Shopping")}
               >
                 <Text style={[FONTS.uiBodyBold, { fontSize: 13, color: "#FFFFFF" }]}>
                   Browse Products

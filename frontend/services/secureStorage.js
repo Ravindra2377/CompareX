@@ -33,3 +33,5 @@ export const secureStorage = {
   },
 };
 
+export default secureStorage;
+

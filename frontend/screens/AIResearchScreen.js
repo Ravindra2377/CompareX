@@ -27,6 +27,7 @@ import BrandHeader from "../components/BrandHeader";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
+import * as Clipboard from "expo-clipboard";
 
 const SOURCE_BADGE_COLORS = {
   "Official Source": "#10B981",
@@ -83,6 +84,14 @@ const AIResearchScreen = ({ navigation, route }) => {
           latitude: loc.latitude,
           longitude: loc.longitude,
         });
+      }
+    });
+
+    AsyncStorage.getItem("comparez_response_feedback").then((raw) => {
+      if (raw) {
+        try {
+          setFeedbackMap(JSON.parse(raw));
+        } catch {}
       }
     });
   }, []);
@@ -151,6 +160,15 @@ const AIResearchScreen = ({ navigation, route }) => {
               comparisonData = JSON.parse(m.comparison.comparison_json);
             } catch {}
           }
+          let keyTakeaways = [];
+          let followUps = [];
+          if (m.metadata_json) {
+            try {
+              const meta = JSON.parse(m.metadata_json);
+              if (Array.isArray(meta.key_takeaways)) keyTakeaways = meta.key_takeaways;
+              if (Array.isArray(meta.follow_up_questions)) followUps = meta.follow_up_questions;
+            } catch {}
+          }
           return {
             id: `ai-${m.id || Math.random()}`,
             role: "assistant",
@@ -158,8 +176,8 @@ const AIResearchScreen = ({ navigation, route }) => {
               summary: m.content,
               sources: m.sources || [],
               comparisonData,
-              keyTakeaways: [],
-              followUps: [],
+              keyTakeaways: m.keyTakeaways || keyTakeaways,
+              followUps: m.followUps || followUps,
             },
             timestamp: new Date(m.created_at || Date.now()).toLocaleTimeString([], {
               hour: "2-digit",
@@ -191,6 +209,9 @@ const AIResearchScreen = ({ navigation, route }) => {
     // Truncate messages to this turn
     setMessages((prev) => prev.slice(0, index));
     historyRef.current = historyRef.current.slice(0, index);
+    if (conversationId) {
+      ConversationService.truncateConversation(conversationId, index);
+    }
   };
 
   const handleRegenerate = (msgIndex) => {
@@ -206,23 +227,30 @@ const AIResearchScreen = ({ navigation, route }) => {
 
     setMessages((prev) => prev.slice(0, msgIndex));
     historyRef.current = historyRef.current.slice(0, msgIndex);
+    if (conversationId) {
+      ConversationService.truncateConversation(conversationId, msgIndex);
+    }
     handleSend(precedingPrompt);
   };
 
   const handleFeedback = (msgId, type) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFeedbackMap((prev) => ({
-      ...prev,
-      [msgId]: prev[msgId] === type ? null : type,
-    }));
+    setFeedbackMap((prev) => {
+      const updated = {
+        ...prev,
+        [msgId]: prev[msgId] === type ? null : type,
+      };
+      AsyncStorage.setItem("comparez_response_feedback", JSON.stringify(updated)).catch(() => {});
+      return updated;
+    });
   };
 
   const handleCopy = async (msgId, text) => {
     try {
+      await Clipboard.setStringAsync(text || "");
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setCopiedMsgId(msgId);
       setTimeout(() => setCopiedMsgId(null), 2000);
-      await Share.share({ message: text });
     } catch {}
   };
 

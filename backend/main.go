@@ -170,10 +170,17 @@ func main() {
 	protected.GET("/ai/conversations", handlers.ListConversations)
 	protected.GET("/ai/conversations/:id", handlers.GetConversation)
 	protected.DELETE("/ai/conversations/:id", handlers.DeleteConversation)
+	protected.DELETE("/ai/conversations/:id/messages", handlers.TruncateConversationMessages)
 
 	// AI Proxy Routes (Groq key stays server-side, accessible to guest & authenticated users)
 	e.POST("/ai/chat", handlers.AIChat, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("256K"))
 	e.POST("/ai/transcribe", handlers.AITranscribe, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("26M"))
+
+	// V7 Dynamic Shopping Intelligence & Product Engine
+	e.POST("/ai/products/discover", handlers.DiscoverProducts, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("64K"))
+	e.GET("/ai/products/:id", handlers.GetProductIntelligence, handlers.OptionalAuth, aiLimiter)
+	e.POST("/ai/products/compare", handlers.CompareProductsMatrix, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("128K"))
+	e.POST("/ai/products/recommend", handlers.CalculateRecommendations, handlers.OptionalAuth, aiLimiter, middleware.BodyLimit("64K"))
 
 	// Start server
 	port := os.Getenv("PORT")

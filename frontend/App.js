@@ -33,6 +33,8 @@ import AIResearchScreen from "./screens/AIResearchScreen";
 import LibraryScreen from "./screens/LibraryScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProductDetailScreen from "./screens/ProductDetailScreen";
+import ProductIntelligenceScreen from "./screens/ProductIntelligenceScreen";
+import ProductComparisonScreen from "./screens/ProductComparisonScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import WishlistScreen from "./screens/WishlistScreen";
 import AccountsScreen from "./screens/AccountsScreen";
@@ -195,6 +197,16 @@ const AppNav = () => {
                 name="ProductDetail"
                 component={ProductDetailScreen}
                 options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="ProductIntelligence"
+                component={ProductIntelligenceScreen}
+                options={{ animation: "slide_from_right", headerShown: false }}
+              />
+              <Stack.Screen
+                name="ProductComparison"
+                component={ProductComparisonScreen}
+                options={{ animation: "slide_from_right", headerShown: false }}
               />
               <Stack.Screen
                 name="InAppBrowser"

@@ -318,7 +318,10 @@ CRITICAL RULES:
         body: JSON.stringify({
           query,
           mode,
-          conversation_id: context.conversationId || undefined,
+          conversation_id:
+            Number.isInteger(Number(context.conversationId)) && Number(context.conversationId) > 0
+              ? Number(context.conversationId)
+              : undefined,
           location: context.city || undefined,
           pincode: context.pincode || undefined,
           latitude: context.latitude || undefined,
@@ -410,7 +413,10 @@ RULES:
         body: JSON.stringify({
           query,
           mode,
-          conversation_id: context.conversationId || undefined,
+          conversation_id:
+            Number.isInteger(Number(context.conversationId)) && Number(context.conversationId) > 0
+              ? Number(context.conversationId)
+              : undefined,
           location: context.city || undefined,
           pincode: context.pincode || undefined,
           latitude: context.latitude || undefined,

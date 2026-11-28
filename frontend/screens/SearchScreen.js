@@ -26,6 +26,7 @@ import { useTheme } from "../context/ThemeContext";
 import * as Haptics from "expo-haptics";
 import api from "../config/api";
 import GroqService from "../services/GroqService";
+import ProductIntelligenceService from "../services/ProductIntelligenceService";
 import { useAudioRecorder, AudioModule, RecordingPresets } from "expo-audio";
 
 // Curated comparison knowledge base for instant head-to-head spec intelligence
@@ -237,12 +238,13 @@ const CATEGORIES = [
 ];
 
 const SUGGESTIONS = [
+  { name: "Best headphones for travelling", emoji: "🎧", bg: "rgba(128, 185, 24, 0.15)" },
   { name: "iPhone 16 vs Galaxy S25", emoji: "📱", bg: "rgba(78, 168, 222, 0.15)" },
-  { name: "Sony WH-1000XM5 vs Bose QC Ultra", emoji: "🎧", bg: "rgba(128, 185, 24, 0.15)" },
+  { name: "Sony WH-1000XM5 vs Bose QC Ultra", emoji: "✈️", bg: "rgba(99, 102, 241, 0.15)" },
+  { name: "MacBook Air M3", emoji: "💻", bg: "rgba(99, 102, 241, 0.15)" },
   { name: "Cold-Pressed Oil vs Refined Oil", emoji: "🫒", bg: "rgba(255, 176, 32, 0.15)" },
   { name: "Tata Punch EV vs Nexon EV", emoji: "⚡", bg: "rgba(224, 122, 95, 0.15)" },
-  { name: "MacBook Air M3", emoji: "💻", bg: "rgba(99, 102, 241, 0.15)" },
-  { name: "Air Fryer 6L", emoji: "🍳", bg: "rgba(244, 162, 97, 0.15)" },
+  { name: "Philips Air Fryer XL", emoji: "🍳", bg: "rgba(244, 162, 97, 0.15)" },
 ];
 
 const SearchScreen = ({ navigation, route }) => {
@@ -253,6 +255,7 @@ const SearchScreen = ({ navigation, route }) => {
   const [results, setResults] = useState([]);
   const [activeComparison, setActiveComparison] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
 
   // Audio recording & voice search state
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
@@ -260,6 +263,20 @@ const SearchScreen = ({ navigation, route }) => {
   const [voiceStatus, setVoiceStatus] = useState("");
 
   const searchAnimation = useRef(new Animated.Value(0)).current;
+
+  const toggleSelectCompare = (productId) => {
+    Haptics.selectionAsync();
+    setSelectedForCompare((prev) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      }
+      if (prev.length >= 4) {
+        alert("You can compare up to 4 products at once.");
+        return prev;
+      }
+      return [...prev, productId];
+    });
+  };
 
   // Check if a query matches a product comparison
   const resolveComparison = useCallback((q) => {
@@ -281,13 +298,6 @@ const SearchScreen = ({ navigation, route }) => {
   const handleSearch = useCallback(
     async (searchTerm) => {
       const q = (searchTerm || query).trim();
-      if (!q) {
-        setResults([]);
-        setActiveComparison(null);
-        setHasSearched(false);
-        return;
-      }
-
       setLoading(true);
       setHasSearched(true);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -296,44 +306,19 @@ const SearchScreen = ({ navigation, route }) => {
       const matchedComp = resolveComparison(q);
       setActiveComparison(matchedComp);
 
-      // 2. Filter universal products & attempt backend search
-      let matchedProducts = UNIVERSAL_PRODUCTS.filter((item) => {
-        const matchesCategory =
-          selectedCategory === "All" || item.category === selectedCategory;
-        const matchesQuery =
-          item.name.toLowerCase().includes(q.toLowerCase()) ||
-          item.brand.toLowerCase().includes(q.toLowerCase()) ||
-          item.specs.toLowerCase().includes(q.toLowerCase());
-        return matchesCategory && matchesQuery;
-      });
-
-      // 3. Fallback to Dynamic Intelligence if no catalog items match
-      if (matchedProducts.length === 0) {
-        try {
-          const res = await api.post("/ai/research", { query: q, mode: "shopping" });
-          if (res.data?.summary) {
-            const dynamicItem = {
-              id: `dynamic_${Date.now()}`,
-              name: q,
-              brand: "Sourced Intelligence",
-              category: selectedCategory === "All" ? "General" : selectedCategory,
-              specs: res.data.summary,
-              benchmarkPrice: res.data.comparison?.best_price || 0,
-              priceLabel: "Sourced Index Reference",
-              image_url:
-                "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=400&q=80",
-              verificationStatus: "Verified Specifications",
-              sources: (res.data.sources || []).map((s) => s.title || s.domain),
-            };
-            matchedProducts = [dynamicItem];
-          }
-        } catch (err) {
-          console.log("[SearchScreen] Backend intelligence query fallback:", err?.message);
-        }
+      // 2. Discover dynamically from product intelligence service
+      try {
+        const prods = await ProductIntelligenceService.discoverProducts({
+          query: q,
+          category: selectedCategory === "All" ? undefined : selectedCategory,
+        });
+        setResults(prods || []);
+      } catch (err) {
+        console.log("[SearchScreen] Discovery error:", err?.message);
+        setResults([]);
+      } finally {
+        setLoading(false);
       }
-
-      setResults(matchedProducts);
-      setLoading(false);
 
       Animated.timing(searchAnimation, {
         toValue: 1,
@@ -343,6 +328,28 @@ const SearchScreen = ({ navigation, route }) => {
     },
     [query, resolveComparison, selectedCategory, searchAnimation],
   );
+
+  // Dynamic discovery on category change or initial load
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const prods = await ProductIntelligenceService.discoverProducts({
+          query: query || undefined,
+          category: selectedCategory === "All" ? undefined : selectedCategory,
+        });
+        if (isMounted) {
+          setResults(prods || []);
+        }
+      } catch {} finally {
+        if (isMounted) setLoading(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (route?.params?.initialQuery) {
@@ -523,20 +530,28 @@ const SearchScreen = ({ navigation, route }) => {
 
   // Render individual product discovery item
   const renderProductItem = ({ item }) => {
+    const isSelected = selectedForCompare.includes(item.id);
+    const price = item.benchmark_price || item.benchmarkPrice || item.price || 0;
+    const specsDisplay = Array.isArray(item.specifications)
+      ? item.specifications.slice(0, 3).map((s) => `${s.feature}: ${s.value}`).join(" · ")
+      : item.specs || item.overview;
+
     return (
       <TouchableOpacity
         style={[
           styles.productCard,
           {
             backgroundColor: themeColors.card,
-            borderColor: themeColors.border,
+            borderColor: isSelected ? themeColors.primary : themeColors.border,
+            borderWidth: isSelected ? 1.5 : 1,
           },
         ]}
         activeOpacity={0.9}
         onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          navigation.navigate("AIResearch", {
-            initialQuery: `What are the full specifications, reviews and trade-offs for ${item.name}?`,
+          navigation.navigate("ProductIntelligence", {
+            product: item,
+            productId: item.id,
           });
         }}
       >
@@ -551,10 +566,31 @@ const SearchScreen = ({ navigation, route }) => {
             <Text style={[styles.brandText, { color: themeColors.textSecondary }]}>
               {item.brand}
             </Text>
-            <View style={styles.verifiedBadge}>
-              <Ionicons name="shield-checkmark" size={11} color="#10B981" />
-              <Text style={styles.verifiedText}>Verified Specs</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => toggleSelectCompare(item.id)}
+              style={[
+                styles.selectCompareBtn,
+                {
+                  backgroundColor: isSelected ? `${themeColors.primary}20` : "transparent",
+                  borderColor: isSelected ? themeColors.primary : themeColors.border,
+                },
+              ]}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons
+                name={isSelected ? "checkbox" : "square-outline"}
+                size={14}
+                color={isSelected ? themeColors.primary : themeColors.textTertiary}
+              />
+              <Text
+                style={[
+                  styles.selectCompareText,
+                  { color: isSelected ? themeColors.primary : themeColors.textTertiary },
+                ]}
+              >
+                {isSelected ? "Comparing" : "Compare"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={[styles.productName, { color: themeColors.textPrimary }]} numberOfLines={2}>
@@ -562,37 +598,38 @@ const SearchScreen = ({ navigation, route }) => {
           </Text>
 
           <Text style={[styles.productSpecs, { color: themeColors.textSecondary }]} numberOfLines={2}>
-            {item.specs}
+            {specsDisplay}
           </Text>
 
           <View style={styles.pricingRow}>
             <View>
               <Text style={[styles.priceText, { color: themeColors.textPrimary }]}>
-                ₹{(item.benchmarkPrice || item.price || 0).toLocaleString("en-IN")}
+                {price > 0 ? `₹${price.toLocaleString("en-IN")}` : "Unverified"}
               </Text>
               <Text style={[styles.mrpText, { color: themeColors.textTertiary }]}>
-                {item.priceLabel || "Official Benchmark MSRP"}
+                {item.price_label || item.priceLabel || "Benchmark Reference"}
               </Text>
             </View>
 
             <TouchableOpacity
-              style={styles.compareBtn}
+              style={[styles.compareBtn, { backgroundColor: `${themeColors.primary}15` }]}
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                navigation.navigate("AIResearch", {
-                  initialQuery: `Analyze whether ${item.name} is worth buying right now versus top alternatives.`,
+                navigation.navigate("ProductIntelligence", {
+                  product: item,
+                  productId: item.id,
                 });
               }}
             >
-              <Ionicons name="analytics-outline" size={14} color="#6366F1" />
-              <Text style={styles.compareBtnText}>Analyze</Text>
+              <Ionicons name="sparkles-outline" size={14} color={themeColors.primary} />
+              <Text style={[styles.compareBtnText, { color: themeColors.primary }]}>Details</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.sourceDisclaimer}>
-            <Ionicons name="information-circle-outline" size={12} color={themeColors.textTertiary} />
+            <Ionicons name="shield-checkmark-outline" size={12} color="#10B981" />
             <Text style={[styles.sourceText, { color: themeColors.textTertiary }]}>
-              Official manufacturer specifications & licensed sources
+              {item.verification_status || item.verificationStatus || "Verified Specifications"}
             </Text>
           </View>
         </View>
@@ -768,6 +805,38 @@ const SearchScreen = ({ navigation, route }) => {
           ListEmptyComponent={renderEmpty}
           testID="resultsList"
         />
+      )}
+
+      {/* Floating Multi-Product Compare Action Bar */}
+      {selectedForCompare.length >= 2 && (
+        <View
+          style={[
+            styles.floatingCompareBar,
+            { backgroundColor: themeColors.card, borderColor: themeColors.primary },
+            SHADOWS.md,
+          ]}
+        >
+          <View style={styles.floatingCompareLeft}>
+            <Ionicons name="git-compare" size={18} color={themeColors.primary} />
+            <Text style={[styles.floatingCompareCount, { color: themeColors.textPrimary }]}>
+              {selectedForCompare.length} products selected
+            </Text>
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.88}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              navigation.navigate("ProductComparison", {
+                productIds: selectedForCompare,
+                category: selectedCategory === "All" ? undefined : selectedCategory,
+              });
+            }}
+            style={[styles.floatingCompareSubmit, { backgroundColor: themeColors.primary }]}
+          >
+            <Text style={styles.floatingCompareSubmitText}>Compare Selected</Text>
+            <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
       )}
     </SafeAreaView>
   );
@@ -1107,6 +1176,55 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 12,
     fontWeight: "600",
+  },
+  selectCompareBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+  },
+  selectCompareText: {
+    fontSize: 11,
+    fontFamily: FONTS.medium,
+  },
+  floatingCompareBar: {
+    position: "absolute",
+    bottom: SPACING.md,
+    left: SPACING.md,
+    right: SPACING.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm + 2,
+    borderRadius: RADIUS.full,
+    borderWidth: 1.5,
+    zIndex: 10,
+  },
+  floatingCompareLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  floatingCompareCount: {
+    fontSize: 13,
+    fontFamily: FONTS.semiBold,
+  },
+  floatingCompareSubmit: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs + 3,
+    borderRadius: RADIUS.full,
+  },
+  floatingCompareSubmitText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontFamily: FONTS.semiBold,
   },
 });
 
