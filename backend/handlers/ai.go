@@ -500,6 +500,7 @@ func AIResearch(c echo.Context) error {
 }
 
 // AIResearchStream provides Server-Sent Events (SSE) streaming for real-time progress.
+// It emits: intent → sources → token (repeating, one per LLM delta chunk) → done.
 // POST /ai/research/stream
 func AIResearchStream(c echo.Context) error {
 	var req ResearchRequest
@@ -550,28 +551,251 @@ func AIResearchStream(c echo.Context) error {
 	fmt.Fprintf(c.Response(), "event: intent\ndata: {\"intent\": %q}\n\n", intent)
 	c.Response().Flush()
 
-	// Execute synthesis
 	ctx := c.Request().Context()
-	resp := synthesizeGroundedResearch(ctx, query, mode, locDetails, intent, req.History, req.ConversationID, userID, isAuth)
+	apiKey := os.Getenv("GROQ_API_KEY")
 
-	// Send step 2: Sources
-	if sourcesJSON, err := json.Marshal(resp.Sources); err == nil {
+	// Fetch sources concurrently before LLM streaming begins
+	var sources []models.Source
+	if (intent == IntentWebSearch || intent == IntentShopping) && apiKey != "" {
+		if retrieved, err := search.SearchWeb(ctx, query, 4); err == nil && retrieved != nil {
+			sources = retrieved
+		}
+	}
+
+	// Send step 2: Sources (before token stream so UI can render them alongside tokens)
+	if sourcesJSON, err := json.Marshal(sources); err == nil {
 		fmt.Fprintf(c.Response(), "event: sources\ndata: %s\n\n", sourcesJSON)
 		c.Response().Flush()
 	}
 
-	// Persist
+	// Gather conversation history for multi-turn context
+	var conversationHistory []map[string]string
+	if len(req.History) > 0 {
+		conversationHistory = req.History
+	} else if isAuth && req.ConversationID > 0 && database.GormDB != nil {
+		var prevMessages []models.Message
+		if err := database.GormDB.Table("messages").
+			Joins("JOIN conversations ON conversations.id = messages.conversation_id").
+			Where("messages.conversation_id = ? AND conversations.user_id = ?", req.ConversationID, userID).
+			Order("messages.created_at ASC").Limit(6).Find(&prevMessages).Error; err == nil {
+			for _, m := range prevMessages {
+				conversationHistory = append(conversationHistory, map[string]string{
+					"role":    m.Role,
+					"content": truncateString(m.Content, 400),
+				})
+			}
+		}
+	}
+
+	// Stream tokens from Groq and emit `token` SSE events in real time.
+	// streamGroqSummary falls back to full synthesis if streaming is unavailable.
+	var resp ResearchResponse
+	if apiKey != "" {
+		streamedSummary, llmErr := streamGroqSummary(ctx, apiKey, query, mode, locDetails, sources, conversationHistory, func(token string) {
+			// Escape newlines for SSE data field compliance
+			safe := strings.ReplaceAll(token, "\n", "\\n")
+			fmt.Fprintf(c.Response(), "event: token\ndata: {\"t\": %q}\n\n", safe)
+			c.Response().Flush()
+		})
+		if llmErr == nil && streamedSummary.Summary != "" {
+			streamedSummary.Summary = validateAndSanitizeCitations(streamedSummary.Summary, len(sources))
+			streamedSummary.Sources = sources
+			streamedSummary.Query = query
+			streamedSummary.Mode = mode
+			streamedSummary.Intent = string(intent)
+			resp = streamedSummary
+		} else {
+			// Fallback: build from retrieved sources deterministically
+			resp = buildDeterministicGroundedResponse(query, mode, locDetails, sources, nil)
+			resp.Intent = string(intent)
+		}
+	} else {
+		resp = buildDeterministicGroundedResponse(query, mode, locDetails, sources, nil)
+		resp.Intent = string(intent)
+	}
+
+	// Persist conversation turn for authenticated users
 	if isAuth && database.GormDB != nil {
 		persistConversationTurn(userID, req.ConversationID, query, mode, &resp)
 	}
 
-	// Send step 3: Final Response
+	// Send final structured `done` event (metadata: takeaways, follow-ups, sources, comparison)
 	if fullJSON, err := json.Marshal(resp); err == nil {
 		fmt.Fprintf(c.Response(), "event: done\ndata: %s\n\n", fullJSON)
 		c.Response().Flush()
 	}
 
 	return nil
+}
+
+// streamGroqSummary calls Groq with stream:true, emits delta tokens via onToken callback,
+// and returns a fully parsed ResearchResponse once the stream completes.
+func streamGroqSummary(
+	ctx context.Context,
+	apiKey, query, mode string,
+	loc LocationDetails,
+	sources []models.Source,
+	history []map[string]string,
+	onToken func(string),
+) (ResearchResponse, error) {
+	// Build the same grounded prompt as synthesizeViaGroq
+	var sourcesText strings.Builder
+	for _, s := range sources {
+		sourcesText.WriteString(fmt.Sprintf("<untrusted_web_content id=\"%d\" domain=\"%s\" url=\"%s\">\nTitle: %s\nSnippet: %s\n</untrusted_web_content>\n\n",
+			s.Number, s.Domain, s.URL, s.Title, s.Snippet))
+	}
+
+	prompt := fmt.Sprintf(`You are CompareZ AI Research & Product Intelligence Engine.
+Query: "%s"
+Mode: %s
+Location: %s (Pincode: %s)
+
+RETRIEVED EXTERNAL SOURCES:
+%s
+
+RULES:
+1. For product comparisons provide structured specs (Processor, Display, Camera, Battery, OS, Value).
+2. Use inline citations [1],[2] referencing source numbers.
+3. Do NOT fabricate prices; mark as "Unverified / Check authorized retailers".
+4. Output valid JSON only with keys:
+   - "summary": string (markdown answer with citations)
+   - "key_takeaways": array of 2-3 concise strings
+   - "detailed_evidence": string (specs table or breakdown)
+   - "follow_up_questions": array of 3 follow-up questions`, query, mode, loc.City, loc.Pincode, sourcesText.String())
+
+	messages := []map[string]string{
+		{"role": "system", "content": "You are CompareZ AI Research Engine. Output valid JSON only."},
+	}
+	for _, h := range history {
+		if content := strings.TrimSpace(h["content"]); content != "" {
+			messages = append(messages, map[string]string{
+				"role":    h["role"],
+				"content": truncateString(content, 400),
+			})
+		}
+	}
+	messages = append(messages, map[string]string{"role": "user", "content": prompt})
+
+	return callGroqStream(ctx, apiKey, messages, onToken)
+}
+
+// callGroqStream calls the Groq chat completions API with stream:true.
+// Delta content chunks are delivered to onToken; the full accumulated text is
+// parsed as a groqSynthesisJSON and returned as a ResearchResponse once complete.
+func callGroqStream(ctx context.Context, apiKey string, messages []map[string]string, onToken func(string)) (ResearchResponse, error) {
+	payload := map[string]interface{}{
+		"model":       "openai/gpt-oss-20b",
+		"messages":    messages,
+		"stream":      true,
+		"temperature": 0.2,
+		"max_tokens":  750,
+	}
+
+	bodyBytes, err := json.Marshal(payload)
+	if err != nil {
+		return ResearchResponse{}, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", groqChatURL, bytes.NewReader(bodyBytes))
+	if err != nil {
+		return ResearchResponse{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+	req.Header.Set("Accept", "text/event-stream")
+
+	// Use a longer timeout for streaming responses
+	streamClient := &http.Client{Timeout: 90 * time.Second}
+	resp, err := streamClient.Do(req)
+	if err != nil {
+		return ResearchResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return ResearchResponse{}, fmt.Errorf("groq stream returned status %d", resp.StatusCode)
+	}
+
+	// Read the OpenAI-compatible SSE stream and accumulate delta content
+	var fullContent strings.Builder
+	bufReader := io.Reader(resp.Body)
+	lineBuf := make([]byte, 0, 4096)
+	tmpBuf := make([]byte, 512)
+
+	for {
+		n, readErr := bufReader.Read(tmpBuf)
+		if n > 0 {
+			lineBuf = append(lineBuf, tmpBuf[:n]...)
+			// Process complete lines (SSE lines end with \n)
+			for {
+				nlIdx := bytes.IndexByte(lineBuf, '\n')
+				if nlIdx < 0 {
+					break
+				}
+				line := strings.TrimRight(string(lineBuf[:nlIdx]), "\r")
+				lineBuf = lineBuf[nlIdx+1:]
+
+				if !strings.HasPrefix(line, "data: ") {
+					continue
+				}
+				data := line[6:]
+				if data == "[DONE]" {
+					break
+				}
+
+				var chunk struct {
+					Choices []struct {
+						Delta struct {
+							Content string `json:"content"`
+						} `json:"delta"`
+					} `json:"choices"`
+				}
+				if jsonErr := json.Unmarshal([]byte(data), &chunk); jsonErr != nil {
+					continue
+				}
+				if len(chunk.Choices) > 0 {
+					delta := chunk.Choices[0].Delta.Content
+					if delta != "" {
+						fullContent.WriteString(delta)
+						if onToken != nil {
+							onToken(delta)
+						}
+					}
+				}
+			}
+		}
+		if readErr == io.EOF {
+			break
+		}
+		if readErr != nil {
+			if fullContent.Len() > 0 {
+				break // Partial content — still parse what we have
+			}
+			return ResearchResponse{}, fmt.Errorf("stream read error: %w", readErr)
+		}
+	}
+
+	// Parse the accumulated JSON response
+	raw := strings.TrimSpace(fullContent.String())
+	// Extract JSON object if wrapped in markdown code fences
+	if idx := strings.Index(raw, "{"); idx > 0 {
+		raw = raw[idx:]
+	}
+	if idx := strings.LastIndex(raw, "}"); idx >= 0 && idx < len(raw)-1 {
+		raw = raw[:idx+1]
+	}
+
+	var parsed groqSynthesisJSON
+	if err := json.Unmarshal([]byte(raw), &parsed); err != nil {
+		return ResearchResponse{}, fmt.Errorf("failed to parse streamed synthesis JSON: %w", err)
+	}
+
+	return ResearchResponse{
+		Summary:           parsed.Summary,
+		KeyTakeaways:      parsed.KeyTakeaways,
+		DetailedEvidence:  parsed.DetailedEvidence,
+		FollowUpQuestions: parsed.FollowUpQuestions,
+	}, nil
 }
 
 func synthesizeGroundedResearch(

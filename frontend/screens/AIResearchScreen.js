@@ -51,6 +51,10 @@ const AIResearchScreen = ({ navigation, route }) => {
   const [savedAnswerIds, setSavedAnswerIds] = useState(new Set());
   const [locationInfo, setLocationInfo] = useState({ city: "Bengaluru", pincode: "560034" });
   const [conversationId, setConversationId] = useState(null);
+  // Live streaming text accumulator — updated token-by-token during active SSE stream
+  const [streamingText, setStreamingText] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const streamingMsgIdRef = useRef(null);
 
   const scrollRef = useRef(null);
   const historyRef = useRef([]);
@@ -114,6 +118,12 @@ const AIResearchScreen = ({ navigation, route }) => {
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
 
+    // Create a placeholder streaming bubble immediately so the user sees live output
+    const streamMsgId = `streaming-${Date.now()}`;
+    streamingMsgIdRef.current = streamMsgId;
+    setStreamingText("");
+    setIsStreaming(true);
+
     // Save query into recent searches
     try {
       const stored = await AsyncStorage.getItem("comparex_search_history");
@@ -127,6 +137,9 @@ const AIResearchScreen = ({ navigation, route }) => {
       { role: "user", content: promptText },
     ].slice(-8);
 
+    // Accumulate tokens in a ref so the closure stays fresh without stale state
+    const tokenAccumulatorRef = { current: "" };
+
     try {
       const result = await GroqService.researchStream(
         promptText,
@@ -136,6 +149,12 @@ const AIResearchScreen = ({ navigation, route }) => {
         {
           onIntent: () => setActiveStep(2),
           onSources: () => setActiveStep(3),
+          onToken: (tokenChunk) => {
+            tokenAccumulatorRef.current += tokenChunk;
+            setStreamingText(tokenAccumulatorRef.current);
+            // Auto-scroll to bottom as content grows
+            scrollRef.current?.scrollToEnd({ animated: false });
+          },
           onDone: () => setActiveStep(4),
           onError: (err) => console.log("[AIResearchScreen] Stream fallback:", err?.message),
         }
@@ -158,6 +177,10 @@ const AIResearchScreen = ({ navigation, route }) => {
         { role: "assistant", content: result.summary || "" },
       ];
 
+      // Stop streaming and add the full structured message
+      setIsStreaming(false);
+      streamingMsgIdRef.current = null;
+      setStreamingText("");
       setMessages((prev) => [...prev, aiMessage]);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err) {
@@ -174,6 +197,9 @@ const AIResearchScreen = ({ navigation, route }) => {
         },
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
+      setIsStreaming(false);
+      streamingMsgIdRef.current = null;
+      setStreamingText("");
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setLoading(false);
@@ -573,8 +599,42 @@ const AIResearchScreen = ({ navigation, route }) => {
           );
         })}
 
-        {/* ── Active Research Stepper (Loading State) ── */}
-        {loading && (
+        {/* ── Live Streaming Bubble (token-by-token output) ── */}
+        {isStreaming && (
+          <View style={styles.aiMessageContainer}>
+            <View style={styles.aiHeaderRow}>
+              <View style={[styles.aiBadge, { backgroundColor: themeColors.primary }]}>
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              </View>
+              <Text style={[FONTS.uiBodyBold, { fontSize: 14, color: themeColors.ink, marginLeft: 8 }]}>
+                CompareZ Intelligence
+              </Text>
+              <View style={[styles.streamingPill, { backgroundColor: `${themeColors.primary}18`, borderColor: `${themeColors.primary}30` }]}>
+                <View style={[styles.streamingDot, { backgroundColor: themeColors.primary }]} />
+                <Text style={[FONTS.monoBold, { fontSize: 10, color: themeColors.primary, marginLeft: 5 }]}>
+                  WRITING
+                </Text>
+              </View>
+            </View>
+            <View style={[styles.aiCard, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
+              {streamingText ? (
+                <Text style={[FONTS.uiBody, { fontSize: 15, color: themeColors.ink, lineHeight: 24 }]}>
+                  {streamingText}
+                  <Text style={{ color: themeColors.primary }}>▍</Text>
+                </Text>
+              ) : (
+                <View style={styles.streamingPlaceholder}>
+                  <View style={[styles.shimmerLine, { width: "90%", backgroundColor: themeColors.line }]} />
+                  <View style={[styles.shimmerLine, { width: "75%", backgroundColor: themeColors.line, marginTop: 10 }]} />
+                  <View style={[styles.shimmerLine, { width: "60%", backgroundColor: themeColors.line, marginTop: 10 }]} />
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* ── Active Research Stepper (shows only while awaiting first tokens) ── */}
+        {loading && !isStreaming && (
           <View style={[styles.loadingContainer, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
             <View style={styles.loadingHeader}>
               <ActivityIndicator size="small" color={themeColors.primary} />
@@ -975,6 +1035,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 8,
+  },
+  // ── Streaming bubble styles ──────────────────────────────────────────────
+  streamingPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginLeft: 8,
+  },
+  streamingDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  streamingPlaceholder: {
+    paddingVertical: 4,
+  },
+  shimmerLine: {
+    height: 14,
+    borderRadius: 7,
+    opacity: 0.4,
   },
 });
 

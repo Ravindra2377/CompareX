@@ -386,7 +386,7 @@ RULES:
     context = {},
     callbacks = {}
   ) {
-    const { onIntent, onSources, onDone, onError } = callbacks;
+    const { onIntent, onSources, onDone, onToken, onError } = callbacks;
     const isCommercial =
       mode === "compare" ||
       mode === "shopping" ||
@@ -452,6 +452,10 @@ RULES:
                   onIntent(parsed.intent || parsed);
                 } else if (event === "sources" && onSources) {
                   onSources(parsed);
+                } else if (event === "token" && onToken) {
+                  // Restore escaped newlines the backend serialised for SSE compliance
+                  const tokenText = (parsed.t || "").replace(/\\n/g, "\n");
+                  if (tokenText) onToken(tokenText);
                 } else if (event === "done") {
                   parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
                   if (onDone) onDone(parsedDoneResult);
@@ -478,6 +482,9 @@ RULES:
                 onIntent(parsed.intent || parsed);
               } else if (event === "sources" && onSources) {
                 onSources(parsed);
+              } else if (event === "token" && onToken) {
+                const tokenText = (parsed.t || "").replace(/\\n/g, "\n");
+                if (tokenText) onToken(tokenText);
               } else if (event === "done") {
                 parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
                 if (onDone) onDone(parsedDoneResult);
