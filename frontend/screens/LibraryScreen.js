@@ -18,26 +18,43 @@ import { FONTS, SPACING, RADIUS, SHADOWS } from "../config/theme";
 import BrandHeader from "../components/BrandHeader";
 import * as Haptics from "expo-haptics";
 
+import ConversationService from "../services/ConversationService";
+
 const LibraryScreen = ({ navigation }) => {
   const { themeColors, isDark } = useTheme();
   const { wishlist, toggleWishlist } = useContext(WishlistContext);
 
   const [activeTab, setActiveTab] = useState("answers"); // "answers" | "products" | "history"
+  const [conversations, setConversations] = useState([]);
   const [savedAnswers, setSavedAnswers] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
 
   useEffect(() => {
     loadLibraryData();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      loadLibraryData();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const loadLibraryData = async () => {
     try {
+      const convList = await ConversationService.listConversations();
+      if (Array.isArray(convList)) setConversations(convList);
+
       const answersRaw = await AsyncStorage.getItem("comparez_saved_research");
       if (answersRaw) setSavedAnswers(JSON.parse(answersRaw));
 
       const historyRaw = await AsyncStorage.getItem("comparex_search_history");
       if (historyRaw) setSearchHistory(JSON.parse(historyRaw));
     } catch {}
+  };
+
+  const deleteConversation = async (id) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const updated = conversations.filter((item) => String(item.id) !== String(id));
+    setConversations(updated);
+    await ConversationService.deleteConversation(id);
   };
 
   const deleteAnswer = async (id) => {
@@ -72,69 +89,89 @@ const LibraryScreen = ({ navigation }) => {
   const handleShareAnswer = async (item) => {
     try {
       await Share.share({
-        message: `${item.query}\n\n${item.summary}\n\n— CompareZ AI Library`,
+        message: `${item.title || item.query}\n\n${item.summary || ""}\n\n— CompareZ AI Library`,
       });
     } catch {}
   };
 
-  const renderSavedAnswer = ({ item }) => (
-    <View style={[styles.card, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
-      <View style={styles.cardHeader}>
-        <View style={[styles.cardTag, { backgroundColor: `${themeColors.primary}18` }]}>
-          <Ionicons name="sparkles" size={11} color={themeColors.primary} />
-          <Text style={[FONTS.monoBold, { fontSize: 10, color: themeColors.primary, marginLeft: 4 }]}>
-            AI RESEARCH
-          </Text>
+  const renderSavedItem = ({ item }) => {
+    const isConv = !!item.title;
+    const title = item.title || item.query;
+    const dateStr = item.updated_at || item.created_at || item.savedAt;
+
+    return (
+      <View style={[styles.card, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
+        <View style={styles.cardHeader}>
+          <View style={[styles.cardTag, { backgroundColor: `${themeColors.primary}18` }]}>
+            <Ionicons name={isConv ? "chatbubbles" : "sparkles"} size={11} color={themeColors.primary} />
+            <Text style={[FONTS.monoBold, { fontSize: 10, color: themeColors.primary, marginLeft: 4 }]}>
+              {isConv ? (item.mode || "RESEARCH").toUpperCase() : "SAVED NOTE"}
+            </Text>
+          </View>
+          {dateStr && (
+            <Text style={[FONTS.uiBody, { fontSize: 11, color: themeColors.inkFaint, marginLeft: "auto" }]}>
+              {new Date(dateStr).toLocaleDateString([], { month: "short", day: "numeric" })}
+            </Text>
+          )}
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={() => (isConv ? deleteConversation(item.id) : deleteAnswer(item.id))}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name="trash-outline" size={16} color={themeColors.inkFaint} />
+          </TouchableOpacity>
         </View>
-        <Text style={[FONTS.uiBody, { fontSize: 11, color: themeColors.inkFaint, marginLeft: "auto" }]}>
-          {new Date(item.savedAt).toLocaleDateString([], { month: "short", day: "numeric" })}
+
+        <Text style={[FONTS.uiBodyBold, { fontSize: 16, color: themeColors.ink, marginTop: 8 }]}>
+          {title}
         </Text>
-        <TouchableOpacity
-          style={styles.iconBtn}
-          onPress={() => deleteAnswer(item.id)}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Ionicons name="trash-outline" size={16} color={themeColors.inkFaint} />
-        </TouchableOpacity>
-      </View>
 
-      <Text style={[FONTS.uiBodyBold, { fontSize: 16, color: themeColors.ink, marginTop: 8 }]}>
-        {item.query}
-      </Text>
-
-      <Text style={[FONTS.uiBody, { fontSize: 13, color: themeColors.inkSoft, marginTop: 6, lineHeight: 20 }]} numberOfLines={3}>
-        {item.summary}
-      </Text>
-
-      {/* Sources badge */}
-      {item.sources && item.sources.length > 0 && (
-        <View style={styles.sourcesRow}>
-          <Ionicons name="globe-outline" size={12} color={themeColors.inkFaint} />
-          <Text style={[FONTS.mono, { fontSize: 11, color: themeColors.inkFaint, marginLeft: 5 }]}>
-            {item.sources.length} cited source{item.sources.length > 1 ? "s" : ""}
+        {item.summary ? (
+          <Text style={[FONTS.uiBody, { fontSize: 13, color: themeColors.inkSoft, marginTop: 6, lineHeight: 20 }]} numberOfLines={3}>
+            {item.summary}
           </Text>
+        ) : null}
+
+        {/* Sources badge */}
+        {item.sources && item.sources.length > 0 && (
+          <View style={styles.sourcesRow}>
+            <Ionicons name="globe-outline" size={12} color={themeColors.inkFaint} />
+            <Text style={[FONTS.mono, { fontSize: 11, color: themeColors.inkFaint, marginLeft: 5 }]}>
+              {item.sources.length} cited source{item.sources.length > 1 ? "s" : ""}
+            </Text>
+          </View>
+        )}
+
+        {/* Actions */}
+        <View style={[styles.cardFooter, { borderTopColor: themeColors.line }]}>
+          <TouchableOpacity
+            style={styles.actionLink}
+            onPress={() => {
+              if (isConv) {
+                navigation.navigate("AIResearch", {
+                  conversationId: item.id,
+                  initialQuery: item.title,
+                  mode: item.mode || "all",
+                });
+              } else {
+                navigation.navigate("AIResearch", { initialQuery: item.query });
+              }
+            }}
+          >
+            <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: themeColors.primary }]}>
+              {isConv ? "Resume Conversation →" : "Continue Research →"}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={() => handleShareAnswer(item)}
+          >
+            <Ionicons name="share-outline" size={16} color={themeColors.inkSoft} />
+          </TouchableOpacity>
         </View>
-      )}
-
-      {/* Actions */}
-      <View style={[styles.cardFooter, { borderTopColor: themeColors.line }]}>
-        <TouchableOpacity
-          style={styles.actionLink}
-          onPress={() => navigation.navigate("AIResearch", { initialQuery: item.query })}
-        >
-          <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: themeColors.primary }]}>
-            Continue Research →
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.iconBtn}
-          onPress={() => handleShareAnswer(item)}
-        >
-          <Ionicons name="share-outline" size={16} color={themeColors.inkSoft} />
-        </TouchableOpacity>
       </View>
-    </View>
-  );
+    );
+  };
 
   const renderWishlistProduct = ({ item }) => {
     const price = item.price || item.bestPrice || (item.listings && item.listings[0]?.price) || 0;
@@ -233,7 +270,7 @@ const LibraryScreen = ({ navigation }) => {
       {/* ── Tabs Segmented Bar ── */}
       <View style={[styles.tabsBar, { borderBottomColor: themeColors.line }]}>
         {[
-          { id: "answers", label: `Saved Answers (${savedAnswers.length})`, icon: "sparkles" },
+          { id: "answers", label: `Chats & Notes (${conversations.length + savedAnswers.length})`, icon: "chatbubbles-outline" },
           { id: "products", label: `Wishlist (${wishlist.length})`, icon: "heart-outline" },
           { id: "history", label: `History (${searchHistory.length})`, icon: "time-outline" },
         ].map((tab) => {
@@ -275,21 +312,21 @@ const LibraryScreen = ({ navigation }) => {
       {/* ── Content List ── */}
       {activeTab === "answers" && (
         <FlatList
-          data={savedAnswers}
-          keyExtractor={(item) => item.id}
-          renderItem={renderSavedAnswer}
+          data={[...conversations, ...savedAnswers]}
+          keyExtractor={(item, index) => (item.id ? String(item.id) : String(index))}
+          renderItem={renderSavedItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyWrap}>
               <View style={[styles.emptyIconCircle, { backgroundColor: `${themeColors.primary}15` }]}>
-                <Ionicons name="bookmark-outline" size={30} color={themeColors.primary} />
+                <Ionicons name="chatbubbles-outline" size={30} color={themeColors.primary} />
               </View>
               <Text style={[FONTS.editorialBold, { fontSize: 18, color: themeColors.ink, marginTop: 12 }]}>
-                No saved research yet
+                No conversations or notes yet
               </Text>
               <Text style={[FONTS.uiBody, { fontSize: 13, color: themeColors.inkSoft, textAlign: "center", marginTop: 4, paddingHorizontal: 32 }]}>
-                When researching topics or comparing products, tap the bookmark icon to save answers here.
+                Ask CompareZ AI anything. Your multi-turn conversations and bookmarked notes will be saved here.
               </Text>
               <TouchableOpacity
                 style={[styles.primaryActionBtn, { backgroundColor: themeColors.primary }]}

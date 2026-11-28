@@ -8,11 +8,12 @@ import {
   ScrollView,
   ActivityIndicator,
   Animated,
-  Easing,
   KeyboardAvoidingView,
   Platform,
   Share,
   Alert,
+  Modal,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "../components/Icon";
@@ -21,7 +22,9 @@ import { WishlistContext } from "../context/WishlistContext";
 import { FONTS, SPACING, RADIUS, SHADOWS } from "../config/theme";
 import GroqService from "../services/GroqService";
 import LocationService from "../services/LocationService";
+import ConversationService from "../services/ConversationService";
 import BrandHeader from "../components/BrandHeader";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 
@@ -39,7 +42,7 @@ const RESEARCH_STEPS = [
 ];
 
 const AIResearchScreen = ({ navigation, route }) => {
-  const { initialQuery = "", mode = "all" } = route.params || {};
+  const { initialQuery = "", mode = "all", conversationId: routeConvId } = route.params || {};
   const { themeColors, isDark } = useTheme();
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
@@ -50,15 +53,25 @@ const AIResearchScreen = ({ navigation, route }) => {
   const [activeStep, setActiveStep] = useState(1);
   const [savedAnswerIds, setSavedAnswerIds] = useState(new Set());
   const [locationInfo, setLocationInfo] = useState({ city: "Bengaluru", pincode: "560034" });
-  const [conversationId, setConversationId] = useState(null);
+  const [conversationId, setConversationId] = useState(routeConvId || null);
+
   // Live streaming text accumulator — updated token-by-token during active SSE stream
   const [streamingText, setStreamingText] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const streamingMsgIdRef = useRef(null);
+  const [currentSources, setCurrentSources] = useState([]);
 
+  // Conversation history modal state
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [historyConversations, setHistoryConversations] = useState([]);
+
+  // Feedback and interaction state
+  const [feedbackMap, setFeedbackMap] = useState({}); // { [msgId]: 'up' | 'down' }
+  const [copiedMsgId, setCopiedMsgId] = useState(null);
+
+  const streamingMsgIdRef = useRef(null);
+  const abortControllerRef = useRef(null);
   const scrollRef = useRef(null);
   const historyRef = useRef([]);
-  const stepAnim = useRef(new Animated.Value(0)).current;
 
   // Load user location for accurate quick-commerce pricing
   useEffect(() => {
@@ -74,31 +87,144 @@ const AIResearchScreen = ({ navigation, route }) => {
     });
   }, []);
 
-  // Run initial query if provided from Home or Search screen
+  // Resume existing conversation if route params specify one
   useEffect(() => {
-    if (initialQuery.trim()) {
+    if (routeConvId) {
+      resumeConversation(routeConvId);
+    } else if (initialQuery.trim()) {
       handleSend(initialQuery.trim());
     }
-  }, [initialQuery]);
+  }, [routeConvId, initialQuery]);
 
-  // Animate research step progress
-  useEffect(() => {
-    let interval;
-    if (loading) {
-      setActiveStep(1);
-      stepAnim.setValue(0);
-      Animated.timing(stepAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-
-      interval = setInterval(() => {
-        setActiveStep((prev) => (prev < 4 ? prev + 1 : 4));
-      }, 900);
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
-    return () => clearInterval(interval);
-  }, [loading]);
+  };
+
+  const handleNewChat = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (loading && abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    setConversationId(null);
+    setMessages([]);
+    historyRef.current = [];
+    setStreamingText("");
+    setIsStreaming(false);
+    setCurrentSources([]);
+    setQuery("");
+  };
+
+  const openHistoryModal = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowHistoryModal(true);
+    const list = await ConversationService.listConversations();
+    if (Array.isArray(list)) {
+      setHistoryConversations(list);
+    }
+  };
+
+  const resumeConversation = async (targetConvId) => {
+    try {
+      setLoading(true);
+      const conv = await ConversationService.getConversation(targetConvId);
+      if (conv) {
+        setConversationId(conv.id);
+        if (conv.mode) setActiveMode(conv.mode);
+        const restoredMessages = (conv.messages || []).map((m) => {
+          if (m.role === "user") {
+            return {
+              id: `user-${m.id || Math.random()}`,
+              role: "user",
+              text: m.content,
+              timestamp: new Date(m.created_at || Date.now()).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            };
+          }
+          let comparisonData = [];
+          if (m.comparison && m.comparison.comparison_json) {
+            try {
+              comparisonData = JSON.parse(m.comparison.comparison_json);
+            } catch {}
+          }
+          return {
+            id: `ai-${m.id || Math.random()}`,
+            role: "assistant",
+            data: {
+              summary: m.content,
+              sources: m.sources || [],
+              comparisonData,
+              keyTakeaways: [],
+              followUps: [],
+            },
+            timestamp: new Date(m.created_at || Date.now()).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+        });
+
+        setMessages(restoredMessages);
+        historyRef.current = (conv.messages || []).map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+        setShowHistoryModal(false);
+      }
+    } catch (e) {
+      Alert.alert("Error", "Could not load conversation.");
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        scrollRef.current?.scrollToEnd({ animated: true });
+      }, 200);
+    }
+  };
+
+  const handleEditMessage = (msg, index) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setQuery(msg.text);
+    // Truncate messages to this turn
+    setMessages((prev) => prev.slice(0, index));
+    historyRef.current = historyRef.current.slice(0, index);
+  };
+
+  const handleRegenerate = (msgIndex) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    let precedingPrompt = "";
+    for (let i = msgIndex - 1; i >= 0; i--) {
+      if (messages[i].role === "user") {
+        precedingPrompt = messages[i].text;
+        break;
+      }
+    }
+    if (!precedingPrompt) return;
+
+    setMessages((prev) => prev.slice(0, msgIndex));
+    historyRef.current = historyRef.current.slice(0, msgIndex);
+    handleSend(precedingPrompt);
+  };
+
+  const handleFeedback = (msgId, type) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setFeedbackMap((prev) => ({
+      ...prev,
+      [msgId]: prev[msgId] === type ? null : type,
+    }));
+  };
+
+  const handleCopy = async (msgId, text) => {
+    try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setCopiedMsgId(msgId);
+      setTimeout(() => setCopiedMsgId(null), 2000);
+      await Share.share({ message: text });
+    } catch {}
+  };
 
   const handleSend = async (textToSend) => {
     const promptText = (typeof textToSend === "string" ? textToSend : query).trim();
@@ -117,12 +243,15 @@ const AIResearchScreen = ({ navigation, route }) => {
 
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
-
-    // Create a placeholder streaming bubble immediately so the user sees live output
-    const streamMsgId = `streaming-${Date.now()}`;
-    streamingMsgIdRef.current = streamMsgId;
+    setActiveStep(1);
     setStreamingText("");
-    setIsStreaming(true);
+    setCurrentSources([]);
+    streamingMsgIdRef.current = `streaming-${Date.now()}`;
+
+    // Create a new AbortController for this request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    let isCancelled = false;
 
     // Save query into recent searches
     try {
@@ -137,8 +266,8 @@ const AIResearchScreen = ({ navigation, route }) => {
       { role: "user", content: promptText },
     ].slice(-8);
 
-    // Accumulate tokens in a ref so the closure stays fresh without stale state
     const tokenAccumulatorRef = { current: "" };
+    let firstTokenReceived = false;
 
     try {
       const result = await GroqService.researchStream(
@@ -148,21 +277,43 @@ const AIResearchScreen = ({ navigation, route }) => {
         { ...locationInfo, conversationId },
         {
           onIntent: () => setActiveStep(2),
-          onSources: () => setActiveStep(3),
+          onSources: (srcs) => {
+            setCurrentSources(srcs || []);
+            setActiveStep(3);
+          },
           onToken: (tokenChunk) => {
+            if (isCancelled) return;
+            if (!firstTokenReceived) {
+              firstTokenReceived = true;
+              setIsStreaming(true);
+              setActiveStep(4);
+            }
             tokenAccumulatorRef.current += tokenChunk;
             setStreamingText(tokenAccumulatorRef.current);
-            // Auto-scroll to bottom as content grows
             scrollRef.current?.scrollToEnd({ animated: false });
           },
           onDone: () => setActiveStep(4),
-          onError: (err) => console.log("[AIResearchScreen] Stream fallback:", err?.message),
-        }
+          onError: (err) => console.log("[AIResearchScreen] Stream error:", err?.message),
+        },
+        controller.signal
       );
+
+      if (isCancelled) return;
 
       if (result.conversationId) {
         setConversationId(result.conversationId);
       }
+
+      // Persist local conversation cache
+      ConversationService.saveLocalConversation({
+        id: result.conversationId || conversationId || `local-${Date.now()}`,
+        title: promptText,
+        mode: activeMode,
+        messages: [
+          ...conversationHistory,
+          { role: "assistant", content: result.summary || "" },
+        ],
+      });
 
       const aiMsgId = `ai-${Date.now()}`;
       const aiMessage = {
@@ -177,13 +328,36 @@ const AIResearchScreen = ({ navigation, route }) => {
         { role: "assistant", content: result.summary || "" },
       ];
 
-      // Stop streaming and add the full structured message
       setIsStreaming(false);
       streamingMsgIdRef.current = null;
       setStreamingText("");
       setMessages((prev) => [...prev, aiMessage]);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (err) {
+      if (err?.name === "AbortError" || controller.signal.aborted) {
+        isCancelled = true;
+        const partialText = tokenAccumulatorRef.current;
+        setIsStreaming(false);
+        streamingMsgIdRef.current = null;
+        setStreamingText("");
+        if (partialText.trim()) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `ai-partial-${Date.now()}`,
+              role: "assistant",
+              data: {
+                summary: partialText + "\n\n*[Generation stopped by user]*",
+                keyTakeaways: [],
+                sources: currentSources,
+                followUps: [],
+              },
+              timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            },
+          ]);
+        }
+        return;
+      }
       const errorMsg = {
         id: `ai-error-${Date.now()}`,
         role: "assistant",
@@ -191,9 +365,7 @@ const AIResearchScreen = ({ navigation, route }) => {
           summary: "I encountered an issue gathering live research data. Please check your connection or tap retry.",
           keyTakeaways: ["Temporary connection interruption"],
           sources: [],
-          isProductQuery: false,
-          comparisonData: [],
-          followUps: ["Retry research", "Compare prices on Search tab"],
+          followUps: ["Try asking again", "Check network connection"],
         },
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
@@ -203,6 +375,7 @@ const AIResearchScreen = ({ navigation, route }) => {
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setLoading(false);
+      abortControllerRef.current = null;
       setTimeout(() => {
         scrollRef.current?.scrollToEnd({ animated: true });
       }, 200);
@@ -211,19 +384,23 @@ const AIResearchScreen = ({ navigation, route }) => {
 
   const handleSaveAnswer = async (message) => {
     try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const stored = await AsyncStorage.getItem("comparez_saved_research");
-      const list = stored ? JSON.parse(stored) : [];
-      const newEntry = {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      const existingRaw = await AsyncStorage.getItem("comparez_saved_research");
+      const existing = existingRaw ? JSON.parse(existingRaw) : [];
+
+      const queryMsg = messages.find((m) => m.role === "user");
+      const userPrompt = queryMsg ? queryMsg.text : "AI Research";
+
+      const itemToSave = {
         id: message.id,
         savedAt: new Date().toISOString(),
-        query: messages.find((m) => m.role === "user")?.text || "Research Answer",
+        query: userPrompt,
         summary: message.data?.summary || "",
+        keyTakeaways: message.data?.keyTakeaways || [],
         sources: message.data?.sources || [],
-        comparisonData: message.data?.comparisonData || [],
       };
 
-      const updated = [newEntry, ...list.filter((item) => item.id !== message.id)];
+      const updated = [itemToSave, ...existing.filter((item) => item.id !== message.id)];
       await AsyncStorage.setItem("comparez_saved_research", JSON.stringify(updated));
 
       setSavedAnswerIds((prev) => new Set([...prev, message.id]));
@@ -260,13 +437,29 @@ const AIResearchScreen = ({ navigation, route }) => {
         showBack={Boolean(navigation.canGoBack && navigation.canGoBack())}
         onBackPress={() => navigation.goBack()}
         rightComponent={
-          <TouchableOpacity
-            style={[styles.headerButton, { borderColor: themeColors.line, backgroundColor: themeColors.card }]}
-            onPress={() => navigation.navigate("Library")}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Ionicons name="bookmark-outline" size={18} color={themeColors.ink} />
-          </TouchableOpacity>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity
+              style={[styles.headerButton, { borderColor: themeColors.line, backgroundColor: themeColors.card, marginRight: 8 }]}
+              onPress={handleNewChat}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="add-circle-outline" size={18} color={themeColors.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.headerButton, { borderColor: themeColors.line, backgroundColor: themeColors.card, marginRight: 8 }]}
+              onPress={openHistoryModal}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="time-outline" size={18} color={themeColors.ink} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.headerButton, { borderColor: themeColors.line, backgroundColor: themeColors.card }]}
+              onPress={() => navigation.navigate("Library")}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="bookmark-outline" size={18} color={themeColors.ink} />
+            </TouchableOpacity>
+          </View>
         }
       />
 
@@ -341,7 +534,7 @@ const AIResearchScreen = ({ navigation, route }) => {
                 { title: "Amul vs Nandini Full Cream Milk", tag: "Compare" },
                 { title: "Best cold-pressed cooking oils in India", tag: "Research" },
                 { title: "Is Blinkit or Zepto cheaper for daily essentials?", tag: "Deals" },
-                { title: "High-protein vegetarian meal plan under ₹200", tag: "Plan" },
+                { title: "Calculate EMI for 10L loan at 8.5% for 10 yrs", tag: "Calc" },
               ].map((starter, i) => (
                 <TouchableOpacity
                   key={i}
@@ -361,7 +554,7 @@ const AIResearchScreen = ({ navigation, route }) => {
           </View>
         )}
 
-        {messages.map((msg) => {
+        {messages.map((msg, index) => {
           if (msg.role === "user") {
             return (
               <View key={msg.id} style={styles.userMessageRow}>
@@ -369,9 +562,21 @@ const AIResearchScreen = ({ navigation, route }) => {
                   <Text style={[FONTS.uiBodyBold, { fontSize: 15, color: "#FFFFFF", lineHeight: 22 }]}>
                     {msg.text}
                   </Text>
-                  <Text style={[FONTS.uiBody, { fontSize: 10, color: "rgba(255,255,255,0.6)", marginTop: 4, alignSelf: "flex-end" }]}>
-                    {msg.timestamp}
-                  </Text>
+                  <View style={styles.userFooterRow}>
+                    <Text style={[FONTS.uiBody, { fontSize: 10, color: "rgba(255,255,255,0.6)" }]}>
+                      {msg.timestamp}
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.editBtn}
+                      onPress={() => handleEditMessage(msg, index)}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    >
+                      <Ionicons name="pencil-outline" size={12} color="rgba(255,255,255,0.85)" />
+                      <Text style={[FONTS.uiBodyBold, { fontSize: 10, color: "rgba(255,255,255,0.85)", marginLeft: 3 }]}>
+                        Edit
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             );
@@ -395,32 +600,88 @@ const AIResearchScreen = ({ navigation, route }) => {
                 </Text>
 
                 <View style={styles.aiActionsRight}>
+                  {/* Regenerate Response */}
                   <TouchableOpacity
                     style={styles.iconAction}
+                    onPress={() => handleRegenerate(index)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons name="reload-outline" size={16} color={themeColors.inkSoft} />
+                  </TouchableOpacity>
+
+                  {/* Copy Response */}
+                  <TouchableOpacity
+                    style={[styles.iconAction, { marginLeft: 6 }]}
+                    onPress={() => handleCopy(msg.id, aiData.summary || "")}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons
+                      name={copiedMsgId === msg.id ? "checkmark" : "copy-outline"}
+                      size={16}
+                      color={copiedMsgId === msg.id ? themeColors.primary : themeColors.inkSoft}
+                    />
+                  </TouchableOpacity>
+
+                  {/* Feedback Thumbs Up */}
+                  <TouchableOpacity
+                    style={[styles.iconAction, { marginLeft: 6 }]}
+                    onPress={() => handleFeedback(msg.id, "up")}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons
+                      name={feedbackMap[msg.id] === "up" ? "thumbs-up" : "thumbs-up-outline"}
+                      size={16}
+                      color={feedbackMap[msg.id] === "up" ? themeColors.primary : themeColors.inkSoft}
+                    />
+                  </TouchableOpacity>
+
+                  {/* Feedback Thumbs Down */}
+                  <TouchableOpacity
+                    style={[styles.iconAction, { marginLeft: 6 }]}
+                    onPress={() => handleFeedback(msg.id, "down")}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons
+                      name={feedbackMap[msg.id] === "down" ? "thumbs-down" : "thumbs-down-outline"}
+                      size={16}
+                      color={feedbackMap[msg.id] === "down" ? themeColors.tomato || "#EF4444" : themeColors.inkSoft}
+                    />
+                  </TouchableOpacity>
+
+                  {/* Bookmark Save */}
+                  <TouchableOpacity
+                    style={[styles.iconAction, { marginLeft: 6 }]}
                     onPress={() => handleSaveAnswer(msg)}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   >
                     <Ionicons
                       name={isSaved ? "bookmark" : "bookmark-outline"}
-                      size={18}
+                      size={16}
                       color={isSaved ? themeColors.primary : themeColors.inkSoft}
                     />
                   </TouchableOpacity>
+
+                  {/* Native Share */}
                   <TouchableOpacity
-                    style={[styles.iconAction, { marginLeft: 8 }]}
+                    style={[styles.iconAction, { marginLeft: 6 }]}
                     onPress={() => handleShare(aiData.summary || "")}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   >
-                    <Ionicons name="share-outline" size={18} color={themeColors.inkSoft} />
+                    <Ionicons name="share-outline" size={16} color={themeColors.inkSoft} />
                   </TouchableOpacity>
                 </View>
               </View>
 
-              {/* Main Summary Text */}
+              {/* Main Summary Rendered with Markdown, Tables, and Clickable Citations */}
               <View style={[styles.aiCard, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
-                <Text style={[FONTS.uiBody, { fontSize: 15, color: themeColors.ink, lineHeight: 24 }]}>
-                  {aiData.summary || "No answer generated."}
-                </Text>
+                <MarkdownRenderer
+                  content={aiData.summary || "No answer generated."}
+                  sources={aiData.sources || []}
+                  onCitationPress={(citeNum) => {
+                    const src = (aiData.sources || []).find((s, sIdx) => (s.number || s.id || sIdx + 1) === citeNum);
+                    if (src && src.url) openSourceUrl(src.url);
+                  }}
+                />
 
                 {/* Key Takeaways */}
                 {aiData.keyTakeaways && aiData.keyTakeaways.length > 0 && (
@@ -460,7 +721,7 @@ const AIResearchScreen = ({ navigation, route }) => {
                           <View style={styles.sourceCardTop}>
                             <View style={[styles.citationNumberBadge, { backgroundColor: `${themeColors.primary}20` }]}>
                               <Text style={[FONTS.monoBold, { fontSize: 10, color: themeColors.primary }]}>
-                                [{src.id || sIdx + 1}]
+                                [{src.number || src.id || sIdx + 1}]
                               </Text>
                             </View>
                             <Text style={[FONTS.mono, { fontSize: 11, color: themeColors.inkFaint, flex: 1, marginLeft: 6 }]} numberOfLines={1}>
@@ -557,7 +818,7 @@ const AIResearchScreen = ({ navigation, route }) => {
                           ))}
                         </View>
 
-                        {/* Button to explore product intelligence & detailed specifications */}
+                        {/* Button to explore product intelligence */}
                         <TouchableOpacity
                           style={[styles.fullScanBtn, { borderColor: themeColors.primary }]}
                           onPress={() => openLiveProductComparison(aiData.suggestedSearch || prod.name)}
@@ -576,13 +837,13 @@ const AIResearchScreen = ({ navigation, route }) => {
                 {aiData.followUps && aiData.followUps.length > 0 && (
                   <View style={styles.followUpsWrap}>
                     <Text style={[FONTS.monoBold, { fontSize: 11, color: themeColors.inkSoft, letterSpacing: 0.5, marginBottom: 8 }]}>
-                      EXPLORE FURTHER
+                      EXPLORE NEXT
                     </Text>
-                    <View style={styles.followUpPillsContainer}>
-                      {aiData.followUps.map((question, fIdx) => (
+                    <View style={styles.followUpButtonsRow}>
+                      {aiData.followUps.map((question, qIdx) => (
                         <TouchableOpacity
-                          key={fIdx}
-                          style={[styles.followUpPill, { backgroundColor: themeColors.paper, borderColor: themeColors.line }]}
+                          key={qIdx}
+                          style={[styles.followUpChip, { backgroundColor: themeColors.paper, borderColor: themeColors.line }]}
                           onPress={() => handleSend(question)}
                         >
                           <Ionicons name="arrow-forward" size={12} color={themeColors.primary} />
@@ -618,10 +879,15 @@ const AIResearchScreen = ({ navigation, route }) => {
             </View>
             <View style={[styles.aiCard, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}>
               {streamingText ? (
-                <Text style={[FONTS.uiBody, { fontSize: 15, color: themeColors.ink, lineHeight: 24 }]}>
-                  {streamingText}
-                  <Text style={{ color: themeColors.primary }}>▍</Text>
-                </Text>
+                <MarkdownRenderer
+                  content={streamingText}
+                  sources={currentSources}
+                  isStreaming={true}
+                  onCitationPress={(citeNum) => {
+                    const src = currentSources.find((s, sIdx) => (s.number || s.id || sIdx + 1) === citeNum);
+                    if (src && src.url) openSourceUrl(src.url);
+                  }}
+                />
               ) : (
                 <View style={styles.streamingPlaceholder}>
                   <View style={[styles.shimmerLine, { width: "90%", backgroundColor: themeColors.line }]} />
@@ -639,38 +905,43 @@ const AIResearchScreen = ({ navigation, route }) => {
             <View style={styles.loadingHeader}>
               <ActivityIndicator size="small" color={themeColors.primary} />
               <Text style={[FONTS.uiBodyBold, { fontSize: 14, color: themeColors.ink, marginLeft: 10 }]}>
-                Synthesizing Research & Evidence...
+                Researching with Real-Time Intelligence...
               </Text>
             </View>
 
+            {/* Stepper indicator */}
             <View style={styles.stepsList}>
               {RESEARCH_STEPS.map((step) => {
-                const isPassed = activeStep > step.id;
+                const isDone = activeStep > step.id;
                 const isCurrent = activeStep === step.id;
+
                 return (
                   <View key={step.id} style={styles.stepItemRow}>
                     <View
                       style={[
                         styles.stepCircle,
                         {
-                          backgroundColor: isPassed
+                          backgroundColor: isDone
                             ? themeColors.primary
                             : isCurrent
-                              ? `${themeColors.primary}20`
-                              : themeColors.line,
+                            ? `${themeColors.primary}20`
+                            : themeColors.paper,
+                          borderColor: isCurrent ? themeColors.primary : themeColors.line,
+                          borderWidth: isCurrent ? 2 : 1,
                         },
                       ]}
                     >
-                      {isPassed ? (
+                      {isDone ? (
                         <Ionicons name="checkmark" size={12} color="#FFFFFF" />
                       ) : (
                         <Ionicons
                           name={step.icon}
-                          size={12}
+                          size={11}
                           color={isCurrent ? themeColors.primary : themeColors.inkFaint}
                         />
                       )}
                     </View>
+
                     <Text
                       style={[
                         FONTS.uiBody,
@@ -722,21 +993,119 @@ const AIResearchScreen = ({ navigation, route }) => {
             )}
           </View>
 
-          <TouchableOpacity
-            style={[
-              styles.sendButton,
-              {
-                backgroundColor: query.trim() ? themeColors.primary : `${themeColors.primary}40`,
-              },
-            ]}
-            onPress={() => handleSend(query)}
-            disabled={!query.trim() || loading}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
-          </TouchableOpacity>
+          {/* Send or Stop Generation Button */}
+          {loading ? (
+            <TouchableOpacity
+              style={[styles.sendButton, { backgroundColor: themeColors.tomato || "#EF4444" }]}
+              onPress={handleStop}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="stop" size={16} color="#FFFFFF" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.sendButton,
+                {
+                  backgroundColor: query.trim() ? themeColors.primary : `${themeColors.primary}40`,
+                },
+              ]}
+              onPress={() => handleSend(query)}
+              disabled={!query.trim()}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
         </View>
       </KeyboardAvoidingView>
+
+      {/* ── Conversation History Modal ── */}
+      <Modal
+        visible={showHistoryModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowHistoryModal(false)}
+      >
+        <SafeAreaView style={[styles.modalContainer, { backgroundColor: themeColors.paper }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: themeColors.line }]}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="chatbubbles-outline" size={20} color={themeColors.primary} />
+              <Text style={[FONTS.editorialBold, { fontSize: 18, color: themeColors.ink, marginLeft: 8 }]}>
+                Chat History
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
+                style={[styles.modalNewBtn, { backgroundColor: themeColors.primary }]}
+                onPress={() => {
+                  handleNewChat();
+                  setShowHistoryModal(false);
+                }}
+              >
+                <Ionicons name="add" size={16} color="#FFFFFF" />
+                <Text style={[FONTS.uiBodyBold, { fontSize: 12, color: "#FFFFFF", marginLeft: 4 }]}>
+                  New Chat
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalCloseBtn, { marginLeft: 12 }]}
+                onPress={() => setShowHistoryModal(false)}
+              >
+                <Ionicons name="close" size={20} color={themeColors.ink} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <FlatList
+            data={historyConversations}
+            keyExtractor={(item, index) => String(item.id || index)}
+            contentContainerStyle={{ padding: 16 }}
+            ListEmptyComponent={
+              <View style={styles.modalEmpty}>
+                <Ionicons name="chatbubbles-outline" size={36} color={themeColors.inkFaint} />
+                <Text style={[FONTS.uiBodyBold, { fontSize: 15, color: themeColors.ink, marginTop: 10 }]}>
+                  No past conversations
+                </Text>
+                <Text style={[FONTS.uiBody, { fontSize: 12, color: themeColors.inkSoft, marginTop: 4, textAlign: "center" }]}>
+                  Past AI conversations and research turns will be listed here.
+                </Text>
+              </View>
+            }
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[styles.historyModalItem, { backgroundColor: themeColors.card, borderColor: themeColors.line }]}
+                onPress={() => resumeConversation(item.id)}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[FONTS.uiBodyBold, { fontSize: 14, color: themeColors.ink }]} numberOfLines={1}>
+                    {item.title || "Research Conversation"}
+                  </Text>
+                  <Text style={[FONTS.uiBody, { fontSize: 11, color: themeColors.inkFaint, marginTop: 4 }]}>
+                    {new Date(item.updated_at || item.created_at || Date.now()).toLocaleDateString([], {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.historyDeleteBtn}
+                  onPress={async () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    await ConversationService.deleteConversation(item.id);
+                    setHistoryConversations((prev) => prev.filter((c) => String(c.id) !== String(item.id)));
+                  }}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <Ionicons name="trash-outline" size={16} color={themeColors.inkFaint} />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            )}
+          />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -745,14 +1114,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
   headerButton: {
     width: 36,
     height: 36,
@@ -760,22 +1121,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  headerTitleWrap: {
-    alignItems: "center",
-  },
-  headerMetaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 2,
-  },
-  modeIndicator: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
-    gap: 3,
   },
   modesBar: {
     flexDirection: "row",
@@ -788,8 +1133,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingVertical: 5,
+    borderRadius: 14,
     borderWidth: 1,
   },
   scrollArea: {
@@ -797,12 +1142,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 24,
   },
   emptyWelcome: {
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 32,
+    paddingTop: 30,
+    paddingBottom: 20,
   },
   emptyIconCircle: {
     width: 64,
@@ -817,24 +1162,38 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   starterCard: {
-    padding: 14,
-    borderRadius: 14,
+    padding: 12,
+    borderRadius: 12,
     borderWidth: 1,
   },
   userMessageRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    alignItems: "flex-end",
     marginBottom: 16,
   },
   userBubble: {
     maxWidth: "85%",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 16,
     borderBottomRightRadius: 4,
   },
+  userFooterRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 6,
+  },
+  editBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 6,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    marginLeft: 12,
+  },
   aiMessageContainer: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   aiHeaderRow: {
     flexDirection: "row",
@@ -842,9 +1201,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   aiBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -857,14 +1216,13 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   aiCard: {
-    padding: 18,
-    borderRadius: 20,
+    padding: 16,
+    borderRadius: 16,
     borderWidth: 1,
-    ...SHADOWS.sm,
   },
   takeawaysBox: {
     marginTop: 14,
-    padding: 14,
+    padding: 12,
     borderRadius: 12,
     borderWidth: 1,
   },
@@ -875,24 +1233,22 @@ const styles = StyleSheet.create({
   },
   sourcesSection: {
     marginTop: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.06)",
   },
   sectionTitleRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   sourcesScroll: {
-    marginHorizontal: -6,
+    marginHorizontal: -16,
+    paddingHorizontal: 16,
   },
   sourceCard: {
-    width: 200,
-    padding: 12,
-    borderRadius: 12,
+    width: 170,
+    padding: 10,
+    borderRadius: 10,
     borderWidth: 1,
-    marginHorizontal: 6,
+    marginRight: 10,
   },
   sourceCardTop: {
     flexDirection: "row",
@@ -904,32 +1260,29 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   comparisonSection: {
-    marginTop: 16,
-    paddingTop: 14,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.06)",
+    marginTop: 18,
   },
   comparisonCard: {
-    padding: 14,
-    borderRadius: 14,
+    padding: 12,
+    borderRadius: 12,
     borderWidth: 1,
     marginTop: 8,
   },
   productHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
   bestPriceTag: {
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 3,
     borderRadius: 6,
+    marginLeft: 8,
   },
   platformGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginTop: 12,
+    marginTop: 10,
   },
   platformItem: {
     flex: 1,
@@ -943,36 +1296,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   platformColorDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
   buyBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 5,
-    borderRadius: 6,
     marginTop: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    alignItems: "center",
   },
   fullScanBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 10,
-    borderRadius: 10,
+    marginTop: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
     borderWidth: 1,
-    marginTop: 12,
   },
   followUpsWrap: {
     marginTop: 16,
-    paddingTop: 14,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.06)",
   },
-  followUpPillsContainer: {
+  followUpButtonsRow: {
     gap: 8,
   },
-  followUpPill: {
+  followUpChip: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
@@ -1058,6 +1407,46 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 7,
     opacity: 0.4,
+  },
+  // ── Conversation History Modal styles ────────────────────────────────────
+  modalContainer: {
+    flex: 1,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+  },
+  modalNewBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  modalCloseBtn: {
+    padding: 4,
+  },
+  modalEmpty: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+  },
+  historyModalItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+  historyDeleteBtn: {
+    padding: 8,
+    marginLeft: 8,
   },
 });
 

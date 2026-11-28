@@ -384,7 +384,8 @@ RULES:
     mode = "all",
     history = [],
     context = {},
-    callbacks = {}
+    callbacks = {},
+    signal = null
   ) {
     const { onIntent, onSources, onDone, onToken, onError } = callbacks;
     const isCommercial =
@@ -394,10 +395,13 @@ RULES:
         query,
       );
 
+    let receivedTokens = false;
+
     try {
       const token = await secureStorage.getItem("userToken");
       const resp = await fetch(`${API_URL}/ai/research/stream`, {
         method: "POST",
+        signal,
         headers: {
           "Content-Type": "application/json",
           Accept: "text/event-stream",
@@ -424,12 +428,37 @@ RULES:
 
       let parsedDoneResult = null;
 
+      const handleEvent = (event, data) => {
+        if (!data) return;
+        try {
+          const parsed = JSON.parse(data);
+          if (event === "intent" && onIntent) {
+            onIntent(parsed.intent || parsed);
+          } else if (event === "sources" && onSources) {
+            onSources(parsed);
+          } else if (event === "token" && onToken) {
+            receivedTokens = true;
+            const tokenText = parsed.t != null ? parsed.t : (typeof parsed === "string" ? parsed : "");
+            if (tokenText) onToken(tokenText);
+          } else if (event === "done") {
+            parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
+            if (onDone) onDone(parsedDoneResult);
+          }
+        } catch {}
+      };
+
       if (resp.body && typeof resp.body.getReader === "function") {
         const reader = resp.body.getReader();
         const decoder = new TextDecoder("utf-8");
         let buffer = "";
 
         while (true) {
+          if (signal?.aborted) {
+            reader.cancel();
+            const abortErr = new Error("Generation stopped by user");
+            abortErr.name = "AbortError";
+            throw abortErr;
+          }
           const { done, value } = await reader.read();
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
@@ -445,23 +474,7 @@ RULES:
               if (line.startsWith("event: ")) event = line.slice(7).trim();
               else if (line.startsWith("data: ")) data = line.slice(6).trim();
             }
-            if (data) {
-              try {
-                const parsed = JSON.parse(data);
-                if (event === "intent" && onIntent) {
-                  onIntent(parsed.intent || parsed);
-                } else if (event === "sources" && onSources) {
-                  onSources(parsed);
-                } else if (event === "token" && onToken) {
-                  // Restore escaped newlines the backend serialised for SSE compliance
-                  const tokenText = (parsed.t || "").replace(/\\n/g, "\n");
-                  if (tokenText) onToken(tokenText);
-                } else if (event === "done") {
-                  parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
-                  if (onDone) onDone(parsedDoneResult);
-                }
-              } catch {}
-            }
+            handleEvent(event, data);
           }
         }
       } else {
@@ -475,31 +488,44 @@ RULES:
             if (line.startsWith("event: ")) event = line.slice(7).trim();
             else if (line.startsWith("data: ")) data = line.slice(6).trim();
           }
-          if (data) {
-            try {
-              const parsed = JSON.parse(data);
-              if (event === "intent" && onIntent) {
-                onIntent(parsed.intent || parsed);
-              } else if (event === "sources" && onSources) {
-                onSources(parsed);
-              } else if (event === "token" && onToken) {
-                const tokenText = (parsed.t || "").replace(/\\n/g, "\n");
-                if (tokenText) onToken(tokenText);
-              } else if (event === "done") {
-                parsedDoneResult = formatResearchData(parsed, query, context, isCommercial);
-                if (onDone) onDone(parsedDoneResult);
-              }
-            } catch {}
-          }
+          handleEvent(event, data);
         }
       }
 
       if (parsedDoneResult) {
         return parsedDoneResult;
       }
-      return this.research(query, mode, history, context);
+      if (!receivedTokens) {
+        return this.research(query, mode, history, context);
+      }
+      return {
+        summary: "",
+        keyTakeaways: [],
+        sources: [],
+        isProductQuery: isCommercial,
+        suggestedSearch: "",
+        comparisonData: [],
+        followUps: [],
+      };
     } catch (err) {
+      if (err?.name === "AbortError" || signal?.aborted) {
+        const abortErr = new Error("Generation stopped by user");
+        abortErr.name = "AbortError";
+        throw abortErr;
+      }
       if (onError) onError(err);
+      // Prevent duplicate AI requests if tokens were already streamed
+      if (receivedTokens) {
+        return {
+          summary: "",
+          keyTakeaways: [],
+          sources: [],
+          isProductQuery: isCommercial,
+          suggestedSearch: "",
+          comparisonData: [],
+          followUps: [],
+        };
+      }
       return this.research(query, mode, history, context);
     }
   },

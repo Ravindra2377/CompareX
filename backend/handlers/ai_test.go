@@ -178,3 +178,32 @@ func TestAIResearchStream_Basic(t *testing.T) {
 	assert.Contains(t, streamOutput, "event: done")
 }
 
+func TestSummaryExtractor(t *testing.T) {
+	var tokens []string
+	extractor := newSummaryExtractor(func(token string) {
+		tokens = append(tokens, token)
+	})
+
+	// Feed in chunks simulating Groq SSE streaming
+	chunks := []string{
+		`{"summary"`,
+		`: "Python is `,
+		`a popular language.\n`,
+		`It is \"versatile\" and easy.", `,
+		`"key_takeaways": ["Easy", "Popular"]}`,
+	}
+
+	for _, chunk := range chunks {
+		extractor.feed(chunk)
+	}
+
+	result := ""
+	for _, tk := range tokens {
+		result += tk
+	}
+
+	expected := "Python is a popular language.\nIt is \"versatile\" and easy."
+	assert.Equal(t, expected, result)
+	assert.NotContains(t, result, "key_takeaways")
+	assert.NotContains(t, result, `{"summary":`)
+}

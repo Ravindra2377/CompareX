@@ -92,4 +92,25 @@ describe("GroqService", () => {
     expect(res.summary).toBe("Fallback grounded summary");
     expect(res.keyTakeaways).toEqual(["Standard point"]);
   });
+
+  it("should handle cancellation signal and not call fallback on AbortError", async () => {
+    const controller = new AbortController();
+    controller.abort();
+
+    global.fetch = jest.fn().mockImplementation((url, opts) => {
+      if (opts?.signal?.aborted) {
+        const err = new Error("The operation was aborted");
+        err.name = "AbortError";
+        return Promise.reject(err);
+      }
+      return Promise.resolve({ ok: true, json: async () => ({}) });
+    });
+
+    await expect(
+      GroqService.researchStream("Test query", "all", [], {}, {}, controller.signal)
+    ).rejects.toThrow("Generation stopped by user");
+
+    // Only 1 fetch call made — no duplicate fallback call!
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
 });
